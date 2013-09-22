@@ -1,11 +1,11 @@
 package cz.cuni.mff.d3s.deeco.am;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import cz.cuni.mff.d3s.deeco.assumptions.AssumptionMonitoring;
 import cz.cuni.mff.d3s.deeco.exceptions.KMException;
 import cz.cuni.mff.d3s.deeco.irm.Assumption;
 import cz.cuni.mff.d3s.deeco.irm.ExchangeInvariant;
@@ -17,8 +17,8 @@ import cz.cuni.mff.d3s.deeco.knowledge.ConstantKeys;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.monitor.Active;
-import cz.cuni.mff.d3s.deeco.monitor.Monitoring;
 import cz.cuni.mff.d3s.deeco.monitor.Predictive;
+import cz.cuni.mff.d3s.deeco.monitor.ProcessEnsembleMonitoring;
 import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
 import cz.cuni.mff.d3s.deeco.sat.SAT4JSolver;
@@ -32,20 +32,25 @@ public class AdaptationManager {
 
 	private final Map<ProcessInvariant, ComponentProcess> piToCp;
 	private final Map<ExchangeInvariant, Ensemble> eiToE;
+	// TODO change the following as one invariant can have multiple roots (i.e.
+	// forest).
 	private final Map<Invariant, Invariant> leafToParent;
 	private final KnowledgeManager km;
 	private final Map<String, Active> activeMonitors;
 	private final Map<String, Predictive> predictiveMonitors;
+	private final Map<String, AssumptionMonitoring> assumptionMonitors;
 	private AdaptationRealTimeScheduler scheduler;
 
 	public AdaptationManager(KnowledgeManager km,
 			Map<String, Active> activeMonitors,
-			Map<String, Predictive> predictiveMonitors) {
+			Map<String, Predictive> predictiveMonitors,
+			Map<String, AssumptionMonitoring> assumptionMonitors) {
 		this.piToCp = new HashMap<>();
 		this.eiToE = new HashMap<>();
 		this.leafToParent = new HashMap<>();
 		this.activeMonitors = activeMonitors;
 		this.predictiveMonitors = predictiveMonitors;
+		this.assumptionMonitors = assumptionMonitors;
 		this.km = km;
 	}
 
@@ -55,8 +60,8 @@ public class AdaptationManager {
 
 	public boolean isToBeScheduled(Job job) {
 		assert (job != null);
-		List<String> assignedRoles = null;
-		List<List<String>> assignments = new LinkedList<>();
+		Map<String, String> assignedRoles = new HashMap<>();
+		List<Map<String, String>> assignments = new LinkedList<>();
 		Invariant top = null, leaf = null;
 		if (job instanceof ComponentProcessJob) {
 			ComponentProcessJob cpj = (ComponentProcessJob) job;
@@ -71,9 +76,10 @@ public class AdaptationManager {
 			leaf = processInvariant;
 			top = leafToParent.get(processInvariant);
 			List<String> topRoles = top.getRoles();
-			assignedRoles = Arrays.asList(new String[topRoles.size()]);
-			assignedRoles.set(topRoles.indexOf(processInvariant.getOwner()),
-					cpj.getComponentId());
+			for (String role : topRoles)
+				assignedRoles.put(role, "");
+			assignedRoles
+					.put(processInvariant.getOwner(), cpj.getComponentId());
 		} else if (job instanceof EnsembleJob) {
 			EnsembleJob ej = (EnsembleJob) job;
 			Ensemble jobEnsemble = ej.getEnsemble();
@@ -88,12 +94,13 @@ public class AdaptationManager {
 			leaf = exchangeInvariant;
 			top = leafToParent.get(exchangeInvariant);
 			List<String> topRoles = top.getRoles();
-			assignedRoles = Arrays.asList(new String[topRoles.size()]);
-			assignedRoles.set(
-					topRoles.indexOf(exchangeInvariant.getCoordinatorRole()),
+			for (String role : topRoles)
+				assignedRoles.put(role, "");
+			assignedRoles.put(
+					exchangeInvariant.getCoordinatorRole(),
 					ej.getCoordinator());
-			assignedRoles.set(
-					topRoles.indexOf(exchangeInvariant.getMemberRole()),
+			assignedRoles.put(
+					exchangeInvariant.getMemberRole(),
 					ej.getMember());
 		}
 		// find other valid assignments
@@ -102,7 +109,7 @@ public class AdaptationManager {
 		assert (leaf != null);
 		findAssignments(null, getRoleFilter(top), assignedRoles, assignments);
 		if (!assignments.isEmpty()) {
-			for (List<String> assignment : assignments)
+			for (Map<String, String> assignment : assignments)
 				if (!holds(assignment, top, leaf))
 					return false;
 			return true;
@@ -115,25 +122,28 @@ public class AdaptationManager {
 		for (ProcessInvariant pi : processInvariants)
 			if (!piToCp.containsKey(pi)) {
 				piToCp.put(pi, pi.getProcess());
+				pi.setMonitorProvider(scheduler);
 				leafToParent.put(pi, invariant);
 			}
 		List<ExchangeInvariant> exchangeInvariants = findExchangeInvariant(invariant);
 		for (ExchangeInvariant ei : exchangeInvariants)
 			if (!eiToE.containsKey(ei)) {
 				eiToE.put(ei, ei.getEnsemble());
+				ei.setMonitorProvider(scheduler);
 				leafToParent.put(ei, invariant);
 			}
 	}
 
-	public Monitoring createMonitoringFor(Job job) {
-		return new Monitoring(activeMonitors.get(job.getModelId()),
-				predictiveMonitors.get(job.getModelId()), job, scheduler, km);
+	public ProcessEnsembleMonitoring createMonitoringFor(Job job) {
+		return new ProcessEnsembleMonitoring(activeMonitors.get(job
+				.getModelId()), predictiveMonitors.get(job.getModelId()), job,
+				scheduler, km);
 	}
 
 	private void findAssignments(Object[] ids, Assumption filter,
-			List<String> partialRoleAssignment, List<List<String>> result) {
+			Map<String, String> partialRoleAssignment,
+			List<Map<String, String>> result) {
 		Object[] currentIds = null;
-		;
 		if (ids == null) {
 			try {
 				currentIds = (Object[]) km
@@ -145,25 +155,33 @@ public class AdaptationManager {
 			}
 		} else
 			currentIds = ids;
-		int index = partialRoleAssignment.indexOf(null);
-		if (index < 0) {
+		String key = findKeyFroEmpty(partialRoleAssignment);
+		if (key == null) {
 			if (filter.evaluate(partialRoleAssignment))
 				result.add(partialRoleAssignment);
 		} else {
-			List<String> newPartialRoleAssignment;
+			Map<String, String> newPartialRoleAssignment;
 			for (Object id : currentIds) {
-				newPartialRoleAssignment = new LinkedList<>(
+				newPartialRoleAssignment = new HashMap<>(
 						partialRoleAssignment);
-				newPartialRoleAssignment.set(index, (String) id);
+				newPartialRoleAssignment.put(key, (String) id);
 				findAssignments(currentIds, filter, newPartialRoleAssignment,
 						result);
 			}
 		}
 	}
+	
+	private String findKeyFroEmpty(Map<String, String> map) {
+		for (String key : map.keySet())
+			if (key.equals(""))
+				return key;
+		return null;
+	}
 
-	private boolean holds(List<String> roleAssignment, Invariant top,
+	private boolean holds(Map<String, String> roleAssignment, Invariant top,
 			Invariant leaf) {
-		SATSolver solver = new SAT4JSolver(top, roleAssignment);
+		SATSolver solver = new SAT4JSolver(roleAssignment);
+		solver.addTopInvariant(top);
 		return isPathSelected(leaf, solver.solve());
 	}
 
@@ -215,6 +233,26 @@ public class AdaptationManager {
 		}
 		return result;
 	}
+
+	
+
+//	private List<Assumption> findLeafAssumptions(IRMPrimitive primitive) {
+//		List<Assumption> result = new LinkedList<>();
+//		if (primitive instanceof Invariant) {
+//			Invariant iPrimitive = (Invariant) primitive;
+//			if (iPrimitive.isLeaf())
+//				if (iPrimitive instanceof Assumption)
+//					result.add((Assumption) iPrimitive);
+//				else
+//					result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
+//			else
+//				result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
+//		} else if (primitive instanceof Operation) {
+//			for (IRMPrimitive child : ((Operation) primitive).getChildren())
+//				result.addAll(findLeafAssumptions(child));
+//		}
+//		return result;
+//	}
 
 	// private ProcessInvariant findProcessInvariantForComponentProcess(
 	// List<ProcessInvariant> processInvariants,

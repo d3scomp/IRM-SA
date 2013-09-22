@@ -1,6 +1,7 @@
 package cz.cuni.mff.d3s.deeco.irm;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Evaluable {
 	/**
@@ -10,5 +11,5 @@ public interface Evaluable {
 	 * @param assignedRoles
 	 * @return
 	 */
-	boolean evaluate(List<String> assignedRoles);
+	boolean evaluate(Map<String, String> assignedRoles);
 }

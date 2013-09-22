@@ -1,24 +1,24 @@
 package cz.cuni.mff.d3s.deeco.irm;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
-import cz.cuni.mff.d3s.deeco.monitor.MonitoringProvider;
+import cz.cuni.mff.d3s.deeco.monitor.ProcessEnsembleMonitoringProvider;
 import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 
 public class ProcessInvariant extends Invariant implements Evaluable {
 
+	private ProcessEnsembleMonitoringProvider provider;
 	private ComponentProcess process;
-	private MonitoringProvider monitoringProvider;
 
 	public ProcessInvariant(String id, String description, String owner) {
 		super(id, description, null, Arrays.asList(new String[] { owner }));
 	}
-	
-	public void setMonitorInstanceHolder(MonitoringProvider monitoringProvider) {
-		this.monitoringProvider = monitoringProvider;
+
+	public void setMonitorProvider(ProcessEnsembleMonitoringProvider provider) {
+		this.provider = provider;
 	}
-	
+
 	public String getOwner() {
 		return roles.get(0);
 	}
@@ -32,7 +32,9 @@ public class ProcessInvariant extends Invariant implements Evaluable {
 	}
 
 	@Override
-	public boolean evaluate(List<String> assignedRoles) {
-		return false;
+	public boolean evaluate(Map<String, String> assignedRoles) {
+		return provider.getMonitoring(
+				assignedRoles.get(getOwner()) + process.getId())
+				.getEvaluation();
 	}
 }

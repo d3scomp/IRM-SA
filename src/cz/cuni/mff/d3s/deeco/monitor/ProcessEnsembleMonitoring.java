@@ -12,7 +12,7 @@ import cz.cuni.mff.d3s.deeco.scheduling.EnsembleJob;
 import cz.cuni.mff.d3s.deeco.scheduling.Job;
 import cz.cuni.mff.d3s.deeco.scheduling.ParametrizedInstance;
 
-public class Monitoring implements JobExecutionListener {
+public class ProcessEnsembleMonitoring implements JobExecutionListener {
 	protected final Active active;
 	protected final Predictive predictive;
 	protected final AdaptationRealTimeScheduler scheduler;
@@ -21,7 +21,7 @@ public class Monitoring implements JobExecutionListener {
 
 	private Boolean evaluation;
 
-	public Monitoring(Active active, Predictive predictive, Job job,
+	public ProcessEnsembleMonitoring(Active active, Predictive predictive, Job job,
 			AdaptationRealTimeScheduler scheduler, KnowledgeManager km) {
 		this.km = km;
 		this.active = active;
