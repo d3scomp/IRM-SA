@@ -4,17 +4,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public enum Operation implements IRMPrimitive {
-	OR, AND;
+public class Operation implements IRMPrimitive {
 	
-	private List<IRMPrimitive> children;
+	private List<? extends IRMPrimitive> children;
 	private IRMPrimitive parent;
+	private OperationType type;
 	
-	public List<IRMPrimitive> getChildren() {
+	public Operation(OperationType type) {
+		this.type = type;
+	}
+	
+	public List<? extends IRMPrimitive> getChildren() {
 		return children;
 	}
+	
+	public OperationType getType() {
+		return type;
+	}
 
-	public void setChildren(List<IRMPrimitive> children) {
+	public void setChildren(List<? extends IRMPrimitive> children) {
 		this.children = children;
 	}
 	

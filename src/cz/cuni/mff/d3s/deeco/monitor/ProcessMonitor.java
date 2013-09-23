@@ -6,46 +6,47 @@ import cz.cuni.mff.d3s.deeco.executor.JobExecutionListener;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
-import cz.cuni.mff.d3s.deeco.scheduling.AdaptationRealTimeScheduler;
 import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessJob;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleJob;
 import cz.cuni.mff.d3s.deeco.scheduling.Job;
-import cz.cuni.mff.d3s.deeco.scheduling.ParametrizedInstance;
 
-public class ProcessEnsembleMonitoring implements JobExecutionListener {
+public class ProcessMonitor extends MonitorInstance implements Runnable, JobExecutionListener {
 	protected final Active active;
-	protected final Predictive predictive;
-	protected final AdaptationRealTimeScheduler scheduler;
-	protected final Job job;
-	protected final KnowledgeManager km;
+	protected ComponentProcessJob job;
 
-	private Boolean evaluation;
+	private Boolean predictiveEvaluation;
 
-	public ProcessEnsembleMonitoring(Active active, Predictive predictive, Job job,
-			AdaptationRealTimeScheduler scheduler, KnowledgeManager km) {
-		this.km = km;
+	public ProcessMonitor(Active active,
+			KnowledgeManager km) {
+		super(active.getId(), km);
 		this.active = active;
-		this.predictive = predictive;
-		this.scheduler = scheduler;
-		this.job = job;
-		this.evaluation = true;
+		this.predictiveEvaluation = true;
+	}
+	
+	private ProcessMonitor(Active active,
+			KnowledgeManager km, ComponentProcessJob job) {
+		super(active.getId(), km);
+		this.active = active;
+		this.predictiveEvaluation = true;
+	}
+	
+	public ProcessMonitor createForJob(ComponentProcessJob job) {
+		ProcessMonitor result = new ProcessMonitor(active, km, job);
+		return result;
 	}
 
 	@Override
 	public void jobExecutionFinished(Job job) {
-		if (job instanceof ComponentProcessJob) {
-			if (evaluation) {
-				if (active != null)
-					scheduler.scheduleRunnable(new MonitorTask(active, km), 0);
+		// perhaps put it in another thread
+		if (active != null) {
+			try {
+				Object[] processParameters = getParameterMethodValues(active,
+						null);
+				Method m = active.getMethod();
+				this.evaluation = (boolean) m.invoke(null, processParameters);
+			} catch (Exception e) {
+				this.evaluation = false;
 			}
-		} else if (job instanceof EnsembleJob) {
-			// do nothing as
 		}
-		// Depending if the job is ensemble or component process job:
-		// Verify by calling active (if possible - ensembles have only
-		// predictive monitoring)
-		// if evaluation is false then call periodically predictive until the
-		// evaluation results in true.
 	}
 
 	@Override
@@ -55,61 +56,31 @@ public class ProcessEnsembleMonitoring implements JobExecutionListener {
 
 	@Override
 	public void jobExecutionException(Job job, Throwable t) {
-		synchronized (evaluation) {
-			if (evaluation) {
-				if (predictive != null) {
-					scheduler.scheduleRunnable(new MonitorTask(predictive, km),
-							predictive.getPeriod());
-					evaluation = false;
-				}
-			}
-		}
+		this.evaluation = false;
 	}
 
 	public boolean getEvaluation() {
-		return evaluation;
+		if (evaluation)
+			return evaluation;
+		else
+			return predictiveEvaluation;
 	}
 
-	private void monitorExecutionFinished(boolean result, Monitor monitor) {
-		synchronized (evaluation) {
-			evaluation = result;
-			if (!evaluation) {
-				if (predictive != null)
-					scheduler.scheduleRunnable(new MonitorTask(predictive, km),
-							predictive.getPeriod());
-			}
-		}
+	private void predictiveExecutionFinished(boolean result) {
+		this.predictiveEvaluation = result;
 	}
 
-	private class MonitorTask extends ParametrizedInstance implements Runnable {
+	@Override
+	public void run() {
+		// Should run the process in the mock, check the results by active and
+		// put the results to the predictiveEvaluation.
+		predictiveExecutionFinished(true);
+	}
 
-		private Monitor monitor;
-
-		public MonitorTask(Monitor monitor, KnowledgeManager km) {
-			super(km);
-			this.monitor = monitor;
-		}
-
-		@Override
-		public String getEvaluatedKnowledgePath(Parameter parameter,
-				ISession session) {
-			return job.getEvaluatedKnowledgePath(parameter, session);
-		}
-
-		@Override
-		public void run() {
-			boolean result = true;
-			try {
-				Object[] processParameters = getParameterMethodValues(monitor,
-						null);
-				Method m = monitor.getMethod();
-				result = (boolean) m.invoke(null, processParameters);
-			} catch (Exception e) {
-				result = false;
-			}
-			monitorExecutionFinished(result, monitor);
-		}
-
+	@Override
+	public String getEvaluatedKnowledgePath(Parameter parameter,
+			ISession session) {
+		return job.getEvaluatedKnowledgePath(parameter, session);
 	}
 
 }

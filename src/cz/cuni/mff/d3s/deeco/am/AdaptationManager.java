@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cz.cuni.mff.d3s.deeco.assumptions.AssumptionMonitoring;
 import cz.cuni.mff.d3s.deeco.exceptions.KMException;
 import cz.cuni.mff.d3s.deeco.irm.Assumption;
 import cz.cuni.mff.d3s.deeco.irm.ExchangeInvariant;
@@ -17,8 +16,6 @@ import cz.cuni.mff.d3s.deeco.knowledge.ConstantKeys;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.monitor.Active;
-import cz.cuni.mff.d3s.deeco.monitor.Predictive;
-import cz.cuni.mff.d3s.deeco.monitor.ProcessEnsembleMonitoring;
 import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
 import cz.cuni.mff.d3s.deeco.sat.SAT4JSolver;
@@ -35,27 +32,22 @@ public class AdaptationManager {
 	// TODO change the following as one invariant can have multiple roots (i.e.
 	// forest).
 	private final Map<Invariant, Invariant> leafToParent;
-	private final KnowledgeManager km;
-	private final Map<String, Active> activeMonitors;
-	private final Map<String, Predictive> predictiveMonitors;
-	private final Map<String, AssumptionMonitoring> assumptionMonitors;
+	
 	private AdaptationRealTimeScheduler scheduler;
+	private KnowledgeManager km;
 
-	public AdaptationManager(KnowledgeManager km,
-			Map<String, Active> activeMonitors,
-			Map<String, Predictive> predictiveMonitors,
-			Map<String, AssumptionMonitoring> assumptionMonitors) {
+	public AdaptationManager() {
 		this.piToCp = new HashMap<>();
 		this.eiToE = new HashMap<>();
 		this.leafToParent = new HashMap<>();
-		this.activeMonitors = activeMonitors;
-		this.predictiveMonitors = predictiveMonitors;
-		this.assumptionMonitors = assumptionMonitors;
-		this.km = km;
 	}
 
 	public void setScheduler(AdaptationRealTimeScheduler scheduler) {
 		this.scheduler = scheduler;
+	}
+	
+	public void setKnowledgeManager(KnowledgeManager km) {
+		this.km = km;
 	}
 
 	public boolean isToBeScheduled(Job job) {
@@ -122,22 +114,14 @@ public class AdaptationManager {
 		for (ProcessInvariant pi : processInvariants)
 			if (!piToCp.containsKey(pi)) {
 				piToCp.put(pi, pi.getProcess());
-				pi.setMonitorProvider(scheduler);
 				leafToParent.put(pi, invariant);
 			}
 		List<ExchangeInvariant> exchangeInvariants = findExchangeInvariant(invariant);
 		for (ExchangeInvariant ei : exchangeInvariants)
 			if (!eiToE.containsKey(ei)) {
 				eiToE.put(ei, ei.getEnsemble());
-				ei.setMonitorProvider(scheduler);
 				leafToParent.put(ei, invariant);
 			}
-	}
-
-	public ProcessEnsembleMonitoring createMonitoringFor(Job job) {
-		return new ProcessEnsembleMonitoring(activeMonitors.get(job
-				.getModelId()), predictiveMonitors.get(job.getModelId()), job,
-				scheduler, km);
 	}
 
 	private void findAssignments(Object[] ids, Assumption filter,

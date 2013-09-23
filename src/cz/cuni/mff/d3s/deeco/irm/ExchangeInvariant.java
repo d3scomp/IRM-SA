@@ -3,21 +3,20 @@ package cz.cuni.mff.d3s.deeco.irm;
 import java.util.Arrays;
 import java.util.Map;
 
-import cz.cuni.mff.d3s.deeco.monitor.ProcessEnsembleMonitoringProvider;
+import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
 import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
 
 public class ExchangeInvariant extends Invariant implements Evaluable {
 
 	private Ensemble ensemble;
-	private ProcessEnsembleMonitoringProvider provider;
 
 	public ExchangeInvariant(String id, String description, String coordinator,
-			String member) {
+			String member, MonitorProvider provider) {
 		super(id, description, null, Arrays.asList(new String[] { coordinator,
-				member }));
+				member }), provider);
 	}
 
-	public void setMonitorProvider(ProcessEnsembleMonitoringProvider provider) {
+	public void setMonitorProvider(MonitorProvider provider) {
 		this.provider = provider;
 	}
 
@@ -40,7 +39,7 @@ public class ExchangeInvariant extends Invariant implements Evaluable {
 	@Override
 	public boolean evaluate(Map<String, String> assignedRoles) {
 		return provider
-				.getMonitoring(
+				.getMonitor(
 						assignedRoles.get(getCoordinatorRole())
 								+ assignedRoles.get(getMemberRole())
 								+ ensemble.getId()).getEvaluation();

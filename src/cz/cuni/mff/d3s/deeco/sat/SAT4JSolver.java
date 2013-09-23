@@ -14,6 +14,7 @@ import cz.cuni.mff.d3s.deeco.irm.Evaluable;
 import cz.cuni.mff.d3s.deeco.irm.IRMPrimitive;
 import cz.cuni.mff.d3s.deeco.irm.Invariant;
 import cz.cuni.mff.d3s.deeco.irm.Operation;
+import cz.cuni.mff.d3s.deeco.irm.OperationType;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 
 public class SAT4JSolver extends SATSolver {
@@ -74,10 +75,10 @@ public class SAT4JSolver extends SATSolver {
 			}
 		} else {
 			Operation o = (Operation) primitive;
-			if (o.equals(Operation.OR)) {
+			if (o.getType().equals(OperationType.OR)) {
 				dh.or("or" + o.toString(), o,
 						o.getChildren().toArray(new IRMPrimitive[] {}));
-			} else if (o.equals(Operation.AND)) {
+			} else if (o.getType().equals(OperationType.AND)) {
 				dh.and("and" + o.toString(), o,
 						o.getChildren().toArray(new IRMPrimitive[] {}));
 			}

@@ -3,8 +3,7 @@ package cz.cuni.mff.d3s.deeco.irm;
 import java.util.LinkedList;
 import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
-
+import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
 
 public class Invariant implements IRMPrimitive {
 
@@ -12,19 +11,26 @@ public class Invariant implements IRMPrimitive {
 	protected String description;
 	protected Operation operation;
 	protected IRMPrimitive parent;
-	protected List<String> roles; //component role ids;
+	protected MonitorProvider provider;
+	protected List<String> roles; // component role ids;
 
-	public Invariant(String id, String description,
-			Operation operation, List<String> roles) {
+	public Invariant(String id, String description, Operation operation,
+			List<String> roles, MonitorProvider provider) {
 		this.description = description;
 		this.operation = operation;
 		this.roles = roles;
+		this.provider = provider;
+		this.id = id;
 	}
-	
+
 	public IRMPrimitive getParent() {
 		return parent;
 	}
-	
+
+	public void setParent(IRMPrimitive parent) {
+		this.parent = parent;
+	}
+
 	public List<String> getRoles() {
 		return roles;
 	}
@@ -36,7 +42,7 @@ public class Invariant implements IRMPrimitive {
 	public boolean isLeaf() {
 		return operation == null;
 	}
-	
+
 	@Override
 	public boolean isRoot() {
 		return parent == null;
@@ -45,7 +51,7 @@ public class Invariant implements IRMPrimitive {
 	public Operation getOperation() {
 		return operation;
 	}
-	
+
 	@Override
 	public List<IRMPrimitive> getIRMPrimitives() {
 		List<IRMPrimitive> elements = new LinkedList<IRMPrimitive>();
@@ -59,9 +65,7 @@ public class Invariant implements IRMPrimitive {
 		return id;
 	}
 	
-	protected List<Parameter> replaceRolesByAssignment(
-			List<String> assignedRoles, List<Parameter> parameters) {
-		//TODO
-		return null;
+	public String toString() {
+		return id;
 	}
 }
