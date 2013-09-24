@@ -6,6 +6,12 @@ import cz.cuni.mff.d3s.deeco.runtime.RuntimeUtil;
 
 public class Assumptions {
 
+	@Condition("2")
+	public static boolean a2(@In("GM.groupLeaderId") String gmGLId,
+			@In("GL.id") String glId) {
+		return glId.equals(gmGLId);
+	}
+
 	@Condition("6")
 	public static boolean a6(@In("GL.gmInDanger") Boolean gmInDanger) {
 		return gmInDanger;
@@ -49,12 +55,12 @@ public class Assumptions {
 			@In("GM.breathingAparatusUsed") Boolean breathingAparatusUsed) {
 		return !breathingAparatusUsed;
 	}
-	
+
 	@Condition("27")
 	public static boolean a27() {
 		return true;
 	}
-	
+
 	@Condition("28")
 	public static boolean a28() {
 		return true;

@@ -14,6 +14,7 @@ public class GroupMember extends ComponentDefinition {
 	public Integer acceleration;
 	public Long noMovementSince;
 	public Boolean nearbyGMInDanger;
+	public Boolean breathingAparatusUsed;
 	public String groupLeaderId;
 
 	public GroupMember(String id, String groupLeaderId, long currentTime) {
@@ -24,6 +25,7 @@ public class GroupMember extends ComponentDefinition {
 		this.nearbyGMInDanger = false;
 		this.groupLeaderId = groupLeaderId;
 		this.noMovementSince = currentTime;
+		this.breathingAparatusUsed = false;
 	}
 
 	@Process("30")

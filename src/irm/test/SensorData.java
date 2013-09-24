@@ -16,7 +16,7 @@ public class SensorData extends EnsembleDefinition {
 		return gmGLId.equals(leaderId);
 	}
 
-	@KnowledgeExchange
+	@KnowledgeExchange("12")
 	public static void map(
 			@In("member.temperature") Integer mTemperature,
 			@InOut("coord.sensorDataList") List<Integer> sensorData) {

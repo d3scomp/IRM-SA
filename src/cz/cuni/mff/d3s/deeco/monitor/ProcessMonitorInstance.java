@@ -5,43 +5,45 @@ import java.lang.reflect.Method;
 import cz.cuni.mff.d3s.deeco.executor.JobExecutionListener;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.monitoring.ProcessMonitor;
+import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
 import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
 import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessJob;
 import cz.cuni.mff.d3s.deeco.scheduling.Job;
 
-public class ProcessMonitor extends MonitorInstance implements Runnable, JobExecutionListener {
-	protected final Active active;
+public class ProcessMonitorInstance extends MonitorInstance implements Runnable, ProcessMonitor, JobExecutionListener {
+	protected final BooleanCondition activeMonitor;
 	protected ComponentProcessJob job;
 
 	private Boolean predictiveEvaluation;
 
-	public ProcessMonitor(Active active,
+	public ProcessMonitorInstance(BooleanCondition active,
 			KnowledgeManager km) {
-		super(active.getId(), km);
-		this.active = active;
+		super((active == null) ? "" : active.getId(), km);
+		this.activeMonitor = active;
 		this.predictiveEvaluation = true;
 	}
 	
-	private ProcessMonitor(Active active,
+	private ProcessMonitorInstance(BooleanCondition active,
 			KnowledgeManager km, ComponentProcessJob job) {
-		super(active.getId(), km);
-		this.active = active;
+		super((active == null) ? "" : active.getId(), km);
+		this.activeMonitor = active;
 		this.predictiveEvaluation = true;
 	}
 	
-	public ProcessMonitor createForJob(ComponentProcessJob job) {
-		ProcessMonitor result = new ProcessMonitor(active, km, job);
+	public ProcessMonitorInstance createForJob(ComponentProcessJob job) {
+		ProcessMonitorInstance result = new ProcessMonitorInstance(activeMonitor, km, job);
 		return result;
 	}
 
 	@Override
 	public void jobExecutionFinished(Job job) {
 		// perhaps put it in another thread
-		if (active != null) {
+		if (activeMonitor != null) {
 			try {
-				Object[] processParameters = getParameterMethodValues(active,
+				Object[] processParameters = getParameterMethodValues(activeMonitor,
 						null);
-				Method m = active.getMethod();
+				Method m = activeMonitor.getMethod();
 				this.evaluation = (boolean) m.invoke(null, processParameters);
 			} catch (Exception e) {
 				this.evaluation = false;
@@ -72,7 +74,7 @@ public class ProcessMonitor extends MonitorInstance implements Runnable, JobExec
 
 	@Override
 	public void run() {
-		// Should run the process in the mock, check the results by active and
+		// Should run the process in the mock, check the results by activeMonitor and
 		// put the results to the predictiveEvaluation.
 		predictiveExecutionFinished(true);
 	}

@@ -15,7 +15,7 @@ public class GMInDanger extends EnsembleDefinition {
 		return gmGLId.equals(leaderId);
 	}
 
-	@KnowledgeExchange
+	@KnowledgeExchange("8")
 	public static void map(
 			@Out("coord.nearbyGMInDanger") OutWrapper<Boolean> gmGMInDanger,
 			@In("member.gmInDanger") Boolean glGMInDanger) {

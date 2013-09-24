@@ -10,7 +10,7 @@ public class Invariant implements IRMPrimitive {
 	protected String id;
 	protected String description;
 	protected Operation operation;
-	protected IRMPrimitive parent;
+	protected List<IRMPrimitive> parents;
 	protected MonitorProvider provider;
 	protected List<String> roles; // component role ids;
 
@@ -23,12 +23,12 @@ public class Invariant implements IRMPrimitive {
 		this.id = id;
 	}
 
-	public IRMPrimitive getParent() {
-		return parent;
+	public List<IRMPrimitive> getParents() {
+		return parents;
 	}
 
-	public void setParent(IRMPrimitive parent) {
-		this.parent = parent;
+	public void setParents(List<IRMPrimitive> parents) {
+		this.parents = parents;
 	}
 
 	public List<String> getRoles() {
@@ -45,7 +45,7 @@ public class Invariant implements IRMPrimitive {
 
 	@Override
 	public boolean isRoot() {
-		return parent == null;
+		return parents == null || parents.isEmpty();
 	}
 
 	public Operation getOperation() {

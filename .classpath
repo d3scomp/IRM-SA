@@ -7,6 +7,9 @@
 	<classpathentry kind="lib" path="libs/org.sat4j.maxsat.jar"/>
 	<classpathentry kind="lib" path="libs/org.sat4j.pb.jar"/>
 	<classpathentry kind="lib" path="libs/sat4j-maxsat.jar"/>
+	<classpathentry kind="lib" path="libs/bcel.jar"/>
+	<classpathentry kind="lib" path="libs/cloner.jar"/>
 	<classpathentry kind="lib" path="libs/jdeeco.jar"/>
+	<classpathentry kind="lib" path="libs/objenesis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,30 +3,32 @@ package cz.cuni.mff.d3s.deeco.monitor;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import cz.cuni.mff.d3s.deeco.exceptions.KMNotExistentException;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.monitoring.AssumptionMonitor;
 import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
 import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
 
-public class AssumptionMonitor extends MonitorInstance {
+public class AssumptionMonitorInstance extends MonitorInstance implements AssumptionMonitor {
 
 	private final BooleanCondition condition;
 	private Map<String, String> roleAssignment;
 
-	public AssumptionMonitor(BooleanCondition condition, KnowledgeManager km) {
+	public AssumptionMonitorInstance(BooleanCondition condition, KnowledgeManager km) {
 		super(condition.getId(), km);
 		this.condition = condition;
 	}
 	
-	private AssumptionMonitor(BooleanCondition condition, KnowledgeManager km, Map<String, String> roleAssignment) {
+	private AssumptionMonitorInstance(BooleanCondition condition, KnowledgeManager km, Map<String, String> roleAssignment) {
 		super(condition.getId(), km);
 		this.condition = condition;
 		this.roleAssignment = roleAssignment;
 	}
 
-	public AssumptionMonitor createForRoleAssignment(Map<String, String> roleAssignment) {
-		AssumptionMonitor result = new AssumptionMonitor(condition, km, roleAssignment);
+	public AssumptionMonitorInstance createForRoleAssignment(Map<String, String> roleAssignment) {
+		AssumptionMonitorInstance result = new AssumptionMonitorInstance(condition, km, roleAssignment);
 		return result;
 	}
 
@@ -37,8 +39,10 @@ public class AssumptionMonitor extends MonitorInstance {
 					null);
 			Method m = condition.getMethod();
 			return (boolean) m.invoke(null, processParameters);
+		} catch (KMNotExistentException kmnee) {
+			//Log.e("AssumptionMonitorInstance", kmnee);
 		} catch (Exception e) {
-			Log.e("AssumptionMonitor", e);
+			Log.e("AssumptionMonitorInstance", e);
 		}
 		return false;
 	}

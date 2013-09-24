@@ -3,21 +3,20 @@ package cz.cuni.mff.d3s.deeco.irm;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Operation implements IRMPrimitive {
-	
+
 	private List<? extends IRMPrimitive> children;
-	private IRMPrimitive parent;
+	private List<IRMPrimitive> parents;
 	private OperationType type;
-	
+
 	public Operation(OperationType type) {
 		this.type = type;
 	}
-	
+
 	public List<? extends IRMPrimitive> getChildren() {
 		return children;
 	}
-	
+
 	public OperationType getType() {
 		return type;
 	}
@@ -25,15 +24,15 @@ public class Operation implements IRMPrimitive {
 	public void setChildren(List<? extends IRMPrimitive> children) {
 		this.children = children;
 	}
-	
+
 	@Override
 	public boolean isRoot() {
 		return false;
 	}
-	
+
 	@Override
-	public IRMPrimitive getParent() {
-		return parent;
+	public List<IRMPrimitive> getParents() {
+		return parents;
 	}
 
 	@Override
@@ -43,6 +42,11 @@ public class Operation implements IRMPrimitive {
 			result.addAll(primitive.getIRMPrimitives());
 		result.add(this);
 		return result;
+	}
+
+	@Override
+	public void setParents(List<IRMPrimitive> parents) {
+		this.parents = parents;
 	}
 
 }

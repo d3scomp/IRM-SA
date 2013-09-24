@@ -2,24 +2,25 @@ package cz.cuni.mff.d3s.deeco.monitor;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.monitoring.ExchangeMonitor;
 import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
 import cz.cuni.mff.d3s.deeco.scheduling.EnsembleJob;
 
-public class ExchangeMonitor extends MonitorInstance implements Runnable {
+public class ExchangeMonitorInstance extends MonitorInstance implements Runnable, ExchangeMonitor {
 
 	protected EnsembleJob job;
 
-	public ExchangeMonitor(String id, KnowledgeManager km) {
+	public ExchangeMonitorInstance(String id, KnowledgeManager km) {
 		super(id, km);
 	}
 	
-	private ExchangeMonitor(String id, EnsembleJob job, KnowledgeManager km) {
+	private ExchangeMonitorInstance(String id, EnsembleJob job, KnowledgeManager km) {
 		super(id, km);
 		this.job = job;
 	}
 	
-	public ExchangeMonitor createForJob(EnsembleJob job) {
-		ExchangeMonitor result = new ExchangeMonitor(id, job, km);
+	public ExchangeMonitorInstance createForJob(EnsembleJob job) {
+		ExchangeMonitorInstance result = new ExchangeMonitorInstance(id, job, km);
 		return result;
 	}
 

@@ -33,8 +33,7 @@ public class ProcessInvariant extends Invariant implements Evaluable {
 
 	@Override
 	public boolean evaluate(Map<String, String> assignedRoles) {
-		return provider.getMonitor(
-				assignedRoles.get(getOwner()) + process.getId())
-				.getEvaluation();
+		return provider.getProcessMonitorEvaluation(id,
+				assignedRoles.get(getOwner()));
 	}
 }

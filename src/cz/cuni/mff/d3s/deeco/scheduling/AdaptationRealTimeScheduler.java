@@ -9,37 +9,39 @@ import cz.cuni.mff.d3s.deeco.runtime.model.Schedule;
 public class AdaptationRealTimeScheduler extends RealTimeScheduler {
 
 	private AdaptationManager am;
-	
+
 	public AdaptationRealTimeScheduler(AdaptationManager am) {
 		this.am = am;
 		this.am.setScheduler(this);
 	}
-	
+
 	@Override
 	public void jobExecutionFinished(Job job) {
 		Schedule schedule = job.getSchedule();
 		if (schedule instanceof PeriodicSchedule) {
-			executor.schedule(job, ((PeriodicSchedule) schedule).getPeriod(),
-					TimeUnit.MILLISECONDS);
+			job.setCancelExecution(!am.isToBeScheduled(job));
+				executor.schedule(job,
+						((PeriodicSchedule) schedule).getPeriod(),
+						TimeUnit.MILLISECONDS);
 		}
 	}
-	
+
 	@Override
 	public void jobExecutionException(Job job, Throwable t) {
-		//do nothing
+		// do nothing
 	}
-	
+
 	@Override
 	public void jobExecutionStarted(Job job) {
-		//do nothing
+		// do nothing
 	}
-	
-	
+
 	@Override
 	public void schedule(Job job) {
 		if (executor != null) {
+			job.setCancelExecution(!am.isToBeScheduled(job));
 			executor.schedule(job, 0, TimeUnit.MILLISECONDS);
 		}
 	}
-	
+
 }

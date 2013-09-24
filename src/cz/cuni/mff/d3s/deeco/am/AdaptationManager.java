@@ -15,7 +15,6 @@ import cz.cuni.mff.d3s.deeco.irm.ProcessInvariant;
 import cz.cuni.mff.d3s.deeco.knowledge.ConstantKeys;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.monitor.Active;
 import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
 import cz.cuni.mff.d3s.deeco.sat.SAT4JSolver;
@@ -27,25 +26,25 @@ import cz.cuni.mff.d3s.deeco.scheduling.Job;
 
 public class AdaptationManager {
 
-	private final Map<ProcessInvariant, ComponentProcess> piToCp;
-	private final Map<ExchangeInvariant, Ensemble> eiToE;
+	private final Map<String, ProcessInvariant> pInvariants;
+	private final Map<String, ExchangeInvariant> eInvariants;
 	// TODO change the following as one invariant can have multiple roots (i.e.
 	// forest).
 	private final Map<Invariant, Invariant> leafToParent;
-	
+
 	private AdaptationRealTimeScheduler scheduler;
 	private KnowledgeManager km;
 
 	public AdaptationManager() {
-		this.piToCp = new HashMap<>();
-		this.eiToE = new HashMap<>();
+		this.pInvariants = new HashMap<>();
+		this.eInvariants = new HashMap<>();
 		this.leafToParent = new HashMap<>();
 	}
 
 	public void setScheduler(AdaptationRealTimeScheduler scheduler) {
 		this.scheduler = scheduler;
 	}
-	
+
 	public void setKnowledgeManager(KnowledgeManager km) {
 		this.km = km;
 	}
@@ -58,12 +57,8 @@ public class AdaptationManager {
 		if (job instanceof ComponentProcessJob) {
 			ComponentProcessJob cpj = (ComponentProcessJob) job;
 			ComponentProcess jobProcess = cpj.getComponentProcess();
-			ProcessInvariant processInvariant = null;
-			for (ProcessInvariant pi : piToCp.keySet())
-				if (jobProcess.equals(piToCp.get(pi))) {
-					processInvariant = pi;
-					break;
-				}
+			ProcessInvariant processInvariant = pInvariants.get(jobProcess
+					.getId());
 			assert (processInvariant != null);
 			leaf = processInvariant;
 			top = leafToParent.get(processInvariant);
@@ -75,25 +70,18 @@ public class AdaptationManager {
 		} else if (job instanceof EnsembleJob) {
 			EnsembleJob ej = (EnsembleJob) job;
 			Ensemble jobEnsemble = ej.getEnsemble();
-			ExchangeInvariant exchangeInvariant = null;
-			for (ExchangeInvariant ei : eiToE.keySet())
-				if (jobEnsemble.equals(eiToE.get(ei))) {
-					exchangeInvariant = ei;
-					break;
-				}
-
+			ExchangeInvariant exchangeInvariant = eInvariants.get(jobEnsemble
+					.getExchangeId());
 			assert (exchangeInvariant != null);
 			leaf = exchangeInvariant;
 			top = leafToParent.get(exchangeInvariant);
 			List<String> topRoles = top.getRoles();
 			for (String role : topRoles)
 				assignedRoles.put(role, "");
-			assignedRoles.put(
-					exchangeInvariant.getCoordinatorRole(),
+			assignedRoles.put(exchangeInvariant.getCoordinatorRole(),
 					ej.getCoordinator());
-			assignedRoles.put(
-					exchangeInvariant.getMemberRole(),
-					ej.getMember());
+			assignedRoles
+					.put(exchangeInvariant.getMemberRole(), ej.getMember());
 		}
 		// find other valid assignments
 		assert (assignedRoles != null);
@@ -112,14 +100,14 @@ public class AdaptationManager {
 	public void addIRMInvariant(Invariant invariant) {
 		List<ProcessInvariant> processInvariants = findProcessInvariant(invariant);
 		for (ProcessInvariant pi : processInvariants)
-			if (!piToCp.containsKey(pi)) {
-				piToCp.put(pi, pi.getProcess());
+			if (!pInvariants.containsKey(pi.getId())) {
+				pInvariants.put(pi.getId(), pi);
 				leafToParent.put(pi, invariant);
 			}
 		List<ExchangeInvariant> exchangeInvariants = findExchangeInvariant(invariant);
 		for (ExchangeInvariant ei : exchangeInvariants)
-			if (!eiToE.containsKey(ei)) {
-				eiToE.put(ei, ei.getEnsemble());
+			if (!eInvariants.containsKey(ei.getId())) {
+				eInvariants.put(ei.getId(), ei);
 				leafToParent.put(ei, invariant);
 			}
 	}
@@ -146,18 +134,17 @@ public class AdaptationManager {
 		} else {
 			Map<String, String> newPartialRoleAssignment;
 			for (Object id : currentIds) {
-				newPartialRoleAssignment = new HashMap<>(
-						partialRoleAssignment);
+				newPartialRoleAssignment = new HashMap<>(partialRoleAssignment);
 				newPartialRoleAssignment.put(key, (String) id);
 				findAssignments(currentIds, filter, newPartialRoleAssignment,
 						result);
 			}
 		}
 	}
-	
+
 	private String findKeyFroEmpty(Map<String, String> map) {
 		for (String key : map.keySet())
-			if (key.equals(""))
+			if (map.get(key).equals(""))
 				return key;
 		return null;
 	}
@@ -166,15 +153,23 @@ public class AdaptationManager {
 			Invariant leaf) {
 		SATSolver solver = new SAT4JSolver(roleAssignment);
 		solver.addTopInvariant(top);
-		return isPathSelected(leaf, solver.solve());
+		return isPathSelected(leaf, top, solver.solve());
 	}
 
-	private boolean isPathSelected(Invariant leaf, List<IRMPrimitive> solution) {
-		IRMPrimitive node = leaf;
-		do {
-			node = node.getParent();
-		} while (node.getParent() != null && solution.contains(node));
-		return node.isRoot();
+	// TODO
+	private boolean isPathSelected(IRMPrimitive fromNode, Invariant top, List<IRMPrimitive> solution) {
+		boolean result = solution.contains(fromNode);
+		if (!result)
+			return false;
+		else if (fromNode.isRoot()) {
+			return fromNode.equals(top);
+		} else {
+			for (IRMPrimitive p : fromNode.getParents()) {
+				if (isPathSelected(p, top, solution))
+					return true;
+			}
+			return false;
+		}
 	}
 
 	private Assumption getRoleFilter(Invariant top) {
@@ -218,25 +213,23 @@ public class AdaptationManager {
 		return result;
 	}
 
-	
-
-//	private List<Assumption> findLeafAssumptions(IRMPrimitive primitive) {
-//		List<Assumption> result = new LinkedList<>();
-//		if (primitive instanceof Invariant) {
-//			Invariant iPrimitive = (Invariant) primitive;
-//			if (iPrimitive.isLeaf())
-//				if (iPrimitive instanceof Assumption)
-//					result.add((Assumption) iPrimitive);
-//				else
-//					result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
-//			else
-//				result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
-//		} else if (primitive instanceof Operation) {
-//			for (IRMPrimitive child : ((Operation) primitive).getChildren())
-//				result.addAll(findLeafAssumptions(child));
-//		}
-//		return result;
-//	}
+	// private List<Assumption> findLeafAssumptions(IRMPrimitive primitive) {
+	// List<Assumption> result = new LinkedList<>();
+	// if (primitive instanceof Invariant) {
+	// Invariant iPrimitive = (Invariant) primitive;
+	// if (iPrimitive.isLeaf())
+	// if (iPrimitive instanceof Assumption)
+	// result.add((Assumption) iPrimitive);
+	// else
+	// result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
+	// else
+	// result.addAll(findLeafAssumptions(iPrimitive.getOperation()));
+	// } else if (primitive instanceof Operation) {
+	// for (IRMPrimitive child : ((Operation) primitive).getChildren())
+	// result.addAll(findLeafAssumptions(child));
+	// }
+	// return result;
+	// }
 
 	// private ProcessInvariant findProcessInvariantForComponentProcess(
 	// List<ProcessInvariant> processInvariants,
