@@ -35,7 +35,7 @@ public class AssumptionMonitorInstance extends MonitorInstance implements Assump
 	@Override
 	public boolean getEvaluation() {
 		try {
-			Object[] processParameters = getParameterMethodValues(condition,
+			Object[] processParameters = getParameterMethodValues(condition.getParameters(),
 					null);
 			Method m = condition.getMethod();
 			return (boolean) m.invoke(null, processParameters);

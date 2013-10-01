@@ -10,8 +10,8 @@ import cz.cuni.mff.d3s.deeco.monitoring.ExchangeMonitor;
 import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
 import cz.cuni.mff.d3s.deeco.monitoring.ProcessMonitor;
 import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
-import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessJob;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleJob;
+import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessTask;
+import cz.cuni.mff.d3s.deeco.scheduling.EnsembleTask;
 
 public class MonitorProviderImpl implements MonitorProvider {
 
@@ -103,39 +103,40 @@ public class MonitorProviderImpl implements MonitorProvider {
 	}
 
 	@Override
-	public ProcessMonitor getProcessMonitor(ComponentProcessJob job) {
-		String key = getProcessMonitorInstanceKey(job.getComponentId(),
-				job.getModelId());
+	public ProcessMonitor getProcessMonitor(ComponentProcessTask task) {
+		String processId = task.getComponentProcess().getId();
+		String key = getProcessMonitorInstanceKey(task.getComponentId(),
+				processId);
 		if (processMonitorInstances.containsKey(key))
 			return processMonitorInstances.get(key);
 		else {
 			ProcessMonitorInstance pmi = (ProcessMonitorInstance) processMonitors
-					.get(job.getModelId());
+					.get(processId);
 			if (pmi == null) {
 				pmi = new ProcessMonitorInstance(null, km);
-				processMonitors.put(job.getModelId(), pmi);
+				processMonitors.put(processId, pmi);
 			}
-			pmi = pmi.createForJob(job);
+			pmi = pmi.createForJob(task);
 			processMonitorInstances.put(key, pmi);
 			return pmi;
 		}
 	}
 
 	@Override
-	public ExchangeMonitor getExchangeMonitor(EnsembleJob job) {
-		String key = getExchangeMonitorInstanceKey(job.getCoordinator(),
-				job.getMember(), job.getEnsemble().getExchangeId());
+	public ExchangeMonitor getExchangeMonitor(EnsembleTask task) {
+		String key = getExchangeMonitorInstanceKey(task.getCoordinator(),
+				task.getMember(), task.getEnsemble().getExchangeId());
 		if (exchangeMonitorInstances.containsKey(key))
 			return exchangeMonitorInstances.get(key);
 		else {
 			ExchangeMonitorInstance emi = (ExchangeMonitorInstance) exchangeMonitors
-					.get(job.getEnsemble().getExchangeId());
+					.get(task.getEnsemble().getExchangeId());
 			if (emi == null) {
-				emi = new ExchangeMonitorInstance(job.getEnsemble()
+				emi = new ExchangeMonitorInstance(task.getEnsemble()
 						.getExchangeId(), km);
-				exchangeMonitors.put(job.getEnsemble().getExchangeId(), emi);
+				exchangeMonitors.put(task.getEnsemble().getExchangeId(), emi);
 			}
-			emi = emi.createForJob(job);
+			emi = emi.createForJob(task);
 			exchangeMonitorInstances.put(key, emi);
 			return emi;
 		}

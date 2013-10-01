@@ -19,10 +19,9 @@ import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
 import cz.cuni.mff.d3s.deeco.sat.SAT4JSolver;
 import cz.cuni.mff.d3s.deeco.sat.SATSolver;
-import cz.cuni.mff.d3s.deeco.scheduling.AdaptationRealTimeScheduler;
-import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessJob;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleJob;
-import cz.cuni.mff.d3s.deeco.scheduling.Job;
+import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessTask;
+import cz.cuni.mff.d3s.deeco.scheduling.EnsembleTask;
+import cz.cuni.mff.d3s.deeco.scheduling.Task;
 
 public class AdaptationManager {
 
@@ -31,8 +30,6 @@ public class AdaptationManager {
 	// TODO change the following as one invariant can have multiple roots (i.e.
 	// forest).
 	private final Map<Invariant, Invariant> leafToParent;
-
-	private AdaptationRealTimeScheduler scheduler;
 	private KnowledgeManager km;
 
 	public AdaptationManager() {
@@ -41,23 +38,19 @@ public class AdaptationManager {
 		this.leafToParent = new HashMap<>();
 	}
 
-	public void setScheduler(AdaptationRealTimeScheduler scheduler) {
-		this.scheduler = scheduler;
-	}
-
 	public void setKnowledgeManager(KnowledgeManager km) {
 		this.km = km;
 	}
 
-	public boolean isToBeScheduled(Job job) {
-		assert (job != null);
+	public boolean isToBeScheduled(Task task) {
+		assert (task != null);
 		Map<String, String> assignedRoles = new HashMap<>();
 		List<Map<String, String>> assignments = new LinkedList<>();
 		Invariant top = null, leaf = null;
-		if (job instanceof ComponentProcessJob) {
-			ComponentProcessJob cpj = (ComponentProcessJob) job;
-			ComponentProcess jobProcess = cpj.getComponentProcess();
-			ProcessInvariant processInvariant = pInvariants.get(jobProcess
+		if (task instanceof ComponentProcessTask) {
+			ComponentProcessTask cpt = (ComponentProcessTask) task;
+			ComponentProcess taskProcess = cpt.getComponentProcess();
+			ProcessInvariant processInvariant = pInvariants.get(taskProcess
 					.getId());
 			assert (processInvariant != null);
 			leaf = processInvariant;
@@ -66,10 +59,10 @@ public class AdaptationManager {
 			for (String role : topRoles)
 				assignedRoles.put(role, "");
 			assignedRoles
-					.put(processInvariant.getOwner(), cpj.getComponentId());
-		} else if (job instanceof EnsembleJob) {
-			EnsembleJob ej = (EnsembleJob) job;
-			Ensemble jobEnsemble = ej.getEnsemble();
+					.put(processInvariant.getOwner(), cpt.getComponentId());
+		} else if (task instanceof EnsembleTask) {
+			EnsembleTask et = (EnsembleTask) task;
+			Ensemble jobEnsemble = et.getEnsemble();
 			ExchangeInvariant exchangeInvariant = eInvariants.get(jobEnsemble
 					.getExchangeId());
 			assert (exchangeInvariant != null);
@@ -79,9 +72,9 @@ public class AdaptationManager {
 			for (String role : topRoles)
 				assignedRoles.put(role, "");
 			assignedRoles.put(exchangeInvariant.getCoordinatorRole(),
-					ej.getCoordinator());
+					et.getCoordinator());
 			assignedRoles
-					.put(exchangeInvariant.getMemberRole(), ej.getMember());
+					.put(exchangeInvariant.getMemberRole(), et.getMember());
 		}
 		// find other valid assignments
 		assert (assignedRoles != null);
