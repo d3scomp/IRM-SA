@@ -7,9 +7,9 @@ import cz.cuni.mff.d3s.deeco.exceptions.KMNotExistentException;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.BooleanCondition;
+import cz.cuni.mff.d3s.deeco.model.Parameter;
 import cz.cuni.mff.d3s.deeco.monitoring.AssumptionMonitor;
-import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
-import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
 
 public class AssumptionMonitorInstance extends MonitorInstance implements AssumptionMonitor {
 

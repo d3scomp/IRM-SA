@@ -2,10 +2,10 @@ package cz.cuni.mff.d3s.deeco.monitor;
 
 
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.knowledge.ParameterAccessor;
 import cz.cuni.mff.d3s.deeco.monitoring.Monitor;
-import cz.cuni.mff.d3s.deeco.scheduling.ParametrizedInstance;
 
-public abstract class MonitorInstance extends ParametrizedInstance implements Monitor {
+public abstract class MonitorInstance extends ParameterAccessor implements Monitor {
 	protected final String id;
 	protected Boolean evaluation;
 	

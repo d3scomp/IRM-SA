@@ -16,13 +16,13 @@ import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeRepository;
 import cz.cuni.mff.d3s.deeco.knowledge.RepositoryKnowledgeManager;
 import cz.cuni.mff.d3s.deeco.knowledge.local.LocalKnowledgeRepository;
+import cz.cuni.mff.d3s.deeco.model.BooleanCondition;
+import cz.cuni.mff.d3s.deeco.model.provider.InstanceRuntimeMetadataProvider;
 import cz.cuni.mff.d3s.deeco.monitor.MonitorProviderImpl;
 import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
 import cz.cuni.mff.d3s.deeco.path.grammar.ParseException;
 import cz.cuni.mff.d3s.deeco.processor.ConditionParser;
-import cz.cuni.mff.d3s.deeco.provider.InstanceRuntimeMetadataProvider;
 import cz.cuni.mff.d3s.deeco.runtime.Runtime;
-import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
 import cz.cuni.mff.d3s.deeco.scheduling.AdaptationRealTimeScheduler;
 
 public class InvariantTest {

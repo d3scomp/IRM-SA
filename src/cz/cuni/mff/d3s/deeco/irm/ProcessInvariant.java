@@ -3,8 +3,8 @@ package cz.cuni.mff.d3s.deeco.irm;
 import java.util.Arrays;
 import java.util.Map;
 
+import cz.cuni.mff.d3s.deeco.model.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
-import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
 
 public class ProcessInvariant extends Invariant implements Evaluable {
 	private ComponentProcess process;

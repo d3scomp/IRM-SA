@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.model.BooleanCondition;
 import cz.cuni.mff.d3s.deeco.monitoring.AssumptionMonitor;
 import cz.cuni.mff.d3s.deeco.monitoring.ExchangeMonitor;
 import cz.cuni.mff.d3s.deeco.monitoring.MonitorProvider;
 import cz.cuni.mff.d3s.deeco.monitoring.ProcessMonitor;
-import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
-import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessTask;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleTask;
+import cz.cuni.mff.d3s.deeco.task.ComponentProcessTask;
+import cz.cuni.mff.d3s.deeco.task.EnsembleTask;
 
 public class MonitorProviderImpl implements MonitorProvider {
 

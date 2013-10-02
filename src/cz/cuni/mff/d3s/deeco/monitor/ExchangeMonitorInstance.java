@@ -2,26 +2,29 @@ package cz.cuni.mff.d3s.deeco.monitor;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.model.Parameter;
 import cz.cuni.mff.d3s.deeco.monitoring.ExchangeMonitor;
-import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleTask;
-import cz.cuni.mff.d3s.deeco.scheduling.Task;
+import cz.cuni.mff.d3s.deeco.task.EnsembleTask;
+import cz.cuni.mff.d3s.deeco.task.Task;
 
-public class ExchangeMonitorInstance extends MonitorInstance implements Runnable, ExchangeMonitor {
+public class ExchangeMonitorInstance extends MonitorInstance implements
+		Runnable, ExchangeMonitor {
 
 	protected EnsembleTask task;
 
 	public ExchangeMonitorInstance(String id, KnowledgeManager km) {
 		super(id, km);
 	}
-	
-	private ExchangeMonitorInstance(String id, EnsembleTask task, KnowledgeManager km) {
+
+	private ExchangeMonitorInstance(String id, EnsembleTask task,
+			KnowledgeManager km) {
 		super(id, km);
 		this.task = task;
 	}
-	
+
 	public ExchangeMonitorInstance createForJob(EnsembleTask task) {
-		ExchangeMonitorInstance result = new ExchangeMonitorInstance(id, task, km);
+		ExchangeMonitorInstance result = new ExchangeMonitorInstance(id, task,
+				km);
 		return result;
 	}
 
@@ -55,7 +58,7 @@ public class ExchangeMonitorInstance extends MonitorInstance implements Runnable
 	@Override
 	public void executionStarted(Task task) {
 		// Do nothing
-		
+
 	}
 
 	@Override

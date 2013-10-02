@@ -15,13 +15,13 @@ import cz.cuni.mff.d3s.deeco.irm.ProcessInvariant;
 import cz.cuni.mff.d3s.deeco.knowledge.ConstantKeys;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.runtime.model.ComponentProcess;
-import cz.cuni.mff.d3s.deeco.runtime.model.Ensemble;
+import cz.cuni.mff.d3s.deeco.model.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.model.Ensemble;
 import cz.cuni.mff.d3s.deeco.sat.SAT4JSolver;
 import cz.cuni.mff.d3s.deeco.sat.SATSolver;
-import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessTask;
-import cz.cuni.mff.d3s.deeco.scheduling.EnsembleTask;
-import cz.cuni.mff.d3s.deeco.scheduling.Task;
+import cz.cuni.mff.d3s.deeco.task.ComponentProcessTask;
+import cz.cuni.mff.d3s.deeco.task.EnsembleTask;
+import cz.cuni.mff.d3s.deeco.task.Task;
 
 public class AdaptationManager {
 
@@ -150,7 +150,8 @@ public class AdaptationManager {
 	}
 
 	// TODO
-	private boolean isPathSelected(IRMPrimitive fromNode, Invariant top, List<IRMPrimitive> solution) {
+	private boolean isPathSelected(IRMPrimitive fromNode, Invariant top,
+			List<IRMPrimitive> solution) {
 		boolean result = solution.contains(fromNode);
 		if (!result)
 			return false;

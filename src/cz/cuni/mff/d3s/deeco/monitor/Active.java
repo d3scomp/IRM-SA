@@ -3,9 +3,9 @@ package cz.cuni.mff.d3s.deeco.monitor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import cz.cuni.mff.d3s.deeco.runtime.model.Invocable;
-import cz.cuni.mff.d3s.deeco.runtime.model.LockingMode;
-import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
+import cz.cuni.mff.d3s.deeco.model.Invocable;
+import cz.cuni.mff.d3s.deeco.model.LockingMode;
+import cz.cuni.mff.d3s.deeco.model.Parameter;
 
 public class Active extends Invocable {
 

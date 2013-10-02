@@ -4,6 +4,7 @@ import cz.cuni.mff.d3s.deeco.am.AdaptationManager;
 import cz.cuni.mff.d3s.deeco.executor.TaskExecutor;
 import cz.cuni.mff.d3s.deeco.executor.ThreadPoolTaskExecutor;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.task.Task;
 
 public class AdaptationRealTimeScheduler extends RealTimeScheduler {
 

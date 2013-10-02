@@ -5,11 +5,11 @@ import java.lang.reflect.Method;
 import cz.cuni.mff.d3s.deeco.executor.ExecutionListener;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
+import cz.cuni.mff.d3s.deeco.model.BooleanCondition;
+import cz.cuni.mff.d3s.deeco.model.Parameter;
 import cz.cuni.mff.d3s.deeco.monitoring.ProcessMonitor;
-import cz.cuni.mff.d3s.deeco.runtime.model.BooleanCondition;
-import cz.cuni.mff.d3s.deeco.runtime.model.Parameter;
-import cz.cuni.mff.d3s.deeco.scheduling.ComponentProcessTask;
-import cz.cuni.mff.d3s.deeco.scheduling.Task;
+import cz.cuni.mff.d3s.deeco.task.ComponentProcessTask;
+import cz.cuni.mff.d3s.deeco.task.Task;
 
 public class ProcessMonitorInstance extends MonitorInstance implements
 		Runnable, ProcessMonitor, ExecutionListener {
