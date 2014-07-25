@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="trace" nsURI="http://cz.cuni.mff.d3s.irm.model.trace/1.0" nsPrefix="cz.cuni.mff.d3s.irm.model.trace">
+  <eClassifiers xsi:type="ecore:EClass" name="TraceModel">
+    <eOperations name="getIRMComponentForArchitectureComponentInstance" lowerBound="1"
+        eType="#//ComponentType">
+      <eParameters name="componentInstance" eType="#//ArchitectureComponentInstanceType"/>
+      <eParameters name="design" eType="#//DesignModelType"/>
+    </eOperations>
+    <eOperations name="getComponentProcessFromComponentInstanceAndInvariant" eType="#//ProcessType">
+      <eParameters name="componentInstance" eType="#//ComponentInstanceType"/>
+      <eParameters name="invariant" eType="#//InvariantType"/>
+    </eOperations>
+    <eOperations name="getEnsembleDefinitionFromInvariant" eType="#//EnsembleDefinitionType">
+      <eParameters name="invariant" eType="#//InvariantType"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentTraces" upperBound="-1"
+        eType="#//ComponentTrace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processTraces" upperBound="-1"
+        eType="#//ProcessTrace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ensembleDefinitionTraces"
+        upperBound="-1" eType="#//EnsembleDefinitionTrace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantMonitors" upperBound="-1"
+        eType="#//InvariantMonitor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentTrace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" lowerBound="1" eType="#//ComponentInstanceType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" lowerBound="1" eType="#//ComponentType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComponentInstanceType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComponentType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.Component"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessTrace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" lowerBound="1" eType="#//ProcessType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" lowerBound="1" eType="#//InvariantType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ProcessType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EnsembleDefinitionType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="InvariantType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.Invariant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EnsembleDefinitionTrace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" lowerBound="1" eType="#//InvariantType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" lowerBound="1" eType="#//EnsembleDefinitionType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ArchitectureComponentInstanceType"
+      instanceClassName="cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="DesignModelType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.IRM"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InvariantMonitor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="invariant" lowerBound="1"
+        eType="#//InvariantType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="method" lowerBound="1"
+        eType="ecore:EDataType ../../cz.cuni.mff.d3s.jdeeco.core/model/RuntimeModel.ecore#//Method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitorParameters" lowerBound="1"
+        upperBound="-1" eType="#//MonitorParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MonitorParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="knowledgePath" lowerBound="1"
+        eType="ecore:EClass ../../cz.cuni.mff.d3s.jdeeco.core/model/RuntimeModel.ecore#//KnowledgePath"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

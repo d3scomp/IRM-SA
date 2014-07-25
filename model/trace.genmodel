@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright 2014 Charles University in Prague&#xA;&#xA;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#xA;you may not use this file except in compliance with the License.&#xA;You may obtain a copy of the License at&#xA;&#xA;http://www.apache.org/licenses/LICENSE-2.0&#xA;&#xA;Unless required by applicable law or agreed to in writing, software&#xA;distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xA;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xA;See the License for the specific language governing permissions and&#xA;limitations under the License."
+    modelDirectory="/cz.cuni.mff.d3s.jdeeco.irm-sa/src" modelPluginID="cz.cuni.mff.d3s.jdeeco.irm-sa"
+    modelName="Trace" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" usedGenPackages="../../cz.cuni.mff.d3s.jdeeco.core/model/RuntimeModel.genmodel#//runtime"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>trace.ecore</foreignModel>
+  <genPackages prefix="Trace" basePackage="cz.cuni.mff.d3s.irm.model" disposableProviderFactory="true"
+      interfacePackageSuffix="api" metaDataPackageSuffix="meta" ecorePackage="trace.ecore#/">
+    <genDataTypes ecoreDataType="trace.ecore#//ComponentInstanceType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//ComponentType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//ProcessType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//EnsembleDefinitionType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//InvariantType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//ArchitectureComponentInstanceType"/>
+    <genDataTypes ecoreDataType="trace.ecore#//DesignModelType"/>
+    <genClasses ecoreClass="trace.ecore#//TraceModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//TraceModel/componentTraces"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//TraceModel/processTraces"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//TraceModel/ensembleDefinitionTraces"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//TraceModel/invariantMonitors"/>
+      <genOperations ecoreOperation="trace.ecore#//TraceModel/getIRMComponentForArchitectureComponentInstance">
+        <genParameters ecoreParameter="trace.ecore#//TraceModel/getIRMComponentForArchitectureComponentInstance/componentInstance"/>
+        <genParameters ecoreParameter="trace.ecore#//TraceModel/getIRMComponentForArchitectureComponentInstance/design"/>
+      </genOperations>
+      <genOperations ecoreOperation="trace.ecore#//TraceModel/getComponentProcessFromComponentInstanceAndInvariant">
+        <genParameters ecoreParameter="trace.ecore#//TraceModel/getComponentProcessFromComponentInstanceAndInvariant/componentInstance"/>
+        <genParameters ecoreParameter="trace.ecore#//TraceModel/getComponentProcessFromComponentInstanceAndInvariant/invariant"/>
+      </genOperations>
+      <genOperations ecoreOperation="trace.ecore#//TraceModel/getEnsembleDefinitionFromInvariant">
+        <genParameters ecoreParameter="trace.ecore#//TraceModel/getEnsembleDefinitionFromInvariant/invariant"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="trace.ecore#//ComponentTrace">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//ComponentTrace/from"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//ComponentTrace/to"/>
+    </genClasses>
+    <genClasses ecoreClass="trace.ecore#//ProcessTrace">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//ProcessTrace/from"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//ProcessTrace/to"/>
+    </genClasses>
+    <genClasses ecoreClass="trace.ecore#//EnsembleDefinitionTrace">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//EnsembleDefinitionTrace/to"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//EnsembleDefinitionTrace/from"/>
+    </genClasses>
+    <genClasses ecoreClass="trace.ecore#//InvariantMonitor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//InvariantMonitor/invariant"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//InvariantMonitor/method"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//InvariantMonitor/monitorParameters"/>
+    </genClasses>
+    <genClasses ecoreClass="trace.ecore#//MonitorParameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trace.ecore#//MonitorParameter/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trace.ecore#//MonitorParameter/knowledgePath"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

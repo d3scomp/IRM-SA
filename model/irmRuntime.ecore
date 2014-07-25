@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="runtime" nsURI="http://cz.cuni.mff.d3s.irm.model.runtime/1.0"
+    nsPrefix="cz.cuni.mff.d3s.irm.model.runtime">
+  <eClassifiers xsi:type="ecore:EClass" name="IRMInstance">
+    <eOperations name="getRoots" lowerBound="1" upperBound="-1" eType="#//InvariantInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantInstances" upperBound="-1"
+        eType="#//InvariantInstance" containment="true" eOpposite="#//InvariantInstance/diagramInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="IRMcomponentInstances"
+        upperBound="-1" eType="#//IRMComponentInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="designModel" lowerBound="1"
+        eType="#//IRMDesignModelType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceModel" lowerBound="1"
+        eType="#//TraceModelType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InvariantInstance" abstract="true">
+    <eOperations name="getParent" lowerBound="1" eType="#//InvariantInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagramInstance" lowerBound="1"
+        eType="#//IRMInstance" eOpposite="#//IRMInstance/invariantInstances"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfied" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selected" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"
+        eType="#//Alternative" unsettable="true" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="InvariantType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.Invariant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IRMComponentInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IRMcomponent" lowerBound="1"
+        eType="#//IRMComponentType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="architectureInstance" lowerBound="1"
+        eType="#//ComponentInstanceType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="knowledgeSnapshot" lowerBound="1"
+        eType="#//ValueSetType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IRMComponentType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.Component"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComponentInstanceType" instanceClassName="cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ValueSetType" instanceClassName="cz.cuni.mff.d3s.deeco.knowledge.ValueSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//InvariantInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IRMDesignModelType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.IRM"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TraceModelType" instanceClassName="cz.cuni.mff.d3s.irm.model.trace.api.TraceModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PresentInvariantInstance" eSuperTypes="#//InvariantInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="invariant" lowerBound="1"
+        eType="#//InvariantType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShadowInvariantInstance" eSuperTypes="#//InvariantInstance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessInvariantInstance" eSuperTypes="#//PresentInvariantInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentProcess" eType="#//ComponentProcessType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExchangeInvariantInstance" eSuperTypes="#//PresentInvariantInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ensembleDefinition" eType="#//EnsembleDefinitionType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComponentProcessType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EnsembleDefinitionType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition"/>
+</ecore:EPackage>
