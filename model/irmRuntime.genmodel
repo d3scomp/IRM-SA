@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright 2014 Charles University in Prague&#xA;&#xA;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#xA;you may not use this file except in compliance with the License.&#xA;You may obtain a copy of the License at&#xA;&#xA;http://www.apache.org/licenses/LICENSE-2.0&#xA;&#xA;Unless required by applicable law or agreed to in writing, software&#xA;distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xA;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xA;See the License for the specific language governing permissions and&#xA;limitations under the License."
+    modelDirectory="/cz.cuni.mff.d3s.jdeeco.irm-sa/src" modelPluginID="cz.cuni.mff.d3s.jdeeco.irm-sa"
+    modelName="IrmRuntime" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    suppressEMFTypes="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    language="" operationReflection="true" importOrganizing="true">
+  <foreignModel>irmRuntime.ecore</foreignModel>
+  <genPackages prefix="IRMRuntime" basePackage="cz.cuni.mff.d3s.irm.model" disposableProviderFactory="true"
+      interfacePackageSuffix="api" metaDataPackageSuffix="meta" ecorePackage="irmRuntime.ecore#/">
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//InvariantType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//IRMComponentType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//ComponentInstanceType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//ValueSetType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//IRMDesignModelType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//TraceModelType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//ComponentProcessType"/>
+    <genDataTypes ecoreDataType="irmRuntime.ecore#//EnsembleDefinitionType"/>
+    <genClasses ecoreClass="irmRuntime.ecore#//IRMInstance">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference irmRuntime.ecore#//IRMInstance/invariantInstances"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference irmRuntime.ecore#//IRMInstance/IRMcomponentInstances"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//IRMInstance/designModel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//IRMInstance/traceModel"/>
+      <genOperations ecoreOperation="irmRuntime.ecore#//IRMInstance/getRoots"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//InvariantInstance">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference irmRuntime.ecore#//InvariantInstance/diagramInstance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//InvariantInstance/satisfied"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//InvariantInstance/selected"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference irmRuntime.ecore#//InvariantInstance/alternatives"/>
+      <genOperations ecoreOperation="irmRuntime.ecore#//InvariantInstance/getParent"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//IRMComponentInstance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//IRMComponentInstance/IRMcomponent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//IRMComponentInstance/runtimeInstance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//IRMComponentInstance/knowledgeSnapshot"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//Alternative">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference irmRuntime.ecore#//Alternative/children"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//PresentInvariantInstance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//PresentInvariantInstance/invariant"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//ShadowInvariantInstance"/>
+    <genClasses ecoreClass="irmRuntime.ecore#//ProcessInvariantInstance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//ProcessInvariantInstance/componentProcess"/>
+    </genClasses>
+    <genClasses ecoreClass="irmRuntime.ecore#//ExchangeInvariantInstance">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute irmRuntime.ecore#//ExchangeInvariantInstance/ensembleDefinition"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
