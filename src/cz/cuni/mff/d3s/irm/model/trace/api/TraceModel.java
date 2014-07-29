@@ -122,6 +122,10 @@ public interface TraceModel extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Returns the IRM design component that corresponds to the architecture component instance. 
+	 * The design model is passed as a second parameter in order to be able to look up the component in the design model by string matching of its role, when the architecture component instance is a remote instance.
+	 * <!-- end-model-doc -->
 	 * @model dataType="cz.cuni.mff.d3s.irm.model.trace.api.ComponentType" required="true" componentInstanceDataType="cz.cuni.mff.d3s.irm.model.trace.api.ArchitectureComponentInstanceType" designDataType="cz.cuni.mff.d3s.irm.model.trace.api.DesignModelType"
 	 * @generated
 	 */
@@ -130,6 +134,9 @@ public interface TraceModel extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Returns a component process by identifying it in the process traces and in the processes of the runtime component instance.
+	 * <!-- end-model-doc -->
 	 * @model dataType="cz.cuni.mff.d3s.irm.model.trace.api.ProcessType" componentInstanceDataType="cz.cuni.mff.d3s.irm.model.trace.api.ComponentInstanceType" invariantDataType="cz.cuni.mff.d3s.irm.model.trace.api.InvariantType"
 	 * @generated
 	 */

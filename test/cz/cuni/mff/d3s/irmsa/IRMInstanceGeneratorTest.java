@@ -47,6 +47,11 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.satsolver.SATSolverPreProcessor;
 
+/**
+ * Tests the generation of IRM instances based on IRM design models of different complexity.
+ * 
+ * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
+ */
 public class IRMInstanceGeneratorTest {
 
 	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", File.separator);

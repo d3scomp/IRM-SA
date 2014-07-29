@@ -34,6 +34,7 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.PresentInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ShadowInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimeFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
+import cz.cuni.mff.d3s.irmsa.IRMHelper;
 
 public class SatSolverTest {
 
@@ -41,7 +42,6 @@ public class SatSolverTest {
 	
 	IRM design;
 	IRMInstance instance;
-	IRMRuntimeFactory factory = IRMRuntimeFactory.eINSTANCE;
 	
 	@Before
 	/**
@@ -52,7 +52,7 @@ public class SatSolverTest {
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		
 		design = (IRM) EMFHelper.loadModelFromXMI(MODELS_BASE_PATH + "vehicles_simple.irmdesign");
-		instance = factory.createIRMInstance();
+		instance = IRMRuntimeFactory.eINSTANCE.createIRMInstance();
 		instance.setDesignModel(design);
 	}
 
@@ -62,14 +62,17 @@ public class SatSolverTest {
 	 * No shadows.
 	 */
 	public void testSimpleANDdecomposition() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", true);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", true);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi2);
 		 
-		 createANDdecomposition(i1, pi1, pi2);
+		 IRMHelper.createANDdecomposition(i1, pi1, pi2);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {		 
@@ -84,14 +87,17 @@ public class SatSolverTest {
 	 * No shadows.
 	 */
 	public void testSimpleORdecomposition1() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", true);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", true);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi2);
 		 
-		 createORdecomposition(i1, pi1, pi2);
+		 IRMHelper.createORdecomposition(i1, pi1, pi2);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {		 
@@ -109,14 +115,17 @@ public class SatSolverTest {
 	 * No shadows.
 	 */
 	public void testSimpleORdecomposition2() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", true);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", false);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(false);
 		 instance.getInvariantInstances().add(pi2);
 		 
-		 createORdecomposition(i1, pi1, pi2);
+		 IRMHelper.createORdecomposition(i1, pi1, pi2);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {		 
@@ -133,19 +142,24 @@ public class SatSolverTest {
 	 * No shadows.
 	 */
 	public void testANDandORdecomposition() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", false);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(false);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance i2 = createPresentInvariantInstance("i2", true);
+		 InvariantInstance i2 = IRMHelper.createPresentInvariantInstance("i2", instance, design);
+		 i2.setSatisfied(true);
 		 instance.getInvariantInstances().add(i2);
-		 InvariantInstance ei1 = createPresentInvariantInstance("ei1", true);
+		 InvariantInstance ei1 = IRMHelper.createPresentInvariantInstance("ei1", instance, design);
+		 ei1.setSatisfied(true);
 		 instance.getInvariantInstances().add(ei1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", true);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi2);
 		 
-		 createORdecomposition(i1, pi1, i2);
-		 createANDdecomposition(i2, ei1, pi2);
+		 IRMHelper.createORdecomposition(i1, pi1, i2);
+		 IRMHelper.createANDdecomposition(i2, ei1, pi2);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {		 
@@ -165,21 +179,26 @@ public class SatSolverTest {
 	 * One shadow invariant.
 	 */
 	public void testANDandORdecompositionWithShadows1() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", false);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(false);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance shadow = createShadowInvariantInstance();
+		 InvariantInstance shadow = IRMHelper.createShadowInvariantInstance(instance);
 		 instance.getInvariantInstances().add(shadow);
-		 InvariantInstance ei1 = createPresentInvariantInstance("ei1", true);
+		 InvariantInstance ei1 = IRMHelper.createPresentInvariantInstance("ei1", instance, design);
+		 ei1.setSatisfied(true);
 		 instance.getInvariantInstances().add(ei1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", true);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi2);
-		 InvariantInstance pi3 = createPresentInvariantInstance("pi3", true);
+		 InvariantInstance pi3 = IRMHelper.createPresentInvariantInstance("pi3", instance, design);
+		 pi3.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi3);
 		 
-		 createORdecomposition(i1, pi1, shadow);
-		 createANDdecomposition(shadow, ei1, pi2, pi3);
+		 IRMHelper.createORdecomposition(i1, pi1, shadow);
+		 IRMHelper.createANDdecomposition(shadow, ei1, pi2, pi3);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {		 
@@ -200,21 +219,26 @@ public class SatSolverTest {
 	 * One shadow invariant.
 	 */
 	public void testANDandORdecompositionWithShadows2() {
-		 InvariantInstance i1 = createPresentInvariantInstance("i1", true);
+		 InvariantInstance i1 = IRMHelper.createPresentInvariantInstance("i1", instance, design);
+		 i1.setSatisfied(true);
 		 instance.getInvariantInstances().add(i1);
-		 InvariantInstance pi1 = createPresentInvariantInstance("pi1", true);
+		 InvariantInstance pi1 = IRMHelper.createPresentInvariantInstance("pi1", instance, design);
+		 pi1.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi1);
-		 InvariantInstance shadow = createShadowInvariantInstance();
+		 InvariantInstance shadow = IRMHelper.createShadowInvariantInstance(instance);
 		 instance.getInvariantInstances().add(shadow);
-		 InvariantInstance ei1 = createPresentInvariantInstance("ei1", true);
+		 InvariantInstance ei1 = IRMHelper.createPresentInvariantInstance("ei1", instance, design);
+		 ei1.setSatisfied(true);
 		 instance.getInvariantInstances().add(ei1);
-		 InvariantInstance pi2 = createPresentInvariantInstance("pi2", true);
+		 InvariantInstance pi2 = IRMHelper.createPresentInvariantInstance("pi2", instance, design);
+		 pi2.setSatisfied(true);
 		 instance.getInvariantInstances().add(pi2);
-		 InvariantInstance pi3 = createPresentInvariantInstance("pi3", false);
+		 InvariantInstance pi3 = IRMHelper.createPresentInvariantInstance("pi3", instance, design);
+		 pi3.setSatisfied(false);
 		 instance.getInvariantInstances().add(pi3);
 		 
-		 createORdecomposition(i1, pi1, shadow);
-		 createANDdecomposition(shadow, ei1, pi2, pi3);
+		 IRMHelper.createORdecomposition(i1, pi1, shadow);
+		 IRMHelper.createANDdecomposition(shadow, ei1, pi2, pi3);
 		 
 		 SATSolver solver = new SATSolver(instance);
 		 if (solver.solve()) {
@@ -233,46 +257,6 @@ public class SatSolverTest {
 			}
 		}
 		return ret;
-	}
-
-	private void createANDdecomposition(InvariantInstance parent, InvariantInstance... children) {
-		Alternative a = factory.createAlternative();
-		parent.getAlternatives().add(a);
-		for (InvariantInstance child : children) {
-			a.getChildren().add(child);	
-		}
-	}
-
-	private void createORdecomposition(InvariantInstance parent, InvariantInstance... children) {
-		for (InvariantInstance child : children) {
-			Alternative a = factory.createAlternative();
-			parent.getAlternatives().add(a);
-			a.getChildren().add(child);	
-		}
-	}
-	
-	private PresentInvariantInstance createPresentInvariantInstance(String id, boolean satisfied) {
-		PresentInvariantInstance pi = factory.createPresentInvariantInstance();
-		pi.setDiagramInstance(instance);
-		pi.setInvariant(findByIDInDesignModel(id));
-		pi.setSatisfied(satisfied);
-		return pi;
-	}
-
-	private ShadowInvariantInstance createShadowInvariantInstance() {
-		ShadowInvariantInstance si = factory.createShadowInvariantInstance();
-		si.setDiagramInstance(instance);
-		si.setSatisfied(true);
-		return si;
-	}
-	
-	private Invariant findByIDInDesignModel(String id) {
-		for (Invariant i : design.getInvariants()) {
-			if (i.getRefID().equals(id)) {
-				return i;
-			}
-		}
-		return null;
 	}
 
 }

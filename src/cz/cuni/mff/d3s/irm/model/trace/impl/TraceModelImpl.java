@@ -187,25 +187,26 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * @generated NOT
 	 */
 	public Component getIRMComponentForArchitectureComponentInstance(ComponentInstance componentInstance, IRM design) {
+		Component ret = null;
 		if (componentInstance instanceof RemoteComponentInstance) {
 			// this runtime instance is not present in the trace model, so we have to look it up by name in the design model 
+			// retrieve the role stored in the knowledge manager of the component
 			String IRMComponentRole = getComponentRole(componentInstance);
-			Component c = getComponentFromDesignModelByNameMatching(design, IRMComponentRole);
-			
-			if (c == null) {
+			// use the role to identify the design component by String matching
+			ret = getComponentFromDesignModelByNameMatching(design, IRMComponentRole);
+			if (ret == null) {
 				try {
 					throw new IRMComponentNotFoundException(IRMComponentRole);
 				} catch (IRMComponentNotFoundException e) {
 					Log.e("Error while trying to find role of remote component with id " + componentInstance.getId() + "in the design model.", e);
 				}
 			} 
-			return c;
 		} else {
 			// componentInstance is an instance of LocalComponentInstance, so we can use the trace model
-			Component ret = null;
 			cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance componentRuntimeInstance = 
 					((LocalComponentInstance) componentInstance).getRuntimeInstance();
-			
+			// if the component instance is a system component, return a new empty component 
+			// (so that it matches no component on the caller's side, but still it's not null)
 			if (componentRuntimeInstance.isSystemComponent()){
 				return IRMDesignFactory.eINSTANCE.createComponent();
 			}
@@ -215,7 +216,6 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 					ret =  cTrace.getTo();
 				}
 			}
-			
 			if (ret == null) {
 				try {
 					throw new IRMComponentNotFoundException(componentRuntimeInstance.getName());
@@ -223,8 +223,8 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 					Log.e("Error while trying to get trace of local component instance " + componentRuntimeInstance.getName(), e);
 				}
 			}
-			return ret;
 		}
+		return ret;
 	}
 
 	/**
@@ -235,7 +235,12 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	public ComponentProcess getComponentProcessFromComponentInstanceAndInvariant(
 			cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance componentInstance, Invariant invariant) {
 		for (ComponentProcess p : componentInstance.getComponentProcesses()) {
-			Invariant i = getInvariantOfProcess(p); 
+			Invariant i = null; 
+			for (ProcessTrace t : getProcessTraces()) {
+				if (t.getFrom().equals(p)) {
+					i = t.getTo();
+				}
+			}
 			if ((i != null) && (i.equals(invariant))) {
 				return p;
 			}
@@ -252,20 +257,6 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 		for (EnsembleDefinitionTrace edt : getEnsembleDefinitionTraces()) {
 			if (edt.getTo().equals(invariant)) {
 				return edt.getFrom();
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	private Invariant getInvariantOfProcess(ComponentProcess p) {
-		for (ProcessTrace t : getProcessTraces()) {
-			if (t.getFrom().equals(p)) {
-				return t.getTo();
 			}
 		}
 		return null;

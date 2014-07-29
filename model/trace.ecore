@@ -4,10 +4,16 @@
   <eClassifiers xsi:type="ecore:EClass" name="TraceModel">
     <eOperations name="getIRMComponentForArchitectureComponentInstance" lowerBound="1"
         eType="#//ComponentType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the IRM design component that corresponds to the architecture component instance. &#xA;The design model is passed as a second parameter in order to be able to look up the component in the design model by string matching of its role, when the architecture component instance is a remote instance."/>
+      </eAnnotations>
       <eParameters name="componentInstance" eType="#//ArchitectureComponentInstanceType"/>
       <eParameters name="design" eType="#//DesignModelType"/>
     </eOperations>
     <eOperations name="getComponentProcessFromComponentInstanceAndInvariant" eType="#//ProcessType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a component process by identifying it in the process traces and in the processes of the runtime component instance."/>
+      </eAnnotations>
       <eParameters name="componentInstance" eType="#//ComponentInstanceType"/>
       <eParameters name="invariant" eType="#//InvariantType"/>
     </eOperations>

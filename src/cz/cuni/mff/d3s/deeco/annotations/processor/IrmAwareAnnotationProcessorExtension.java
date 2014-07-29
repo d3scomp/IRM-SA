@@ -70,6 +70,9 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		tFactory = TraceFactory.eINSTANCE;
 	}
 
+	/**
+	 * Creates invariant monitors by parsing the appropriately annotated Java methods. 
+	 */
 	@Override
 	public void onUnknownMethodAnnotation(AnnotationProcessor caller, boolean inComponent, Method method, Annotation unknownAnnotation) throws AnnotationProcessorException {
 		if (unknownAnnotation instanceof InvariantMonitor) {
@@ -113,6 +116,9 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		}
 	}
 	
+	/**
+	 * Creates component traces using the appropriate class-level annotations. 
+	 */
 	@Override
 	public void onComponentInstanceCreation(ComponentInstance componentInstance, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof IRMComponent) {
@@ -139,6 +145,9 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		}
 	}
 
+	/**
+	 * Creates process traces using the appropriate method-level annotations.
+	 */
 	@Override
 	public void onComponentProcessCreation(ComponentProcess componentProcess, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof Invariant) {
@@ -156,6 +165,9 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		}
 	}
 
+	/**
+	 * Creates ensemble traces using the appropriate method-level annotations.
+	 */
 	@Override
 	public void onEnsembleDefinitionCreation(EnsembleDefinition ensembleDefinition, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof Invariant) {
