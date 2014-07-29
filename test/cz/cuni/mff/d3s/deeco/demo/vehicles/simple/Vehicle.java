@@ -25,7 +25,7 @@ public class Vehicle {
 	@PeriodicScheduling(600) 
 	public static void planWhenFarFromPOI(
 		@In("id") String id, 
-		@In("position.x") Integer position,  
+		@In("position") Integer position,  
 		@In("POI") POI POI,  
 		@In("availabilityList") Map<Integer,Availability> availabilityList,  
 		@Out("plan") ParamHolder<Plan> plan 
