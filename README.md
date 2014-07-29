@@ -1,10 +1,10 @@
 IRM-SA
 ======
 
-This project contains the adaptation extension part for the jDEECo as well as a simple demonstrator example taken from: [http://d3s.mff.cuni.cz/projects/components_and_services/irm-sa/](http://d3s.mff.cuni.cz/projects/components_and_services/irm-sa/)
+This project contains the adaptation plugin for jDEECo as explained in [http://d3s.mff.cuni.cz/projects/components_and_services/irm-sa/](http://d3s.mff.cuni.cz/projects/components_and_services/irm-sa/)
 
-##Running the demonstrator
-To run the demo applcation you need to import the project into your Eclipse workspace and execute the main method from the: irm.test.InvariantTest.
+##Building the plugin
+To build the plugin checkout the master branch, import the project into an Eclipse IDE, and use Maven to build the project (via "Maven..."->"Update Project").
 
-##Expected results
-The application is highly randomized and prints out messages whenever a process is executed (see the source code in the irm.test packege for more details).
+##Testing the plugin
+You can test the plugin by running its unit tests: "run as..."->" JUnit Test".

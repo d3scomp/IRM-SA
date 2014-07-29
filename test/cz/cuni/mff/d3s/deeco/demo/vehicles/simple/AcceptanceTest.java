@@ -60,7 +60,7 @@ public class AcceptanceTest {
 		runtimeFramework.start();
 		
 		// WHEN the AdaptationManager runs for the first time
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		
 		// terminate execution
 		runtimeFramework.stop();
