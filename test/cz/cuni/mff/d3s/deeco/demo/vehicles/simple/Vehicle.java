@@ -22,7 +22,7 @@ public class Vehicle {
  
 	@Process
 	@Invariant("pi5")
-	@PeriodicScheduling(600) 
+	@PeriodicScheduling(period=600) 
 	public static void planWhenFarFromPOI(
 		@In("id") String id, 
 		@In("position") Integer position,  
@@ -51,7 +51,7 @@ public class Vehicle {
  
 	@Process
 	@Invariant("pi4")
-	@PeriodicScheduling(300) 
+	@PeriodicScheduling(period=300) 
 	public static void planWhenCloseToPOI(
 		@In("id") String id, 
 		@In("position") Integer position,  
@@ -80,7 +80,7 @@ public class Vehicle {
  
 	@Process
 	@Invariant("pi2")
-	@PeriodicScheduling(300) 
+	@PeriodicScheduling(period=300) 
 	public static void checkFeasibility(
 		@In("id") String id, 
 		@In("position") Integer position,  
@@ -96,7 +96,7 @@ public class Vehicle {
  
 	@Process
 	@Invariant("pi1")
-	@PeriodicScheduling(100) 
+	@PeriodicScheduling(period=100) 
 	public static void monitorPosition(
 		@In("id") String id, 
 		@Out("position") ParamHolder<Integer> position 

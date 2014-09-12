@@ -34,7 +34,7 @@ public class AdaptationManager {
 	public static final String DESIGN_MODEL = "design";  
 	
 	@Process
-	@PeriodicScheduling(2000)
+	@PeriodicScheduling(period=2000)
 	public static void reason(@In("id") String id) {
 		// get runtime, architecture, design, and trace models from the process context
 		RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();

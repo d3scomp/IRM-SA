@@ -20,7 +20,7 @@ public class Parking {
  
 	@Process
 	@Invariant("pi3")
-	@PeriodicScheduling(400) 
+	@PeriodicScheduling(period=400) 
 	public static void monitorAvailability(
 		@Out("availability") ParamHolder<Availability> availability 
 	) {

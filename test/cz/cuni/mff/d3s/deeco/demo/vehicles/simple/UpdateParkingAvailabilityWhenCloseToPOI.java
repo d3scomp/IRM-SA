@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("ei1")
-@PeriodicScheduling(300)
+@PeriodicScheduling(period=300)
 public class UpdateParkingAvailabilityWhenCloseToPOI {
 
 	@Membership
