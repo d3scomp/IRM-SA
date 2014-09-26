@@ -83,4 +83,10 @@
 		  <version>2.3.4</version>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>d3s</id>
+			<url>https://gitlab.d3s.mff.cuni.cz:8443/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
 </project>
