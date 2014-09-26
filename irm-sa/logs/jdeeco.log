@@ -1,0 +1,946 @@
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@116cf35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3d600a0c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@6c33b94e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi2
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@37cae761 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi1
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for component: Vehicle
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@33192410 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@378eb0a5 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@78ef3d21 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi2
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2dd4f42a (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi1
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for component: Vehicle
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7d22f244 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking.monitorAvailability(cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorAvailability, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi3
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for component: Parking
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Non-public or static fields are ignored during the extraction of initial knowledge (cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AdaptationManager
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@271d900d (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AdaptationManager.reason(java.lang.String)) (name: reason, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@5dc598b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AdaptationManager, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@a2147fa7, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_ENSEMBLE_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI.checkUpdateParkingAvailabilityWhenCloseToPOI(java.util.Map,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Availability), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for exchange invariant: ei1
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_ENSEMBLE_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for exchange invariant: ei1
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_ENSEMBLE_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI.checkUpdateParkingAvailabilityWhenFarFromPOI(java.util.Map,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Availability), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for exchange invariant: ei2
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_ENSEMBLE_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@63b6feb1]
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for exchange invariant: ei2
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@7539b974 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@116cf35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5f689243 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3d600a0c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@4a5a9da4 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@6c33b94e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@323a01f corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@37cae761 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@489da8d2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@33192410 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@66b6983c corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@378eb0a5 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5dc4bfd2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@78ef3d21 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@200da416 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2dd4f42a (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5676ae8e corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7d22f244 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking.monitorAvailability(cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorAvailability, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@4f9fe278 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@271d900d (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AdaptationManager.reason(java.lang.String)) (name: reason, active: true) to true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@31f89717, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@31f89717, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@3c9c87e4, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@3c9c87e4, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@183a37d9 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@162893fc (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@420b90c1 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: EnsembleDefinition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) is not instantiated within this runtime, so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@183a37d9 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@162893fc (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@420b90c1 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: EnsembleDefinition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) is not instantiated within this runtime, so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:23 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 30
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 52
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 24
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 30
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 52
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 25
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@7539b974 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@116cf35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5f689243 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3d600a0c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@4a5a9da4 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@6c33b94e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@323a01f corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@37cae761 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@43a11a8e corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@3717ab91 corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@489da8d2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@33192410 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@66b6983c corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@378eb0a5 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5dc4bfd2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@78ef3d21 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@200da416 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2dd4f42a (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@529fcec9 corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@742f784b corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5676ae8e corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7d22f244 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking.monitorAvailability(cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorAvailability, active: true) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@1f5a0bbc corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@7db55e6e corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@31f89717, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@3c9c87e4, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@31f89717, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@3c9c87e4, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:24 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6a1cade4 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@56fedb2f, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@31f89717, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicle0e6bb39c-bb35-4233-8762-373de88836fa.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (availability) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@77ea08e7 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@f106cd41, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@3c9c87e4, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicle0e6bb39c-bb35-4233-8762-373de88836fa
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: Ensemble cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) formed at the side of cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@14f8e8b (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@5a11f45b, shadowKnowledgeManagerRegistry: cz.cuni.mff.d3s.deeco.knowledge.ShadowKnowledgeManagerRegistryImpl@6feba081, systemComponent: false) with coord: Parkingfe630825-f8db-4a49-9d23-50e2792927a1 and member: Vehicledbd37ab3-b3e5-43d2-8c25-70b45dc0c80c
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager Parkingfe630825-f8db-4a49-9d23-50e2792927a1.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (position) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Input knowledge (POI) of a membership in cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI was not found in the knowledge manager AdaptationManager50983b23-d0fc-458d-82fb-03001dbe7fe2.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@183a37d9 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@162893fc (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@420b90c1 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: EnsembleDefinition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) is not instantiated within this runtime, so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: EnsembleDefinition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) is not instantiated within this runtime, so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@183a37d9 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@162893fc (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@420b90c1 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: EnsembleDefinition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) is not instantiated within this runtime, so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@495d950b (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@1ee42ace (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@495d950b (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@15b64a3a (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@445a34fb (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@1ee42ace (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@445a34fb (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@4bbc6b34 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@3f2249c4 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@4bbc6b34 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@239e2011 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@1ee42ace (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@239e2011 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@3e056ac7 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@495d950b (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@59734643 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@495d950b (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@15b64a3a (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@445a34fb (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@59734643 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@445a34fb (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@4bbc6b34 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@3f2249c4 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@4bbc6b34 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@239e2011 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@59734643 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@239e2011 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 30
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 52
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@3e056ac7 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 25
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 30
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 52
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 25
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@7539b974 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@116cf35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2278eb54 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@30a1e97a (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2278eb54 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5f689243 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3d600a0c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@55e76187 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2261adb1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@30a1e97a (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2261adb1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ad25119 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@45ca5e7a (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@4a5a9da4 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@6c33b94e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@323a01f corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@37cae761 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@43a11a8e corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@3717ab91 corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ad25119 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@489da8d2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@33192410 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@1df5f9d7 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@30a1e97a (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@1df5f9d7 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@7fe5a19e (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@66b6983c corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@378eb0a5 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2278eb54 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@5ad1e727 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2278eb54 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@55e76187 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2261adb1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@5ad1e727 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2261adb1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5dc4bfd2 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@78ef3d21 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ad25119 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@45ca5e7a (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ad25119 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@200da416 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2dd4f42a (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@1df5f9d7 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@5ad1e727 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@1df5f9d7 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@7fe5a19e (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@529fcec9 corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@742f784b corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5676ae8e corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7d22f244 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Parking.monitorAvailability(cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorAvailability, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@1f5a0bbc corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@253b56ce (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenCloseToPOI, communicationBoundary: null) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Changing the activity of ensemble task cz.cuni.mff.d3s.deeco.task.EnsembleTask@7db55e6e corresponding to ensemble definition cz.cuni.mff.d3s.deeco.model.runtime.impl.EnsembleDefinitionImpl@695fd9a5 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.UpdateParkingAvailabilityWhenFarFromPOI, communicationBoundary: null) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@612b1ff9 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@56404645 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@612b1ff9 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@15c58840 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3407a7a1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@56404645 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3407a7a1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@628e55b6 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6e9d5246 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@628e55b6 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3fe485bd (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@56404645 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3fe485bd (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@34085c10 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@612b1ff9 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10d43920 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@612b1ff9 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@15c58840 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3407a7a1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10d43920 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3407a7a1 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@628e55b6 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6e9d5246 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@628e55b6 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3fe485bd (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10d43920 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3fe485bd (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@34085c10 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@492aa0bf (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@d9f8120 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@492aa0bf (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@62d662dc (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2eaf7970 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@d9f8120 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2eaf7970 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@24dc002 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@3e78c47c (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@24dc002 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@9592216 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@d9f8120 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@9592216 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@3accd725 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@492aa0bf (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@743ef044 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@492aa0bf (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@62d662dc (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2eaf7970 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@743ef044 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@2eaf7970 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@24dc002 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@3e78c47c (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@24dc002 (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@9592216 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@743ef044 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@9592216 (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@3accd725 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@6ca9e1af (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@51fdfe5 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@6ca9e1af (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@6fa43603 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@14cc51c8 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@51fdfe5 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@14cc51c8 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@720d2c22 (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@51fdfe5 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@720d2c22 (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ecca6ad (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6dd2c810 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ecca6ad (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@5375e9db (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@51fdfe5 (name: Vehicle1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@5375e9db (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@624c53ab (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@6ca9e1af (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10931f8 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@6ca9e1af (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 12 secs, refID: pi5) (processName: planWhenFarFromPOI, processPeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@6fa43603 (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 12 secs, refID: ei2) (ensembleName: UpdateParkingAvailabilityWhenFarFromPOI, ensemblePeriod: 6000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@14cc51c8 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10931f8 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@14cc51c8 (description: V::position is determined, refID: pi1) (processName: monitorPosition, processPeriod: 1000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@720d2c22 (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10931f8 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@720d2c22 (description: V::planFeasibility w.r.t. V::position, V::POI is determined, refID: pi2) (processName: checkFeasibility, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ecca6ad (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@6dd2c810 (name: Parking1, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@3ecca6ad (description: P::availability is monitored, refID: pi3) (processName: monitorAvailability, processPeriod: 4000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No process present for ProcessInvariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@5375e9db (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000) and *local* componentInstance cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@10931f8 (name: Vehicle2, knowledgeManager: null, shadowKnowledgeManagerRegistry: null, systemComponent: false) in the trace model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger warning
+WARNING: No invariant monitor found for process invariant cz.cuni.mff.d3s.irm.model.design.impl.ProcessInvariantImpl@5375e9db (description: Up-to-date V::plan w.r.t V::availabilityList, V::position, V::POI is available within 6 secs, refID: pi4) (processName: planWhenCloseToPOI, processPeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: No trace found for exchange invariant cz.cuni.mff.d3s.irm.model.design.impl.ExchangeInvariantImpl@624c53ab (description: V::availability of Parking lots within 100m distance from POI is up-to-date within 6 secs, refID: ei1) (ensembleName: UpdateParkingAvailabilityWhenCloseToPOI, ensemblePeriod: 3000), so invariant evaluation trivially returned true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Removing all ensemble instances from architectural model.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2e771a72 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@d694a33 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7b866125 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi2
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3354037e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi1
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@50b15f85 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@e55ac4e1, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@a68f17d]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for component: Vehicle
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5a6a47d9 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2e771a72 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@779325ee corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@d694a33 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5d9f6996 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7b866125 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@ccd26df corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3354037e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5a6a47d9 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@2e771a72 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@779325ee corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@d694a33 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@5d9f6996 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@7b866125 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@ccd26df corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3354037e (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: false) to false.
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_UNKNOWN_COMPONENT_METHOD_ANNOTATION, runtimeObject: public static boolean cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkPlanWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@21c59a65 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi5
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@341b6e35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi4
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@74e0744c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi2
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_PROCESS_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3bf36586 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for process invariant: pi1
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: in 'CallExtensions': [EventType: ON_COMPONENT_CREATION, runtimeObject: cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentInstanceImpl@688e5f29 (name: cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle, knowledgeManager: cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManager@de8c9a04, shadowKnowledgeManagerRegistry: null, systemComponent: false), extension: cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension@2de460dc]
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Looking for component: Vehicle
+Sep 26, 2014 5:06:25 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@599da9aa corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@21c59a65 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: true) to true.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@7dee05dc corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@341b6e35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: true) to true.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@15c2ef1b corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@74e0744c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: true) to true.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@30dfe0c6 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3bf36586 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@30dfe0c6 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3bf36586 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: false) to false.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@599da9aa corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@21c59a65 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenFarFromPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenFarFromPOI, active: false) to false.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@7dee05dc corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@341b6e35 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.planWhenCloseToPOI(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,java.util.Map,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: planWhenCloseToPOI, active: false) to false.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@15c2ef1b corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@74e0744c (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.checkFeasibility(java.lang.String,java.lang.Integer,cz.cuni.mff.d3s.deeco.demo.vehicles.simple.POI,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: checkFeasibility, active: false) to false.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger debug
+DEBUG: Changing the activity of task cz.cuni.mff.d3s.deeco.task.ProcessTask@30dfe0c6 corresponding to process cz.cuni.mff.d3s.deeco.model.runtime.impl.ComponentProcessImpl@3bf36586 (method: public static void cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle.monitorPosition(java.lang.String,cz.cuni.mff.d3s.deeco.task.ParamHolder)) (name: monitorPosition, active: true) to true.
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 6
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 10
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 6
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 6
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 11
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 5
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 6
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 11
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 4
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 12
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 21
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 10
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 12
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 21
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 7
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Encoding...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of variables: 10
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Number of constraints: 18
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution found...
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Solution size: 8
+Sep 26, 2014 5:06:26 PM cz.cuni.mff.d3s.deeco.logging.StandardLogger info
+INFO: Model: 
