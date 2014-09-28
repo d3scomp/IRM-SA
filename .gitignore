@@ -1,4 +1,11 @@
-/bin
-/target
-/logs
-/.codepro
+/irm-sa/bin
+/irm-sa/target
+/irm-sa/doc
+/irm-sa/.settings
+/irm-sa/.classpath
+
+/cz.cuni.mff.d3s.jdeeco.irm-sa.demo/bin
+/cz.cuni.mff.d3s.jdeeco.irm-sa.demo/target
+/cz.cuni.mff.d3s.jdeeco.irm-sa.demo/doc
+/cz.cuni.mff.d3s.jdeeco.irm-sa.demo/.settings
+/cz.cuni.mff.d3s.jdeeco.irm-sa.demo/.classpath
