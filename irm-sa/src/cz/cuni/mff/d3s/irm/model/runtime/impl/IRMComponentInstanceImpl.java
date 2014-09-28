@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.irm.model.runtime.impl;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
 import cz.cuni.mff.d3s.irm.model.design.Component;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage;
@@ -75,7 +76,7 @@ public class IRMComponentInstanceImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 * @ordered
 	 */
-	protected static final cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance ARCHITECTURE_INSTANCE_EDEFAULT = null;
+	protected static final ComponentInstance ARCHITECTURE_INSTANCE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getArchitectureInstance() <em>Architecture Instance</em>}' attribute.
@@ -85,7 +86,7 @@ public class IRMComponentInstanceImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 * @ordered
 	 */
-	protected cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance architectureInstance = ARCHITECTURE_INSTANCE_EDEFAULT;
+	protected ComponentInstance architectureInstance = ARCHITECTURE_INSTANCE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getKnowledgeSnapshot() <em>Knowledge Snapshot</em>}' attribute.
@@ -152,7 +153,7 @@ public class IRMComponentInstanceImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance getArchitectureInstance() {
+	public ComponentInstance getArchitectureInstance() {
 		return architectureInstance;
 	}
 
@@ -161,8 +162,8 @@ public class IRMComponentInstanceImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setArchitectureInstance(cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance newArchitectureInstance) {
-		cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance oldArchitectureInstance = architectureInstance;
+	public void setArchitectureInstance(ComponentInstance newArchitectureInstance) {
+		ComponentInstance oldArchitectureInstance = architectureInstance;
 		architectureInstance = newArchitectureInstance;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, IRMRuntimePackage.IRM_COMPONENT_INSTANCE__ARCHITECTURE_INSTANCE, oldArchitectureInstance, architectureInstance));
@@ -219,7 +220,7 @@ public class IRMComponentInstanceImpl extends MinimalEObjectImpl.Container imple
 				setIRMcomponent((Component)newValue);
 				return;
 			case IRMRuntimePackage.IRM_COMPONENT_INSTANCE__ARCHITECTURE_INSTANCE:
-				setArchitectureInstance((cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance)newValue);
+				setArchitectureInstance((ComponentInstance)newValue);
 				return;
 			case IRMRuntimePackage.IRM_COMPONENT_INSTANCE__KNOWLEDGE_SNAPSHOT:
 				setKnowledgeSnapshot((ValueSet)newValue);

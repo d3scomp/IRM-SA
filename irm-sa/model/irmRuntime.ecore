@@ -18,7 +18,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="diagramInstance" lowerBound="1"
         eType="#//IRMInstance" eOpposite="#//IRMInstance/invariantInstances"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfied" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="selected" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"

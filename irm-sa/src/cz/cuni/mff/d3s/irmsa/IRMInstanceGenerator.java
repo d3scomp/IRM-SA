@@ -294,6 +294,15 @@ public class IRMInstanceGenerator {
 					a.getChildren().add(invariantsToInstances.get(decomposition.getStart()));
 				}
 			}
+			// if the AndNode is followed by an OrNode, then create shadow invariant instance
+			for (Refinement r : design.getRefinements()) {
+				if (r.getEnd().equals(branchingNode)) {
+					ShadowInvariantInstance shadowInstance = IRMRuntimeFactory.eINSTANCE.createShadowInvariantInstance();
+					irmInstance.getInvariantInstances().add(shadowInstance);
+					a.getChildren().add(shadowInstance);
+					processAlternatives(irmInstance, shadowInstance, r.getStart(), invariantsToInstances);
+				}
+			}
 			invariantInstance.getAlternatives().add(a);
 		} 
 		// create potentially many Alternative objects with one child each
@@ -305,18 +314,19 @@ public class IRMInstanceGenerator {
 					invariantInstance.getAlternatives().add(a);
 				}
 			}
+			// if the OrNode is followed by an AndNode, then create shadow invariant instance
+			for (Refinement r : design.getRefinements()) {
+				if (r.getEnd().equals(branchingNode)) {
+					Alternative a = IRMRuntimeFactory.eINSTANCE.createAlternative();
+					ShadowInvariantInstance shadowInstance = IRMRuntimeFactory.eINSTANCE.createShadowInvariantInstance();
+					irmInstance.getInvariantInstances().add(shadowInstance);
+					a.getChildren().add(shadowInstance);
+					invariantInstance.getAlternatives().add(a);
+					processAlternatives(irmInstance, shadowInstance, r.getStart(), invariantsToInstances);
+				}
+			}			
 		}
-		// in case of consecutive OrNodes and AndNodes, create shadow invariant instances
-		for (Refinement r : design.getRefinements()) {
-			if (r.getEnd().equals(branchingNode)) {
-				Alternative a = IRMRuntimeFactory.eINSTANCE.createAlternative();
-				ShadowInvariantInstance shadowInstance = IRMRuntimeFactory.eINSTANCE.createShadowInvariantInstance();
-				a.getChildren().add(shadowInstance);
-				invariantInstance.getAlternatives().add(a);
-				irmInstance.getInvariantInstances().add(shadowInstance);
-				processAlternatives(irmInstance, shadowInstance, r.getStart(), invariantsToInstances);
-			}
-		}
+
 	}
 	
 	/**

@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.irm.model.runtime.api;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
 import cz.cuni.mff.d3s.irm.model.design.Component;
 import org.eclipse.emf.ecore.EObject;
 
@@ -80,12 +81,12 @@ public interface IRMComponentInstance extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Architecture Instance</em>' attribute.
-	 * @see #setArchitectureInstance(cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance)
+	 * @see #setArchitectureInstance(ComponentInstance)
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage#getIRMComponentInstance_ArchitectureInstance()
 	 * @model dataType="cz.cuni.mff.d3s.irm.model.runtime.api.ComponentInstanceType" required="true"
 	 * @generated
 	 */
-	cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance getArchitectureInstance();
+	ComponentInstance getArchitectureInstance();
 
 	/**
 	 * Sets the value of the '{@link cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance#getArchitectureInstance <em>Architecture Instance</em>}' attribute.
@@ -95,7 +96,7 @@ public interface IRMComponentInstance extends EObject {
 	 * @see #getArchitectureInstance()
 	 * @generated
 	 */
-	void setArchitectureInstance(cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance value);
+	void setArchitectureInstance(ComponentInstance value);
 
 	/**
 	 * Returns the value of the '<em><b>Knowledge Snapshot</b></em>' attribute.

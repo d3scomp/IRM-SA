@@ -73,7 +73,7 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean SATISFIED_EDEFAULT = false;
+	protected static final boolean SATISFIED_EDEFAULT = true;
 
 	/**
 	 * The cached value of the '{@link #isSatisfied() <em>Satisfied</em>}' attribute.

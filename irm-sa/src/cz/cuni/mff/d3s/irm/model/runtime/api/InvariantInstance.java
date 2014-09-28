@@ -76,6 +76,7 @@ public interface InvariantInstance extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Satisfied</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Satisfied</em>' attribute isn't clear,
@@ -85,7 +86,7 @@ public interface InvariantInstance extends EObject {
 	 * @return the value of the '<em>Satisfied</em>' attribute.
 	 * @see #setSatisfied(boolean)
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage#getInvariantInstance_Satisfied()
-	 * @model required="true"
+	 * @model default="true" required="true"
 	 * @generated
 	 */
 	boolean isSatisfied();

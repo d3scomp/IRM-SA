@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.irm.model.runtime.impl;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.irm.model.design.Component;
@@ -640,7 +641,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 
 		initEClass(invariantInstanceEClass, InvariantInstance.class, "InvariantInstance", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInvariantInstance_DiagramInstance(), this.getIRMInstance(), this.getIRMInstance_InvariantInstances(), "diagramInstance", null, 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getInvariantInstance_Satisfied(), ecorePackage.getEBoolean(), "satisfied", null, 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInvariantInstance_Satisfied(), ecorePackage.getEBoolean(), "satisfied", "true", 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInvariantInstance_Selected(), ecorePackage.getEBoolean(), "selected", null, 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInvariantInstance_Alternatives(), this.getAlternative(), null, "alternatives", null, 0, -1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
@@ -668,7 +669,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		// Initialize data types
 		initEDataType(invariantTypeEDataType, Invariant.class, "InvariantType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(irmComponentTypeEDataType, Component.class, "IRMComponentType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(componentInstanceTypeEDataType, cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance.class, "ComponentInstanceType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(componentInstanceTypeEDataType, ComponentInstance.class, "ComponentInstanceType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(valueSetTypeEDataType, ValueSet.class, "ValueSetType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(irmDesignModelTypeEDataType, IRM.class, "IRMDesignModelType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(traceModelTypeEDataType, TraceModel.class, "TraceModelType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

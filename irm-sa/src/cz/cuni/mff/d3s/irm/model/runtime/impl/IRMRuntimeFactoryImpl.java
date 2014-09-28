@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.irm.model.runtime.impl;
 
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.irm.model.design.Component;
@@ -264,8 +265,8 @@ public class IRMRuntimeFactoryImpl extends EFactoryImpl implements IRMRuntimeFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance createComponentInstanceTypeFromString(EDataType eDataType, String initialValue) {
-		return (cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance)super.createFromString(eDataType, initialValue);
+	public ComponentInstance createComponentInstanceTypeFromString(EDataType eDataType, String initialValue) {
+		return (ComponentInstance)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
