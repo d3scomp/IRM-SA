@@ -16,4 +16,11 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
+  		<artifactId>cz.cuni.mff.d3s.irm-sa</artifactId>
+  		<version>0.0.1</version>
+  	</dependency>
+  </dependencies>
 </project>
