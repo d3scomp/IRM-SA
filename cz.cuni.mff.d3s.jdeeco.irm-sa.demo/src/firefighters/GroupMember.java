@@ -42,6 +42,7 @@ public class GroupMember {
 	public static void monitorAcceleration(
 		@Out("acceleration") ParamHolder<Integer> acceleration 
 	) {
+		System.out.println("inside monitorAcceleration");
 		Random r = new Random();
 //		acceleration.value = r.nextInt();
 		acceleration.value = 3;
