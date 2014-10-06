@@ -31,6 +31,7 @@ public class GroupMember {
 	public static void monitorTemperatureScarcely(
 		@Out("temperature") ParamHolder<Long> temperature 
 	) {
+		System.out.println("monitorTemperatureScarcely");
 		Random r = new Random();
 //		temperature.value = r.nextLong();
 		temperature.value = 25l;
@@ -42,7 +43,7 @@ public class GroupMember {
 	public static void monitorAcceleration(
 		@Out("acceleration") ParamHolder<Integer> acceleration 
 	) {
-		System.out.println("inside monitorAcceleration");
+		System.out.println("monitorAcceleration");
 		Random r = new Random();
 //		acceleration.value = r.nextInt();
 		acceleration.value = 3;
@@ -54,6 +55,7 @@ public class GroupMember {
 	public static void monitorPositionITS(
 		@Out("position") ParamHolder<Position> position 
 	) {
+		System.out.println("monitorPositionITS");
 		position.value = new Position(4,4);
 	}
  
@@ -63,6 +65,7 @@ public class GroupMember {
 	public static void monitorPositionGPS(
 		@Out("position") ParamHolder<Position> position 
 	) {
+		System.out.println("monitorPositionGPS");		
 		position.value = new Position(5,5);
 	}
  
@@ -72,6 +75,7 @@ public class GroupMember {
 	public static void monitorTemperatureClosely(
 		@Out("temperature") ParamHolder<Long> temperature 
 	) {
+		System.out.println("monitorTemperatureClosely");
 		Random r = new Random();
 //		temperature.value = r.nextLong();
 		temperature.value = 50l;
@@ -83,6 +87,7 @@ public class GroupMember {
 	public static void monitorOxygenLevel(
 		@Out("oxygenLevel") ParamHolder<Long> oxygenLevel 
 	) {
+		System.out.println("monitorOxygenLevel");
 		Random r = new Random();
 //		oxygenLevel.value = r.nextLong();
 		oxygenLevel.value = 70l;

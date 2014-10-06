@@ -51,9 +51,9 @@ public class CentralizedRun {
 		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, extension);
 		
 		processor.process(
-			new GroupMember("member1","leader1"), 
-			new GroupMember("member2","leader1"), 
-			new GroupLeader("leader1"),
+			new GroupMember("M1","L1"), 
+			new GroupMember("M2","L1"), 
+			new GroupLeader("L1"),
 			new AdaptationManager(), 
 			SensorDataUpdate.class, 
 			GMsInDangerUpdate.class 

@@ -44,8 +44,8 @@ public class DecentralizedRun {
 	private static final String MODELS_BASE_PATH = "designModels/";
 	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";
 	private static final long SIMULATION_START = 0; // in milliseconds
-	private static final long SIMULATION_END = 10000; // in milliseconds
-	private static final long NETWORK_DELAY = 100; // in milliseconds
+	private static final long SIMULATION_END = 9998; // in milliseconds
+	private static final long NETWORK_DELAY = 10; // in milliseconds
 	
 	private static IRM design;
 	private static JDEECoSimulation simulation;
@@ -66,17 +66,18 @@ public class DecentralizedRun {
 		List<TimerTaskListener> listeners = new LinkedList<>();
 		listeners.add(networkKnowledgeDataHandler);
 
-		createAndDeployGroupMember(42,"1_1", listeners);
-		createAndDeployGroupMember(43,"11_11", listeners);
 		createAndDeployGroupLeader(1,"5_5", listeners);
+		createAndDeployGroupMember(32, 1, "11_11", listeners);
+		createAndDeployGroupMember(42, 1, "1_1", listeners);
 		
+		Log.i("Simulation Starts");
 		simulation.run();
 		Log.i("Simulation Finished");
 	}
 	
-	private static void createAndDeployGroupMember(int idx, String sourceLinkIdString, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+	private static void createAndDeployGroupMember(int idx, int leaderIdx, String sourceLinkIdString, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
 		String compIdString = "M" + idx;
-		GroupMember component = new GroupMember(compIdString,"L1");
+		GroupMember component = new GroupMember(compIdString,"L"+leaderIdx);
 		createAndDeployComponent(component, compIdString, simulationListeners);
 	}
 	
@@ -91,15 +92,20 @@ public class DecentralizedRun {
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
 		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
-		processor.process(component);//, new AdaptationManager());
+		processor.process(
+				component, 
+//				new AdaptationManager(),
+				SensorDataUpdate.class
+//				GMsInDangerUpdate.class 
+			);
 		
 		// pass design and trace models to the AdaptationManager
-		for (ComponentInstance c : model.getComponentInstances()) {
-			if (c.getName().equals(AdaptationManager.class.getName())) {
-				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
-				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
-			}
-		}
+//		for (ComponentInstance c : model.getComponentInstances()) {
+//			if (c.getName().equals(AdaptationManager.class.getName())) {
+//				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
+//				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
+//			}
+//		}
 		
 		DirectSimulationHost host = simulation.getHost(hostId);
 		RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, null, null);
