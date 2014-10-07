@@ -67,7 +67,7 @@ public class DecentralizedRun {
 		listeners.add(networkKnowledgeDataHandler);
 
 		createAndDeployGroupLeader(1,"5_5", listeners);
-		createAndDeployGroupMember(32, 1, "11_11", listeners);
+//		createAndDeployGroupMember(32, 1, "11_11", listeners);
 		createAndDeployGroupMember(42, 1, "1_1", listeners);
 		
 		Log.i("Simulation Starts");
@@ -94,18 +94,18 @@ public class DecentralizedRun {
 		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
 		processor.process(
 				component, 
-//				new AdaptationManager(),
+				new AdaptationManager(),
 				SensorDataUpdate.class
 //				GMsInDangerUpdate.class 
 			);
 		
 		// pass design and trace models to the AdaptationManager
-//		for (ComponentInstance c : model.getComponentInstances()) {
-//			if (c.getName().equals(AdaptationManager.class.getName())) {
-//				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
-//				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
-//			}
-//		}
+		for (ComponentInstance c : model.getComponentInstances()) {
+			if (c.getName().equals(AdaptationManager.class.getName())) {
+				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
+				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
+			}
+		}
 		
 		DirectSimulationHost host = simulation.getHost(hostId);
 		RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, null, null);

@@ -29,6 +29,9 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.EnsembleInstance;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
@@ -38,6 +41,7 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.PresentInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ShadowInvariantInstance;
+import cz.cuni.mff.d3s.irm.model.trace.api.ComponentTrace;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.ArchitectureReconfigurator;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
@@ -57,7 +61,9 @@ public class AdaptationManager {
 	public static void reason(@In("id") String id) {
 		// get runtime, architecture, design, and trace models from the process context
 		RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
+//		System.out.println("*** Runtime is: "+ runtime + " ***");
 		Architecture architecture = ProcessContext.getArchitecture();
+//		printArchitectureModel(architecture);
 		IRM design = (IRM) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(TRACE_MODEL);
 		// generate the IRM runtime model instances
@@ -91,9 +97,29 @@ public class AdaptationManager {
 			}
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
-		reconfigurator.toggleProcessesAndEnsembles();
+//		reconfigurator.toggleProcessesAndEnsembles();
 	}
-	
+
+	private static void printArchitectureModel(Architecture model) {
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		System.out.println("> ComponentInstances");
+		for (ComponentInstance ci : model.getComponentInstances()) {
+			if (ci instanceof LocalComponentInstance) {
+				System.out.println(">> LocalComponentInstance with id: " + ci.getId());
+			} else {
+				System.out.println(">> RemoteComponentInstance with id: " + ci.getId());
+			}
+		}
+		System.out.println("> EnsembleInstances");
+		for (EnsembleInstance ei : model.getEnsembleInstances()) {
+			System.out.println(">> EnsembleInstance "
+					+ ei.getEnsembleDefinition().getName() + " with coord: "
+					+ ei.getCoordinator().getId() + " and member: "
+					+ ei.getMembers().get(0).getId());
+		}
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	}
+
 	private static void printIRMInstance(IRMInstance i) {
 		System.out.println("###########");
 		System.out.println("IRMInstance: "+i);
