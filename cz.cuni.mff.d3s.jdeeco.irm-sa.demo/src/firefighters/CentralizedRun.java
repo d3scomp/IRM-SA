@@ -15,19 +15,24 @@
  ******************************************************************************/
 package firefighters;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFrameworkBuilder;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Distribution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Execution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Scheduling;
+import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
+import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
+import cz.cuni.mff.d3s.deeco.simulation.JDEECoSimulation;
+import cz.cuni.mff.d3s.deeco.simulation.SimulationRuntimeBuilder;
+import cz.cuni.mff.d3s.deeco.simulation.TimerTaskListener;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
@@ -36,45 +41,68 @@ import cz.cuni.mff.d3s.irmsa.EMFHelper;
 
 public class CentralizedRun {
 
-	static final String MODELS_BASE_PATH = "designModels/";
-	static final String XMIFILE_PREFIX = "firefighters_";
-	static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";	
+	private static final String MODELS_BASE_PATH = "designModels/";
+	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";
+	private static final long SIMULATION_START = 0; // in milliseconds
+	private static final long SIMULATION_END = 15000; // in milliseconds
+	private static final long NETWORK_DELAY = 100; // in milliseconds (this value is actually not used in the centralized case)
+	
+	private static IRM design;
+	private static JDEECoSimulation simulation;
+	private static SimulationRuntimeBuilder builder;
 
 	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException {
-		RuntimeMetadata runtime = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
+		Log.i("Preparing simulation");
+
 		@SuppressWarnings("unused")
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
-		IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+		design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+
+		DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new DelayedKnowledgeDataHandler(NETWORK_DELAY);
+		simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END, networkKnowledgeDataHandler);
 		
+		builder = new SimulationRuntimeBuilder();
+		
+		List<TimerTaskListener> listeners = new LinkedList<>();
+		listeners.add(networkKnowledgeDataHandler);
+
+		createAndDeployComponents(listeners);
+		
+		Log.i("Simulation Starts");
+		simulation.run();
+		Log.i("Simulation Finished");
+	}
+	
+	private static void createAndDeployComponents(Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, extension);
+		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
+		
+		GroupLeader leader = new GroupLeader("L1");
+		GroupMember member1 = new GroupMember("M1", "L1");
+		GroupMember member2 = new GroupMember("M2", "L1");
 		
 		processor.process(
-			new GroupMember("M1","L1"), 
-			new GroupMember("M2","L1"), 
-			new GroupLeader("L1"),
-			new AdaptationManager(), 
-			SensorDataUpdate.class, 
-			GMsInDangerUpdate.class 
-		);
-
+				leader,
+				member1,
+				member2,
+				new AdaptationManager(),
+				SensorDataUpdate.class,
+				GMsInDangerUpdate.class 
+			);
+		
 		// pass design and trace models to the AdaptationManager
-		for (ComponentInstance c : runtime.getComponentInstances()) {
+		for (ComponentInstance c : model.getComponentInstances()) {
 			if (c.getName().equals(AdaptationManager.class.getName())) {
 				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
 				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
 			}
 		}
 		
-		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
-				new RuntimeConfiguration(
-						Scheduling.WALL_TIME,
-						Distribution.LOCAL, 
-						Execution.SINGLE_THREADED));
-		RuntimeFramework runtimeFramework = builder.build(runtime);
+		DirectSimulationHost host = simulation.getHost("host");
+		RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, null, null);
 		
-		runtimeFramework.start();
-		
+		runtime.start();	
 	}
 }

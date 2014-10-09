@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("ei2")
-@PeriodicScheduling(period=4000)
+@PeriodicScheduling(period=2000)
 public class SensorDataUpdate {
 
 	@Membership
@@ -15,13 +15,7 @@ public class SensorDataUpdate {
 		@In("member.leaderId") String leaderId,
 		@In("coord.id") String id
 	) {
-		System.out.println("SensorDataUpdate: [leaderId=" + leaderId + "],[id=" + id + "]");
-		if (leaderId.equals(id)) {
-			System.out.println("SensorDataUpdate ensemble formed...");
-			return true;
-		} else {
-			return false;
-		}
+		return leaderId.equals(id);
 	}
 
 	@KnowledgeExchange
@@ -36,7 +30,6 @@ public class SensorDataUpdate {
 		@InOut("coord.positionMap") ParamHolder<Map<String,Position>> positionMap,  
 		@InOut("coord.temperatureMap") ParamHolder<Map<String,Long>> temperatureMap 
 	) {
-		System.out.println("SensorDataUpdate knowledge exchange...");
 		accelerationMap.value.put(id, acceleration);
 		oxygenLevelMap.value.put(id, oxygenLevel);
 		positionMap.value.put(id, position);

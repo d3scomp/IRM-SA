@@ -2,10 +2,11 @@ package firefighters;
 
 import cz.cuni.mff.d3s.deeco.annotations.*;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 
 @Ensemble
 @Invariant("ei1")
-@PeriodicScheduling(period=2000)
+@PeriodicScheduling(period=3000)
 public class GMsInDangerUpdate {
 
 	@Membership
@@ -13,12 +14,7 @@ public class GMsInDangerUpdate {
 		@In("member.leaderId") String leaderId,  
 		@In("coord.id") String id 
 	) {
-		if (leaderId == id) {
-			System.out.println("SensorDataUpdate ensemble formed...");
-			return true;
-		} else {
-			return false;
-		}
+		return leaderId.equals(id);
 	}
 
 	@KnowledgeExchange
@@ -27,5 +23,10 @@ public class GMsInDangerUpdate {
 		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger 
 	) {
 		nearbyGMInDanger.value = noOfGMsInDanger > 0;
+		if (nearbyGMInDanger.value) {
+			long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+			System.out.println("nearbyGMInDanger signal propagated to GroupMember at time : " + simulatedTime);	
+		}
+		
 	}	
 }

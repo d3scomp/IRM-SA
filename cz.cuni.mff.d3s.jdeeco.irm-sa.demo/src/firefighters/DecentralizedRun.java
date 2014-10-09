@@ -44,8 +44,8 @@ public class DecentralizedRun {
 	private static final String MODELS_BASE_PATH = "designModels/";
 	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";
 	private static final long SIMULATION_START = 0; // in milliseconds
-	private static final long SIMULATION_END = 9998; // in milliseconds
-	private static final long NETWORK_DELAY = 10; // in milliseconds
+	private static final long SIMULATION_END = 15000; // in milliseconds
+	private static final long NETWORK_DELAY = 100; // in milliseconds
 	
 	private static IRM design;
 	private static JDEECoSimulation simulation;
@@ -66,25 +66,23 @@ public class DecentralizedRun {
 		List<TimerTaskListener> listeners = new LinkedList<>();
 		listeners.add(networkKnowledgeDataHandler);
 
-		createAndDeployGroupLeader(1,"5_5", listeners);
-//		createAndDeployGroupMember(32, 1, "11_11", listeners);
-		createAndDeployGroupMember(42, 1, "1_1", listeners);
+		createAndDeployGroupLeader("L1", listeners);
+		createAndDeployGroupMember("M1", "L1", listeners);
+		createAndDeployGroupMember("M2", "L1", listeners);
 		
 		Log.i("Simulation Starts");
 		simulation.run();
 		Log.i("Simulation Finished");
 	}
 	
-	private static void createAndDeployGroupMember(int idx, int leaderIdx, String sourceLinkIdString, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
-		String compIdString = "M" + idx;
-		GroupMember component = new GroupMember(compIdString,"L"+leaderIdx);
-		createAndDeployComponent(component, compIdString, simulationListeners);
+	private static void createAndDeployGroupMember(String idx, String leaderIdx, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+		GroupMember component = new GroupMember(idx,leaderIdx);
+		createAndDeployComponent(component, idx, simulationListeners);
 	}
 	
-	private static void createAndDeployGroupLeader(int idx, String sourceLinkIdString, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
-		String compIdString = "L" + idx;
-		GroupLeader component = new GroupLeader(compIdString);
-		createAndDeployComponent(component, compIdString, simulationListeners);
+	private static void createAndDeployGroupLeader(String idx, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+		GroupLeader component = new GroupLeader(idx);
+		createAndDeployComponent(component, idx, simulationListeners);
 	}
 	
 	private static void createAndDeployComponent(Object component, String hostId, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
@@ -95,8 +93,8 @@ public class DecentralizedRun {
 		processor.process(
 				component, 
 				new AdaptationManager(),
-				SensorDataUpdate.class
-//				GMsInDangerUpdate.class 
+				SensorDataUpdate.class,
+				GMsInDangerUpdate.class 
 			);
 		
 		// pass design and trace models to the AdaptationManager

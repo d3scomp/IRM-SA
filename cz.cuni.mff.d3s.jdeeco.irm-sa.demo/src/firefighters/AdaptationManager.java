@@ -21,13 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.EnsembleInstance;
@@ -40,8 +39,6 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.PresentInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ShadowInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.trace.api.ComponentTrace;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.ArchitectureReconfigurator;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
@@ -59,13 +56,21 @@ public class AdaptationManager {
 	@Process
 	@PeriodicScheduling(period=5000)
 	public static void reason(@In("id") String id) {
-		// get runtime, architecture, design, and trace models from the process context
+		// get runtime model from the process context
 		RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
-//		System.out.println("*** Runtime is: "+ runtime + " ***");
+		// get simulated time
+		long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		System.out.println("*** Reasoning in runtime "+ runtime + " at time " + simulatedTime +" ***");
+		// skipping the first run of this process as replicas are not disseminated yet
+		if (simulatedTime == -1) {
+			Log.w("First invocation of the AdaptationManager. Skipping this reasoning cycle.");
+			return;
+		}
+		// get architecture, design, and trace models from the process context
 		Architecture architecture = ProcessContext.getArchitecture();
-//		printArchitectureModel(architecture);
 		IRM design = (IRM) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(TRACE_MODEL);
+		printArchitectureModel(architecture); // for debugging...
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
@@ -75,17 +80,17 @@ public class AdaptationManager {
 			preProcessor.convertDAGToForest();
 		}
 		// clean up the files from previous run (if any)
-		deleteXMIFilesFromPreviousRun(CentralizedRun.MODELS_BASE_PATH, CentralizedRun.XMIFILE_PREFIX);
+		deleteXMIFilesFromPreviousRun(MainOld.MODELS_BASE_PATH, MainOld.XMIFILE_PREFIX);
 		// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
 		System.out.println("Number of IRMInstances: " + IRMInstances.size());
 		for (int i = 0; i< IRMInstances.size(); i++) {
-//			System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
-			EMFHelper.saveModelInXMI(IRMInstances.get(i),CentralizedRun.MODELS_BASE_PATH + CentralizedRun.XMIFILE_PREFIX + i +".xmi");
+			// System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i))); // for debugging...
+			EMFHelper.saveModelInXMI(IRMInstances.get(i),MainOld.MODELS_BASE_PATH + MainOld.XMIFILE_PREFIX + i +".xmi");
 		}
 		// create a reconfigurator of the current runtime
 		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
 		for (IRMInstance i: IRMInstances) {
-//			printIRMInstance(i); // for debugging...
+			// printIRMInstance(i); // for debugging...
 			SATSolver solver = new SATSolver(i);
 			
 			if (solver.solve()) {
@@ -97,7 +102,7 @@ public class AdaptationManager {
 			}
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
-//		reconfigurator.toggleProcessesAndEnsembles();
+		reconfigurator.toggleProcessesAndEnsembles();
 	}
 
 	private static void printArchitectureModel(Architecture model) {
@@ -105,9 +110,9 @@ public class AdaptationManager {
 		System.out.println("> ComponentInstances");
 		for (ComponentInstance ci : model.getComponentInstances()) {
 			if (ci instanceof LocalComponentInstance) {
-				System.out.println(">> LocalComponentInstance with id: " + ci.getId());
+				System.out.println(">> LocalComponentInstance : " + ci.getId());
 			} else {
-				System.out.println(">> RemoteComponentInstance with id: " + ci.getId());
+				System.out.println(">> RemoteComponentInstance: " + ci.getId());
 			}
 		}
 		System.out.println("> EnsembleInstances");

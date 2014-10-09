@@ -131,9 +131,15 @@ public class IRMInstanceGenerator {
 	public List<IRMInstance> generateIRMInstances() {
 		IRMinstances = new ArrayList<>();
 		constructInstances(new HashMap<Component,ComponentInstance>(), design.getComponents().listIterator(0));
+		
+		// flush all ensemble instances from architecture model (they are anyway used as volatile data) 
+		Log.i("Removing all ensemble instances from architectural model.");
+		architecture.getEnsembleInstances().retainAll(Collections.EMPTY_SET);
+		
 		return IRMinstances;
 	}
-	
+
+
 	/**
 	 * Goes through all IRM design components, and recursively tries to
 	 * "instantiate" each component by looking for its counterpart on the
@@ -227,10 +233,6 @@ public class IRMInstanceGenerator {
 			invariantsToInstances.put(i, invariantInstance);
 			irmInstance.getInvariantInstances().add(invariantInstance);
 		}
-		
-		// flush all ensemble instances from architecture model (they are anyway used as volatile data) 
-		Log.i("Removing all ensemble instances from architectural model.");
-		architecture.getEnsembleInstances().retainAll(Collections.EMPTY_SET);
 		
 		// FIXME(IG) Make the design model easier to work with, i.e. make it into a tree structure computed on the fly 
 		// e.g., by implementing a DecomposableElement.getParents(), DecomposableElement.getChildren()
@@ -406,6 +408,7 @@ public class IRMInstanceGenerator {
 			} 
 			
 			InvariantMonitor monitor = getInvariantMonitor(invariant);
+			
 			if (monitor == null) {
 				Log.w("No invariant monitor found for process invariant " + invariant + ", so invariant evaluation trivially returned true.");
 				return true;
@@ -414,7 +417,7 @@ public class IRMInstanceGenerator {
 			Method method = monitor.getMethod();
 			ReadOnlyKnowledgeManager knowledgeManager = contributingComponent.getArchitectureInstance().getKnowledgeManager();
 			Collection<MonitorParameter> formalParams = monitor.getMonitorParameters();
-			
+						
 			Collection<KnowledgePath> paths = new ArrayList<KnowledgePath>();
 			
 			for (MonitorParameter formalParam : formalParams) {
@@ -522,7 +525,8 @@ public class IRMInstanceGenerator {
 			System.out.println("-------- Monitor " + method + " returned " + ret);
 			return ret;
 			
-		} else { // if i is neither Process nor Exchange invariant
+		} else {
+			// if i is neither Process nor Exchange invariant
 			// TODO(IG) implement monitoring also for Assumption and non-leaf invariants
 			return true;
 		}
@@ -612,7 +616,7 @@ public class IRMInstanceGenerator {
 		return false;
 	}
 
-	private  InvariantMonitor getInvariantMonitor(Invariant i) {
+	private InvariantMonitor getInvariantMonitor(Invariant i) {
 		for (InvariantMonitor m : trace.getInvariantMonitors()) {
 			if (m.getInvariant().equals(i)) {
 				return m;
