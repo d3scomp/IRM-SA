@@ -450,7 +450,7 @@ public class IRMInstanceGenerator {
 				Log.e("Error when invoking a monitor method, so invariant evaluation returned false.", e);
 				return false;
 			}
-			System.out.println("++++++++ Monitor " + method + " returned " + ret);
+			System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
 			return ret;
 			
 		} else if (invariant instanceof ExchangeInvariant){

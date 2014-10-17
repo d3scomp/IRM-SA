@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import cz.cuni.mff.d3s.deeco.DeecoProperties;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
@@ -42,61 +43,153 @@ import cz.cuni.mff.d3s.irmsa.EMFHelper;
 public class DecentralizedRun {
 
 	private static final String MODELS_BASE_PATH = "designModels/";
-	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";
+	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH
+			+ "firefighters.irmdesign";
 	private static final long SIMULATION_START = 0; // in milliseconds
 	private static final long SIMULATION_END = 15000; // in milliseconds
-	private static final long NETWORK_DELAY = 100; // in milliseconds
-	
+
 	private static IRM design;
 	private static JDEECoSimulation simulation;
 	private static SimulationRuntimeBuilder builder;
 
-	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException {
-		Log.i("Preparing simulation");
+	@SuppressWarnings("unused")
+	public static void main(String args[]) throws AnnotationProcessorException,
+			InterruptedException {
+		System.setProperty(DeecoProperties.PUBLISHING_PERIOD, new Integer(Settings.BROADCAST_PERIOD).toString());
+		int networkDelay;
+		int numberOfIterations = 5;
+		List<String> afterTimes = new LinkedList<>();
+		boolean inaccuarcyEnabled;
+		afterTimes.add("----------Inaccuracy disabled-------------");
+		afterTimes.add("\n");
+		for (int i = 0; i <= numberOfIterations; i++) {
+			InDangerTimeHelper.getInstance().reset();
+			Results.getInstance().reset();
+			Log.i("Preparing simulation");
+			networkDelay = i * Settings.NETWORK_DELAY;
+			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
+			design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+			DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new CustomDelayedNetworkKnowledgeDataHandler(networkDelay);
 
-		@SuppressWarnings("unused")
-		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
-		design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+			simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END,
+					networkKnowledgeDataHandler);
 
-		DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new DelayedKnowledgeDataHandler(NETWORK_DELAY);
-		simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END, networkKnowledgeDataHandler);
-		
-		builder = new SimulationRuntimeBuilder();
-		
-		List<TimerTaskListener> listeners = new LinkedList<>();
-		listeners.add(networkKnowledgeDataHandler);
+			builder = new SimulationRuntimeBuilder();
 
-		createAndDeployGroupLeader("L1", listeners);
-		createAndDeployGroupMember("M1", "L1", listeners);
-		createAndDeployGroupMember("M2", "L1", listeners);
+			List<TimerTaskListener> listeners = new LinkedList<>();
+			listeners.add(networkKnowledgeDataHandler);
+
+			createAndDeployGroupLeader("L1", listeners);
+			createAndDeployGroupMember("M1", "L1", listeners);
+			createAndDeployGroupMember("M2", "L1", listeners);
+
+			// Here we enable the inaccuracy checking - i.e. the second case.
+			// The parameter sets the threashold (maximum) inaccuracy (in
+			// milliseconds). Please comment the following line if you would
+			// like to disable the
+			// inaccuracy checking and have just the first (simple) case.
+			// NearbyGMInDangerInaccuaracy.enableInaccuarcyChecking(400);
+
+			Log.i("Simulation Starts");
+			simulation.run();
+			Log.i("Simulation Finished");
+			long srTime = Results.getInstance().getReactionTime();
+			long idTime = InDangerTimeHelper.getInstance().getInDangerTime();
+			StringBuilder resultString = new StringBuilder(
+					"no inaccuracy, network delay: " + networkDelay);
+			resultString.append(" - " + (srTime - idTime));
+			afterTimes.add(resultString.toString());
+		}
+		afterTimes.add("\n");
+		afterTimes.add("----------Inaccuracy enabled-------------");
+		afterTimes.add("\n");
+		long inaccuracy;
+		for (int j = 0; j < 3; j++) {
+			inaccuracy = Settings.BASE_INACCURACY + j*Settings.INACCURACY_INTERVAL;
+			afterTimes.add("----------Inaccuracy "+inaccuracy+"-------------");
+			for (int i = 0; i <= numberOfIterations; i++) {
+				InDangerTimeHelper.getInstance().reset();
+				Results.getInstance().reset();
+				Log.i("Preparing simulation");
+				networkDelay = i * Settings.NETWORK_DELAY;
+				IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
+				design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+
+				// Here we set the arbitrary value for the network delay.
+				DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new CustomDelayedNetworkKnowledgeDataHandler(
+						networkDelay);
+
+				simulation = new JDEECoSimulation(SIMULATION_START,
+						SIMULATION_END, networkKnowledgeDataHandler);
+
+				builder = new SimulationRuntimeBuilder();
+
+				List<TimerTaskListener> listeners = new LinkedList<>();
+				listeners.add(networkKnowledgeDataHandler);
+
+				createAndDeployGroupLeader("L1", listeners);
+				createAndDeployGroupMember("M1", "L1", listeners);
+				createAndDeployGroupMember("M2", "L1", listeners);
+
+				// Here we enable the inaccuracy checking - i.e. the second
+				// case.
+				// The parameter sets the threashold (maximum) inaccuracy (in
+				// milliseconds). Please comment the following line if you would
+				// like to disable the
+				// inaccuracy checking and have just the first (simple) case.
+				NearbyGMInDangerInaccuaracy.enableInaccuarcyChecking(inaccuracy);
+
+				Log.i("Simulation Starts");
+				simulation.run();
+				Log.i("Simulation Finished");
+				StringBuilder resultString = new StringBuilder(
+						"inaccuracy: " + inaccuracy);
+				resultString.append(", network delay: " + networkDelay);
+				resultString
+						.append(" - "
+								+ (Results.getInstance().getReactionTime() - InDangerTimeHelper
+										.getInstance().getInDangerTime()));
+				afterTimes.add(resultString.toString());
+			}
+			afterTimes.add("\n");
+		}
+
+		for (String result : afterTimes) {
+			System.out.println(result);
+		}
 		
-		Log.i("Simulation Starts");
-		simulation.run();
-		Log.i("Simulation Finished");
+		System.out.println(NearbyGMInDangerInaccuaracy.getInstance().getInaccuracies());
 	}
-	
-	private static void createAndDeployGroupMember(String idx, String leaderIdx, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
-		GroupMember component = new GroupMember(idx,leaderIdx);
+
+	private static void createAndDeployGroupMember(String idx,
+			String leaderIdx,
+			Collection<? extends TimerTaskListener> simulationListeners)
+			throws AnnotationProcessorException {
+		GroupMember component = new GroupMember(idx, leaderIdx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
-	
-	private static void createAndDeployGroupLeader(String idx, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+
+	private static void createAndDeployGroupLeader(String idx,
+			Collection<? extends TimerTaskListener> simulationListeners)
+			throws AnnotationProcessorException {
 		GroupLeader component = new GroupLeader(idx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
-	
-	private static void createAndDeployComponent(Object component, String hostId, Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
-		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+
+	private static void createAndDeployComponent(Object component,
+			String hostId,
+			Collection<? extends TimerTaskListener> simulationListeners)
+			throws AnnotationProcessorException {
+		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE
+				.createRuntimeMetadata();
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
-		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
-		processor.process(
-				component, 
-				new AdaptationManager(),
-				SensorDataUpdate.class,
-				GMsInDangerUpdate.class 
-			);
-		
+		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(
+				design, trace);
+		AnnotationProcessor processor = new AnnotationProcessor(
+				RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
+		processor.process(component, new AdaptationManager(),
+				SensorDataUpdate.class, GMsInDangerUpdate.class);
+
 		// pass design and trace models to the AdaptationManager
 		for (ComponentInstance c : model.getComponentInstances()) {
 			if (c.getName().equals(AdaptationManager.class.getName())) {
@@ -104,10 +197,11 @@ public class DecentralizedRun {
 				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
 			}
 		}
-		
+
 		DirectSimulationHost host = simulation.getHost(hostId);
-		RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, null, null);
-		
-		runtime.start();	
+		RuntimeFramework runtime = builder.build(host, simulation,
+				simulationListeners, model, null, null);
+
+		runtime.start();
 	}
 }

@@ -4,10 +4,11 @@ import java.util.Map;
 
 import cz.cuni.mff.d3s.deeco.annotations.*;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 
 @Ensemble
 @Invariant("ei2")
-@PeriodicScheduling(period=2000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class SensorDataUpdate {
 
 	@Membership
@@ -25,14 +26,9 @@ public class SensorDataUpdate {
 		@In("member.oxygenLevel") Long oxygenLevel,  
 		@In("member.position") Position position,  
 		@In("member.temperature") Long temperature,  
-		@InOut("coord.accelerationMap") ParamHolder<Map<String,Integer>> accelerationMap,  
-		@InOut("coord.oxygenLevelMap") ParamHolder<Map<String,Long>> oxygenLevelMap,  
-		@InOut("coord.positionMap") ParamHolder<Map<String,Position>> positionMap,  
-		@InOut("coord.temperatureMap") ParamHolder<Map<String,Long>> temperatureMap 
+		@InOut("coord.sensorReadings") ParamHolder<Map<String,SensorReadings>> sensorReadings
 	) {
-		accelerationMap.value.put(id, acceleration);
-		oxygenLevelMap.value.put(id, oxygenLevel);
-		positionMap.value.put(id, position);
-		temperatureMap.value.put(id, temperature);
+		System.out.println("Ensemble at "+id+" fired at " + ProcessContext.getTimeProvider().getCurrentMilliseconds() + " temperature " + temperature);
+		sensorReadings.value.put(id, new SensorReadings(temperature, position, acceleration, oxygenLevel));
 	}	
 }

@@ -54,7 +54,7 @@ public class AdaptationManager {
 	public static final String DESIGN_MODEL = "design";  
 	
 	@Process
-	@PeriodicScheduling(period=5000)
+	@PeriodicScheduling(period=Settings.ADAPTATION_PERIOD, order=10)
 	public static void reason(@In("id") String id) {
 		// get runtime model from the process context
 		RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
@@ -62,7 +62,7 @@ public class AdaptationManager {
 		long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		System.out.println("*** Reasoning in runtime "+ runtime + " at time " + simulatedTime +" ***");
 		// skipping the first run of this process as replicas are not disseminated yet
-		if (simulatedTime == -1) {
+		if (simulatedTime == 0) {
 			Log.w("First invocation of the AdaptationManager. Skipping this reasoning cycle.");
 			return;
 		}
@@ -74,6 +74,11 @@ public class AdaptationManager {
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+		
+		if (IRMInstances.size()==0) {
+			return;
+		}
+		
 		// preprocess the generated instances
 		for (IRMInstance i : IRMInstances) {
 			SATSolverPreProcessor preProcessor = new SATSolverPreProcessor(i);

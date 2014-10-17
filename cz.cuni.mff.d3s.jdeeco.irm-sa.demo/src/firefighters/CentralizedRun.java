@@ -71,6 +71,8 @@ public class CentralizedRun {
 		Log.i("Simulation Starts");
 		simulation.run();
 		Log.i("Simulation Finished");
+		
+		System.out.println("The reaction time is: " + (Results.getInstance().getReactionTime() - InDangerTimeHelper.getInstance().getInDangerTime()));
 	}
 	
 	private static void createAndDeployComponents(Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {

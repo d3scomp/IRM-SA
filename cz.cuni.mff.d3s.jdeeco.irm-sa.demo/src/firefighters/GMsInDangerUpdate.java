@@ -1,12 +1,18 @@
 package firefighters;
 
-import cz.cuni.mff.d3s.deeco.annotations.*;
+import cz.cuni.mff.d3s.deeco.annotations.Ensemble;
+import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.Invariant;
+import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
+import cz.cuni.mff.d3s.deeco.annotations.Membership;
+import cz.cuni.mff.d3s.deeco.annotations.Out;
+import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 
 @Ensemble
 @Invariant("ei1")
-@PeriodicScheduling(period=3000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class GMsInDangerUpdate {
 
 	@Membership
@@ -19,13 +25,14 @@ public class GMsInDangerUpdate {
 
 	@KnowledgeExchange
 	public static void map(
-		@Out("member.nearbyGMInDanger") ParamHolder<Boolean> nearbyGMInDanger,  
-		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger 
+		@In("member.id") String id,	
+		@Out("member.nearbyGMInDanger") ParamHolder<Boolean> nearbyGMInDanger,   
+		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger
 	) {
 		nearbyGMInDanger.value = noOfGMsInDanger > 0;
 		if (nearbyGMInDanger.value) {
 			long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-			System.out.println("nearbyGMInDanger signal propagated to GroupMember at time : " + simulatedTime);	
+			System.out.println("nearbyGMInDanger signal propagated to GroupMember " + id + " at time : " + simulatedTime);	
 		}
 		
 	}	

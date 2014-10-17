@@ -32,17 +32,19 @@ public class GroupMember {
  
 	@Process
 	@Invariant("pi5")
-	@PeriodicScheduling(period=2000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorTemperatureScarcely(
 			@In("id") String id, // very ugly hard-coding, just to identify the member's id
-		@Out("temperature") ParamHolder<Long> temperature 
+			@Out("temperature") ParamHolder<Long> temperature 
 	) {
 		System.out.println("monitorTemperatureScarcely");
 		long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		// hard-coded scenario: M1 starts to have has high temperature at time 5999 (4th invocation of this process)
-		if ((id.equals("M1")) && (simulatedTime >= 5999)) {
-			// the timestamp of the first time this happens has to be logged to a file!
-			System.out.println("M1 surpassed temperature threshold (50) at : " + simulatedTime);
+		if ((id.equals("M1")) && (simulatedTime >= 6000)) {
+			if (!InDangerTimeHelper.getInstance().isSetInDangerTime()) {
+				InDangerTimeHelper.getInstance().setInDangerTime(simulatedTime);
+				System.out.println("GroupMember reported high temperature at " + simulatedTime);
+			}
 			temperature.value = 51l;
 		} else {
 			temperature.value = 25l;
@@ -51,7 +53,7 @@ public class GroupMember {
  
 	@Process
 	@Invariant("pi2")
-	@PeriodicScheduling(period=1000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorAcceleration(
 		@Out("acceleration") ParamHolder<Integer> acceleration 
 	) {
@@ -60,7 +62,7 @@ public class GroupMember {
  
 	@Process
 	@Invariant("pi3")
-	@PeriodicScheduling(period=1000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorPositionITS(
 		@Out("position") ParamHolder<Position> position
 	) {
@@ -69,7 +71,7 @@ public class GroupMember {
  
 	@Process
 	@Invariant("pi4")
-	@PeriodicScheduling(period=1000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorPositionGPS(
 		@Out("position") ParamHolder<Position> position 
 	) {
@@ -78,17 +80,17 @@ public class GroupMember {
  
 	@Process
 	@Invariant("pi6")
-	@PeriodicScheduling(period=1000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorTemperatureClosely(
 		@Out("temperature") ParamHolder<Long> temperature 
 	) {
 		System.out.println("monitorTemperatureClosely");
-		temperature.value = 50l;
+		temperature.value = 40l;
 	}
  
 	@Process
 	@Invariant("pi7")
-	@PeriodicScheduling(period=2000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void monitorOxygenLevel(
 		@Out("oxygenLevel") ParamHolder<Long> oxygenLevel 
 	) {
@@ -97,15 +99,22 @@ public class GroupMember {
 	
 	@Process
 	@Invariant("pi8")
-	@PeriodicScheduling(period=1000)
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD, order=5)
 	public static void searchAndRescue(
 			@In("id") String id, // very ugly hard-coding, just to identify the member's id
-		@In("nearbyGMInDanger") Boolean nearbyGMInDanger 
+			@In("nearbyGMInDanger") Boolean nearbyGMInDanger
 	) {
-		long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-		if (nearbyGMInDanger && (id.equals("M2"))) {
-			// the timestamp of the first time this happens has to be logged to a file!
-			System.out.println("M2 search and rescue operation started at time : " + simulatedTime);	
+		long currentTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		if (id.equals("M2") && currentTime > 5000) {
+			if (nearbyGMInDanger) {
+				long inDangerTime = InDangerTimeHelper.getInstance().getInDangerTime();
+				long afterTime = currentTime - inDangerTime;
+				// the timestamp of the first time this happens has to be logged to a file!
+				System.out.println("M2 search and rescue operation started after: " + afterTime);
+			} else {
+				System.out.println("M2 search and rescue operation started as data is inaccurate (MAX_INACCURACY = "+NearbyGMInDangerInaccuaracy.getMaxInaccuracy()+")");
+			}
+			Results.getInstance().setReactionTime(currentTime);
 		}
 	}
 	
@@ -113,6 +122,9 @@ public class GroupMember {
 	public static boolean monitorTemperatureCloselyMonitor(
 		@In("nearbyGMInDanger") Boolean nearbyGMInDanger
 	) {
+		if (NearbyGMInDangerInaccuaracy.getInstance().isInaccurate() && InDangerTimeHelper.getInstance().isSetInDangerTime()) {
+			return false;
+		}
 		return !nearbyGMInDanger;
 	}
 	
@@ -120,14 +132,25 @@ public class GroupMember {
 	public static boolean monitorOxygenLevelMonitor(
 		@In("nearbyGMInDanger") Boolean nearbyGMInDanger
 	) {
+		if (NearbyGMInDangerInaccuaracy.getInstance().isInaccurate() && InDangerTimeHelper.getInstance().isSetInDangerTime()) {
+			return false;
+		}
 		return !nearbyGMInDanger;
 	}
 	
 	@InvariantMonitor("pi8") 
 	public static boolean searchAndRescueMonitor(
-		@In("nearbyGMInDanger") Boolean nearbyGMInDanger
+		@In("nearbyGMInDanger") Boolean nearbyGMInDanger,
+		@In("id") String id
 	) {
-		return nearbyGMInDanger;
+		if (nearbyGMInDanger) {
+			return true;
+		}
+		if (NearbyGMInDangerInaccuaracy.getInstance().isInaccurate() && InDangerTimeHelper.getInstance().isSetInDangerTime()) {
+			System.out.println("The value of the nearbyGMInDanger is inaccurate. Switching to safe mode.");
+			return true;
+		}
+		return false;
 	}
 	
 }
