@@ -24,6 +24,7 @@ import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
+import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -186,7 +187,7 @@ public class DecentralizedRun {
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(
 				design, trace);
 		AnnotationProcessor processor = new AnnotationProcessor(
-				RuntimeMetadataFactoryExt.eINSTANCE, model, extension);
+				RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
 		processor.process(component, new AdaptationManager(),
 				SensorDataUpdate.class, GMsInDangerUpdate.class);
 

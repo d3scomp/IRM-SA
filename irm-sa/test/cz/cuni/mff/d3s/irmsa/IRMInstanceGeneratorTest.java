@@ -54,7 +54,7 @@ import cz.cuni.mff.d3s.irmsa.satsolver.SATSolverPreProcessor;
  */
 public class IRMInstanceGeneratorTest {
 
-	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", File.separator);
+	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");
 	
 	RuntimeMetadataFactory rFactory; 
 	ArchitectureFactory aFactory;

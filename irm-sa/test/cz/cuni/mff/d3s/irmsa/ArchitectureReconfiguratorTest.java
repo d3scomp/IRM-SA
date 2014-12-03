@@ -27,6 +27,7 @@ import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
 import cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle;
+import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -53,7 +54,7 @@ import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
  */
 public class ArchitectureReconfiguratorTest {
 
-	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", File.separator);
+	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");
 
 	IRM design;
 	RuntimeMetadata runtime;
@@ -69,13 +70,13 @@ public class ArchitectureReconfiguratorTest {
 		design = (IRM) EMFHelper.loadModelFromXMI(MODELS_BASE_PATH + "vehicles_simple.irmdesign");
 
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, extension);
+		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, new CloningKnowledgeManagerFactory(), extension);
 
 		processor.process(new Vehicle());
 
 		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
 				new RuntimeConfiguration(Scheduling.WALL_TIME,
-						Distribution.LOCAL, Execution.SINGLE_THREADED));
+						Distribution.LOCAL, Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
 		builder.build(runtime);
 	}
 

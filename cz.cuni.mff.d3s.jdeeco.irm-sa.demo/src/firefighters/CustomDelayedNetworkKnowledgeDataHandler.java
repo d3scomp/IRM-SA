@@ -5,7 +5,7 @@ import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.network.AbstractHost;
 import cz.cuni.mff.d3s.deeco.network.KnowledgeData;
-import cz.cuni.mff.d3s.deeco.network.KnowledgeDataReceiver;
+//import cz.cuni.mff.d3s.deeco.network.KnowledgeDataReceiver;
 import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
 import cz.cuni.mff.d3s.deeco.simulation.task.KnowledgeUpdateTask;
 

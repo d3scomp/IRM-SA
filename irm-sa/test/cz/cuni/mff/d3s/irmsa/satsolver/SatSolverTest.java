@@ -38,7 +38,7 @@ import cz.cuni.mff.d3s.irmsa.IRMHelper;
 
 public class SatSolverTest {
 
-	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", File.separator);
+	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");
 	
 	IRM design;
 	IRMInstance instance;

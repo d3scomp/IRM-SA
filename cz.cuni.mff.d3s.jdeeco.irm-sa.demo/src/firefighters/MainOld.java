@@ -19,6 +19,7 @@ import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
+import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
@@ -48,7 +49,7 @@ public class MainOld {
 		IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 		
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, extension);
+		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, new CloningKnowledgeManagerFactory(), extension);
 		
 		processor.process(
 			new GroupMember("M1","L1"), 
@@ -71,7 +72,7 @@ public class MainOld {
 				new RuntimeConfiguration(
 						Scheduling.WALL_TIME,
 						Distribution.LOCAL, 
-						Execution.SINGLE_THREADED));
+						Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
 		RuntimeFramework runtimeFramework = builder.build(runtime);
 		
 		runtimeFramework.start();
