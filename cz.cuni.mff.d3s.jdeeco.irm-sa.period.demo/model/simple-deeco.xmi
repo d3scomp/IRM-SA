@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cz.cuni.mff.d3s.irm.tool.deeco="http://cz.cuni.mff.d3s.irm.tool.deeco/1.0">
+  <cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance name="Component1" IRMcomponent="Component1">
+    <componentProcesses name="Process1" isActive="false" IRMinvariant="I02">
+      <parameters direction="OUT" type="String">
+        <knowledgePath>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="Knowledge1"/>
+        </knowledgePath>
+      </parameters>
+      <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1000"/>
+    </componentProcesses>
+    <initialKnowledge name="Knowledge1" type="String"/>
+  </cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance>
+  <cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance name="Component2" IRMcomponent="Component2">
+    <initialKnowledge name="Knowledge2" type="String"/>
+  </cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance>
+  <cz.cuni.mff.d3s.irm.tool.deeco:EnsembleDefinition name="Ensemble1" IRMinvariant="I03">
+    <membership>
+      <parameters direction="IN" type="String">
+        <knowledgePath>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeMember"/>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="Knowledge1"/>
+        </knowledgePath>
+      </parameters>
+      <parameters direction="IN" type="String">
+        <knowledgePath>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeCoordinator"/>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="Knowledge2"/>
+        </knowledgePath>
+      </parameters>
+    </membership>
+    <knowledgeExchange>
+      <parameters direction="IN" type="String">
+        <knowledgePath>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeMember"/>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="Knowledge1"/>
+        </knowledgePath>
+      </parameters>
+      <parameters direction="INOUT" type="String">
+        <knowledgePath>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeCoordinator"/>
+          <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="Knowledge2"/>
+        </knowledgePath>
+      </parameters>
+    </knowledgeExchange>
+    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="2000"/>
+  </cz.cuni.mff.d3s.irm.tool.deeco:EnsembleDefinition>
+</xmi:XMI>
