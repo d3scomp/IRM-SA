@@ -29,6 +29,7 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
+import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
 import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
 import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
@@ -201,7 +202,9 @@ public class DecentralizedRun {
 
 		DirectSimulationHost host = simulation.getHost(hostId);
 		RuntimeFramework runtime = builder.build(host, simulation,
-				simulationListeners, model, null, null);
+				simulationListeners, model,
+				new DefaultKnowledgeDataManager(model.getEnsembleDefinitions(), null),
+				new CloningKnowledgeManagerFactory());
 
 		runtime.start();
 	}
