@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2014 Charles University in Prague
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionP
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
 import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
@@ -41,66 +41,86 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 
+/**
+ * This class contains main for centralized run.
+ * Most of it is adapted from CentralizedRun in fire fighters demo.
+ */
 public class CentralizedRun {
 
-	private static final String MODELS_BASE_PATH = "model/";
-	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "simple.irmdesign";
-	private static final long SIMULATION_START = 0; // in milliseconds
-	private static final long SIMULATION_END = 15000; // in milliseconds
-	private static final long NETWORK_DELAY = 100; // in milliseconds (this value is actually not used in the centralized case)
-	
-	private static IRM design;
-	private static JDEECoSimulation simulation;
-	private static SimulationRuntimeBuilder builder;
+	/** Directory containing models. */
+	static private final String MODELS_BASE_PATH = "model/";
 
-	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException {
+	/** Path to design model of the simulation to run. */
+	static private final String DESIGN_MODEL_PATH =
+			MODELS_BASE_PATH + "simple.irmdesign";
+
+	/** Start of the simulation in milliseconds. */
+	static private final long SIMULATION_START = 0;
+
+	/** End of the simulation in milliseconds. */
+	static private final long SIMULATION_END = 15000;
+
+	/** Network delay in milliseconds. Not used in centralized case. */
+	static private final long NETWORK_DELAY = 100;
+
+	/**
+	 * Runs centralized simulation.
+	 * @param args command line arguments, ignored
+	 * @throws AnnotationProcessorException
+	 */
+	public static void main(String args[]) throws AnnotationProcessorException {
 		Log.i("Preparing simulation");
 
 		@SuppressWarnings("unused")
-		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
-		design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
+		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
+		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 
-		DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new DelayedKnowledgeDataHandler(NETWORK_DELAY);
-		simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END, networkKnowledgeDataHandler);
-		
-		builder = new SimulationRuntimeBuilder();
-		
+		final DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new DelayedKnowledgeDataHandler(NETWORK_DELAY);
+		final JDEECoSimulation simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END, networkKnowledgeDataHandler);
+
+		final SimulationRuntimeBuilder builder = new SimulationRuntimeBuilder();
+
 		List<TimerTaskListener> listeners = new LinkedList<>();
 		listeners.add(networkKnowledgeDataHandler);
 
-		createAndDeployComponents(listeners);
-		
+		createAndDeployComponents(design, simulation, builder, listeners);
+
 		Log.i("Simulation Starts");
 		simulation.run();
 		Log.i("Simulation Finished");
-		
-//		System.out.println("The reaction time is: " + (Results.getInstance().getReactionTime() - InDangerTimeHelper.getInstance().getInDangerTime()));
 	}
-	
-	private static void createAndDeployComponents(Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
-		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
-		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
-		
-		Component1 component1 = new Component1();
-		Component2 component2 = new Component2();
+
+	/**
+	 * Creates and deploys components.
+	 * @param design IRM to use
+	 * @param simulation JDEECoSimulation to use
+	 * @param builder SimulationRuntimeBuilder to use
+	 * @param simulationListeners listeners to use
+	 * @throws AnnotationProcessorException
+	 */
+	private static void createAndDeployComponents(IRM design,
+			JDEECoSimulation simulation,
+			SimulationRuntimeBuilder builder,
+			Collection<? extends TimerTaskListener> simulationListeners)
+					throws AnnotationProcessorException {
+		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
+		final AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
+		final AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
+
+		final Component1 component1 = new Component1();
+		final Component2 component2 = new Component2();
 		processor.process(
 				component1,
 				component2,
 				new PeriodAdaptationManager());
-		
-		// pass design and trace models to the PeriodAdaptationManager
-		for (ComponentInstance c : model.getComponentInstances()) {
-			if (c.getName().equals(PeriodAdaptationManager.class.getName())) {
-				c.getInternalData().put(PeriodAdaptationManager.DESIGN_MODEL, design);
-				c.getInternalData().put(PeriodAdaptationManager.TRACE_MODEL, trace);
-			}
-		}
-		
-		DirectSimulationHost host = simulation.getHost("host");
-		RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, new DefaultKnowledgeDataManager(model.getEnsembleDefinitions(), null), new CloningKnowledgeManagerFactory());
-		
-		runtime.start();	
+
+		PeriodAdaptationManager.prepare(model, design, trace);
+
+		final DirectSimulationHost host = simulation.getHost("host");
+		final List<EnsembleDefinition> ensembles = model.getEnsembleDefinitions();
+		final RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, new DefaultKnowledgeDataManager(ensembles, null), new CloningKnowledgeManagerFactory());
+
+		runtime.start();
 	}
 }
