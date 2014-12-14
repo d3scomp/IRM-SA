@@ -9,22 +9,22 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 public class Component1 {
 
 	public String Knowledge1;
-	
+
 	private static int counter = 0;
- 
+
 	public Component1() {
-		/* 
+		/*
 			Just a skeleton,
 			business logic to be provided here.
 		*/
 		Knowledge1 = "Component1Knowledge1_" + counter;
 	}
- 
+
 	@Process
 	@Invariant("I02")
-	@PeriodicScheduling(period=1000) 
+	@PeriodicScheduling(period=1000)
 	public static void Process1(
-		@Out("Knowledge1") ParamHolder<String> Knowledge1 
+		@Out("Knowledge1") ParamHolder<String> Knowledge1
 	) {
 		/*
 			Just a skeleton,
