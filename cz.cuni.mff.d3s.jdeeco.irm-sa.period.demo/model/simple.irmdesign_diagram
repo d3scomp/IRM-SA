@@ -75,26 +75,6 @@
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_6ynmUXu7EeSx2cI5eZxQNg"/>
   <element xmi:type="cz.cuni.mff.d3s.irm.model.design:IRM" href="default.irmdesign#/"/>
-  <edges xmi:type="notation:Edge" xmi:id="_L0nysH7FEeS_AZidwIdggg" type="4003" source="_J8SYEH7FEeS_AZidwIdggg" target="__U1RMH7EEeS_AZidwIdggg">
-    <styles xmi:type="notation:RoutingStyle" xmi:id="_L0nysX7FEeS_AZidwIdggg"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_L0nysn7FEeS_AZidwIdggg" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="default.irmdesign#//@refinements.0"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_L0nys37FEeS_AZidwIdggg" points="[-10, 5, 118, -71]$[-124, 67, 4, -9]"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_L13I0H7FEeS_AZidwIdggg" id="(0.527363184079602,0.225)"/>
-  </edges>
-  <edges xmi:type="notation:Edge" xmi:id="_MRvMgH7FEeS_AZidwIdggg" type="4003" source="_J8SYEH7FEeS_AZidwIdggg" target="_EmKA4H7FEeS_AZidwIdggg">
-    <styles xmi:type="notation:RoutingStyle" xmi:id="_MRvMgX7FEeS_AZidwIdggg"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_MRvMgn7FEeS_AZidwIdggg" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="default.irmdesign#//@refinements.1"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MRvMg37FEeS_AZidwIdggg" points="[10, 6, -124, -81]$[83, 84, -51, -3]"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MRxowH7FEeS_AZidwIdggg" id="(0.23394495412844038,0.425)"/>
-  </edges>
-  <edges xmi:type="notation:Edge" xmi:id="_Mt4V8H7FEeS_AZidwIdggg" type="4004" source="_giYQoH7EEeS_AZidwIdggg" target="_J8SYEH7FEeS_AZidwIdggg">
-    <styles xmi:type="notation:RoutingStyle" xmi:id="_Mt4V8X7FEeS_AZidwIdggg"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_Mt4V8n7FEeS_AZidwIdggg" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="default.irmdesign#//@decompositions.0"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mt4V837FEeS_AZidwIdggg" points="[4, 19, -2, -43]$[-4, 62, -10, 0]"/>
-  </edges>
   <edges xmi:type="notation:Edge" xmi:id="_YybF4H7FEeS_AZidwIdggg" type="4005" source="_NhQ6sH7FEeS_AZidwIdggg" target="__U1RMH7EEeS_AZidwIdggg">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_YybF4X7FEeS_AZidwIdggg"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_YybF4n7FEeS_AZidwIdggg" fontName="Segoe UI"/>
@@ -119,5 +99,26 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_aL6BUX7FEeS_AZidwIdggg" fontName="Segoe UI"/>
     <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Member" href="default.irmdesign#//@members.0"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_aL6BUn7FEeS_AZidwIdggg" points="[9, 59, -578, -44]$[34, 213, -553, 110]$[384, 213, -203, 110]$[550, 123, -37, 20]"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_id9Z0IaWEeSEm5svZMKvdg" type="4003" source="_J8SYEH7FEeS_AZidwIdggg" target="_giYQoH7EEeS_AZidwIdggg">
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_id9Z0YaWEeSEm5svZMKvdg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_id9Z0oaWEeSEm5svZMKvdg" fontName="Segoe UI"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="default.irmdesign#//@refinements.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_id9Z04aWEeSEm5svZMKvdg" points="[0, -10, 6, 52]$[0, -30, 6, 32]$[0, -43, 6, 19]"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_jsfpgIaWEeSEm5svZMKvdg" type="4004" source="__U1RMH7EEeS_AZidwIdggg" target="_J8SYEH7FEeS_AZidwIdggg">
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_jsfpgYaWEeSEm5svZMKvdg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_jsfpgoaWEeSEm5svZMKvdg" fontName="Segoe UI"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="default.irmdesign#//@decompositions.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_jsfpg4aWEeSEm5svZMKvdg" points="[6, -11, -58, 97]$[61, -107, -3, 1]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_jsg3oIaWEeSEm5svZMKvdg" id="(0.8208955223880597,0.275)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_jsg3oYaWEeSEm5svZMKvdg" id="(0.15,0.65)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_kQcEEIaWEeSEm5svZMKvdg" type="4004" source="_EmKA4H7FEeS_AZidwIdggg" target="_J8SYEH7FEeS_AZidwIdggg">
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_kQcEEYaWEeSEm5svZMKvdg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_kQcEEoaWEeSEm5svZMKvdg" fontName="Segoe UI"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="default.irmdesign#//@decompositions.1"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_kQcEE4aWEeSEm5svZMKvdg" points="[-6, -6, 83, 73]$[-89, -69, 0, 10]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_kQdSMIaWEeSEm5svZMKvdg" id="(0.027522935779816515,0.225)"/>
   </edges>
 </notation:Diagram>

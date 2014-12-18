@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import period.model.Component1;
+import period.model.Component2;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
@@ -113,7 +115,12 @@ public class CentralizedRun {
 		processor.process(
 				component1,
 				component2,
-				new PeriodAdaptationManager());
+				PeriodAdaptationManager.create()
+						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
+						.withAdapteeSelector(new AdapteeSelectorTree())
+						.withDirectionSelector(new DirectionSelectorImpl())
+						.withDeltaComputor(new DeltaComputorFixed(1000))
+						.build());
 
 		PeriodAdaptationManager.prepare(model, design, trace);
 

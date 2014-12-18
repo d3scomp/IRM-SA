@@ -1,4 +1,4 @@
-package period;
+package period.model;
 
 import cz.cuni.mff.d3s.deeco.annotations.*;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;

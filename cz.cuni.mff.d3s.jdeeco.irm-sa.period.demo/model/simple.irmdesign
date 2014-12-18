@@ -9,9 +9,9 @@
   <components name="Component2">
     <knowledgeElements type="String" name="Knowledge2"/>
   </components>
-  <refinements start="//@andNodes.0" end="//@invariants.1"/>
-  <refinements start="//@andNodes.0" end="//@invariants.2"/>
-  <decompositions start="//@invariants.0" end="//@andNodes.0"/>
+  <refinements start="//@andNodes.0" end="//@invariants.0"/>
+  <decompositions start="//@invariants.1" end="//@andNodes.0"/>
+  <decompositions start="//@invariants.2" end="//@andNodes.0"/>
   <andNodes/>
   <members start="//@components.0" end="//@invariants.2" membershipInput="//@components.0/@knowledgeElements.0" knowledgeExchangeInput="//@components.0/@knowledgeElements.0"/>
   <coordinators start="//@components.1" end="//@invariants.2" membershipInput="//@components.1/@knowledgeElements.0" knowledgeExchangeInput="//@components.1/@knowledgeElements.0" knowledgeExchangeOutput="//@components.1/@knowledgeElements.0"/>
