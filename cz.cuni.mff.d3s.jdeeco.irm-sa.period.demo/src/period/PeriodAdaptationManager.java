@@ -305,7 +305,7 @@ public final class PeriodAdaptationManager {
 //			info.weight = 1.0;
 //		}
 		//TODO
-		return null;
+		return new Backup();
 	}
 
 	static private int computeObserveTime(final Set<InvariantInfo<?>> adaptees, final Set<InvariantInfo<?>> infos) {
@@ -327,8 +327,15 @@ public final class PeriodAdaptationManager {
 	/**
 	 * Class holding the information needed to restore the previous state of the system.
 	 */
-	private static class Backup {
-		//TODO needs to be Knoledge too
+	private static class Backup extends KnowledgeImpl {
+
+		/**
+		 * Only constructor.
+		 */
+		public Backup() {
+			this.name = "PeriodAdaptationManagerBackup";
+			this.type = "PeriodAdaptationManagerBackupType";
+		}
 	}
 
 	/**
