@@ -19,18 +19,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 
-public class AdapteeSelectorSatisfaction extends KnowledgeImpl implements AdapteeSelector {
-
-	/**
-	 * Only constructor.
-	 */
-	public AdapteeSelectorSatisfaction() {
-		this.name = "FitnessAdapteeSelector";
-		this.type = "FitnessAdapteeSelectorType";
-	}
+public class AdapteeSelectorSatisfaction implements AdapteeSelector {
 
 	@Override
 	public Set<InvariantInfo<?>> selectAdaptees(

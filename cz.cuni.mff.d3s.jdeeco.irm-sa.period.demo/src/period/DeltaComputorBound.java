@@ -17,23 +17,13 @@ package period;
 
 import cz.cuni.mff.d3s.irm.model.design.ExchangeInvariant;
 import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 
 /**
  * Delta computor returning always the same value if possible.
  */
-public class DeltaComputorBound extends KnowledgeImpl implements DeltaComputor {
-
-	/**
-	 * Sets fixed delta.
-	 * @param delta fixed delta
-	 */
-	public DeltaComputorBound(final long delta) {
-		this.name = "DeltaComputorBound";
-		this.type = "DeltaComputorBoundType";
-	}
+public class DeltaComputorBound implements DeltaComputor {
 
 	@Override
 	public void computeDelta(final InvariantInfo<?> info) {

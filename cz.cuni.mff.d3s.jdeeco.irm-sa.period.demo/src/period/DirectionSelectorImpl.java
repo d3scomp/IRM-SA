@@ -15,20 +15,10 @@
  ******************************************************************************/
 package period;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
-
 /**
  * Temporary direction selector that does nothing.
  */
-public class DirectionSelectorImpl extends KnowledgeImpl implements DirectionSelector {
-
-	/**
-	 * Only constructor.
-	 */
-	public DirectionSelectorImpl() {
-		this.name = "DirectionSelectorImpl";
-		this.type = "DirectionSelectorImplType";
-	}
+public class DirectionSelectorImpl implements DirectionSelector {
 
 	@Override
 	public void selectDirection(InvariantInfo<?> info) {

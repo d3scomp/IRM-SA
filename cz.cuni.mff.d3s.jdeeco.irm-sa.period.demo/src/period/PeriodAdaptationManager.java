@@ -16,9 +16,15 @@
 package period;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
+
+import org.eclipse.emf.common.util.EMap;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
@@ -29,23 +35,15 @@ import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.Exchange;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import cz.cuni.mff.d3s.irm.model.design.ExchangeInvariant;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
-import cz.cuni.mff.d3s.irm.model.design.Invariant;
-import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
 import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.trace.api.EnsembleDefinitionTrace;
-import cz.cuni.mff.d3s.irm.model.trace.api.ProcessTrace;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
 
@@ -54,25 +52,38 @@ import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
  */
 @Component
 @SystemComponent
-public class PeriodAdaptationManager {
+public final class PeriodAdaptationManager {
 
+	/** Trace model stored in internal data under this key. */
 	static private final String TRACE_MODEL = "trace";
+
+	/** Design model stored in internal data under this key. */
 	static private final String DESIGN_MODEL = "design";
+
+	/** InvariantFitnessCombiner stored in internal data under this key. */
+	static private final String INVARIANT_FITNESS_COMBINER = "invariantFitnessCombiner";
+
+	/** AdapteeSelector stored in internal data under this key. */
+	static private final String ADAPTEE_SELECTOR = "adapteeSelector";
+
+	/** DirectionSelector stored in internal data under this key. */
+	static private final String DIRECTION_SELECTOR = "directionSelector";
+
+	/** DeltaComputor stored in internal data under this key. */
+	static private final String DELTA_COMPUTOR = "deltaComputor";
+
+	/**
+	 * Mapping of ids to builders.
+	 * TODO think of a better way to pass data from builder to component internal data as it may be not the best approach to store them statically
+	 */
+	static final private Map<String, PeriodAdaptationManagerBuilder> toPrepare =
+			Collections.synchronizedMap(new HashMap<String, PeriodAdaptationManagerBuilder>());
+
+	/** Manager ID. */
+	public String id;
 
 	/** Holds the state of the adaptPeriods method. */
 	public StateHolder state = new StateHolder();
-
-	/** Method for combining overall system fitness. */
-	public InvariantFitnessCombiner invariantFitnessCombiner;
-
-	/** Method for selecting invariant instances to adapt. */
-	public AdapteeSelector adapteeSelector;
-
-	/** Method for selecting direction of adaptation. */
-	public DirectionSelector directionSelector;
-
-	/** Method for computing period delta of adaptation. */
-	public DeltaComputor deltaComputor;
 
 	/**
 	 * Prepares PeriodAdaptationManagers in model.
@@ -85,8 +96,18 @@ public class PeriodAdaptationManager {
 			TraceModel trace) {
 		for (ComponentInstance c : model.getComponentInstances()) {
 			if (c.getName().equals(PeriodAdaptationManager.class.getName())) {
-				c.getInternalData().put(PeriodAdaptationManager.DESIGN_MODEL, design);
-				c.getInternalData().put(PeriodAdaptationManager.TRACE_MODEL, trace);
+				final EMap<String, Object> data = c.getInternalData();
+				data.put(DESIGN_MODEL, design);
+				data.put(TRACE_MODEL, trace);
+				//TODO is knowledge manager's id guaranteed to be the same as the component's one?
+				final PeriodAdaptationManagerBuilder builder =
+						toPrepare.remove(c.getKnowledgeManager().getId());
+				if (builder != null) {
+					data.put(INVARIANT_FITNESS_COMBINER, builder.invariantFitnessCombiner);
+					data.put(ADAPTEE_SELECTOR, builder.adapteeSelector);
+					data.put(DIRECTION_SELECTOR, builder.directionSelector);
+					data.put(DELTA_COMPUTOR, builder.deltaComputor);
+				}
 			}
 		}
 	}
@@ -96,18 +117,14 @@ public class PeriodAdaptationManager {
 	 * @return newly created manager builder
 	 */
 	public static PeriodAdaptationManagerBuilder create() {
-		return new PeriodAdaptationManagerBuilder();
+		return new PeriodAdaptationManagerBuilder(toPrepare);
 	}
 
 	@Process
 	@PeriodicScheduling(period=Settings.ADAPTATION_PERIOD, order=10)
 	static public void adaptPeriods(
 			@In("id") String id,
-			@InOut("state") ParamHolder<StateHolder> stateHolder,
-			@In("invariantFitnessCombiner") InvariantFitnessCombiner invariantFitnessCombiner,
-			@In("adapteeSelector") AdapteeSelector adapteeSelector,
-			@In("directionSelector") DirectionSelector directionSelector,
-			@In("deltaComputor") DeltaComputor deltaComputor) {
+			@InOut("state") ParamHolder<StateHolder> stateHolder) {
 		final StateHolder state = stateHolder.value;
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
@@ -121,10 +138,18 @@ public class PeriodAdaptationManager {
 			return;
 		}
 
-		// get architecture, design, and trace models from the process context
+		// get architecture, design, trace models and plug-ins from the process context
 		final Architecture architecture = ProcessContext.getArchitecture();
-		final IRM design = retrieveDesign();
-		final TraceModel trace = retrieveTrace();
+		final IRM design = retrieveFromInternalData(DESIGN_MODEL);
+		final TraceModel trace = retrieveFromInternalData(TRACE_MODEL);
+		final InvariantFitnessCombiner invariantFitnessCombiner =
+				retrieveFromInternalData(INVARIANT_FITNESS_COMBINER);
+		final AdapteeSelector adapteeSelector =
+				retrieveFromInternalData(ADAPTEE_SELECTOR);
+		final DirectionSelector directionSelector =
+				retrieveFromInternalData(DIRECTION_SELECTOR);
+		final DeltaComputor deltaComputor =
+				retrieveFromInternalData(DELTA_COMPUTOR);
 
 		// generate the IRM runtime model instances
 		final IRMInstanceGenerator generator =
@@ -197,32 +222,25 @@ public class PeriodAdaptationManager {
 	}
 
 	/**
-	 * Retrieves design stored in component's internal data by prepare method.
-	 * @return IRM design
+	 * Not type-safe method for retrieving objects from component's internal data.
+	 * @param key key to search value for
+	 * @return typed object from component's internal data
+	 * @throws RuntimeException when no, null or wrongly typed data are provided
 	 */
-	static private IRM retrieveDesign() {
+	static private <T> T retrieveFromInternalData(final String key) {
 		final ComponentInstance instance =
 				ProcessContext.getCurrentProcess().getComponentInstance();
-		final Object design = instance.getInternalData().get(DESIGN_MODEL);
-		if (design != null && design instanceof IRM) {
-			return (IRM) design;
-		} else {
-			throw new RuntimeException("Could not retrieve design model. Make sure to run PeriodAdaptationManager.prepare");
-		}
-	}
-
-	/**
-	 * Retrieves trace stored in component's internal data by prepare method.
-	 * @return trace model
-	 */
-	static private TraceModel retrieveTrace() {
-		final ComponentInstance instance =
-				ProcessContext.getCurrentProcess().getComponentInstance();
-		final Object trace = instance.getInternalData().get(TRACE_MODEL);
-		if (trace != null && trace instanceof TraceModel) {
-			return (TraceModel) trace;
-		} else {
-			throw new RuntimeException("Could not retrieve trace model. Make sure to run PeriodAdaptationManager.prepare");
+		final Object value = instance.getInternalData().get(key);
+		try {
+			if (value != null) {
+				@SuppressWarnings("unchecked")
+				final T result = (T) value;
+				return result;
+			} else {
+				throw new NoSuchElementException("No or null data for key " + key);
+			}
+		} catch (ClassCastException | NoSuchElementException e) {
+			throw new RuntimeException(String.format("Could not retrieve %s from internal data. Make sure to run PeriodAdaptationManager.prepare", key), e);
 		}
 	}
 
@@ -301,17 +319,16 @@ public class PeriodAdaptationManager {
 
 	/**
 	 * Only constructor.
-	 * Required fields must be set too!
 	 */
-	protected PeriodAdaptationManager() {
-		//nothing
+	protected PeriodAdaptationManager(final long id) {
+		this.id = String.format("PeriodAdapatationManager_0x%08X", id);
 	}
 
 	/**
 	 * Class holding the information needed to restore the previous state of the system.
 	 */
 	private static class Backup {
-
+		//TODO needs to be Knoledge too
 	}
 
 	/**

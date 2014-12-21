@@ -17,12 +17,10 @@ package period;
 
 import java.util.Collection;
 
-import cz.cuni.mff.d3s.irm.model.design.Knowledge;
-
 /**
  * Interface for combining overall system fitness.
  */
-public interface InvariantFitnessCombiner extends Knowledge {
+public interface InvariantFitnessCombiner {
 
 	/**
 	 * Returns combined overall system fitness.

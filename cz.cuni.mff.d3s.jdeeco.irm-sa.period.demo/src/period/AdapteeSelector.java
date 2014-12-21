@@ -18,12 +18,10 @@ package period;
 import java.util.Collection;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.irm.model.design.Knowledge;
-
 /**
  * Interface for selecting processes for period adaptation.
  */
-public interface AdapteeSelector extends Knowledge {
+public interface AdapteeSelector {
 
 	/**
 	 * Returns filtered set of invariant instances to adapt.

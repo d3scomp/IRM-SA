@@ -15,10 +15,20 @@
  ******************************************************************************/
 package period;
 
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Builder for PeriodAdaptationManager.
+ * Do NOT pass nulls to its methods.
  */
 public class PeriodAdaptationManagerBuilder {
+
+	/** Counter for generating ids. */
+	static protected AtomicLong counter = new AtomicLong(-1);
+
+	/** After building a PeriodAdaptationManager, its builder is mapped here under its id. */
+	final protected Map<String, PeriodAdaptationManagerBuilder> map;
 
 	InvariantFitnessCombiner invariantFitnessCombiner =
 			new InvariantFitnessCombinerAverage();
@@ -31,9 +41,11 @@ public class PeriodAdaptationManagerBuilder {
 
 	/**
 	 * Only constructor.
+	 * @param map where to store built managers' data, not null!
 	 */
-	protected PeriodAdaptationManagerBuilder() {
-		//nothing
+	protected PeriodAdaptationManagerBuilder(
+			final Map<String, PeriodAdaptationManagerBuilder> map) {
+		this.map = map;
 	}
 
 	/**
@@ -82,14 +94,13 @@ public class PeriodAdaptationManagerBuilder {
 
 	/**
 	 * Build new PeriodAdaptationManager.
+	 * The builder should not be modified after calling this!
 	 * @return new PeriodAdaptationManager
 	 */
 	public PeriodAdaptationManager build() {
-		final PeriodAdaptationManager result = new PeriodAdaptationManager();
-		result.invariantFitnessCombiner = invariantFitnessCombiner;
-		result.adapteeSelector = adapteeSelector;
-		result.directionSelector = directionSelector;
-		result.deltaComputor = deltaComputor;
+		final long id = counter.incrementAndGet();
+		final PeriodAdaptationManager result = new PeriodAdaptationManager(id);
+		map.put(result.id, this);
 		return result;
 	}
 }

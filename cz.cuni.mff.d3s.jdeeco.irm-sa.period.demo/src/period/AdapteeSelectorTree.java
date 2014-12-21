@@ -19,18 +19,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 
-public class AdapteeSelectorTree extends KnowledgeImpl implements AdapteeSelector {
-
-	/**
-	 * Only constructor.
-	 */
-	public AdapteeSelectorTree() {
-		this.name = "TreeAdapteeSelector";
-		this.type = "TreeAdapteeSelectorType";
-	}
+public class AdapteeSelectorTree implements AdapteeSelector {
 
 	@Override
 	public Set<InvariantInfo<?>> selectAdaptees(

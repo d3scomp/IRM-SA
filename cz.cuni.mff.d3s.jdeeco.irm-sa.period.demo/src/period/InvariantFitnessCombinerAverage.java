@@ -17,22 +17,13 @@ package period;
 
 import java.util.Collection;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 
 /**
  * Combines overall fitness by weighted average.
  */
-public class InvariantFitnessCombinerAverage extends KnowledgeImpl implements InvariantFitnessCombiner {
-
-	/**
-	 * Only constructor.
-	 */
-	public InvariantFitnessCombinerAverage() {
-		this.name = "AverageFitnessCombiner";
-		this.type = "AverageFitnessCombinerType";
-	}
+public class InvariantFitnessCombinerAverage implements InvariantFitnessCombiner {
 
 	@Override
 	public double combineInvariantFitness(final Collection<InvariantInfo<?>> infos) {

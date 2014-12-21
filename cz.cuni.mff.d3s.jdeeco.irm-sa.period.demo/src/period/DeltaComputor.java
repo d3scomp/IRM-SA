@@ -15,14 +15,10 @@
  ******************************************************************************/
 package period;
 
-import java.util.Collection;
-
-import cz.cuni.mff.d3s.irm.model.design.Knowledge;
-
 /**
  * Interface for selecting direction of adaptation.
  */
-public interface DeltaComputor extends Knowledge {
+public interface DeltaComputor {
 
 	/**
 	 * Computes delta of period adaptation.

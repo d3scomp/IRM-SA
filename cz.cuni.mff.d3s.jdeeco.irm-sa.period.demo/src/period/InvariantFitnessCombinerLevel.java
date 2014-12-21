@@ -17,23 +17,10 @@ package period;
 
 import java.util.Collection;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
-
 /**
  * Combines overall fitness by considering invariant level.
  */
-public class InvariantFitnessCombinerLevel extends KnowledgeImpl implements InvariantFitnessCombiner {
-
-	/**
-	 * Only constructor.
-	 */
-	public InvariantFitnessCombinerLevel() {
-		this.name = "LevelFitnessCombiner";
-		this.type = "LevelFitnessCombinerType";
-	}
+public class InvariantFitnessCombinerLevel implements InvariantFitnessCombiner {
 
 	@Override
 	public double combineInvariantFitness(final Collection<InvariantInfo<?>> infos) {

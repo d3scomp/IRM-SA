@@ -15,12 +15,10 @@
  ******************************************************************************/
 package period;
 
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
-
 /**
  * Delta computor returning always the same value if possible.
  */
-public class DeltaComputorFixed extends KnowledgeImpl implements DeltaComputor {
+public class DeltaComputorFixed implements DeltaComputor {
 
 	/** Default delta in ms. */
 	static final long DEFAULT_DELTA = 1000;
@@ -40,8 +38,6 @@ public class DeltaComputorFixed extends KnowledgeImpl implements DeltaComputor {
 	 * @param delta fixed delta
 	 */
 	public DeltaComputorFixed(final long delta) {
-		this.name = "DeltaComputorFixed";
-		this.type = "DeltaComputorFixedType";
 		this.delta = delta;
 	}
 
