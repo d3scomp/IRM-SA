@@ -23,6 +23,19 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 
 public class AdapteeSelectorSatisfaction implements AdapteeSelector {
 
+	/** Numbers differing in only this value are considered equal. */
+	static private final double TOLERANCE = 1e-9;
+
+	/**
+	 * Returns whether given values are equal considering TOLERANCE.
+	 * @param val1 value 1
+	 * @param val2 value 2
+	 * @return true if given values are equal considering TOLERANCE
+	 */
+	static private boolean toleranceEqual(final double val1, final double val2) {
+		return Math.abs(val1 - val2) <= TOLERANCE;
+	}
+
 	@Override
 	public Set<InvariantInfo<?>> selectAdaptees(
 			final Collection<InvariantInfo<?>> infos) {
@@ -35,7 +48,7 @@ public class AdapteeSelectorSatisfaction implements AdapteeSelector {
 					result.clear();
 					fitness = invariant.fitness;
 					result.add(invariant);
-				} else if (invariant.fitness == fitness) { //TODO not compare double on equality?
+				} else if (toleranceEqual(invariant.fitness, fitness)) {
 					result.add(invariant);
 				}
 			}
