@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2014 Charles University in Prague
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,17 +52,17 @@ import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
  * The <code>AnnotationProcessor</code> provides necessary hooks where this
  * processor is plugged-in.
  * </p>
- * 
+ *
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
  * @see AnnotationProcessor
  */
 public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExtensionPoint {
 
 	public static final String COMPONENT_ROLE = "role";
-	
+
 	IRM design;
 	TraceModel trace;
-	TraceFactory tFactory; 
+	TraceFactory tFactory;
 
 	public IrmAwareAnnotationProcessorExtension(IRM design, TraceModel trace) {
 		this.design = design;
@@ -71,20 +71,20 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 	}
 
 	/**
-	 * Creates invariant monitors by parsing the appropriately annotated Java methods. 
+	 * Creates invariant monitors by parsing the appropriately annotated Java methods.
 	 */
 	@Override
 	public void onUnknownMethodAnnotation(AnnotationProcessor caller, boolean inComponent, Method method, Annotation unknownAnnotation) throws AnnotationProcessorException {
 		if (unknownAnnotation instanceof InvariantMonitor) {
-			
+
 			String invariantRefID = ((InvariantMonitor) unknownAnnotation).value();
 			cz.cuni.mff.d3s.irm.model.design.Invariant invariantInDesignModel;
 			if (inComponent) {
-				invariantInDesignModel = getProcessInvariantFromDesignModel(invariantRefID);	
+				invariantInDesignModel = getProcessInvariantFromDesignModel(invariantRefID);
 			} else {
 				invariantInDesignModel = getExchangeInvariantFromDesignModel(invariantRefID);
 			}
-			
+
 			if (invariantInDesignModel == null) {
 				Log.w("No monitor created out of the method " + method.getName());
 			} else {
@@ -115,21 +115,21 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 			}
 		}
 	}
-	
+
 	/**
-	 * Creates component traces using the appropriate class-level annotations. 
+	 * Creates component traces using the appropriate class-level annotations.
 	 */
 	@Override
 	public void onComponentInstanceCreation(ComponentInstance componentInstance, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof IRMComponent) {
 			String IRMComponentValue = ((IRMComponent) unknownAnnotation).value();
-			
+
 			try {
 				componentInstance.getKnowledgeManager().update(getChangeSetWithIRMComponent(IRMComponentValue));
 			} catch (KnowledgeUpdateException e) {
 				Log.e("Error while writing component role to knowledge manager of component "+ componentInstance.getName(), e);
 			}
-			
+
 			Component componentInDesignModel = getIRMComponentFromDesignModel(IRMComponentValue);
 			if (componentInDesignModel == null) {
 				Log.w("No design trace is created for component " + componentInstance.getName());
@@ -140,7 +140,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 				trace.getComponentTraces().add(cTrace);
 			}
 		}
-		if (unknownAnnotation instanceof SystemComponent) { 
+		if (unknownAnnotation instanceof SystemComponent) {
 			componentInstance.setSystemComponent(true);
 		}
 	}
@@ -152,7 +152,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 	public void onComponentProcessCreation(ComponentProcess componentProcess, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof Invariant) {
 			String invariantRefID = ((Invariant) unknownAnnotation).value();
-			
+
 			cz.cuni.mff.d3s.irm.model.design.Invariant invariantInDesignModel = getProcessInvariantFromDesignModel(invariantRefID);
 			if (invariantInDesignModel == null) {
 				Log.w("No design trace is created for process " + componentProcess.getName());
@@ -172,7 +172,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 	public void onEnsembleDefinitionCreation(EnsembleDefinition ensembleDefinition, Annotation unknownAnnotation) {
 		if (unknownAnnotation instanceof Invariant) {
 			String invariantRefId = ((Invariant) unknownAnnotation).value();
-			
+
 			cz.cuni.mff.d3s.irm.model.design.Invariant invariantInDesignModel = getExchangeInvariantFromDesignModel(invariantRefId);
 			if (invariantInDesignModel == null) {
 				Log.w("No design trace is created for ensemble " + ensembleDefinition.getName());
@@ -184,7 +184,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 			}
 		}
 	}
-	
+
 	private ChangeSet getChangeSetWithIRMComponent(String IRMComponent) {
 		ChangeSet changeSet = new ChangeSet();
 		KnowledgePath path = RuntimeMetadataFactoryExt.eINSTANCE.createKnowledgePath();
@@ -194,7 +194,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		changeSet.setValue(path, IRMComponent);
 		return changeSet;
 	}
-	
+
 	private Component getIRMComponentFromDesignModel(String IRMcomponent) {
 		Log.d("Looking for component: "+IRMcomponent);
 		for (Component c : design.getComponents()) {
@@ -205,7 +205,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		Log.w("Component role " + IRMcomponent + " was not found in the design model.");
 		return null;
 	}
-	
+
 	private cz.cuni.mff.d3s.irm.model.design.Invariant getProcessInvariantFromDesignModel(String invariantRefId) {
 		Log.d("Looking for process invariant: "+invariantRefId);
 		for (cz.cuni.mff.d3s.irm.model.design.Contributes c : design.getContributes()) {
@@ -217,7 +217,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		Log.w("Process invariant " + invariantRefId + " was not found in the design model.");
 		return null;
 	}
-	
+
 	private cz.cuni.mff.d3s.irm.model.design.Invariant getExchangeInvariantFromDesignModel(String invariantRefId) {
 		Log.d("Looking for exchange invariant: "+invariantRefId);
 		for (cz.cuni.mff.d3s.irm.model.design.Coordinator c : design.getCoordinators()) {
@@ -229,5 +229,5 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		Log.w("Exchange invariant " + invariantRefId + " was not found in the design model.");
 		return null;
 	}
-	
+
 }
