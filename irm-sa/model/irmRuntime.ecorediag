@@ -39,6 +39,10 @@
         <element xmi:type="ecore:EAttribute" href="irmRuntime.ecore#//InvariantInstance/selected"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Pdj3Efe0EeOX55S23Shv6w"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_J9I6AIq1EeSOPrI9vOm6rA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="irmRuntime.ecore#//InvariantInstance/fitness"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_J9I6AYq1EeSOPrI9vOm6rA"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_tYIp4vezEeOX55S23Shv6w"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_tYIp4_ezEeOX55S23Shv6w"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_tYIp5PezEeOX55S23Shv6w"/>
@@ -54,7 +58,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_tYIC0fezEeOX55S23Shv6w" fontColor="4210752" fontName="Lucida Grande" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="irmRuntime.ecore#//InvariantInstance"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tYIC0vezEeOX55S23Shv6w" x="81" y="153" width="237" height="84"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tYIC0vezEeOX55S23Shv6w" x="81" y="153" width="237" height="90"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_6qHdUPezEeOX55S23Shv6w" type="1004">
     <children xmi:type="notation:Node" xmi:id="_6qIEYPezEeOX55S23Shv6w" type="4008"/>

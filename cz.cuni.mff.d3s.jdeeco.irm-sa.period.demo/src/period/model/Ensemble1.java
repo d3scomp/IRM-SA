@@ -30,4 +30,10 @@ public class Ensemble1 {
 		Knowledge2.value = Knowledge2.value + Knowledge1 + ",";
 		System.out.println("Ensemble1.map: " + Knowledge1 + " -> " + Knowledge2.value);
 	}
+
+	@InvariantMonitor("I03")
+	public static double fitnessMonitor() {
+		System.out.println("I03 satisfaction monitor");
+		return 24.0;
+	}
 }

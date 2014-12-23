@@ -276,13 +276,11 @@ public final class PeriodAdaptationManager {
 		for (InvariantInfo<?> info : infos) {
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
-//				final double f = pii.getFitness(); //TODO implement
-				final double f = 0.0;
+				final double f = pii.getFitness();
 				info.fitness = f;
 			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ExchangeInvariantInstance xii  = info.getInvariant();
-//				final double f = xii.getFitness();
-				final double f = 0.0;
+				final double f = xii.getFitness();
 				info.fitness = f;
 			}
 		}

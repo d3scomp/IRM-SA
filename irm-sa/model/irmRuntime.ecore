@@ -23,6 +23,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"
         eType="#//Alternative" unsettable="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitness" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="InvariantType" instanceClassName="cz.cuni.mff.d3s.irm.model.design.Invariant"/>
   <eClassifiers xsi:type="ecore:EClass" name="IRMComponentInstance">

@@ -111,7 +111,15 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 					}
 					monitor.getMonitorParameters().add(mParameter);
 				  }
-				trace.getInvariantMonitors().add(monitor);
+				Class<?> returnType = method.getReturnType();
+				//TODO maybe create new special annotation for fitness monitors? instead of switching on return type?
+				if (returnType == Boolean.class || returnType == Boolean.TYPE) {
+					trace.getInvariantSatisfactionMonitors().add(monitor);
+				} else if (returnType == Double.class || returnType == Double.TYPE) {
+					trace.getInvariantFitnessMonitors().add(monitor);
+				} else {
+					throw new AnnotationProcessorException("Return type of method " + method.getName() + " does not match supported InvariantMonitors (double/boolean).");
+				}
 			}
 		}
 	}

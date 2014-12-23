@@ -39,7 +39,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getComponentTraces <em>Component Traces</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getProcessTraces <em>Process Traces</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getEnsembleDefinitionTraces <em>Ensemble Definition Traces</em>}</li>
- *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantMonitors <em>Invariant Monitors</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantSatisfactionMonitors <em>Invariant Satisfaction Monitors</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantFitnessMonitors <em>Invariant Fitness Monitors</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,20 +105,36 @@ public interface TraceModel extends EObject {
 	EList<EnsembleDefinitionTrace> getEnsembleDefinitionTraces();
 
 	/**
-	 * Returns the value of the '<em><b>Invariant Monitors</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Invariant Satisfaction Monitors</b></em>' containment reference list.
 	 * The list contents are of type {@link cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Invariant Monitors</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Invariant Satisfaction Monitors</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Invariant Monitors</em>' containment reference list.
-	 * @see cz.cuni.mff.d3s.irm.model.trace.meta.TracePackage#getTraceModel_InvariantMonitors()
+	 * @return the value of the '<em>Invariant Satisfaction Monitors</em>' containment reference list.
+	 * @see cz.cuni.mff.d3s.irm.model.trace.meta.TracePackage#getTraceModel_InvariantSatisfactionMonitors()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<InvariantMonitor> getInvariantMonitors();
+	EList<InvariantMonitor> getInvariantSatisfactionMonitors();
+
+	/**
+	 * Returns the value of the '<em><b>Invariant Fitness Monitors</b></em>' containment reference list.
+	 * The list contents are of type {@link cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Invariant Fitness Monitors</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Invariant Fitness Monitors</em>' containment reference list.
+	 * @see cz.cuni.mff.d3s.irm.model.trace.meta.TracePackage#getTraceModel_InvariantFitnessMonitors()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<InvariantMonitor> getInvariantFitnessMonitors();
 
 	/**
 	 * <!-- begin-user-doc -->

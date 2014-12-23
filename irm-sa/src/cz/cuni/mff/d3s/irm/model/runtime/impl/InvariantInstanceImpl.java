@@ -52,6 +52,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.impl.InvariantInstanceImpl#isSatisfied <em>Satisfied</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.impl.InvariantInstanceImpl#isSelected <em>Selected</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.impl.InvariantInstanceImpl#getAlternatives <em>Alternatives</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.impl.InvariantInstanceImpl#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +115,26 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 	 * @ordered
 	 */
 	protected EList<Alternative> alternatives;
+
+	/**
+	 * The default value of the '{@link #getFitness() <em>Fitness</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFitness()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double FITNESS_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getFitness() <em>Fitness</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFitness()
+	 * @generated
+	 * @ordered
+	 */
+	protected double fitness = FITNESS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,6 +271,27 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getFitness() {
+		return fitness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFitness(double newFitness) {
+		double oldFitness = fitness;
+		fitness = newFitness;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, IRMRuntimePackage.INVARIANT_INSTANCE__FITNESS, oldFitness, fitness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public InvariantInstance getParent() {
@@ -325,6 +367,8 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 				return isSelected();
 			case IRMRuntimePackage.INVARIANT_INSTANCE__ALTERNATIVES:
 				return getAlternatives();
+			case IRMRuntimePackage.INVARIANT_INSTANCE__FITNESS:
+				return getFitness();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -351,6 +395,9 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 				getAlternatives().clear();
 				getAlternatives().addAll((Collection<? extends Alternative>)newValue);
 				return;
+			case IRMRuntimePackage.INVARIANT_INSTANCE__FITNESS:
+				setFitness((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -375,6 +422,9 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 			case IRMRuntimePackage.INVARIANT_INSTANCE__ALTERNATIVES:
 				unsetAlternatives();
 				return;
+			case IRMRuntimePackage.INVARIANT_INSTANCE__FITNESS:
+				setFitness(FITNESS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -395,6 +445,8 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 				return selected != SELECTED_EDEFAULT;
 			case IRMRuntimePackage.INVARIANT_INSTANCE__ALTERNATIVES:
 				return isSetAlternatives();
+			case IRMRuntimePackage.INVARIANT_INSTANCE__FITNESS:
+				return fitness != FITNESS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -427,6 +479,8 @@ public abstract class InvariantInstanceImpl extends MinimalEObjectImpl.Container
 		result.append(satisfied);
 		result.append(", selected: ");
 		result.append(selected);
+		result.append(", fitness: ");
+		result.append(fitness);
 		result.append(')');
 		return result.toString();
 	}

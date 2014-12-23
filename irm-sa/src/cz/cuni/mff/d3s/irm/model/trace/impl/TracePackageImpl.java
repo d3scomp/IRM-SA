@@ -253,8 +253,17 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTraceModel_InvariantMonitors() {
+	public EReference getTraceModel_InvariantSatisfactionMonitors() {
 		return (EReference)traceModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTraceModel_InvariantFitnessMonitors() {
+		return (EReference)traceModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -523,7 +532,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		createEReference(traceModelEClass, TRACE_MODEL__COMPONENT_TRACES);
 		createEReference(traceModelEClass, TRACE_MODEL__PROCESS_TRACES);
 		createEReference(traceModelEClass, TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES);
-		createEReference(traceModelEClass, TRACE_MODEL__INVARIANT_MONITORS);
+		createEReference(traceModelEClass, TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS);
+		createEReference(traceModelEClass, TRACE_MODEL__INVARIANT_FITNESS_MONITORS);
 		createEOperation(traceModelEClass, TRACE_MODEL___GET_IRM_COMPONENT_FOR_ARCHITECTURE_COMPONENT_INSTANCE__COMPONENTINSTANCE_IRM);
 		createEOperation(traceModelEClass, TRACE_MODEL___GET_COMPONENT_PROCESS_FROM_COMPONENT_INSTANCE_AND_INVARIANT__COMPONENTINSTANCE_INVARIANT);
 		createEOperation(traceModelEClass, TRACE_MODEL___GET_ENSEMBLE_DEFINITION_FROM_INVARIANT__INVARIANT);
@@ -596,7 +606,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		initEReference(getTraceModel_ComponentTraces(), this.getComponentTrace(), null, "componentTraces", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTraceModel_ProcessTraces(), this.getProcessTrace(), null, "processTraces", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTraceModel_EnsembleDefinitionTraces(), this.getEnsembleDefinitionTrace(), null, "ensembleDefinitionTraces", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTraceModel_InvariantMonitors(), this.getInvariantMonitor(), null, "invariantMonitors", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTraceModel_InvariantSatisfactionMonitors(), this.getInvariantMonitor(), null, "invariantSatisfactionMonitors", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTraceModel_InvariantFitnessMonitors(), this.getInvariantMonitor(), null, "invariantFitnessMonitors", null, 0, -1, TraceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getTraceModel__GetIRMComponentForArchitectureComponentInstance__ComponentInstance_IRM(), this.getComponentType(), "getIRMComponentForArchitectureComponentInstance", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getArchitectureComponentInstanceType(), "componentInstance", 0, 1, IS_UNIQUE, IS_ORDERED);

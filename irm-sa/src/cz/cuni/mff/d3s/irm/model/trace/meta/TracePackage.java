@@ -116,13 +116,22 @@ public interface TracePackage extends EPackage {
 	int TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES = 2;
 
 	/**
-	 * The feature id for the '<em><b>Invariant Monitors</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Invariant Satisfaction Monitors</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_MODEL__INVARIANT_MONITORS = 3;
+	int TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Invariant Fitness Monitors</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRACE_MODEL__INVARIANT_FITNESS_MONITORS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -131,7 +140,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_MODEL_FEATURE_COUNT = 4;
+	int TRACE_MODEL_FEATURE_COUNT = 5;
 
 	/**
 	 * The operation id for the '<em>Get IRM Component For Architecture Component Instance</em>' operation.
@@ -523,15 +532,26 @@ public interface TracePackage extends EPackage {
 	EReference getTraceModel_EnsembleDefinitionTraces();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantMonitors <em>Invariant Monitors</em>}'.
+	 * Returns the meta object for the containment reference list '{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantSatisfactionMonitors <em>Invariant Satisfaction Monitors</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Invariant Monitors</em>'.
-	 * @see cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantMonitors()
+	 * @return the meta object for the containment reference list '<em>Invariant Satisfaction Monitors</em>'.
+	 * @see cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantSatisfactionMonitors()
 	 * @see #getTraceModel()
 	 * @generated
 	 */
-	EReference getTraceModel_InvariantMonitors();
+	EReference getTraceModel_InvariantSatisfactionMonitors();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantFitnessMonitors <em>Invariant Fitness Monitors</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Invariant Fitness Monitors</em>'.
+	 * @see cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getInvariantFitnessMonitors()
+	 * @see #getTraceModel()
+	 * @generated
+	 */
+	EReference getTraceModel_InvariantFitnessMonitors();
 
 	/**
 	 * Returns the meta object for the '{@link cz.cuni.mff.d3s.irm.model.trace.api.TraceModel#getIRMComponentForArchitectureComponentInstance(cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance, cz.cuni.mff.d3s.irm.model.design.IRM) <em>Get IRM Component For Architecture Component Instance</em>}' operation.
@@ -869,12 +889,20 @@ public interface TracePackage extends EPackage {
 		EReference TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES = eINSTANCE.getTraceModel_EnsembleDefinitionTraces();
 
 		/**
-		 * The meta object literal for the '<em><b>Invariant Monitors</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Invariant Satisfaction Monitors</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference TRACE_MODEL__INVARIANT_MONITORS = eINSTANCE.getTraceModel_InvariantMonitors();
+		EReference TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS = eINSTANCE.getTraceModel_InvariantSatisfactionMonitors();
+
+		/**
+		 * The meta object literal for the '<em><b>Invariant Fitness Monitors</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRACE_MODEL__INVARIANT_FITNESS_MONITORS = eINSTANCE.getTraceModel_InvariantFitnessMonitors();
 
 		/**
 		 * The meta object literal for the '<em><b>Get IRM Component For Architecture Component Instance</b></em>' operation.

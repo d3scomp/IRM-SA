@@ -60,7 +60,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getComponentTraces <em>Component Traces</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getProcessTraces <em>Process Traces</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getEnsembleDefinitionTraces <em>Ensemble Definition Traces</em>}</li>
- *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getInvariantMonitors <em>Invariant Monitors</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getInvariantSatisfactionMonitors <em>Invariant Satisfaction Monitors</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.trace.impl.TraceModelImpl#getInvariantFitnessMonitors <em>Invariant Fitness Monitors</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,14 +106,24 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	protected EList<EnsembleDefinitionTrace> ensembleDefinitionTraces;
 
 	/**
-	 * The cached value of the '{@link #getInvariantMonitors() <em>Invariant Monitors</em>}' containment reference list.
+	 * The cached value of the '{@link #getInvariantSatisfactionMonitors() <em>Invariant Satisfaction Monitors</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getInvariantMonitors()
+	 * @see #getInvariantSatisfactionMonitors()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<InvariantMonitor> invariantMonitors;
+	protected EList<InvariantMonitor> invariantSatisfactionMonitors;
+
+	/**
+	 * The cached value of the '{@link #getInvariantFitnessMonitors() <em>Invariant Fitness Monitors</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInvariantFitnessMonitors()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<InvariantMonitor> invariantFitnessMonitors;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -174,11 +185,23 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<InvariantMonitor> getInvariantMonitors() {
-		if (invariantMonitors == null) {
-			invariantMonitors = new EObjectContainmentEList<InvariantMonitor>(InvariantMonitor.class, this, TracePackage.TRACE_MODEL__INVARIANT_MONITORS);
+	public EList<InvariantMonitor> getInvariantSatisfactionMonitors() {
+		if (invariantSatisfactionMonitors == null) {
+			invariantSatisfactionMonitors = new EObjectContainmentEList<InvariantMonitor>(InvariantMonitor.class, this, TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS);
 		}
-		return invariantMonitors;
+		return invariantSatisfactionMonitors;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<InvariantMonitor> getInvariantFitnessMonitors() {
+		if (invariantFitnessMonitors == null) {
+			invariantFitnessMonitors = new EObjectContainmentEList<InvariantMonitor>(InvariantMonitor.class, this, TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS);
+		}
+		return invariantFitnessMonitors;
 	}
 
 	/**
@@ -313,8 +336,10 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 				return ((InternalEList<?>)getProcessTraces()).basicRemove(otherEnd, msgs);
 			case TracePackage.TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES:
 				return ((InternalEList<?>)getEnsembleDefinitionTraces()).basicRemove(otherEnd, msgs);
-			case TracePackage.TRACE_MODEL__INVARIANT_MONITORS:
-				return ((InternalEList<?>)getInvariantMonitors()).basicRemove(otherEnd, msgs);
+			case TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS:
+				return ((InternalEList<?>)getInvariantSatisfactionMonitors()).basicRemove(otherEnd, msgs);
+			case TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS:
+				return ((InternalEList<?>)getInvariantFitnessMonitors()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -333,8 +358,10 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 				return getProcessTraces();
 			case TracePackage.TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES:
 				return getEnsembleDefinitionTraces();
-			case TracePackage.TRACE_MODEL__INVARIANT_MONITORS:
-				return getInvariantMonitors();
+			case TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS:
+				return getInvariantSatisfactionMonitors();
+			case TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS:
+				return getInvariantFitnessMonitors();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -360,9 +387,13 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 				getEnsembleDefinitionTraces().clear();
 				getEnsembleDefinitionTraces().addAll((Collection<? extends EnsembleDefinitionTrace>)newValue);
 				return;
-			case TracePackage.TRACE_MODEL__INVARIANT_MONITORS:
-				getInvariantMonitors().clear();
-				getInvariantMonitors().addAll((Collection<? extends InvariantMonitor>)newValue);
+			case TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS:
+				getInvariantSatisfactionMonitors().clear();
+				getInvariantSatisfactionMonitors().addAll((Collection<? extends InvariantMonitor>)newValue);
+				return;
+			case TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS:
+				getInvariantFitnessMonitors().clear();
+				getInvariantFitnessMonitors().addAll((Collection<? extends InvariantMonitor>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -385,8 +416,11 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 			case TracePackage.TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES:
 				getEnsembleDefinitionTraces().clear();
 				return;
-			case TracePackage.TRACE_MODEL__INVARIANT_MONITORS:
-				getInvariantMonitors().clear();
+			case TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS:
+				getInvariantSatisfactionMonitors().clear();
+				return;
+			case TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS:
+				getInvariantFitnessMonitors().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -406,8 +440,10 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 				return processTraces != null && !processTraces.isEmpty();
 			case TracePackage.TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES:
 				return ensembleDefinitionTraces != null && !ensembleDefinitionTraces.isEmpty();
-			case TracePackage.TRACE_MODEL__INVARIANT_MONITORS:
-				return invariantMonitors != null && !invariantMonitors.isEmpty();
+			case TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS:
+				return invariantSatisfactionMonitors != null && !invariantSatisfactionMonitors.isEmpty();
+			case TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS:
+				return invariantFitnessMonitors != null && !invariantFitnessMonitors.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

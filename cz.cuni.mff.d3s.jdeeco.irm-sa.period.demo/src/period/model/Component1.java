@@ -33,4 +33,10 @@ public class Component1 {
 		Knowledge1.value = "Component1Knowledge1_" + ++counter;
 		System.out.println("Component1.Process1: " + Knowledge1.value);
 	}
+
+	@InvariantMonitor("I02")
+	public static double fitnessMonitor() {
+		System.out.println("I02 satisfaction monitor");
+		return 89.0;
+	}
 }

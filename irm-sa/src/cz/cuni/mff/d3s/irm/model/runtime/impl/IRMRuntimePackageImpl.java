@@ -332,6 +332,15 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getInvariantInstance_Fitness() {
+		return (EAttribute)invariantInstanceEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getInvariantInstance__GetParent() {
 		return invariantInstanceEClass.getEOperations().get(0);
 	}
@@ -565,6 +574,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		createEAttribute(invariantInstanceEClass, INVARIANT_INSTANCE__SATISFIED);
 		createEAttribute(invariantInstanceEClass, INVARIANT_INSTANCE__SELECTED);
 		createEReference(invariantInstanceEClass, INVARIANT_INSTANCE__ALTERNATIVES);
+		createEAttribute(invariantInstanceEClass, INVARIANT_INSTANCE__FITNESS);
 		createEOperation(invariantInstanceEClass, INVARIANT_INSTANCE___GET_PARENT);
 
 		irmComponentInstanceEClass = createEClass(IRM_COMPONENT_INSTANCE);
@@ -644,6 +654,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		initEAttribute(getInvariantInstance_Satisfied(), ecorePackage.getEBoolean(), "satisfied", "true", 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInvariantInstance_Selected(), ecorePackage.getEBoolean(), "selected", null, 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInvariantInstance_Alternatives(), this.getAlternative(), null, "alternatives", null, 0, -1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInvariantInstance_Fitness(), ecorePackage.getEDouble(), "fitness", null, 1, 1, InvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getInvariantInstance__GetParent(), this.getInvariantInstance(), "getParent", 1, 1, IS_UNIQUE, IS_ORDERED);
 

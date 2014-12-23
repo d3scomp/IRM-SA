@@ -26,8 +26,10 @@
         eType="#//ProcessTrace" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ensembleDefinitionTraces"
         upperBound="-1" eType="#//EnsembleDefinitionTrace" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantMonitors" upperBound="-1"
-        eType="#//InvariantMonitor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantSatisfactionMonitors"
+        upperBound="-1" eType="#//InvariantMonitor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantFitnessMonitors"
+        upperBound="-1" eType="#//InvariantMonitor" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentTrace">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" lowerBound="1" eType="#//ComponentInstanceType"/>

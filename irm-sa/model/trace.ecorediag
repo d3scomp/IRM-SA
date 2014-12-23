@@ -368,15 +368,15 @@
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_Vi9vEBKPEeSKOLrRDpHCtw" type="3002" source="_o8Z_gPmiEeOpacsaxuRw2Q" target="_TpRpkBKPEeSKOLrRDpHCtw">
     <children xmi:type="notation:Node" xmi:id="_Vi_kQBKPEeSKOLrRDpHCtw" type="4011">
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_Vi_kQRKPEeSKOLrRDpHCtw" x="18" y="-47"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_Vi_kQRKPEeSKOLrRDpHCtw" x="7" y="-80"/>
     </children>
     <children xmi:type="notation:Node" xmi:id="_VjALUBKPEeSKOLrRDpHCtw" type="4012">
       <layoutConstraint xmi:type="notation:Location" xmi:id="_VjALURKPEeSKOLrRDpHCtw" x="-16" y="22"/>
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_Vi9vERKPEeSKOLrRDpHCtw" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_Vi9vEhKPEeSKOLrRDpHCtw" fontColor="4210752" fontName="Lucida Grande" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="trace.ecore#//TraceModel/invariantMonitors"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Vi9vExKPEeSKOLrRDpHCtw" points="[25, 47, -39, -88]$[72, 100, 8, -35]"/>
+    <element xmi:type="ecore:EReference" href="trace.ecore#//TraceModel/invariantSatisfactionMonitors"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Vi9vExKPEeSKOLrRDpHCtw" points="[19, 47, -45, -88]$[28, 68, -36, -67]$[45, 100, -19, -35]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_VjDOoBKPEeSKOLrRDpHCtw" id="(0.9348484848484848,0.5392156862745098)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_19-B0BKPEeSKOLrRDpHCtw" type="3002" source="_TpRpkBKPEeSKOLrRDpHCtw" target="_mWQGEBKPEeSKOLrRDpHCtw">
@@ -457,5 +457,19 @@
     <element xmi:type="ecore:EReference" href="trace.ecore#//MonitorParameter/knowledgePath"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_UT3pQxKQEeSKOLrRDpHCtw" points="[9, 49, -33, -81]$[-33, 127, -75, -3]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_UT6FgBKQEeSKOLrRDpHCtw" id="(0.5174418604651163,0.21875)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_90NBAIquEeSOPrI9vOm6rA" type="3002" source="_o8Z_gPmiEeOpacsaxuRw2Q" target="_TpRpkBKPEeSKOLrRDpHCtw">
+    <children xmi:type="notation:Node" xmi:id="_90XZEIquEeSOPrI9vOm6rA" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_90XZEYquEeSOPrI9vOm6rA" x="-111" y="69"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_90YAIIquEeSOPrI9vOm6rA" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_90YAIYquEeSOPrI9vOm6rA" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_90NBAYquEeSOPrI9vOm6rA" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_90NBAoquEeSOPrI9vOm6rA" fontColor="4210752" fontName="Segoe UI" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="trace.ecore#//TraceModel/invariantFitnessMonitors"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_90NBA4quEeSOPrI9vOm6rA" points="[79, 6, 59, -101]$[238, 6, 218, -101]$[238, 107, 218, 0]$[194, 107, 174, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_90bDcIquEeSOPrI9vOm6rA" id="(0.8803030303030303,0.7549019607843137)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_90bDcYquEeSOPrI9vOm6rA" id="(0.07894736842105263,0.410958904109589)"/>
   </edges>
 </notation:Diagram>

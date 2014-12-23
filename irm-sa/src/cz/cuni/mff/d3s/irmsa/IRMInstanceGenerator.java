@@ -79,6 +79,12 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
  */
 public class IRMInstanceGenerator {
 
+	/** Double object with value 0 used as failure fitness. */
+	static final Double ZERO = new Double(0.0);
+
+	/** Double object with value 1 used as success fitness. */
+	static final Double ONE = new Double(1.0);
+
 	/**
 	 * Holds the model that represents the current snapshot of the architecture
 	 * (i.e., active processes, established ensembles). Used during the IRM
@@ -228,7 +234,8 @@ public class IRMInstanceGenerator {
 
 			invariantInstance.setDiagramInstance(irmInstance);
 			invariantInstance.setInvariant(i);
-			invariantInstance.setSatisfied(getMonitorValue(i, newInstances));
+			invariantInstance.setSatisfied(getMonitorValue(i, trace.getInvariantSatisfactionMonitors(), newInstances, Boolean.TRUE, Boolean.FALSE));
+			invariantInstance.setFitness(getMonitorValue(i, trace.getInvariantFitnessMonitors(), newInstances, ONE, ZERO));
 
 			invariantsToInstances.put(i, invariantInstance);
 			irmInstance.getInvariantInstances().add(invariantInstance);
@@ -397,21 +404,21 @@ public class IRMInstanceGenerator {
 	 * When a monitor is not present, it optimistically returns true.
 	 * </p>
 	 */
-	boolean getMonitorValue(Invariant invariant, List<IRMComponentInstance> IRMComponentInstances) {
+	<T> T getMonitorValue(Invariant invariant, List<InvariantMonitor> monitors, List<IRMComponentInstance> IRMComponentInstances, T success, T failure) {
 
 		if (invariant instanceof ProcessInvariant) {
 
 			IRMComponentInstance contributingComponent = findContributingComponent(invariant, IRMComponentInstances);
 			if (contributingComponent == null) {
 				Log.w("No component contributing to process invariant " + invariant + ", so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 
-			InvariantMonitor monitor = getInvariantMonitor(invariant);
+			InvariantMonitor monitor = getInvariantMonitor(invariant, monitors);
 
 			if (monitor == null) {
 				Log.w("No invariant monitor found for process invariant " + invariant + ", so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 
 			Method method = monitor.getMethod();
@@ -430,7 +437,7 @@ public class IRMInstanceGenerator {
 					absoluteKnowledgePath = KnowledgePathHelper.getAbsolutePath(formalParam.getKnowledgePath(), knowledgeManager);
 				} catch (KnowledgeNotFoundException e) {
 					Log.w("Knowledge path " + e.getNotFoundPath() + " could not be resolved, so invariant evaluation returned false.");
-					return false;
+					return failure;
 				}
 				paths.add(absoluteKnowledgePath);
 			}
@@ -443,39 +450,39 @@ public class IRMInstanceGenerator {
 				paramIdx++;
 			}
 
-			Boolean ret;
 			try {
-				ret = (Boolean) method.invoke(null, actualParams);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				@SuppressWarnings("unchecked")
+				T ret = (T) method.invoke(null, actualParams);
+				System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
+				return ret;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.e("Error when invoking a monitor method, so invariant evaluation returned false.", e);
-				return false;
+				return failure;
 			}
-			System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
-			return ret;
 
 		} else if (invariant instanceof ExchangeInvariant){
 
 			EnsembleDefinition ed = trace.getEnsembleDefinitionFromInvariant(invariant);
 			if (ed == null) {
 				Log.i("No trace found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 			if (!isEnsembleInstantiated(IRMComponentInstances, ed)) {
 				Log.i("EnsembleDefinition " + ed + " is not instantiated within this runtime, so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 
 			IRMComponentInstance coord = findCoordinator(invariant, IRMComponentInstances);
 			IRMComponentInstance member = findMember(invariant, IRMComponentInstances);
 			if ((coord == null) || (member == null)) {
 				Log.w("No coordinator/member found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 
-			InvariantMonitor monitor = getInvariantMonitor(invariant);
+			InvariantMonitor monitor = getInvariantMonitor(invariant, monitors);
 			if (monitor == null) {
 				Log.w("No invariant monitor found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
-				return true;
+				return success;
 			}
 
 			Method method = monitor.getMethod();
@@ -497,7 +504,7 @@ public class IRMInstanceGenerator {
 				} catch (KnowledgeNotFoundException e) {
 					Log.w("Not able to resolve the path for monitor " + method + " of invariant " + invariant
 							+ ", so invariant evaluation trivially returned true.");
-					return true;
+					return success;
 				}
 				allPathsWithRoots.add(absoluteKnowledgePathAndRoot);
 			}
@@ -515,20 +522,20 @@ public class IRMInstanceGenerator {
 				paramIdx++;
 			}
 
-			Boolean ret;
 			try {
-				ret = (Boolean) method.invoke(null, actualParams);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				@SuppressWarnings("unchecked")
+				T ret = (T) method.invoke(null, actualParams);
+				System.out.println("-------- Monitor " + method + " returned " + ret);
+				return ret;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.w("Error when invoking a monitor method, so invariant evaluation returned false.", e);
-				return false;
+				return failure;
 			}
-			System.out.println("-------- Monitor " + method + " returned " + ret);
-			return ret;
 
 		} else {
 			// if i is neither Process nor Exchange invariant
 			// TODO(IG) implement monitoring also for Assumption and non-leaf invariants
-			return true;
+			return success;
 		}
 	}
 
@@ -616,8 +623,8 @@ public class IRMInstanceGenerator {
 		return false;
 	}
 
-	private InvariantMonitor getInvariantMonitor(Invariant i) {
-		for (InvariantMonitor m : trace.getInvariantMonitors()) {
+	private InvariantMonitor getInvariantMonitor(Invariant i, List<InvariantMonitor> monitors) {
+		for (InvariantMonitor m : monitors) {
 			if (m.getInvariant().equals(i)) {
 				return m;
 			}

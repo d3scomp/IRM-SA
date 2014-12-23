@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#isSatisfied <em>Satisfied</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#isSelected <em>Selected</em>}</li>
  *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getAlternatives <em>Alternatives</em>}</li>
+ *   <li>{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getFitness <em>Fitness</em>}</li>
  * </ul>
  * </p>
  *
@@ -165,6 +166,32 @@ public interface InvariantInstance extends EObject {
 	 * @generated
 	 */
 	boolean isSetAlternatives();
+
+	/**
+	 * Returns the value of the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fitness</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fitness</em>' attribute.
+	 * @see #setFitness(double)
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage#getInvariantInstance_Fitness()
+	 * @model required="true"
+	 * @generated
+	 */
+	double getFitness();
+
+	/**
+	 * Sets the value of the '{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getFitness <em>Fitness</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Fitness</em>' attribute.
+	 * @see #getFitness()
+	 * @generated
+	 */
+	void setFitness(double value);
 
 	/**
 	 * <!-- begin-user-doc -->

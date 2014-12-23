@@ -198,13 +198,22 @@ public interface IRMRuntimePackage extends EPackage {
 	int INVARIANT_INSTANCE__ALTERNATIVES = 3;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVARIANT_INSTANCE__FITNESS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Invariant Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVARIANT_INSTANCE_FEATURE_COUNT = 4;
+	int INVARIANT_INSTANCE_FEATURE_COUNT = 5;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -363,6 +372,15 @@ public interface IRMRuntimePackage extends EPackage {
 	int PRESENT_INVARIANT_INSTANCE__ALTERNATIVES = INVARIANT_INSTANCE__ALTERNATIVES;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRESENT_INVARIANT_INSTANCE__FITNESS = INVARIANT_INSTANCE__FITNESS;
+
+	/**
 	 * The feature id for the '<em><b>Invariant</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -445,6 +463,15 @@ public interface IRMRuntimePackage extends EPackage {
 	int SHADOW_INVARIANT_INSTANCE__ALTERNATIVES = INVARIANT_INSTANCE__ALTERNATIVES;
 
 	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHADOW_INVARIANT_INSTANCE__FITNESS = INVARIANT_INSTANCE__FITNESS;
+
+	/**
 	 * The number of structural features of the '<em>Shadow Invariant Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -516,6 +543,15 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_INVARIANT_INSTANCE__ALTERNATIVES = PRESENT_INVARIANT_INSTANCE__ALTERNATIVES;
+
+	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_INVARIANT_INSTANCE__FITNESS = PRESENT_INVARIANT_INSTANCE__FITNESS;
 
 	/**
 	 * The feature id for the '<em><b>Invariant</b></em>' attribute.
@@ -607,6 +643,15 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @ordered
 	 */
 	int EXCHANGE_INVARIANT_INSTANCE__ALTERNATIVES = PRESENT_INVARIANT_INSTANCE__ALTERNATIVES;
+
+	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXCHANGE_INVARIANT_INSTANCE__FITNESS = PRESENT_INVARIANT_INSTANCE__FITNESS;
 
 	/**
 	 * The feature id for the '<em><b>Invariant</b></em>' attribute.
@@ -851,6 +896,17 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getInvariantInstance_Alternatives();
+
+	/**
+	 * Returns the meta object for the attribute '{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getFitness <em>Fitness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fitness</em>'.
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getFitness()
+	 * @see #getInvariantInstance()
+	 * @generated
+	 */
+	EAttribute getInvariantInstance_Fitness();
 
 	/**
 	 * Returns the meta object for the '{@link cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance#getParent() <em>Get Parent</em>}' operation.
@@ -1201,6 +1257,14 @@ public interface IRMRuntimePackage extends EPackage {
 		 * @generated
 		 */
 		EReference INVARIANT_INSTANCE__ALTERNATIVES = eINSTANCE.getInvariantInstance_Alternatives();
+
+		/**
+		 * The meta object literal for the '<em><b>Fitness</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVARIANT_INSTANCE__FITNESS = eINSTANCE.getInvariantInstance_Fitness();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Parent</b></em>' operation.
