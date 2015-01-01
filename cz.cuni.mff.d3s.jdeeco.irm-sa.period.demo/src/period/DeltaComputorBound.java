@@ -33,17 +33,17 @@ public class DeltaComputorBound implements DeltaComputor {
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-//			min = pi.getProcessMinPeriod(); //TODO implement
+//			min = pi.getProcessMinPeriod(); //TODO add getProcessMinPeriod to ProcessInvariant
 			min = 0;
-//			max = pi.getProcessMaxPeriod(); //TODO implement
+//			max = pi.getProcessMaxPeriod(); //TODO add getProcessMaxPeriod to ProcessInvariant
 			max = 0;
 			per = pi.getProcessPeriod();
 		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ExchangeInvariantInstance xii = info.getInvariant();
 			final ExchangeInvariant xi = (ExchangeInvariant) xii.getInvariant();
-//			min = xi.getEnsebleMinPeriod(); //TODO implement
+//			min = xi.getEnsebleMinPeriod(); //TODO add getEnsembleMinPeriod to ExchangeInvariant
 			min = 0;
-//			max = xi.getEnsebleMaxPeriod(); //TODO implement
+//			max = xi.getEnsebleMaxPeriod(); //TODO add getEnsembleMaxPeriod to ExchangeInvariant
 			max = 0;
 			per = xi.getEnsemblePeriod();
 		}

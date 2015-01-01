@@ -32,12 +32,12 @@ public class InvariantFitnessCombinerAverage implements InvariantFitnessCombiner
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
 				//a) weighted average
-//				info.weight = info.fitness * pii.getWeight() /  infos.size(); //TODO implement
+//				info.weight = info.fitness * pii.getWeight() /  infos.size(); //TODO add getWeigth to ProcessInvariantInstance/ProcessInvariant
 				info.weight = 1.0;
 			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ExchangeInvariantInstance xii = info.getInvariant();
 				//a) weighted average
-//				info.weight = info.fitness * xii.getWeight() /  infos.size(); //TODO implement
+//				info.weight = info.fitness * xii.getWeight() /  infos.size(); //TODO add getWeigth to ExchangeInvariantInstance/ExchangeInvariant
 				info.weight = 1.0;
 			}
 			result += info.weight;
