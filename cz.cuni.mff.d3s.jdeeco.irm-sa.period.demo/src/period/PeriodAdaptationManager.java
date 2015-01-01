@@ -278,16 +278,25 @@ public final class PeriodAdaptationManager {
 	 */
 	static private void computeInvariantsFitness(final Set<InvariantInfo<?>> infos) {
 		for (InvariantInfo<?> info : infos) {
-			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-				final ProcessInvariantInstance pii = info.getInvariant();
-				final double f = pii.getFitness();
-				info.fitness = f;
-			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
-				final ExchangeInvariantInstance xii  = info.getInvariant();
-				final double f = xii.getFitness();
-				info.fitness = f;
-			}
+			InvariantInstance instance = info.getInvariant();
+			info.fitness = instance.getFitness();
 		}
+	}
+
+	/**
+	 * Returns current period of given invariant in info.
+	 * @param info holder of invariant
+	 * @return current period of given invariant
+	 */
+	static private int getCurrentPeriod(InvariantInfo<?> info) {
+		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ProcessInvariantInstance pii = info.getInvariant();
+//			return pii.getComponentProcess().getPeriod(); //TODO extract current period
+		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ExchangeInvariantInstance xii = info.getInvariant();
+			//TODO how to get EnsembleController from ExchangeInvariantInstance???
+		}
+		return 0;
 	}
 
 	static private Backup applyChanges(final Set<InvariantInfo<?>> infos) {
@@ -310,9 +319,23 @@ public final class PeriodAdaptationManager {
 		return new Backup();
 	}
 
+	/**
+	 * Returns observe time for given adaptees and invariant infos.
+	 * @param adaptees adapted invariants
+	 * @param infos all invariants
+	 * @return observe time
+	 */
 	static private int computeObserveTime(final Set<InvariantInfo<?>> adaptees, final Set<InvariantInfo<?>> infos) {
-		//TODO
-		return 0;
+		//TODO implement more sophisticated algorithm
+		int max = 0;
+		for (InvariantInfo<?> info : infos) {
+			final int period = getCurrentPeriod(info);
+			if (period > max) {
+				max = period;
+			}
+		}
+		final int minIterations = 10;
+		return minIterations * max;
 	}
 
 	static private void restoreBackup(final Backup backup) {

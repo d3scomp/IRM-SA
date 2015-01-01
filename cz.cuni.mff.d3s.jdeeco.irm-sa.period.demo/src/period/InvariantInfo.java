@@ -84,7 +84,7 @@ public class InvariantInfo<T extends InvariantInstance> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <X> X getInvariant() {
+	public <X extends InvariantInstance> X getInvariant() {
 		return (X) invariant;
 	}
 
