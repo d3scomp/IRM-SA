@@ -35,6 +35,7 @@ import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
@@ -126,15 +127,15 @@ public final class PeriodAdaptationManager {
 			@In("id") String id,
 			@InOut("state") ParamHolder<StateHolder> stateHolder) {
 		final StateHolder state = stateHolder.value;
+		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
-		final RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
+		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
 		// get simulated time
 		final long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		System.out.println("*** Adapting periods in runtime "+ runtime + " at time " + simulatedTime +" ***");
 		// skipping the first run of this process as replicas are not disseminated yet
 		if (simulatedTime == 0) {
 			Log.w("First invocation of the PeriodAdaptationManager. Skipping this reasoning cycle.");
-			//TODO set period of this process
 			return;
 		}
 
@@ -158,8 +159,9 @@ public final class PeriodAdaptationManager {
 
 		if (IRMInstances.isEmpty()) {
 			//nothing to adapt, reset state
-			state.reset();
 			//TODO reset original period of this process
+			//process.setPeriod(state.originalPeriod);
+			state.reset();
 			return;
 		}
 
@@ -194,8 +196,9 @@ public final class PeriodAdaptationManager {
 
 			//Run for observe time
 			state.state = State.OBSERVED;
-			//??? - change period of this process?
-			//state.originalPeriod = ???
+			//TODO change period of this process
+			//state.originalPeriod = process.getPeriod();
+			//process.setPeriod(observeTime);
 		} else if (state.state == State.OBSERVED) { //observing done
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
@@ -215,7 +218,8 @@ public final class PeriodAdaptationManager {
 
 			//{Mark non-prospective specimen as dead end or utilize Simulated annealing}
 			state.reset();
-			//TODO restore original period?
+			//TODO restore original period
+			//process.setPeriod(state.originalPeriod);
 		} else {
 			Log.w("Unknown state " + state.state);
 		}
