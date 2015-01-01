@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -192,7 +193,7 @@ public final class PeriodAdaptationManager {
 			state.backup = applyChanges(adaptees);
 
 			//{Compute observe time}
-			final int observeTime = computeObserveTime(adaptees, infos);
+			final long observeTime = computeObserveTime(adaptees, infos);
 
 			//Run for observe time
 			state.state = State.OBSERVED;
@@ -213,7 +214,7 @@ public final class PeriodAdaptationManager {
 				//Take child as new parent
 			} else {
 				//Keep parent
-				restoreBackup(state.backup);
+				restoreBackup(infos, state.backup);
 			}
 
 			//{Mark non-prospective specimen as dead end or utilize Simulated annealing}
@@ -288,35 +289,43 @@ public final class PeriodAdaptationManager {
 	 * @param info holder of invariant
 	 * @return current period of given invariant
 	 */
-	static private int getCurrentPeriod(InvariantInfo<?> info) {
+	static private long getCurrentPeriod(InvariantInfo<?> info) {
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 //			return pii.getComponentProcess().getPeriod(); //TODO extract current period
 		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ExchangeInvariantInstance xii = info.getInvariant();
 			//TODO how to get EnsembleController from ExchangeInvariantInstance???
+//			return ensembleController.getPeriod();
 		}
 		return 0;
 	}
 
+	/**
+	 * Applies changes specified in infos.
+	 * @param infos container of desired changes
+	 * @return backup to revert the changes
+	 */
 	static private Backup applyChanges(final Set<InvariantInfo<?>> infos) {
-//		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-//			final ProcessInvariantInstance pii = info.getInvariant();
-//			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-////			final long min = pi.getProcessMinPeriod(); //TODO implement
-//			final long min = 0;
-////			final long max = pi.getProcessMaxPeriod(); //TODO implement
-//			final long max = 0;
-//			final long per = pi.getProcessPeriod();
-//			final long target = per + info.delta * info.direction.getCoef();
-//		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
-//			final ExchangeInvariantInstance xii = info.getInvariant();
-//			//a) weighted average
-////			info.weight = info.fitness * xii.getWeight() /  infos.size(); //TODO implement
-//			info.weight = 1.0;
-//		}
-		//TODO
-		return new Backup();
+		final Backup backup = new Backup();
+		for (InvariantInfo<?> info : infos) {
+			final Backup.Change change = new Backup.Change(info.delta, info.direction.opposite());
+			final long currentPeriod = getCurrentPeriod(info);
+			final long newPeriod = currentPeriod + info.direction.getCoef() * info.delta;
+			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ProcessInvariantInstance pii = info.getInvariant();
+//				pii.getComponentProcess().setPeriod(newPeriod); //TODO set new period for process
+				final String id = pii.getComponentProcess().getComponentInstance().getKnowledgeManager().getId();
+				backup.processes.put(id, change);
+			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ExchangeInvariantInstance xii = info.getInvariant();
+				//TODO how to get EnsembleController from ExchangeInvariantInstance???
+//				ensembleController.setPeriod(newPeriod);
+				final String id = "TODO";
+				backup.exchanges.put(id, change);
+			}
+		}
+		return backup;
 	}
 
 	/**
@@ -325,21 +334,51 @@ public final class PeriodAdaptationManager {
 	 * @param infos all invariants
 	 * @return observe time
 	 */
-	static private int computeObserveTime(final Set<InvariantInfo<?>> adaptees, final Set<InvariantInfo<?>> infos) {
+	static private long computeObserveTime(final Set<InvariantInfo<?>> adaptees, final Set<InvariantInfo<?>> infos) {
 		//TODO implement more sophisticated algorithm
-		int max = 0;
+		long max = 0;
 		for (InvariantInfo<?> info : infos) {
-			final int period = getCurrentPeriod(info);
+			final long period = getCurrentPeriod(info);
 			if (period > max) {
 				max = period;
 			}
 		}
-		final int minIterations = 10;
+		final long minIterations = 10L;
 		return minIterations * max;
 	}
 
-	static private void restoreBackup(final Backup backup) {
-		//TODO
+	static private long computeNewPeriod(InvariantInfo<?> info, Backup.Change change) {
+		final long currentPeriod = getCurrentPeriod(info);
+		return currentPeriod + change.direction.getCoef() * change.delta;
+	}
+
+	/**
+	 * Restores backup.
+	 * @param backup Backup to restore
+	 */
+	static private void restoreBackup(final Set<InvariantInfo<?>> infos, final Backup backup) {
+		for (InvariantInfo<?> info: infos) {
+			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ProcessInvariantInstance pii = info.getInvariant();
+				final String id = pii.getComponentProcess().getComponentInstance().getKnowledgeManager().getId();
+				final Backup.Change change = backup.processes.get(id);
+				if (change == null) {
+					continue;
+				}
+				final long newPeriod = computeNewPeriod(info, change);
+//				pii.getComponentProcess().setPeriod(newPeriod); //TODO set new period for process
+			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ExchangeInvariantInstance xii = info.getInvariant();
+				//TODO how to get EnsembleController from ExchangeInvariantInstance???
+				final String id = "TODO";
+				final Backup.Change change = backup.exchanges.get(id);
+				if (change == null) {
+					continue;
+				}
+				final long newPeriod = computeNewPeriod(info, change);
+//				ensembleController.setPeriod(newPeriod);
+			}
+		}
 	}
 
 	/**
@@ -354,12 +393,40 @@ public final class PeriodAdaptationManager {
 	 */
 	private static class Backup extends KnowledgeImpl {
 
+		//TODO maybe one map is enough? if id collision are not possible
+		/** Changes of process invariants. */
+		public Map<String, Change> processes = new HashMap<>();
+
+		/** Changes of exchange invariants. */
+		public Map<String, Change> exchanges = new HashMap<>();
+
 		/**
 		 * Only constructor.
 		 */
 		public Backup() {
 			this.name = "PeriodAdaptationManagerBackup";
 			this.type = "PeriodAdaptationManagerBackupType";
+		}
+
+		static class Change extends KnowledgeImpl {
+
+			/** Period delta. */
+			public long delta;
+
+			/** Direction of change. */
+			public Direction direction;
+
+			/**
+			 * Only constructor.
+			 * @param delta period delta
+			 * @param direction direction of change
+			 */
+			public Change(final long delta, final Direction direction) {
+				this.name = "PeriodAdaptationManagerBackupItem";
+				this.type = "PeriodAdaptationManagerBackupItemType";
+				this.delta = delta;
+				this.direction = direction;
+			}
 		}
 	}
 
@@ -389,7 +456,7 @@ public final class PeriodAdaptationManager {
 		public Backup backup;
 
 		/** Original period of the adaptation process. */
-		public int originalPeriod;
+		public long originalPeriod;
 
 		/**
 		 * Only constructor.

@@ -24,17 +24,32 @@ public enum Direction {
 		public byte getCoef() {
 			return 1;
 		}
+
+		@Override
+		public Direction opposite() {
+			return DOWN;
+		}
 	},
 	DOWN {
 		@Override
 		public byte getCoef() {
 			return  -1;
 		}
+
+		@Override
+		public Direction opposite() {
+			return UP;
+		}
 	},
 	NO {
 		@Override
 		public byte getCoef() {
 			return 0;
+		}
+
+		@Override
+		public Direction opposite() {
+			return NO;
 		}
 	};
 
@@ -43,4 +58,10 @@ public enum Direction {
 	 * @return coefficient of this direction
 	 */
 	public abstract byte getCoef();
+
+	/**
+	 * Returns opposite direction.
+	 * @return opposite direction
+	 */
+	public abstract Direction opposite();
 }
