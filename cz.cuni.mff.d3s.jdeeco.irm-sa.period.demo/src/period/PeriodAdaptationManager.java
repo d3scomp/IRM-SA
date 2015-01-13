@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -37,7 +36,11 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
@@ -101,7 +104,6 @@ public final class PeriodAdaptationManager {
 				final EMap<String, Object> data = c.getInternalData();
 				data.put(DESIGN_MODEL, design);
 				data.put(TRACE_MODEL, trace);
-				//TODO is knowledge manager's id guaranteed to be the same as the component's one?
 				final PeriodAdaptationManagerBuilder builder =
 						toPrepare.remove(c.getKnowledgeManager().getId());
 				if (builder != null) {
@@ -160,8 +162,8 @@ public final class PeriodAdaptationManager {
 
 		if (IRMInstances.isEmpty()) {
 			//nothing to adapt, reset state
-			//TODO reset original period of this process
-			//process.setPeriod(state.originalPeriod);
+			final TimeTrigger trigger = getTimeTrigger(process);
+			trigger.setPeriod(state.originalPeriod);
 			state.reset();
 			return;
 		}
@@ -197,9 +199,10 @@ public final class PeriodAdaptationManager {
 
 			//Run for observe time
 			state.state = State.OBSERVED;
-			//TODO change period of this process
-			//state.originalPeriod = process.getPeriod();
-			//process.setPeriod(observeTime);
+			//change period of this process
+			final TimeTrigger trigger = getTimeTrigger(process);
+			state.originalPeriod = trigger.getPeriod();
+			trigger.setPeriod(observeTime);
 		} else if (state.state == State.OBSERVED) { //observing done
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
@@ -218,9 +221,9 @@ public final class PeriodAdaptationManager {
 			}
 
 			//{Mark non-prospective specimen as dead end or utilize Simulated annealing}
+			final TimeTrigger trigger = getTimeTrigger(process);
+			trigger.setPeriod(state.originalPeriod);
 			state.reset();
-			//TODO restore original period
-			//process.setPeriod(state.originalPeriod);
 		} else {
 			Log.w("Unknown state " + state.state);
 		}
@@ -274,6 +277,20 @@ public final class PeriodAdaptationManager {
 	}
 
 	/**
+	 * Returns time trigger of the given process or null.
+	 * @param process given process
+	 * @return time trigger of the given process or null
+	 */
+	static private TimeTrigger getTimeTrigger(final ComponentProcess process) {
+		for (Trigger trigger : process.getTriggers()) {
+			if (trigger instanceof TimeTrigger) {
+				return (TimeTrigger) trigger;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Computes fitness for invariant instances.
 	 * @param infos invariant instances to compute fitness for
 	 */
@@ -285,20 +302,58 @@ public final class PeriodAdaptationManager {
 	}
 
 	/**
+	 * Returns TimeTrigger for invariant or null.
+	 * @param info invariant info
+	 * @return TimeTrigger for invariant or null
+	 */
+	static private TimeTrigger getTimeTrigger(InvariantInfo<?> info) {
+		List<Trigger> triggers;
+		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ProcessInvariantInstance pii = info.getInvariant();
+			triggers = pii.getComponentProcess().getTriggers();
+		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ExchangeInvariantInstance xii = info.getInvariant();
+			triggers = xii.getEnsembleDefinition().getTriggers(); //TODO change to getEnsembleController when ready
+		} else {
+			return null;
+		}
+		for (Trigger trigger : triggers) {
+			if (trigger instanceof TimeTrigger) {
+				return (TimeTrigger) trigger;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Returns current period of given invariant in info.
 	 * @param info holder of invariant
 	 * @return current period of given invariant
 	 */
 	static private long getCurrentPeriod(InvariantInfo<?> info) {
-		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-			final ProcessInvariantInstance pii = info.getInvariant();
-//			return pii.getComponentProcess().getPeriod(); //TODO extract current period
-		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
-			final ExchangeInvariantInstance xii = info.getInvariant();
-			//TODO how to get EnsembleController from ExchangeInvariantInstance???
-//			return ensembleController.getPeriod();
-		}
-		return 0;
+		final TimeTrigger trigger = getTimeTrigger(info);
+		return trigger != null ? trigger.getPeriod() : 0;
+	}
+
+	/**
+	 * Returns id of ExchangeInvariantInstance as knowledge manager id
+	 * @param xii ExchangeInvariantInstance
+	 * @return knowledge manager id
+	 */
+	static private String getProcessInvariantInstanceId(final ProcessInvariantInstance pii) {
+		final ComponentInstance com = pii.getComponentProcess().getComponentInstance();
+		return com.getKnowledgeManager().getId();
+	}
+
+	/**
+	 * Returns id of ExchangeInvariantInstance as componentId-defName
+	 * @param xii ExchangeInvariantInstance
+	 * @return componentId-defName
+	 */
+	static private String getExchangeInvariantInstanceId(final ExchangeInvariantInstance xii) {
+		final EnsembleDefinition def = xii.getEnsembleDefinition();
+		final EnsembleController cont = null; //TODO getEnsembleController when ready
+		return cont.getComponentInstance().getKnowledgeManager().getId() + "-" + def.getName();
 	}
 
 	/**
@@ -312,16 +367,18 @@ public final class PeriodAdaptationManager {
 			final Backup.Change change = new Backup.Change(info.delta, info.direction.opposite());
 			final long currentPeriod = getCurrentPeriod(info);
 			final long newPeriod = currentPeriod + info.direction.getCoef() * info.delta;
+			final TimeTrigger trigger = getTimeTrigger(info);
+			if (trigger == null) {
+				continue;
+			}
+			trigger.setPeriod(newPeriod);
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
-//				pii.getComponentProcess().setPeriod(newPeriod); //TODO set new period for process
-				final String id = pii.getComponentProcess().getComponentInstance().getKnowledgeManager().getId();
+				final String id = getProcessInvariantInstanceId(pii);
 				backup.processes.put(id, change);
 			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ExchangeInvariantInstance xii = info.getInvariant();
-				//TODO how to get EnsembleController from ExchangeInvariantInstance???
-//				ensembleController.setPeriod(newPeriod);
-				final String id = "TODO";
+				final String id = getExchangeInvariantInstanceId(xii);
 				backup.exchanges.put(id, change);
 			}
 		}
@@ -358,25 +415,29 @@ public final class PeriodAdaptationManager {
 	 */
 	static private void restoreBackup(final Set<InvariantInfo<?>> infos, final Backup backup) {
 		for (InvariantInfo<?> info: infos) {
+			long newPeriod;
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
-				final String id = pii.getComponentProcess().getComponentInstance().getKnowledgeManager().getId();
+				final String id = getProcessInvariantInstanceId(pii);
 				final Backup.Change change = backup.processes.get(id);
 				if (change == null) {
 					continue;
 				}
-				final long newPeriod = computeNewPeriod(info, change);
-//				pii.getComponentProcess().setPeriod(newPeriod); //TODO set new period for process
+				newPeriod = computeNewPeriod(info, change);
 			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ExchangeInvariantInstance xii = info.getInvariant();
-				//TODO how to get EnsembleController from ExchangeInvariantInstance???
-				final String id = "TODO";
+				final String id = getExchangeInvariantInstanceId(xii);
 				final Backup.Change change = backup.exchanges.get(id);
 				if (change == null) {
 					continue;
 				}
-				final long newPeriod = computeNewPeriod(info, change);
-//				ensembleController.setPeriod(newPeriod);
+				newPeriod = computeNewPeriod(info, change);
+			} else {
+				continue;
+			}
+			final TimeTrigger trigger = getTimeTrigger(info);
+			if (trigger != null) {
+				trigger.setPeriod(newPeriod);
 			}
 		}
 	}
@@ -393,7 +454,6 @@ public final class PeriodAdaptationManager {
 	 */
 	private static class Backup extends KnowledgeImpl {
 
-		//TODO maybe one map is enough? if id collision are not possible
 		/** Changes of process invariants. */
 		public Map<String, Change> processes = new HashMap<>();
 
@@ -408,12 +468,15 @@ public final class PeriodAdaptationManager {
 			this.type = "PeriodAdaptationManagerBackupType";
 		}
 
+		/**
+		 * Simple wrapper around period change of an invariant.
+		 */
 		static class Change extends KnowledgeImpl {
 
 			/** Period delta. */
 			public long delta;
 
-			/** Direction of change. */
+			/** Direction of change to revert the change. */
 			public Direction direction;
 
 			/**

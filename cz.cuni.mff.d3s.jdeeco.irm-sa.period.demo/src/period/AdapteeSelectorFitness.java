@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
-
 public class AdapteeSelectorFitness implements AdapteeSelector {
 
 	/** Numbers differing in only this value are considered equal. */
@@ -42,15 +40,12 @@ public class AdapteeSelectorFitness implements AdapteeSelector {
 		final Set<InvariantInfo<?>> result = new HashSet<>();
 		double fitness = Double.MAX_VALUE; //fitness of invariants in result
 		for (InvariantInfo<?> invariant: infos) {
-			final InvariantInstance instance = invariant.getInvariant(); //TODO not only unsatisfied?
-			if (!instance.isSatisfied()) {
-				if (invariant.fitness < fitness) {
-					result.clear();
-					fitness = invariant.fitness;
-					result.add(invariant);
-				} else if (toleranceEqual(invariant.fitness, fitness)) {
-					result.add(invariant);
-				}
+			if (invariant.fitness < fitness) {
+				result.clear();
+				fitness = invariant.fitness;
+				result.add(invariant);
+			} else if (toleranceEqual(invariant.fitness, fitness)) {
+				result.add(invariant);
 			}
 		}
 		return result;

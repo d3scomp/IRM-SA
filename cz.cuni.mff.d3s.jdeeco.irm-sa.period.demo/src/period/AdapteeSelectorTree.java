@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
-
 public class AdapteeSelectorTree implements AdapteeSelector {
 
 	@Override
@@ -32,15 +30,12 @@ public class AdapteeSelectorTree implements AdapteeSelector {
 			if (invariant.level < 0) {
 				invariant.computeInvariantLevel();
 			}
-			final InvariantInstance instance = invariant.getInvariant(); //TODO not only unsatisfied?
-			if (!instance.isSatisfied()) {
-				if (invariant.level < level) {
-					result.clear();
-					level = invariant.level;
-					result.add(invariant);
-				} else if (invariant.level == level) {
-					result.add(invariant);
-				}
+			if (invariant.level < level) {
+				result.clear();
+				level = invariant.level;
+				result.add(invariant);
+			} else if (invariant.level == level) {
+				result.add(invariant);
 			}
 		}
 		return result;
