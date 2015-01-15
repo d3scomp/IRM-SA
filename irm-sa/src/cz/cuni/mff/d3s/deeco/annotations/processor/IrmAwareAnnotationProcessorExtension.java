@@ -24,6 +24,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Invariant;
 import cz.cuni.mff.d3s.deeco.annotations.InvariantMonitor;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.annotations.pathparser.ParseException;
+import cz.cuni.mff.d3s.deeco.annotations.pathparser.PathOrigin;
 import cz.cuni.mff.d3s.deeco.knowledge.ChangeSet;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeUpdateException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
@@ -105,7 +106,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 							throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
 						}
 						String path = caller.getDirectionAnnotationValue(directionAnnotation);
-						mParameter.setKnowledgePath(caller.createKnowledgePath(path, inComponent));
+						mParameter.setKnowledgePath(caller.createKnowledgePath(path, PathOrigin.COMPONENT));
 					} catch (AnnotationProcessorException | ParseException e) {
 						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+(i+1) + "->" + e.getMessage(), e);
 					}

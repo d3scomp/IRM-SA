@@ -128,7 +128,7 @@ public class CentralizedRun {
 
 		final DirectSimulationHost host = simulation.getHost("host");
 		final List<EnsembleDefinition> ensembles = model.getEnsembleDefinitions();
-		final RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, new DefaultKnowledgeDataManager(ensembles, null), new CloningKnowledgeManagerFactory());
+		final RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, new DefaultKnowledgeDataManager(ensembles, null), new CloningKnowledgeManagerFactory(),null);
 
 		runtime.start();
 	}

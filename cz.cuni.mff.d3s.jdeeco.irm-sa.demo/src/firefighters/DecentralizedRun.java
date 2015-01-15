@@ -204,7 +204,7 @@ public class DecentralizedRun {
 		RuntimeFramework runtime = builder.build(host, simulation,
 				simulationListeners, model,
 				new DefaultKnowledgeDataManager(model.getEnsembleDefinitions(), null),
-				new CloningKnowledgeManagerFactory());
+				new CloningKnowledgeManagerFactory(), null);
 
 		runtime.start();
 	}
