@@ -181,6 +181,13 @@ public final class PeriodAdaptationManager {
 			//Compute overall fitness
 			state.oldFitness = invariantFitnessCombiner.combineInvariantFitness(infos);
 			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
+			//TODO define clearly condition for adaptation
+			if (state.oldFitness >= 0.5) {
+				final TimeTrigger trigger = getTimeTrigger(process);
+				trigger.setPeriod(Settings.ADAPTATION_PERIOD);
+				state.reset();
+				return;
+			}
 
 			//Select a (set of) processes to adapt
 			final Set<InvariantInfo<?>> adaptees = adapteeSelector.selectAdaptees(infos);
@@ -202,12 +209,15 @@ public final class PeriodAdaptationManager {
 			final long observeTime = computeObserveTime(adaptees, infos);
 
 			//Run for observe time
-//			state.state = State.OBSERVED;
-//			//change period of this process
-//			final TimeTrigger trigger = getTimeTrigger(process);
-//			state.originalPeriod = trigger.getPeriod();
-//			trigger.setPeriod(observeTime);
-//			state.observeTime = simulatedTime + observeTime;
+			state.state = State.OBSERVED;
+			//change period of this process
+			final TimeTrigger trigger = getTimeTrigger(process);
+			state.originalPeriod = trigger.getPeriod();
+			if (observeTime > state.originalPeriod) { //changing period takes effect only the run after the next one
+				trigger.setPeriod(observeTime - state.originalPeriod);
+			}
+			state.observeTime = simulatedTime + observeTime;
+			System.out.println("!!!ADAPTING!!!");
 		} else if (state.state == State.OBSERVED) { //observing done
 			if (simulatedTime < state.observeTime) {
 				System.out.println("Adaptation invoked too soon, waiting");

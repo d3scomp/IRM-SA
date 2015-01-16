@@ -15,6 +15,9 @@
  ******************************************************************************/
 package period;
 
+import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+
 /**
  * Temporary direction selector that does nothing.
  */
@@ -22,7 +25,17 @@ public class DirectionSelectorImpl implements DirectionSelector {
 
 	@Override
 	public void selectDirection(InvariantInfo<?> info) {
-		//TODO implement ONLY DOWN FOR NOW
-		info.direction = Direction.NO;
+		//TODO implement ONLY DOWN FOR NOW AND ONLY FOR GPS
+		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ProcessInvariantInstance pii = info.getInvariant();
+			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
+			if (pi.getProcessName().equals("determinePosition")) {
+				info.direction = Direction.DOWN;
+			} else {
+				info.direction = Direction.NO;
+			}
+		} else {
+			info.direction = Direction.NO;
+		}
 	}
 }

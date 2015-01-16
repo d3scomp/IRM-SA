@@ -113,20 +113,15 @@ public class CentralizedRun {
 		final AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
 		final AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
 
-//		final Component1 component1 = new Component1();
-//		final Component2 component2 = new Component2();
 		processor.process(
-//				component1,
-//				component2,
 				new FireFighter(),
 				new Environment(),
 				PeriodAdaptationManager.create()
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
-						.withAdapteeSelector(new AdapteeSelectorTree())
+						.withAdapteeSelector(new AdapteeSelectorFitness())
 						.withDirectionSelector(new DirectionSelectorImpl())
-						.withDeltaComputor(new DeltaComputorFixed(1000))
-						.build()/*,
-				Ensemble1.class*/);
+						.withDeltaComputor(new DeltaComputorFixed(250))
+						.build());
 
 		PeriodAdaptationManager.prepare(model, design, trace);
 

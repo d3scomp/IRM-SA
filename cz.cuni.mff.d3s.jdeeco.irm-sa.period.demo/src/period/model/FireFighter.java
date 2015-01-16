@@ -106,6 +106,8 @@ public class FireFighter {
 		if (posBad > 0) {
 			final double ratio = (1.0 * posOk) / (posOk + posBad);
 			result = SATISFACTION_BOUND * ratio;
+		} else if (posOk + posBad == 0){
+			return 1.0;
 		} else {
 			final double ratio = inaccuracyAcc / ((posOk + posBad) * MAX_INACCURACY);
 			result = (1.0 - SATISFACTION_BOUND) * ratio + SATISFACTION_BOUND;

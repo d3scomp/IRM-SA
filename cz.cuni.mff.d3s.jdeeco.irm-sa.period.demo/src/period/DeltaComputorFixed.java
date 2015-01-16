@@ -71,7 +71,7 @@ public class DeltaComputorFixed implements DeltaComputor {
 			info.delta = per + delta > max ? max - per : delta;
 			break;
 		case DOWN:
-			info.delta = per - delta < max ? per - min : delta;
+			info.delta = per - delta < min ? per - min : delta;
 			break;
 		case NO:
 			info.delta = delta;
