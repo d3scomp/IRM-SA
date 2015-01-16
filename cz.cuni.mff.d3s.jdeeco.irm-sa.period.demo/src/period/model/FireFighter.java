@@ -14,6 +14,10 @@ public class FireFighter {
 
 	static private final double MAX_INACCURACY = 20.0;
 
+	static private final double SATISFACTION_BOUND = 0.8;
+
+	static private final long TARGET_DURABILITY = 400000;
+
 	/** Hack. */
 	static private double lastBatteryLevel = Environment.getBatteryLevel();
 
@@ -21,6 +25,10 @@ public class FireFighter {
 	static private long lastBatteryCheck = 0L;
 
 	static private double inaccuracyAcc = 0.0;
+
+	static private int posOk = 0;
+
+	static private int posBad = 0;
 
 	public Double batteryLevel;
 	public Double position;
@@ -46,29 +54,46 @@ public class FireFighter {
 			@In("batteryLevel") Double batteryLevel) {
 		System.out.println("Determining BLF at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("Battery level: " + batteryLevel);
-		final double diff = (lastBatteryLevel - batteryLevel);
 		final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		if (time > TARGET_DURABILITY /*|| batteryLevel <= 0.00001*/) {
+			return 1.0;
+		}
+		if (batteryLevel <= 0.00001) {
+			return 0.0;
+		}
+		final long timeLeft = TARGET_DURABILITY - time;
+		final double diff = (lastBatteryLevel - batteryLevel);
 		final long period = time - lastBatteryCheck;
 		System.out.println("Battery level diff: " + diff);
 		System.out.println("Battery level period: " + period);
-		final double fitness = 0.00025 / (diff / period);
-		if (Double.isInfinite(fitness)) {
-			return 1.0;
+		final double energyLeft = batteryLevel / diff * period;
+		double result;
+		if (energyLeft < timeLeft) {
+			final double ratio = energyLeft / timeLeft;
+			result = SATISFACTION_BOUND * ratio;
+		} else {
+			result = 1.0;
 		}
 		lastBatteryLevel = batteryLevel;
 		lastBatteryCheck = time;
-		System.out.println("Battery level Fitness: " + fitness);
-		return fitness;
+		System.out.println("Battery level Fitness: " + result);
+		return result;
 	}
 
 
 	@Process
 	@Invariant("P02")
-	@PeriodicScheduling(period=2000)
+	@PeriodicScheduling(period=1250)
 	public static void determinePosition(
 		@Out("position") ParamHolder<Double> position
 	) {
-		inaccuracyAcc += Environment.getInaccuracy();
+		final double inacc = Environment.getInaccuracy();
+		if (inacc <= MAX_INACCURACY) {
+			++posOk;
+		} else {
+			++posBad;
+		}
+		inaccuracyAcc += inacc;
 		position.value = Environment.getPosition();
 		System.out.println("Determining Pos at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("Pos: " + position.value);
@@ -77,16 +102,17 @@ public class FireFighter {
 	@InvariantMonitor("P02")
 	public static double determinePositionFitness() {
 		System.out.println("Determining PosFit at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
-		final double inaccuracy = Environment.getInaccuracy();
-		if (inaccuracy > MAX_INACCURACY) {
-			System.out.println("Position Fitness: 0");
-			return 0;
+		double result;
+		if (posBad > 0) {
+			final double ratio = (1.0 * posOk) / (posOk + posBad);
+			result = SATISFACTION_BOUND * ratio;
+		} else {
+			final double ratio = inaccuracyAcc / ((posOk + posBad) * MAX_INACCURACY);
+			result = (1.0 - SATISFACTION_BOUND) * ratio + SATISFACTION_BOUND;
 		}
-//		System.out.println("Position Fitness: " + 4 * (inaccuracy / MAX_INACCURACY));
-//		return 4 * (inaccuracy / MAX_INACCURACY);
-		System.out.println("Inaccuracy accumulator: " + inaccuracyAcc);
-		final double res = 1 / inaccuracyAcc * 1000;
+		posBad = 0;
+		posOk = 0;
 		inaccuracyAcc = 0;
-		return res;
+		return result;
 	}
 }

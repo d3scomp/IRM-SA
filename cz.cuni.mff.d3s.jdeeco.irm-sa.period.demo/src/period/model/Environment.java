@@ -16,7 +16,7 @@ import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 @SystemComponent
 public class Environment {
 
-	static private final double GPS_ENERGY_COST = 0.5;
+	static private final double GPS_ENERGY_COST = 0.4;
 
 	static private final Random RANDOM = new Random();
 
@@ -24,7 +24,7 @@ public class Environment {
 
 	static private final double FF_MOVEMENT = 4.0;
 
-	static private final double BROKEN_GSP_INACURRACY = 15.0;
+	static private final double BROKEN_GSP_INACURRACY = 9.0;
 
 	/////////////////////
 	//ENVIRONMENT STATE//
