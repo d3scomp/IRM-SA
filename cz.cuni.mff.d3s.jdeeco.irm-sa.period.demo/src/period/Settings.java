@@ -29,7 +29,7 @@ public interface Settings {
 
 	public static final int PROCESS_PERIOD = 500; // in milliseconds
 	public static final int ENSEMBLE_PERIOD = 500;
-	public static final int ADAPTATION_PERIOD = 500;
+	public static final int ADAPTATION_PERIOD = 5000;
 	public static final int BROADCAST_PERIOD = 400;
 
 	public static final int NETWORK_DELAY = 500; // in milliseconds

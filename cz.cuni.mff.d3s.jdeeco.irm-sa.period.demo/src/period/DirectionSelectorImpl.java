@@ -22,7 +22,7 @@ public class DirectionSelectorImpl implements DirectionSelector {
 
 	@Override
 	public void selectDirection(InvariantInfo<?> info) {
-		//TODO implement
+		//TODO implement ONLY DOWN FOR NOW
 		info.direction = Direction.NO;
 	}
 }

@@ -22,6 +22,8 @@ import java.util.List;
 import period.model.Component1;
 import period.model.Component2;
 import period.model.Ensemble1;
+import period.model.Environment;
+import period.model.FireFighter;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
@@ -55,13 +57,13 @@ public class CentralizedRun {
 
 	/** Path to design model of the simulation to run. */
 	static private final String DESIGN_MODEL_PATH =
-			MODELS_BASE_PATH + "simple.irmdesign";
+			MODELS_BASE_PATH + "firefighters.irmdesign";
 
 	/** Start of the simulation in milliseconds. */
 	static private final long SIMULATION_START = 0;
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 15000;
+	static private final long SIMULATION_END = 400000;
 
 	/** Network delay in milliseconds. Not used in centralized case. */
 	static private final long NETWORK_DELAY = 100;
@@ -111,18 +113,20 @@ public class CentralizedRun {
 		final AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
 		final AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
 
-		final Component1 component1 = new Component1();
-		final Component2 component2 = new Component2();
+//		final Component1 component1 = new Component1();
+//		final Component2 component2 = new Component2();
 		processor.process(
-				component1,
-				component2,
+//				component1,
+//				component2,
+				new FireFighter(),
+				new Environment(),
 				PeriodAdaptationManager.create()
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new AdapteeSelectorTree())
 						.withDirectionSelector(new DirectionSelectorImpl())
 						.withDeltaComputor(new DeltaComputorFixed(1000))
-						.build(),
-				Ensemble1.class);
+						.build()/*,
+				Ensemble1.class*/);
 
 		PeriodAdaptationManager.prepare(model, design, trace);
 

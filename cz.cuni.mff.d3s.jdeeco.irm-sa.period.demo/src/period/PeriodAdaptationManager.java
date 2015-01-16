@@ -129,6 +129,9 @@ public final class PeriodAdaptationManager {
 	static public void adaptPeriods(
 			@In("id") String id,
 			@InOut("state") ParamHolder<StateHolder> stateHolder) {
+//		if (1 == 1) {
+//			return;
+//		}
 		final StateHolder state = stateHolder.value;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
@@ -137,7 +140,7 @@ public final class PeriodAdaptationManager {
 		final long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 		System.out.println("*** Adapting periods in runtime "+ runtime + " at time " + simulatedTime +" ***");
 		// skipping the first run of this process as replicas are not disseminated yet
-		if (simulatedTime == 0) {
+		if (simulatedTime <= 0) {
 			Log.w("First invocation of the PeriodAdaptationManager. Skipping this reasoning cycle.");
 			return;
 		}
@@ -177,6 +180,7 @@ public final class PeriodAdaptationManager {
 
 			//Compute overall fitness
 			state.oldFitness = invariantFitnessCombiner.combineInvariantFitness(infos);
+			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
 
 			//Select a (set of) processes to adapt
 			final Set<InvariantInfo<?>> adaptees = adapteeSelector.selectAdaptees(infos);
@@ -198,12 +202,17 @@ public final class PeriodAdaptationManager {
 			final long observeTime = computeObserveTime(adaptees, infos);
 
 			//Run for observe time
-			state.state = State.OBSERVED;
-			//change period of this process
-			final TimeTrigger trigger = getTimeTrigger(process);
-			state.originalPeriod = trigger.getPeriod();
-			trigger.setPeriod(observeTime);
+//			state.state = State.OBSERVED;
+//			//change period of this process
+//			final TimeTrigger trigger = getTimeTrigger(process);
+//			state.originalPeriod = trigger.getPeriod();
+//			trigger.setPeriod(observeTime);
+//			state.observeTime = simulatedTime + observeTime;
 		} else if (state.state == State.OBSERVED) { //observing done
+			if (simulatedTime < state.observeTime) {
+				System.out.println("Adaptation invoked too soon, waiting");
+				return;
+			}
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
@@ -212,6 +221,7 @@ public final class PeriodAdaptationManager {
 
 			//Compute overall fitness
 			final double newFitness = invariantFitnessCombiner.combineInvariantFitness(infos);
+			System.out.println("NEW FITNESS: " + newFitness);
 
 			if (newFitness > state.oldFitness) {
 				//Take child as new parent
@@ -521,6 +531,8 @@ public final class PeriodAdaptationManager {
 		/** Original period of the adaptation process. */
 		public long originalPeriod;
 
+		public long observeTime;
+
 		/**
 		 * Only constructor.
 		 */
@@ -538,6 +550,7 @@ public final class PeriodAdaptationManager {
 			oldFitness = 0.0;
 			backup = null;
 			originalPeriod = 0;
+			observeTime = 0;
 		}
 	}
 }

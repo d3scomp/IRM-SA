@@ -15,6 +15,11 @@
  ******************************************************************************/
 package period;
 
+import cz.cuni.mff.d3s.irm.model.design.ExchangeInvariant;
+import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+
 /**
  * Delta computor returning always the same value if possible.
  */
@@ -43,6 +48,33 @@ public class DeltaComputorFixed implements DeltaComputor {
 
 	@Override
 	public void computeDelta(final InvariantInfo<?> info) {
-		info.delta = delta;
+		long per = 0;
+		long min = 250;
+		long max = 2000;
+		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ProcessInvariantInstance pii = info.getInvariant();
+			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
+//			min = pi.getProcessMinPeriod(); //TODO add getProcessMinPeriod to ProcessInvariant
+//			max = pi.getProcessMaxPeriod(); //TODO add getProcessMaxPeriod to ProcessInvariant
+			per = pi.getProcessPeriod();
+		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ExchangeInvariantInstance xii = info.getInvariant();
+			final ExchangeInvariant xi = (ExchangeInvariant) xii.getInvariant();
+//			min = xi.getEnsebleMinPeriod(); //TODO add getEnsembleMinPeriod to ExchangeInvariant
+			min = 0;
+//			max = xi.getEnsebleMaxPeriod(); //TODO add getEnsembleMaxPeriod to ExchangeInvariant
+			max = 0;
+			per = xi.getEnsemblePeriod();
+		}
+		switch (info.direction) {
+		case UP:
+			info.delta = per + delta > max ? max - per : delta;
+			break;
+		case DOWN:
+			info.delta = per - delta < max ? per - min : delta;
+			break;
+		case NO:
+			info.delta = delta;
+		}
 	}
 }
