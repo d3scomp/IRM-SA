@@ -101,11 +101,11 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 					Annotation[][] allAnnotations = method.getParameterAnnotations();
 					Annotation directionAnnotation;
 					try {
-						directionAnnotation = caller.getDirectionAnnotation(allAnnotations[i]);
+						directionAnnotation = caller.getKindAnnotation(allAnnotations[i]);
 						if (!(directionAnnotation instanceof In)) {
 							throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
 						}
-						String path = caller.getDirectionAnnotationValue(directionAnnotation);
+						String path = caller.getKindAnnotationValue(directionAnnotation);
 						mParameter.setKnowledgePath(caller.createKnowledgePath(path, PathOrigin.COMPONENT));
 					} catch (AnnotationProcessorException | ParseException e) {
 						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+(i+1) + "->" + e.getMessage(), e);
