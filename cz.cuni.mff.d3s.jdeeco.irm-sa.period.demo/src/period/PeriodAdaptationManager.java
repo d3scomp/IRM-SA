@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.UUID;
 
 import org.eclipse.emf.common.util.EMap;
 
@@ -60,29 +61,22 @@ import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
 public final class PeriodAdaptationManager {
 
 	/** Trace model stored in internal data under this key. */
-	static private final String TRACE_MODEL = "trace";
+	static final String TRACE_MODEL = "trace";
 
 	/** Design model stored in internal data under this key. */
-	static private final String DESIGN_MODEL = "design";
+	static final String DESIGN_MODEL = "design";
 
 	/** InvariantFitnessCombiner stored in internal data under this key. */
-	static private final String INVARIANT_FITNESS_COMBINER = "invariantFitnessCombiner";
+	static final String INVARIANT_FITNESS_COMBINER = "invariantFitnessCombiner";
 
 	/** AdapteeSelector stored in internal data under this key. */
-	static private final String ADAPTEE_SELECTOR = "adapteeSelector";
+	static final String ADAPTEE_SELECTOR = "adapteeSelector";
 
 	/** DirectionSelector stored in internal data under this key. */
-	static private final String DIRECTION_SELECTOR = "directionSelector";
+	static final String DIRECTION_SELECTOR = "directionSelector";
 
 	/** DeltaComputor stored in internal data under this key. */
-	static private final String DELTA_COMPUTOR = "deltaComputor";
-
-	/**
-	 * Mapping of ids to builders.
-	 * TODO think of a better way to pass data from builder to component internal data as it may be not the best approach to store them statically
-	 */
-	static final private Map<String, PeriodAdaptationManagerBuilder> toPrepare =
-			Collections.synchronizedMap(new HashMap<String, PeriodAdaptationManagerBuilder>());
+	static final String DELTA_COMPUTOR = "deltaComputor";
 
 	/** Manager ID. */
 	public String id;
@@ -91,37 +85,55 @@ public final class PeriodAdaptationManager {
 	public StateHolder state = new StateHolder();
 
 	/**
-	 * Prepares PeriodAdaptationManagers in model.
-	 * Ie. passes them design and trace by internal data hack.
-	 * @param model runtime model
-	 * @param design IRM
-	 * @param trace TraceModel
+	 * Only constructor.
 	 */
-	public static void prepare(RuntimeMetadata model, IRM design,
-			TraceModel trace) {
-		for (ComponentInstance c : model.getComponentInstances()) {
-			if (c.getName().equals(PeriodAdaptationManager.class.getName())) {
-				final EMap<String, Object> data = c.getInternalData();
-				data.put(DESIGN_MODEL, design);
-				data.put(TRACE_MODEL, trace);
-				final PeriodAdaptationManagerBuilder builder =
-						toPrepare.remove(c.getKnowledgeManager().getId());
-				if (builder != null) {
-					data.put(INVARIANT_FITNESS_COMBINER, builder.invariantFitnessCombiner);
-					data.put(ADAPTEE_SELECTOR, builder.adapteeSelector);
-					data.put(DIRECTION_SELECTOR, builder.directionSelector);
-					data.put(DELTA_COMPUTOR, builder.deltaComputor);
-				}
-			}
-		}
+	protected PeriodAdaptationManager() {
+		this.id = String.format("PeriodAdapatationManager_%s", UUID.randomUUID());
 	}
 
-	/**
-	 * Factory method for creating builder and manager itself.
-	 * @return newly created manager builder
-	 */
-	public static PeriodAdaptationManagerBuilder create() {
-		return new PeriodAdaptationManagerBuilder(toPrepare);
+	@Process
+	@PeriodicScheduling(period=Settings.MONITOR_PERIOD, order=10)
+	static public void monitorOverallFitness(@In("id") String id) {
+		final ComponentProcess process = ProcessContext.getCurrentProcess();
+		// get runtime model from the process context
+		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
+		// get simulated time
+		final long simulatedTime = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+		System.out.println("*** Monitoring overall system fitness in runtime "+ runtime + " at time " + simulatedTime +" ***");
+		// skipping the first run of this process as replicas are not disseminated yet
+		if (simulatedTime <= 0) {
+			Log.w("First invocation of the fitness monitoring. Skipping this reasoning cycle.");
+			return;
+		}
+
+		// get architecture, design, trace models and plug-ins from the process context
+		final Architecture architecture = ProcessContext.getArchitecture();
+		final IRM design = retrieveFromInternalData(DESIGN_MODEL);
+		final TraceModel trace = retrieveFromInternalData(TRACE_MODEL);
+		final InvariantFitnessCombiner invariantFitnessCombiner =
+				retrieveFromInternalData(INVARIANT_FITNESS_COMBINER);
+
+		// generate the IRM runtime model instances
+		final IRMInstanceGenerator generator =
+				new IRMInstanceGenerator(architecture, design, trace);
+		final List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+
+		if (IRMInstances.isEmpty()) {
+			//nothing to monitor
+			return;
+		}
+
+//		MonitorContext.setState(MonitorContext.State.MONITORING);
+		//Create data structure for processing
+		final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
+
+		//Compute processes' fitnesses
+		computeInvariantsFitness(infos);
+
+		//Compute overall fitness
+		final double fitness = invariantFitnessCombiner.combineInvariantFitness(infos);
+		System.out.println("Overall System Fitness: " + fitness + "(at " + simulatedTime + ")");
+//		MonitorContext.setState(MonitorContext.State.ANALYZING);
 	}
 
 	@Process
@@ -129,9 +141,6 @@ public final class PeriodAdaptationManager {
 	static public void adaptPeriods(
 			@In("id") String id,
 			@InOut("state") ParamHolder<StateHolder> stateHolder) {
-//		if (1 == 1) {
-//			return;
-//		}
 		final StateHolder state = stateHolder.value;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
@@ -460,13 +469,6 @@ public final class PeriodAdaptationManager {
 				trigger.setPeriod(newPeriod);
 			}
 		}
-	}
-
-	/**
-	 * Only constructor.
-	 */
-	protected PeriodAdaptationManager(final long id) {
-		this.id = String.format("PeriodAdapatationManager_0x%08X", id);
 	}
 
 	/**

@@ -20,7 +20,7 @@ public class Environment {
 
 	static private final Random RANDOM = new Random();
 
-	static private final int GPS_BREAK_TIME = 100000;
+	static private final int GPS_BREAK_TIME = 50000;
 
 	static private final double FF_MOVEMENT = 4.0;
 
