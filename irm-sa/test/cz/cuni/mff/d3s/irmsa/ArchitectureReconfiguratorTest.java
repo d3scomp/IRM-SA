@@ -15,28 +15,20 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.irmsa;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
-import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
 import cz.cuni.mff.d3s.deeco.demo.vehicles.simple.Vehicle;
-import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
-import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Distribution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Execution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Scheduling;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFrameworkBuilder;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
+import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.design.Invariant;
@@ -57,27 +49,24 @@ public class ArchitectureReconfiguratorTest {
 	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");
 
 	IRM design;
-	RuntimeMetadata runtime;
 	TraceModel trace;
 	
+	DEECoNode deecoNode;
+	
 	@Before
-	public void createRuntime() throws AnnotationProcessorException {
-		runtime = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+	public void createRuntime() throws AnnotationProcessorException, DEECoException {
+
 		trace = TraceFactory.eINSTANCE.createTraceModel();
-		
 		@SuppressWarnings("unused")
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		design = (IRM) EMFHelper.loadModelFromXMI(MODELS_BASE_PATH + "vehicles_simple.irmdesign");
 
-		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, new CloningKnowledgeManagerFactory(), extension);
+		IRMPlugin irmPlugin = new IRMPlugin(trace, design);
+		
+		SimulationTimer simulationTimer = new DiscreteEventTimer(); 
+		deecoNode = new DEECoNode(simulationTimer, irmPlugin);
+		deecoNode.deployComponent(new Vehicle());
 
-		processor.process(new Vehicle());
-
-		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
-				new RuntimeConfiguration(Scheduling.WALL_TIME,
-						Distribution.LOCAL, Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
-		builder.build(runtime);
 	}
 
 	@Test
@@ -91,7 +80,7 @@ public class ArchitectureReconfiguratorTest {
 
 		// WHEN the process is active
 		assertTrue(process.isActive());
-		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
+		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(deecoNode.getRuntimeMetadata());
 		reconfigurator.addInstance(instance);
 		// WHEN the reconfigurator is invoked
 		reconfigurator.toggleProcessesAndEnsembles();
@@ -110,7 +99,7 @@ public class ArchitectureReconfiguratorTest {
 
 		// WHEN the process is non active
 		process.setActive(false);
-		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
+		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(deecoNode.getRuntimeMetadata());
 		reconfigurator.addInstance(instance);
 		// WHEN the reconfigurator is invoked
 		reconfigurator.toggleProcessesAndEnsembles();
@@ -119,10 +108,12 @@ public class ArchitectureReconfiguratorTest {
 	}
 
 	private ComponentProcess getProcess(String invariantrefID) {
-		for (ComponentInstance c: runtime.getComponentInstances()) {
-			for (ComponentProcess p : c.getComponentProcesses()) {
-				if (getInvariantForProcess(p).getRefID().equals(invariantrefID)) {
-					return p;
+		for (ComponentInstance c: deecoNode.getRuntimeMetadata().getComponentInstances()) {
+			if (!c.isSystemComponent()) {
+				for (ComponentProcess p : c.getComponentProcesses()) {
+					if (getInvariantForProcess(p).getRefID().equals(invariantrefID)) {
+						return p;
+					}
 				}
 			}
 		}

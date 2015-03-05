@@ -30,9 +30,14 @@ import cz.cuni.mff.d3s.irmsa.satsolver.SATSolverPreProcessor;
 @SystemComponent
 public class AdaptationManager {
 	
+	public String id;
 	public static final String TRACE_MODEL = "trace";
 	public static final String DESIGN_MODEL = "design";  
 	
+	public AdaptationManager(IRM design, TraceModel trace) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Process
 	@PeriodicScheduling(period=2000)
 	public static void reason(@In("id") String id) {

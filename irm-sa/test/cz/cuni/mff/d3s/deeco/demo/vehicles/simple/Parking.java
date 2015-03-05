@@ -8,6 +8,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 @IRMComponent("Parking")
 public class Parking {
 
+	public String id;
 	public Integer position;
 	public Availability availability;
  

@@ -29,6 +29,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
+import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
 import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
 import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
@@ -41,6 +42,13 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 
+/**
+ * Experiment run for the IRM-JSS paper evaluation.
+ * TODO make it work with jDEECo 3.0 
+ * 
+ * @author Ilias
+ *
+ */
 public class CentralizedRun {
 
 	private static final String MODELS_BASE_PATH = "designModels/";
@@ -53,7 +61,7 @@ public class CentralizedRun {
 	private static JDEECoSimulation simulation;
 	private static SimulationRuntimeBuilder builder;
 
-	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException {
+	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException, DuplicateEnsembleDefinitionException {
 		Log.i("Preparing simulation");
 
 		@SuppressWarnings("unused")
@@ -77,7 +85,7 @@ public class CentralizedRun {
 		System.out.println("The reaction time is: " + (Results.getInstance().getReactionTime() - InDangerTimeHelper.getInstance().getInDangerTime()));
 	}
 	
-	private static void createAndDeployComponents(Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException {
+	private static void createAndDeployComponents(Collection<? extends TimerTaskListener> simulationListeners) throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
 		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
@@ -87,14 +95,12 @@ public class CentralizedRun {
 		GroupMember member1 = new GroupMember("M1", "L1");
 		GroupMember member2 = new GroupMember("M2", "L1");
 		
-		processor.process(
-				leader,
-				member1,
-				member2,
-				new AdaptationManager(),
-				SensorDataUpdate.class,
-				GMsInDangerUpdate.class 
-			);
+		processor.processComponent(leader);
+		processor.processComponent(member1);
+		processor.processComponent(member2);
+		// new AdaptationManager() ???
+		processor.processEnsemble(SensorDataUpdate.class);
+		processor.processEnsemble(GMsInDangerUpdate.class);
 		
 		// pass design and trace models to the AdaptationManager
 		for (ComponentInstance c : model.getComponentInstances()) {

@@ -10,6 +10,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 @IRMComponent("Vehicle")
 public class Vehicle {
 
+	public String id;
 	public Integer position;
 	public POI POI;
 	public Plan plan;

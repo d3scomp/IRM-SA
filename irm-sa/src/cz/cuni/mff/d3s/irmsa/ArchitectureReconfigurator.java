@@ -87,23 +87,22 @@ public class ArchitectureReconfigurator {
 		// by changing ComponentProcess.isActive and EnsembleContoller.isActive
 		for (ComponentInstance c : runtime.getComponentInstances()) {
 			// system components are excepted from this process
-			if (c.isSystemComponent()) {
-				break;
-			}
-			// go through all processes and activate/deactivate them
-			for (ComponentProcess p : c.getComponentProcesses()) {
-				if (processesToRun.contains(p)) {
-					p.setActive(true);
-				} else {
-					p.setActive(false);
+			if (!c.isSystemComponent()) {
+				// go through all processes and activate/deactivate them
+				for (ComponentProcess p : c.getComponentProcesses()) {
+					if (processesToRun.contains(p)) {
+						p.setActive(true);
+					} else {
+						p.setActive(false);
+					}
 				}
-			}
-			// go through all ensemble controllers and activate/deactivate them
-			for (EnsembleController ec : c.getEnsembleControllers()) {
-				if (ensemblesToRun.contains(ec.getEnsembleDefinition())) {
-					ec.setActive(true);
-				} else {
-					ec.setActive(false);
+				// go through all ensemble controllers and activate/deactivate them
+				for (EnsembleController ec : c.getEnsembleControllers()) {
+					if (ensemblesToRun.contains(ec.getEnsembleDefinition())) {
+						ec.setActive(true);
+					} else {
+						ec.setActive(false);
+					}
 				}
 			}
 		}

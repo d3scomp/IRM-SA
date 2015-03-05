@@ -1,28 +1,19 @@
 package cz.cuni.mff.d3s.deeco.demo.vehicles.simple;
 
-import java.io.File;
-
 import org.junit.Test;
 
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
-import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
-import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
-import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Distribution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Execution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Scheduling;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFrameworkBuilder;
+import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
+import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
+import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 public class AcceptanceTest {
 	
@@ -31,40 +22,30 @@ public class AcceptanceTest {
 	static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "vehicles_simple.irmdesign";	
 
 	@Test
-	public void sampleRun() throws AnnotationProcessorException, InterruptedException {
-		RuntimeMetadata runtime = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
+	public void sampleRun() throws AnnotationProcessorException, InterruptedException, DEECoException {
+		
+		/* create IRM plugin */
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
 		IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 		
-		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
-		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, new CloningKnowledgeManagerFactory(), extension);
+		IRMPlugin irmPlugin = new IRMPlugin(trace, design);
 		
-		processor.process(
-			new Vehicle(), new Vehicle(), new Parking(), new AdaptationManager(), // Application Components + Adaptation Manager
-			UpdateParkingAvailabilityWhenCloseToPOI.class, UpdateParkingAvailabilityWhenFarFromPOI.class // Ensembles
-		);
-
-		// pass design and trace models to the AdaptationManager
-		for (ComponentInstance c : runtime.getComponentInstances()) {
-			if (c.getName().equals(AdaptationManager.class.getName())) {
-				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
-				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
-			}
-		}
+		SimulationTimer simulationTimer = new DiscreteEventTimer(); 
+		/* create main application container */
+		DEECoSimulation simulation = new DEECoSimulation(simulationTimer, irmPlugin);
+		/* deploy components and ensembles */
+		DEECoNode deecoNode = simulation.createNode();
 		
-		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
-				new RuntimeConfiguration(Scheduling.WALL_TIME,Distribution.LOCAL, Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
-		RuntimeFramework runtimeFramework = builder.build(runtime);
+		deecoNode.deployComponent(new Vehicle());
+		deecoNode.deployComponent(new Vehicle());
+		deecoNode.deployComponent(new Parking());
+		deecoNode.deployEnsemble(UpdateParkingAvailabilityWhenCloseToPOI.class);
+		deecoNode.deployEnsemble(UpdateParkingAvailabilityWhenFarFromPOI.class);
 		
-		runtimeFramework.start();
+		simulation.start(2000);
 		
-		// WHEN the AdaptationManager runs for the first time
-		Thread.sleep(2000);
-		
-		// terminate execution
-		runtimeFramework.stop();
 	}
 
 }

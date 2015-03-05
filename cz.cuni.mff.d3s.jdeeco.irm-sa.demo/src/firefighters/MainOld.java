@@ -23,25 +23,26 @@ import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFrameworkBuilder;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Distribution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Execution;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeConfiguration.Scheduling;
+import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 
+/**
+ * TODO remove this class at cleanup.
+ *
+ * @author Ilias
+ *
+ */
 public class MainOld {
 
 	static final String MODELS_BASE_PATH = "designModels/";
 	static final String XMIFILE_PREFIX = "firefighters_";
 	static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";	
 
-	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException {
+	public static void main(String args[]) throws AnnotationProcessorException, InterruptedException, DuplicateEnsembleDefinitionException {
 		RuntimeMetadata runtime = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
@@ -51,14 +52,12 @@ public class MainOld {
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design,trace);
 		AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, runtime, new CloningKnowledgeManagerFactory(), extension);
 		
-		processor.process(
-			new GroupMember("M1","L1"), 
-			new GroupMember("M2","L1"), 
-			new GroupLeader("L1"),
-			new AdaptationManager(), 
-			SensorDataUpdate.class, 
-			GMsInDangerUpdate.class 
-		);
+		processor.processComponent(new GroupMember("M1","L1"));
+		processor.processComponent(new GroupMember("M2","L1"));
+		processor.processComponent(new GroupLeader("L1"));
+		//	new AdaptationManager()??? 
+		processor.processEnsemble(SensorDataUpdate.class);
+		processor.processEnsemble(GMsInDangerUpdate.class); 
 
 		// pass design and trace models to the AdaptationManager
 		for (ComponentInstance c : runtime.getComponentInstances()) {
@@ -68,14 +67,14 @@ public class MainOld {
 			}
 		}
 		
-		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
-				new RuntimeConfiguration(
-						Scheduling.WALL_TIME,
-						Distribution.LOCAL, 
-						Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
-		RuntimeFramework runtimeFramework = builder.build(runtime);
+//		RuntimeFrameworkBuilder builder = new RuntimeFrameworkBuilder(
+//				new RuntimeConfiguration(
+//						Scheduling.WALL_TIME,
+//						Distribution.LOCAL, 
+//						Execution.SINGLE_THREADED), new CloningKnowledgeManagerFactory());
+//		RuntimeFramework runtimeFramework = builder.build(runtime);
 		
-		runtimeFramework.start();
+//		runtimeFramework.start();
 		
 	}
 }

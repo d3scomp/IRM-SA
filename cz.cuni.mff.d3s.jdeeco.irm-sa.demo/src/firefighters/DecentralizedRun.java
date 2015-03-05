@@ -30,6 +30,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
+import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
 import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
 import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
@@ -42,6 +43,13 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 
+/**
+ * Experiment run for the IRM-JSS paper evaluation.
+ * TODO make it work with jDEECo 3.0 
+ * 
+ * @author Ilias
+ *
+ */
 public class DecentralizedRun {
 
 	private static final String MODELS_BASE_PATH = "designModels/";
@@ -56,7 +64,7 @@ public class DecentralizedRun {
 
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws AnnotationProcessorException,
-			InterruptedException {
+			InterruptedException, DuplicateEnsembleDefinitionException {
 		System.setProperty(DeecoProperties.PUBLISHING_PERIOD, new Integer(Settings.BROADCAST_PERIOD).toString());
 		int networkDelay;
 		int numberOfIterations = 5;
@@ -166,22 +174,20 @@ public class DecentralizedRun {
 	private static void createAndDeployGroupMember(String idx,
 			String leaderIdx,
 			Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException {
+			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
 		GroupMember component = new GroupMember(idx, leaderIdx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
 
 	private static void createAndDeployGroupLeader(String idx,
 			Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException {
+			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
 		GroupLeader component = new GroupLeader(idx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
 
-	private static void createAndDeployComponent(Object component,
-			String hostId,
-			Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException {
+	private static void createAndDeployComponent(Object component, String hostId, Collection<? extends TimerTaskListener> simulationListeners)
+			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
 		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE
 				.createRuntimeMetadata();
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
@@ -189,8 +195,10 @@ public class DecentralizedRun {
 				design, trace);
 		AnnotationProcessor processor = new AnnotationProcessor(
 				RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
-		processor.process(component, new AdaptationManager(),
-				SensorDataUpdate.class, GMsInDangerUpdate.class);
+		processor.processComponent(component);
+		// new AdaptationManager(), ???
+		processor.processEnsemble(SensorDataUpdate.class);
+		processor.processEnsemble(GMsInDangerUpdate.class);
 
 		// pass design and trace models to the AdaptationManager
 		for (ComponentInstance c : model.getComponentInstances()) {

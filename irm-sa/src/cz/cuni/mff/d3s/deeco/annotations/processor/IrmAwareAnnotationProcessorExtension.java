@@ -34,6 +34,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.KnowledgePath;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.PathNodeField;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
+import cz.cuni.mff.d3s.deeco.task.KnowledgePathHelper;
 import cz.cuni.mff.d3s.irm.model.design.Component;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.ComponentTrace;
@@ -106,7 +107,7 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 							throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
 						}
 						String path = caller.getKindAnnotationValue(directionAnnotation);
-						mParameter.setKnowledgePath(caller.createKnowledgePath(path, PathOrigin.COMPONENT));
+						mParameter.setKnowledgePath(KnowledgePathHelper.createKnowledgePath(path, PathOrigin.COMPONENT));
 					} catch (AnnotationProcessorException | ParseException e) {
 						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+(i+1) + "->" + e.getMessage(), e);
 					}
