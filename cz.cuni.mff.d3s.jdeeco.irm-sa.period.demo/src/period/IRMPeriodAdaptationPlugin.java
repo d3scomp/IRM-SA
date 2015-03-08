@@ -1,6 +1,5 @@
 package period;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,8 +15,10 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
+/**
+ * Plugin for period adaptation strategy.
+ */
 public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 
 	/** Plugin dependencies. */
@@ -25,20 +26,30 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 //			Collections.unmodifiableList(Arrays.asList(IRMPlugin.class));
 			Collections.emptyList();
 
+	/** Runtime model. */
 	final RuntimeMetadata model;
 
+	/** Design model. */
 	final IRM design;
 
+	/** Trace model. */
 	final TraceModel trace;
 
-	InvariantFitnessCombiner invariantFitnessCombiner =
+	/** Combines independent fitnesses into overall system fitness. */
+	protected InvariantFitnessCombiner invariantFitnessCombiner =
 			new InvariantFitnessCombinerAverage();
 
-	AdapteeSelector adapteeSelector = new AdapteeSelectorTree();
+	/** Selects processes to adapt. */
+	protected AdapteeSelector adapteeSelector = new AdapteeSelectorTree();
 
-	DirectionSelector directionSelector = new DirectionSelectorImpl();
+	/** Selects direction of period adaptation. */
+	protected DirectionSelector directionSelector = new DirectionSelectorImpl();
 
-	DeltaComputor deltaComputor = new DeltaComputorFixed();
+	/** Calculates period delta (difference between old and new period) for adaptees. */
+	protected DeltaComputor deltaComputor = new DeltaComputorFixed();
+
+	/** No adaptation takes place if overall fitness is at least this bound. */
+	protected double adaptationBound = 0.5;
 
 	/**
 	 * Only constructor.
@@ -96,6 +107,17 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 		return this;
 	}
 
+	/**
+	 * Sets adaptation bound.
+	 * @param adaptationBound new adaptationBound
+	 * @return this
+	 */
+	public IRMPeriodAdaptationPlugin withAdaptationBound(
+			final double adaptationBound) {
+		this.adaptationBound = adaptationBound;
+		return this;
+	}
+
 	@Override
 	public List<Class<? extends DEECoPlugin>> getDependencies() {
 		return dependencies;
@@ -113,7 +135,7 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 			Log.e("Error while trying to deploy PeriodAdaptationManager", e);
 		}
 
-		// pass necessary data to the AdaptationManager
+		// pass necessary data to the PeriodAdaptationManager
 		for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
 			if (c.getName().equals(PeriodAdaptationManager.class.getName())) {
 				final EMap<String, Object> data = c.getInternalData();
@@ -123,6 +145,7 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 				data.put(PeriodAdaptationManager.ADAPTEE_SELECTOR, adapteeSelector);
 				data.put(PeriodAdaptationManager.DIRECTION_SELECTOR, directionSelector);
 				data.put(PeriodAdaptationManager.DELTA_COMPUTOR, deltaComputor);
+				data.put(PeriodAdaptationManager.ADAPTATION_BOUND, adaptationBound);
 			}
 		}
 	}

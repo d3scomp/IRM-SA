@@ -76,6 +76,9 @@ public final class PeriodAdaptationManager {
 	/** DeltaComputor stored in internal data under this key. */
 	static final String DELTA_COMPUTOR = "deltaComputor";
 
+	/** Adaptation bound stored in internal data under this key. */
+	static final String ADAPTATION_BOUND = "adaptationBound";
+
 	/** Manager ID. */
 	public String id;
 
@@ -185,8 +188,8 @@ public final class PeriodAdaptationManager {
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
 			state.oldFitness = fitness;
-			//TODO define clearly condition for adaptation
-			if (state.oldFitness >= 0.5) {
+			final double adaptionBound = retrieveFromInternalData(ADAPTATION_BOUND);
+			if (state.oldFitness >= adaptionBound) {
 				final TimeTrigger trigger = getTimeTrigger(process);
 				trigger.setPeriod(Settings.ADAPTATION_PERIOD);
 				state.reset();
