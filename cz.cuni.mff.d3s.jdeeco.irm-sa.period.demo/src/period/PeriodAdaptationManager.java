@@ -188,6 +188,7 @@ public final class PeriodAdaptationManager {
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
 			state.oldFitness = fitness;
+			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
 			final double adaptionBound = retrieveFromInternalData(ADAPTATION_BOUND);
 			if (state.oldFitness >= adaptionBound) {
 				final TimeTrigger trigger = getTimeTrigger(process);
@@ -233,6 +234,7 @@ public final class PeriodAdaptationManager {
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
+			System.out.println("NEW FITNESS: " + fitness);
 			if (fitness > state.oldFitness) {
 				//Take child as new parent
 			} else {
