@@ -16,7 +16,6 @@
 package period;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,11 +24,10 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.eclipse.emf.common.util.EMap;
-
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
+import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
@@ -84,6 +82,9 @@ public final class PeriodAdaptationManager {
 	/** Holds the state of the adaptPeriods method. */
 	public StateHolder state = new StateHolder();
 
+	/** Overall system fitness. */
+	public Double fitness = 0.0;
+
 	/**
 	 * Only constructor.
 	 */
@@ -93,7 +94,9 @@ public final class PeriodAdaptationManager {
 
 	@Process
 	@PeriodicScheduling(period=Settings.MONITOR_PERIOD, order=10)
-	static public void monitorOverallFitness(@In("id") String id) {
+	static public void monitorOverallFitness(
+			@In("id") String id,
+			@Out("fitness") ParamHolder<Double> fitness) {
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
@@ -123,7 +126,6 @@ public final class PeriodAdaptationManager {
 			return;
 		}
 
-//		MonitorContext.setState(MonitorContext.State.MONITORING);
 		//Create data structure for processing
 		final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
@@ -131,15 +133,15 @@ public final class PeriodAdaptationManager {
 		computeInvariantsFitness(infos);
 
 		//Compute overall fitness
-		final double fitness = invariantFitnessCombiner.combineInvariantFitness(infos);
-		System.out.println("Overall System Fitness: " + fitness + "(at " + simulatedTime + ")");
-//		MonitorContext.setState(MonitorContext.State.ANALYZING);
+		fitness.value = invariantFitnessCombiner.combineInvariantFitness(infos);
+		System.out.println("Overall System Fitness: " + fitness.value + "(at " + simulatedTime + ")");
 	}
 
 	@Process
 	@PeriodicScheduling(period=Settings.ADAPTATION_PERIOD, order=10)
 	static public void adaptPeriods(
 			@In("id") String id,
+			@In("fitness") Double fitness,
 			@InOut("state") ParamHolder<StateHolder> stateHolder) {
 		final StateHolder state = stateHolder.value;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
@@ -158,8 +160,6 @@ public final class PeriodAdaptationManager {
 		final Architecture architecture = ProcessContext.getArchitecture();
 		final IRM design = retrieveFromInternalData(DESIGN_MODEL);
 		final TraceModel trace = retrieveFromInternalData(TRACE_MODEL);
-		final InvariantFitnessCombiner invariantFitnessCombiner =
-				retrieveFromInternalData(INVARIANT_FITNESS_COMBINER);
 		final AdapteeSelector adapteeSelector =
 				retrieveFromInternalData(ADAPTEE_SELECTOR);
 		final DirectionSelector directionSelector =
@@ -184,12 +184,7 @@ public final class PeriodAdaptationManager {
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
-			//Compute overall fitness
-			computeInvariantsFitness(infos);
-
-			//Compute overall fitness
-			state.oldFitness = invariantFitnessCombiner.combineInvariantFitness(infos);
-			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
+			state.oldFitness = fitness;
 			//TODO define clearly condition for adaptation
 			if (state.oldFitness >= 0.5) {
 				final TimeTrigger trigger = getTimeTrigger(process);
@@ -235,14 +230,7 @@ public final class PeriodAdaptationManager {
 			//Create data structure for processing
 			final Set<InvariantInfo<?>> infos = extractInvariants(IRMInstances);
 
-			//Compute fitness functions of invariants again
-			computeInvariantsFitness(infos);
-
-			//Compute overall fitness
-			final double newFitness = invariantFitnessCombiner.combineInvariantFitness(infos);
-			System.out.println("NEW FITNESS: " + newFitness);
-
-			if (newFitness > state.oldFitness) {
+			if (fitness > state.oldFitness) {
 				//Take child as new parent
 			} else {
 				//Keep parent
