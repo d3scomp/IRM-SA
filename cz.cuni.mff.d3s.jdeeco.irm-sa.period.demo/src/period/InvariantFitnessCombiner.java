@@ -20,6 +20,7 @@ import java.util.Collection;
 /**
  * Interface for combining overall system fitness.
  */
+@FunctionalInterface
 public interface InvariantFitnessCombiner {
 
 	/**

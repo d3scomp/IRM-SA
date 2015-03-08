@@ -21,6 +21,7 @@ import java.util.Set;
 /**
  * Interface for selecting processes for period adaptation.
  */
+@FunctionalInterface
 public interface AdapteeSelector {
 
 	/**
