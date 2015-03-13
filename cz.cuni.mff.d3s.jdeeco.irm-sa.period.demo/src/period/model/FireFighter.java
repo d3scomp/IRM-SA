@@ -244,23 +244,25 @@ public class FireFighter {
 	 * Only constructor.
 	 */
 	public FireFighter() {
-		batteryLevel = Environment.getBatteryLevel();
-		position = Environment.getPosition();
+		batteryLevel = Environment.INITIAL_BATTERY_LEVEL;
+		position = Environment.INITIAL_POSITION;
 	}
 
 	@Process
 	@Invariant("P01")
 	@PeriodicScheduling(period=1000)
 	public static void determineBatteryLevel(
+		@In("id") String id,
 		@Out("batteryLevel") ParamHolder<Double> batteryLevel
 	) {
-		batteryLevel.value = Environment.getBatteryLevel();
+		batteryLevel.value = Environment.getBatteryLevel(id);
 		System.out.println("Determining BL at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("Battery level: " + batteryLevel.value);
 	}
 
 	@InvariantMonitor("P01")
 	public static double determineBatteryLevelFitness(
+			@In("id") String id,
 			@In("batteryLevel") Double batteryLevel) {
 		System.out.println("Determining BLF at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("Battery level: " + batteryLevel);
@@ -300,16 +302,17 @@ public class FireFighter {
 	@Invariant("P02")
 	@PeriodicScheduling(period=1250)
 	public static void determinePosition(
+		@In("id") String id,
 		@Out("position") ParamHolder<Double> position
 	) {
-		final double inacc = Environment.getInaccuracy();
+		final double inacc = Environment.getInaccuracy(id);
 		if (inacc <= MAX_INACCURACY) {
 			setPositionOkCounter(getPositionOkCounter() + 1);
 		} else {
 			setPositionBadCounter(getPositionBadCounter() + 1);
 		}
 		setInaccuracyAccumulator(getInaccuracyAccumulator() + inacc);
-		position.value = Environment.getPosition();
+		position.value = Environment.getPosition(id);
 		System.out.println("Determining Pos at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		System.out.println("Pos: " + position.value);
 	}
