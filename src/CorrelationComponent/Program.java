@@ -84,6 +84,8 @@ public class Program {
 				// Exchange the new knowledge values with the Correlation component
 				correlationComponent.receiveData(component);
 			}
+			// Compute the correlation in the process of Correlation component
+			correlationComponent.process();
 		}
 		
 		// Print the computed correlations of data in the system

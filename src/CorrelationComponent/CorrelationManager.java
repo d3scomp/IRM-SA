@@ -200,7 +200,7 @@ public class CorrelationManager {
 	}
 	
 	/**
-	 * Receives data from the specified component.
+	 * Receives data from the specified component. Simulates the knowledge exchange.
 	 * @param component The component to receive data from.
 	 */
 	public void receiveData(Component component){ // TODO: split into knowledge exchange and component process
@@ -215,20 +215,28 @@ public class CorrelationManager {
 			}
 			historyData.get(label).add(component.getKnowledge(label));
 		}
-		
-		// If the data length reaches the data length of another data compute correlation
-		for(int otherComponentId : knowledgeHistoryOfAllComponents.keySet()){
-			if(otherComponentId == component.getId()){
-				continue;
-			}
-			// For pair labels
-			for(LabelPair labels : getLabelPairs(component.getId(), otherComponentId)){
-				if(isEqualSizeHistory(component.getId(), otherComponentId, labels)){
+	}
+	
+	/**
+	 * Simulate the components process. Compute the correlations.
+	 */
+	public void process(){
+		// Compute the closeness between pairs of knowledge fields
+		// Consider the last knowledge entry only
+		for(int component1Id : knowledgeHistoryOfAllComponents.keySet()){
+			for(int component2Id : knowledgeHistoryOfAllComponents.keySet()){
+				if(component1Id == component2Id){
+					continue;
+				}
+				// For pair labels
+				for(LabelPair labels : getLabelPairs(component1Id, component2Id)){
 					CorrelationLevel correlationLevel = getCorrelationLevel(labels);
-					Object c1Value1 = component.getKnowledge(labels.firstLabel);
-					Object c1Value2 = component.getKnowledge(labels.secondLabel);
-					List<Object> c2Values1 = knowledgeHistoryOfAllComponents.get(otherComponentId).get(labels.firstLabel);
-					List<Object> c2Values2 = knowledgeHistoryOfAllComponents.get(otherComponentId).get(labels.secondLabel);
+					List<Object> c1Values1 = knowledgeHistoryOfAllComponents.get(component1Id).get(labels.firstLabel);
+					List<Object> c1Values2 = knowledgeHistoryOfAllComponents.get(component1Id).get(labels.secondLabel);
+					Object c1Value1 = c1Values1.get(c1Values1.size()-1);
+					Object c1Value2 = c1Values2.get(c1Values2.size()-1);
+					List<Object> c2Values1 = knowledgeHistoryOfAllComponents.get(component2Id).get(labels.firstLabel);
+					List<Object> c2Values2 = knowledgeHistoryOfAllComponents.get(component2Id).get(labels.secondLabel);
 					Object c2Value1 = c2Values1.get(c2Values1.size()-1);
 					Object c2Value2 = c2Values2.get(c2Values2.size()-1);
 					
