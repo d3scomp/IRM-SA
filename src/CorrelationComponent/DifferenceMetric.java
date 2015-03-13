@@ -8,6 +8,12 @@ package CorrelationComponent;
  */
 public class DifferenceMetric implements Metric {
 
+	/**
+	 * Computes the distance between the given values as a simple difference.
+	 * @param value1 The value to measure the distance from.
+	 * @param value2 The value to measure the distance to.
+	 * @return the distance between the given values measured by a simple difference.
+	 */
 	@Override
 	public double distance(Object value1, Object value2){
 		if(!(value1 instanceof Number) || !(value2 instanceof Number))
