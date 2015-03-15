@@ -1,10 +1,11 @@
 package cz.cuni.mff.d3s.irmsa;
 
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 
 /**
  * A class providing reflective capabilities to monitors.
- * TODO add monitored ensemble too
+ * TODO use EnsembleController instead of EnsembleDefinition when ready
  */
 public class MonitorContext {
 
@@ -12,7 +13,8 @@ public class MonitorContext {
 	private static ThreadLocal<MonitorContext> context = new ThreadLocal<>();
 
 	/**
-	 * @return the monitoredComponent
+	 * Returns currently monitored component.
+	 * @return currently monitored component
 	 */
 	static public ComponentInstance getMonitoredComponent() {
 		final MonitorContext c = context.get();
@@ -23,6 +25,10 @@ public class MonitorContext {
 		}
 	}
 
+	/**
+	 * Sets currently monitored component.
+	 * @param monitoredComponent new monitored component
+	 */
 	static void setMonitoredComponent(final ComponentInstance monitoredComponent) {
 		MonitorContext c = context.get();
 		if (c == null) {
@@ -32,6 +38,35 @@ public class MonitorContext {
 		c.monitoredComponent = monitoredComponent;
 	}
 
+	/**
+	 * Returns currently monitored ensemble.
+	 * @return currently monitored ensemble
+	 */
+	static public EnsembleDefinition getMonitoredEnsemble() {
+		final MonitorContext c = context.get();
+		if (c != null) {
+			return c.moniteredEnsemble;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Sets currently monitored ensemble.
+	 * @param monitoredEnsemble new monitored ensemble
+	 */
+	static void setMonitoredEnsemble(final EnsembleDefinition monitoredEnseble) {
+		MonitorContext c = context.get();
+		if (c == null) {
+			c = new MonitorContext();
+			context.set(c);
+		}
+		c.moniteredEnsemble= monitoredEnseble;
+	}
+
 	/** Monitored component. */
 	private ComponentInstance monitoredComponent;
+
+	/** Monitored ensemble. */
+	private EnsembleDefinition moniteredEnsemble;
 }
