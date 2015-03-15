@@ -35,7 +35,6 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
@@ -374,8 +373,10 @@ public final class PeriodAdaptationManager {
 	 */
 	static private String getExchangeInvariantInstanceId(final ExchangeInvariantInstance xii) {
 		final EnsembleDefinition def = xii.getEnsembleDefinition();
-		final EnsembleController cont = null; //TODO getEnsembleController when ready
-		return cont.getComponentInstance().getKnowledgeManager().getId() + "-" + def.getName();
+//		final EnsembleController cont = null; //TODO getEnsembleController when ready
+//		final String id = cont.getComponentInstance().getKnowledgeManager().getId();
+		final String id = "TEMPORARY_FIXED_ID";
+		return id + "-" + def.getName();
 	}
 
 	/**

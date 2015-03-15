@@ -15,11 +15,44 @@
  ******************************************************************************/
 package period;
 
+import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+
 /**
  * Interface for selecting direction of adaptation.
  */
 @FunctionalInterface
 public interface DeltaComputor {
+
+	/**
+	 * Returns current period of the process or -1.
+	 * @param pii process invariant instance
+	 * @return current period of the process or -1
+	 */
+	static public long getCurrentPeriod(final ProcessInvariantInstance pii) {
+		for (Trigger trigger : pii.getComponentProcess().getTriggers()) {
+			if (trigger instanceof TimeTrigger) {
+				return ((TimeTrigger) trigger).getPeriod();
+			}
+		}
+		return -1L;
+	}
+
+	/**
+	 * Returns current period of the exchange or -1.
+	 * @param xii exchange invariant instance
+	 * @return current period of the exchange or -1
+	 */
+	static public long getCurrentPeriod(final ExchangeInvariantInstance xii) {
+		for (Trigger trigger : xii.getEnsembleDefinition().getTriggers()) {
+			if (trigger instanceof TimeTrigger) {
+				return ((TimeTrigger) trigger).getPeriod();
+			}
+		}
+		return -1L;
+	}
 
 	/**
 	 * Computes delta of period adaptation.

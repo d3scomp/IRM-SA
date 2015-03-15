@@ -89,7 +89,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_Hh7wEpzCEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_Hh7wE5zCEeSV4cO5EtOeQw"/>
     <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters.irmdesign#//@invariants.5"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Hh7wFJzCEeSV4cO5EtOeQw" x="410" y="300"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Hh7wFJzCEeSV4cO5EtOeQw" x="427" y="302"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_6ynmUXu7EeSx2cI5eZxQNg"/>
   <element xmi:type="cz.cuni.mff.d3s.irm.model.design:IRM" href="firefighters.irmdesign#/"/>

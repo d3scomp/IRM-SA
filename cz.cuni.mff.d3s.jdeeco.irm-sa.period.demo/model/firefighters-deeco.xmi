@@ -14,7 +14,7 @@
         <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="position"/>
       </knowledgePath>
     </parameters>
-    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1000"/>
+    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1250"/>
   </componentProcesses>
   <initialKnowledge name="batteryLevel" type="Double"/>
   <initialKnowledge name="position" type="Double"/>

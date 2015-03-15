@@ -21,7 +21,7 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 
 /**
- * Delta computor returning always the same value if possible.
+ * Delta computor returning the middle to the bound.
  */
 public class DeltaComputorBound implements DeltaComputor {
 
@@ -33,19 +33,18 @@ public class DeltaComputorBound implements DeltaComputor {
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-//			min = pi.getProcessMinPeriod(); //TODO add getProcessMinPeriod to ProcessInvariant
-			min = 0;
-//			max = pi.getProcessMaxPeriod(); //TODO add getProcessMaxPeriod to ProcessInvariant
-			max = 0;
-			per = pi.getProcessPeriod();
+			min = pi.getProcessMinPeriod();
+			max = pi.getProcessMaxPeriod();
+			per = DeltaComputor.getCurrentPeriod(pii);
 		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ExchangeInvariantInstance xii = info.getInvariant();
 			final ExchangeInvariant xi = (ExchangeInvariant) xii.getInvariant();
-//			min = xi.getEnsebleMinPeriod(); //TODO add getEnsembleMinPeriod to ExchangeInvariant
-			min = 0;
-//			max = xi.getEnsebleMaxPeriod(); //TODO add getEnsembleMaxPeriod to ExchangeInvariant
-			max = 0;
-			per = xi.getEnsemblePeriod();
+			min = xi.getEnsembleMinPeriod();
+			max = xi.getEnsembleMaxPeriod();
+			per = DeltaComputor.getCurrentPeriod(xii);
+		}
+		if (max == -1L) {
+			max = 3 * per / 2;
 		}
 		switch (info.direction) {
 		case UP:
@@ -53,6 +52,9 @@ public class DeltaComputorBound implements DeltaComputor {
 			break;
 		case DOWN:
 			info.delta = (per - min) / 2;
+		case NO:
+			info.delta = 0;
+			break;
 		}
 	}
 }
