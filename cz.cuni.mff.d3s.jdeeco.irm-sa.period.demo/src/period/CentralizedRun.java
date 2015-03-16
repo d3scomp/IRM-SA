@@ -15,36 +15,23 @@
  ******************************************************************************/
 package period;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import period.model.Component1;
-import period.model.Component2;
-import period.model.Ensemble1;
 import period.model.Environment;
 import period.model.FireFighter;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
-import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
-import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
-import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
-import cz.cuni.mff.d3s.deeco.simulation.JDEECoSimulation;
-import cz.cuni.mff.d3s.deeco.simulation.SimulationRuntimeBuilder;
-import cz.cuni.mff.d3s.deeco.task.TimerTaskListener;
+import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
+import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
+import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
+import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 /**
  * This class contains main for centralized run.
@@ -59,77 +46,46 @@ public class CentralizedRun {
 	static private final String DESIGN_MODEL_PATH =
 			MODELS_BASE_PATH + "firefighters.irmdesign";
 
-	/** Start of the simulation in milliseconds. */
-	static private final long SIMULATION_START = 0;
-
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 400000;
-
-	/** Network delay in milliseconds. Not used in centralized case. */
-	static private final long NETWORK_DELAY = 100;
+	static private final long SIMULATION_END = 200000;
 
 	/**
 	 * Runs centralized simulation.
 	 * @param args command line arguments, ignored
+	 * @throws DEECoException
 	 * @throws AnnotationProcessorException
 	 */
-	public static void main(String args[]) throws AnnotationProcessorException {
+	public static void main(final String args[]) throws DEECoException, AnnotationProcessorException {
 		Log.i("Preparing simulation");
 
+		/* create IRM plugin */
+		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 
-		final DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new DelayedKnowledgeDataHandler(NETWORK_DELAY);
-		final JDEECoSimulation simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END, networkKnowledgeDataHandler);
+//		final IRMPlugin irmPlugin = new IRMPlugin(trace, design);
 
-		final SimulationRuntimeBuilder builder = new SimulationRuntimeBuilder();
-
-		List<TimerTaskListener> listeners = new LinkedList<>();
-		listeners.add(networkKnowledgeDataHandler);
-
-		createAndDeployComponents(design, simulation, builder, listeners);
-
-		Log.i("Simulation Starts");
-		simulation.run();
-		Log.i("Simulation Finished");
-	}
-
-	/**
-	 * Creates and deploys components.
-	 * @param design IRM to use
-	 * @param simulation JDEECoSimulation to use
-	 * @param builder SimulationRuntimeBuilder to use
-	 * @param simulationListeners listeners to use
-	 * @throws AnnotationProcessorException
-	 */
-	private static void createAndDeployComponents(IRM design,
-			JDEECoSimulation simulation,
-			SimulationRuntimeBuilder builder,
-			Collection<? extends TimerTaskListener> simulationListeners)
-					throws AnnotationProcessorException {
+		// create IRMPeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
-		final AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(design, trace);
-		final AnnotationProcessor processor = new AnnotationProcessor(RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
-
-		processor.process(
-				new FireFighter(),
-				new Environment(),
-				PeriodAdaptationManager.create()
+		final IRMPeriodAdaptationPlugin periodAdaptionPlugin =
+				new IRMPeriodAdaptationPlugin(model, design, trace)
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new AdapteeSelectorFitness())
 						.withDirectionSelector(new DirectionSelectorImpl())
-						.withDeltaComputor(new DeltaComputorFixed(250))
-						.build());
+						.withDeltaComputor(new DeltaComputorFixed(250));
 
-		PeriodAdaptationManager.prepare(model, design, trace);
+		final SimulationTimer simulationTimer = new DiscreteEventTimer();
+		/* create main application container */
+		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer, /*irmPlugin,*/ periodAdaptionPlugin);
+		/* deploy components and ensembles */
+		final DEECoNode deecoNode = simulation.createNode();
 
-		final DirectSimulationHost host = simulation.getHost("host");
-		final List<EnsembleDefinition> ensembles = model.getEnsembleDefinitions();
-		final RuntimeFramework runtime = builder.build(host, simulation, simulationListeners, model, new DefaultKnowledgeDataManager(ensembles, null), new CloningKnowledgeManagerFactory(),null, 
-				/* FIXME the following argument throws an exception in task invocation */ null);
+		deecoNode.deployComponent(new FireFighter());
+		deecoNode.deployComponent(new Environment());
 
-		runtime.start();
+		Log.i("Simulation Starts");
+		simulation.start(SIMULATION_END);
+		Log.i("Simulation Finished");
 	}
 }

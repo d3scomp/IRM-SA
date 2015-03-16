@@ -451,6 +451,7 @@ public class IRMInstanceGenerator {
 			}
 
 			try {
+				MonitorContext.setMonitoredComponent(knowledgeManager.getComponent());
 				@SuppressWarnings("unchecked")
 				T ret = (T) method.invoke(null, actualParams);
 				System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
@@ -458,6 +459,8 @@ public class IRMInstanceGenerator {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.e("Error when invoking a monitor method, so invariant evaluation returned false.", e);
 				return failure;
+			} finally {
+				MonitorContext.setMonitoredComponent(null);
 			}
 
 		} else if (invariant instanceof ExchangeInvariant){
@@ -523,6 +526,7 @@ public class IRMInstanceGenerator {
 			}
 
 			try {
+				MonitorContext.setMonitoredEnsemble(ed);
 				@SuppressWarnings("unchecked")
 				T ret = (T) method.invoke(null, actualParams);
 				System.out.println("-------- Monitor " + method + " returned " + ret);
@@ -530,6 +534,8 @@ public class IRMInstanceGenerator {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.w("Error when invoking a monitor method, so invariant evaluation returned false.", e);
 				return failure;
+			} finally {
+				MonitorContext.setMonitoredEnsemble(null);
 			}
 
 		} else {

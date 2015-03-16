@@ -54,17 +54,18 @@ public class DeltaComputorFixed implements DeltaComputor {
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-//			min = pi.getProcessMinPeriod(); //TODO add getProcessMinPeriod to ProcessInvariant
-//			max = pi.getProcessMaxPeriod(); //TODO add getProcessMaxPeriod to ProcessInvariant
-			per = pi.getProcessPeriod();
+			min = pi.getProcessMinPeriod();
+			max = pi.getProcessMaxPeriod();
+			per = DeltaComputor.getCurrentPeriod(pii);
 		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ExchangeInvariantInstance xii = info.getInvariant();
 			final ExchangeInvariant xi = (ExchangeInvariant) xii.getInvariant();
-//			min = xi.getEnsebleMinPeriod(); //TODO add getEnsembleMinPeriod to ExchangeInvariant
-			min = 0;
-//			max = xi.getEnsebleMaxPeriod(); //TODO add getEnsembleMaxPeriod to ExchangeInvariant
-			max = 0;
-			per = xi.getEnsemblePeriod();
+			min = xi.getEnsembleMinPeriod();
+			max = xi.getEnsembleMaxPeriod();
+			per = DeltaComputor.getCurrentPeriod(xii);
+		}
+		if (max == -1L) {
+			max = Long.MAX_VALUE;
 		}
 		switch (info.direction) {
 		case UP:

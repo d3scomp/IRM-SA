@@ -18,6 +18,7 @@ package period;
 /**
  * Interface for selecting direction of adaptation.
  */
+@FunctionalInterface
 public interface DirectionSelector {
 
 	/**
