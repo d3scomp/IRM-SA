@@ -22,7 +22,7 @@ public class AcceptanceTest {
 	static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "vehicles_simple.irmdesign";	
 
 	@Test
-	public void sampleRun() throws AnnotationProcessorException, InterruptedException, DEECoException {
+	public void sampleRun() throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 		
 		/* create IRM plugin */
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
@@ -30,11 +30,10 @@ public class AcceptanceTest {
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
 		IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 		
-		IRMPlugin irmPlugin = new IRMPlugin(trace, design);
-		
 		SimulationTimer simulationTimer = new DiscreteEventTimer(); 
 		/* create main application container */
-		DEECoSimulation simulation = new DEECoSimulation(simulationTimer, irmPlugin);
+		DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
+		simulation.addPlugin(new IRMPlugin(trace, design));
 		/* deploy components and ensembles */
 		DEECoNode deecoNode = simulation.createNode();
 		
