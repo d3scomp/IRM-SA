@@ -44,7 +44,7 @@ public class DeltaComputorBound implements DeltaComputor {
 			per = DeltaComputor.getCurrentPeriod(xii);
 		}
 		if (max == -1L) {
-			max = 3 * per / 2;
+			max = 3 * per / 2; //TODO tweak the constant -> delta = 1/4 per
 		}
 		switch (info.direction) {
 		case UP:
