@@ -29,11 +29,20 @@ import cz.cuni.mff.d3s.irmsa.satsolver.SATSolverPreProcessor;
 @Component
 @SystemComponent
 public class AdaptationManager {
-	
+
 	public String id;
 	public static final String TRACE_MODEL = "trace";
-	public static final String DESIGN_MODEL = "design";  
-	
+	public static final String DESIGN_MODEL = "design";
+
+	/** Internal data key for flag indicating whether logging is on. */
+	public static final String LOG = "log";
+
+	/** Internal data key for directory to store logs in. */
+	public static final String LOG_DIR = "logDir";
+
+	/** Internal data key for prefix of logs. */
+	public static final String LOG_PREFIX = "logPrefix";
+
 	public AdaptationManager(IRM design, TraceModel trace) {
 		// TODO Auto-generated constructor stub
 	}
@@ -46,6 +55,7 @@ public class AdaptationManager {
 		Architecture architecture = ProcessContext.getArchitecture();
 		IRM design = (IRM) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(TRACE_MODEL);
+		final boolean log = (Boolean) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(LOG);
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
@@ -54,27 +64,31 @@ public class AdaptationManager {
 			SATSolverPreProcessor preProcessor = new SATSolverPreProcessor(i);
 			preProcessor.convertDAGToForest();
 		}
-		// clean up the files from previous run (if any)
-		deleteXMIFilesFromPreviousRun(AcceptanceTest.MODELS_BASE_PATH, AcceptanceTest.XMIFILE_PREFIX);
-		// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
-		System.out.println("Number of IRMInstances: " + IRMInstances.size());
-		for (int i = 0; i< IRMInstances.size(); i++) {
-			System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
-			EMFHelper.saveModelInXMI(IRMInstances.get(i),AcceptanceTest.MODELS_BASE_PATH + AcceptanceTest.XMIFILE_PREFIX + i +".xmi");
+		if (log) {
+			// clean up the files from previous run (if any)
+			deleteXMIFilesFromPreviousRun(AcceptanceTest.MODELS_BASE_PATH, AcceptanceTest.XMIFILE_PREFIX);
+			// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
+			System.out.println("Number of IRMInstances: " + IRMInstances.size());
+			for (int i = 0; i< IRMInstances.size(); i++) {
+				System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
+				EMFHelper.saveModelInXMI(IRMInstances.get(i),AcceptanceTest.MODELS_BASE_PATH + AcceptanceTest.XMIFILE_PREFIX + i +".xmi");
+			}
 		}
 		// create a reconfigurator of the current runtime
 		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
 		for (IRMInstance i: IRMInstances) {
 			SATSolver solver = new SATSolver(i);
 			if (solver.solve()) {
-				printSelectedIRMInstance(i); // for debugging...
+				if (log) {
+					printSelectedIRMInstance(i); // for debugging...
+				}
 				reconfigurator.addInstance(i);
 			}
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
 		reconfigurator.toggleProcessesAndEnsembles();
 	}
-	
+
 	private static void printSelectedIRMInstance(IRMInstance i) {
 		System.out.println("***********");
 		System.out.println("IRMInstance: "+i);
@@ -105,5 +119,4 @@ public class AdaptationManager {
 			}
 		}
 	}
-	
 }

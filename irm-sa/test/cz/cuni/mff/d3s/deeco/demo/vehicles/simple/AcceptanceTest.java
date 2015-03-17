@@ -17,8 +17,8 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 public class AcceptanceTest {
 	
-	static final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");//File.separator);
-	static final String XMIFILE_PREFIX = "vehicles_simple_";
+	static public final String MODELS_BASE_PATH = "test.cz.cuni.mff.d3s.deeco.demo.vehicles.designModels.".replaceAll("[.]", "/");//File.separator);
+	static public final String XMIFILE_PREFIX = "vehicles_simple_";
 	static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "vehicles_simple.irmdesign";	
 
 	@Test

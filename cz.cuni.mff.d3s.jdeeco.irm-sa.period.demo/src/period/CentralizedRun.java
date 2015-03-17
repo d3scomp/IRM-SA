@@ -67,7 +67,7 @@ public class CentralizedRun {
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 
-//		final IRMPlugin irmPlugin = new IRMPlugin(trace, design);
+		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
 
 		// create IRMPeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
@@ -81,7 +81,7 @@ public class CentralizedRun {
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-//		simulation.addPlugin(irmPlugin);
+		simulation.addPlugin(irmPlugin);
 		simulation.addPlugin(periodAdaptionPlugin);
 		/* deploy components and ensembles */
 		final DEECoNode deecoNode = simulation.createNode();
