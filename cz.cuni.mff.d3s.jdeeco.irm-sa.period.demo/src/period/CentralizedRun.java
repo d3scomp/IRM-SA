@@ -54,8 +54,11 @@ public class CentralizedRun {
 	 * @param args command line arguments, ignored
 	 * @throws DEECoException
 	 * @throws AnnotationProcessorException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
-	public static void main(final String args[]) throws DEECoException, AnnotationProcessorException {
+	public static void main(final String args[])
+			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
 		Log.i("Preparing simulation");
 
 		/* create IRM plugin */
@@ -77,7 +80,9 @@ public class CentralizedRun {
 
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
-		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer, /*irmPlugin,*/ periodAdaptionPlugin);
+		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
+//		simulation.addPlugin(irmPlugin);
+		simulation.addPlugin(periodAdaptionPlugin);
 		/* deploy components and ensembles */
 		final DEECoNode deecoNode = simulation.createNode();
 
