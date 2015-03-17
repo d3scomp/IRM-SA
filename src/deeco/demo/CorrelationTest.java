@@ -37,7 +37,7 @@ public class CorrelationTest {
 		realm.createNode(new CorrelationPlugin());
 		
 		/* WHEN simulation is performed */
-		realm.start(1000);
+		realm.start(10000);
 		
 	}	
 	

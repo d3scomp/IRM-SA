@@ -14,7 +14,7 @@ public class DEECoCorrelationManager {
 
 	public String id;
 	
-	public Map<Integer, Map<String, List<Object>>> knowledgeHistoryOfAllComponents;
+	public Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> knowledgeHistoryOfAllComponents;
 
 	public DEECoCorrelationManager() {
 		knowledgeHistoryOfAllComponents = new HashMap<>(); 
@@ -26,7 +26,7 @@ public class DEECoCorrelationManager {
 	@Process
 	@PeriodicScheduling(period=100)
 	public static void printHistory(
-			@In("knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<Object>>> history){
+			@In("knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> history){
 		
 		StringBuilder b = new StringBuilder(1024);
 		b.append("Printing global history...\n");
@@ -35,13 +35,13 @@ public class DEECoCorrelationManager {
 
 			b.append("\tComponent " + id + "\n");
 			
-			Map<String, List<Object>> componentHistory = history.get(id);
+			Map<String, List<MetadataWrapper<? extends Object>>> componentHistory = history.get(id);
 			for (String field : componentHistory.keySet()) {
 				b.append("\t\t" + field + ":\t[");
 				
-				List<Object> values = componentHistory.get(field); 
-				for (Object value : values) {
-					b.append(value + ", ");
+				List<MetadataWrapper<? extends Object>> values = componentHistory.get(field); 
+				for (MetadataWrapper<? extends Object> value : values) {
+					b.append(value.getValue() + " (" + value.getTimestamp() + "), ");
 				}
 				
 				b.delete(b.length()-2, b.length());

@@ -22,7 +22,7 @@ public class GroupLeaderDataAggregation {
 	public static boolean membership(
 			@In("member.id") String memberId,
 			@In("member.leaderId") Integer leaderId, // just to rule out GroupMembers
-			@In("coord.knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<Object>>> knowledgeHistoryOfAllComponents) {
+			@In("coord.knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> knowledgeHistoryOfAllComponents) {
 		return true;
 	}
 
@@ -30,21 +30,21 @@ public class GroupLeaderDataAggregation {
 	public static void map(
 			@In("member.id") String memberId,
 			@In("member.leaderId") Integer leaderId, // just to rule out GroupMembers 
-			@In("member.position") Integer position,
-			@In("member.temperature") Integer temperature,
-			@InOut("coord.knowledgeHistoryOfAllComponents") ParamHolder<Map<Integer, Map<String, List<Object>>>> knowledgeHistoryOfAllComponents) throws KnowledgeNotFoundException {
+			@In("member.position") MetadataWrapper<Integer> position,
+			@In("member.temperature") MetadataWrapper<Integer> temperature,
+			@InOut("coord.knowledgeHistoryOfAllComponents") ParamHolder<Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>>> knowledgeHistoryOfAllComponents) throws KnowledgeNotFoundException {
 
 		System.out.println("KnowledgeExchange for component " + memberId);
 
 		// FIXME hard-coded conversion of id to Integer
 		Integer memberIdInt = Integer.parseInt(memberId);
-		Map<String, List<Object>> memberKnowledgeHistory = knowledgeHistoryOfAllComponents.value.get(memberIdInt);
+		Map<String, List<MetadataWrapper<? extends Object>>> memberKnowledgeHistory = knowledgeHistoryOfAllComponents.value.get(memberIdInt);
 		if (memberKnowledgeHistory == null) {
 			memberKnowledgeHistory = new HashMap<>();
 		}
 
 		String field = "position";
-		List<Object> fieldHistory = memberKnowledgeHistory.get(field);
+		List<MetadataWrapper<? extends Object>> fieldHistory = memberKnowledgeHistory.get(field);
 		if (fieldHistory == null) {
 			fieldHistory = new ArrayList<>();
 		}
