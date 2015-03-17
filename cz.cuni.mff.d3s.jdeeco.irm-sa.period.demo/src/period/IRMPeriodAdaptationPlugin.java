@@ -1,5 +1,6 @@
 package period;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
+import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 /**
  * Plugin for period adaptation strategy.
@@ -23,8 +25,7 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 
 	/** Plugin dependencies. */
 	static private List<Class<? extends DEECoPlugin>> dependencies =
-//			Collections.unmodifiableList(Arrays.asList(IRMPlugin.class));
-			Collections.emptyList();
+			Collections.unmodifiableList(Arrays.asList(IRMPlugin.class));
 
 	/** Runtime model. */
 	final RuntimeMetadata model;
@@ -125,10 +126,7 @@ public class IRMPeriodAdaptationPlugin implements DEECoPlugin {
 
 	@Override
 	public void init(DEECoContainer container) {
-		final AnnotationProcessorExtensionPoint irmAwareAnnotationProcessorExtension =
-				new IrmAwareAnnotationProcessorExtension(design, trace);
-		container.getProcessor().addExtension(irmAwareAnnotationProcessorExtension);
-
+		//relying on annotation processor from IRMPlugin
 		try {
 			container.deployComponent(new PeriodAdaptationManager());
 		} catch (AnnotationProcessorException e) {
