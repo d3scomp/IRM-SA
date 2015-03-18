@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.logging.Log;
+
 /**
  * An emulation of a DEECo component that specifies the functionality
  * for computation of the correlation between knowledge data
