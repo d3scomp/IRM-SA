@@ -1,9 +1,10 @@
-package deeco.demo;
+package deeco.metadata;
 
 import java.io.Serializable;
 
 public class MetadataWrapper<T> implements Serializable{
 	
+	private static final long serialVersionUID = -1190064726886324861L;
 	private T value;
 	private long timestamp;
 	

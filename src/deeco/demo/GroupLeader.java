@@ -10,6 +10,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import deeco.demo.CorrelationTest.Variances;
+import deeco.metadata.MetadataWrapper;
 
 @Component
 public class GroupLeader {

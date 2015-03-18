@@ -13,6 +13,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import deeco.metadata.MetadataWrapper;
 
 @Ensemble
 @PeriodicScheduling(period = 100)
