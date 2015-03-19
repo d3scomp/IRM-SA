@@ -35,7 +35,7 @@ public class AcceptanceTest {
 		DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 		simulation.addPlugin(new IRMPlugin(trace, design));
 		/* deploy components and ensembles */
-		DEECoNode deecoNode = simulation.createNode();
+		DEECoNode deecoNode = simulation.createNode(1);
 		
 		deecoNode.deployComponent(new Vehicle());
 		deecoNode.deployComponent(new Vehicle());

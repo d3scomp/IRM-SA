@@ -84,7 +84,7 @@ public class CentralizedRun {
 		simulation.addPlugin(irmPlugin);
 		simulation.addPlugin(periodAdaptionPlugin);
 		/* deploy components and ensembles */
-		final DEECoNode deecoNode = simulation.createNode();
+		final DEECoNode deecoNode = simulation.createNode(1);
 
 		deecoNode.deployComponent(new FireFighter());
 		deecoNode.deployComponent(new Environment());

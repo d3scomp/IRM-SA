@@ -64,7 +64,7 @@ public class ArchitectureReconfiguratorTest {
 		IRMPlugin irmPlugin = new IRMPlugin(trace, design);
 		
 		SimulationTimer simulationTimer = new DiscreteEventTimer(); 
-		deecoNode = new DEECoNode(simulationTimer, irmPlugin);
+		deecoNode = new DEECoNode(1, simulationTimer, irmPlugin);
 		deecoNode.deployComponent(new Vehicle());
 
 	}
