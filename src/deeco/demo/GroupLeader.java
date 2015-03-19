@@ -28,7 +28,7 @@ public class GroupLeader {
 	}
 	
 	@Process
-	@PeriodicScheduling(period=50)
+	@PeriodicScheduling(period=500)
 	public static void changePosition(
 			@In("id") String id,
 			@InOut("position") ParamHolder<MetadataWrapper<Integer>> position) {
@@ -41,7 +41,7 @@ public class GroupLeader {
 	}
 
 	@Process
-	@PeriodicScheduling(period=50)
+	@PeriodicScheduling(period=500)
 	public static void changeTemperature(
 			@In("id") String id,
 			@InOut("temperature") ParamHolder<MetadataWrapper<Integer>> temperature) {

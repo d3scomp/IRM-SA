@@ -44,7 +44,7 @@ public class DEECoCorrelationManager {
 	 * For quick debugging.
 	 */
 	@Process
-	@PeriodicScheduling(period=100)
+	@PeriodicScheduling(period=1000)
 	public static void printHistory(
 			@In("knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			@In("correlationLevels") List<CorrelationLevel> levels){

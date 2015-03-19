@@ -16,7 +16,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import deeco.metadata.MetadataWrapper;
 
 @Ensemble
-@PeriodicScheduling(period = 100)
+@PeriodicScheduling(period = 1000)
 public class GroupLeaderDataAggregation {
 
 	@Membership
