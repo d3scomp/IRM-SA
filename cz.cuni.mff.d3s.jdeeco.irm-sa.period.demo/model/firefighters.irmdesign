@@ -9,6 +9,7 @@
   <components name="FireFighter">
     <knowledgeElements type="Double" name="batteryLevel"/>
     <knowledgeElements type="Double" name="position"/>
+    <knowledgeElements type="String" name="id"/>
   </components>
   <refinements start="//@andNodes.0" end="//@invariants.0"/>
   <refinements start="//@andNodes.1" end="//@invariants.1"/>
@@ -18,6 +19,6 @@
   <decompositions start="//@invariants.5" end="//@andNodes.0"/>
   <andNodes/>
   <andNodes/>
-  <contributes start="//@components.0" end="//@invariants.2" processOutput="//@components.0/@knowledgeElements.0"/>
-  <contributes start="//@components.0" end="//@invariants.4" processOutput="//@components.0/@knowledgeElements.1"/>
+  <contributes start="//@components.0" end="//@invariants.2" processInput="//@components.0/@knowledgeElements.2" processOutput="//@components.0/@knowledgeElements.0"/>
+  <contributes start="//@components.0" end="//@invariants.4" processInput="//@components.0/@knowledgeElements.2" processOutput="//@components.0/@knowledgeElements.1"/>
 </cz.cuni.mff.d3s.irm.model.design:IRM>
