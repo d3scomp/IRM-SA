@@ -9,7 +9,7 @@ import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
-import cz.cuni.mff.d3s.jdeeco.publishing.DummyKnowledgePublisher;
+import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 /**
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
  */
@@ -21,20 +21,20 @@ public class CorrelationTest {
 		DEECoSimulation realm = new DEECoSimulation(simulationTimer);
 		realm.addPlugin(new BroadcastLoopback());
 		realm.addPlugin(Network.class);
-		realm.addPlugin(DummyKnowledgePublisher.class);
+		realm.addPlugin(DefaultKnowledgePublisher.class);
 		realm.addPlugin(KnowledgeInsertingStrategy.class);
 		
-		DEECoNode deeco1 = realm.createNode();
+		DEECoNode deeco1 = realm.createNode(1);
 		deeco1.deployComponent(new GroupMember("1"));
 		
-		DEECoNode deeco2 = realm.createNode();
+		DEECoNode deeco2 = realm.createNode(2);
 		deeco2.deployComponent(new GroupMember("2"));
 		
-		DEECoNode deeco3 = realm.createNode();
+		DEECoNode deeco3 = realm.createNode(3);
 		deeco3.deployComponent(new GroupLeader("3"));
 		
 		/* Create node that holds the correlation component */
-		realm.createNode(new CorrelationPlugin());
+		realm.createNode(4, new CorrelationPlugin());
 		
 		/* WHEN simulation is performed */
 		realm.start(10000);
