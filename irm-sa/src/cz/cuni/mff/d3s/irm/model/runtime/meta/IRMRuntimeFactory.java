@@ -16,6 +16,7 @@
 package cz.cuni.mff.d3s.irm.model.runtime.meta;
 
 import cz.cuni.mff.d3s.irm.model.runtime.api.Alternative;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
@@ -111,6 +112,15 @@ public interface IRMRuntimeFactory extends EFactory {
 	 * @generated
 	 */
 	ExchangeInvariantInstance createExchangeInvariantInstance();
+
+	/**
+	 * Returns a new object of class '<em>Assumption Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Assumption Instance</em>'.
+	 * @generated
+	 */
+	AssumptionInstance createAssumptionInstance();
 
 	/**
 	 * Returns the package supported by this factory.

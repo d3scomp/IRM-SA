@@ -142,6 +142,14 @@ public class IRMRuntimeSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case IRMRuntimePackage.ASSUMPTION_INSTANCE: {
+				AssumptionInstance assumptionInstance = (AssumptionInstance)theEObject;
+				T result = caseAssumptionInstance(assumptionInstance);
+				if (result == null) result = casePresentInvariantInstance(assumptionInstance);
+				if (result == null) result = caseInvariantInstance(assumptionInstance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -263,6 +271,21 @@ public class IRMRuntimeSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseExchangeInvariantInstance(ExchangeInvariantInstance object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Assumption Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Assumption Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAssumptionInstance(AssumptionInstance object) {
 		return null;
 	}
 

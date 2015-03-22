@@ -23,6 +23,7 @@ import cz.cuni.mff.d3s.irm.model.design.Component;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.Invariant;
 import cz.cuni.mff.d3s.irm.model.runtime.api.Alternative;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
@@ -110,6 +111,13 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 	 * @generated
 	 */
 	private EClass exchangeInvariantInstanceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass assumptionInstanceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -467,6 +475,15 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAssumptionInstance() {
+		return assumptionInstanceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getInvariantType() {
 		return invariantTypeEDataType;
 	}
@@ -596,6 +613,8 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		exchangeInvariantInstanceEClass = createEClass(EXCHANGE_INVARIANT_INSTANCE);
 		createEAttribute(exchangeInvariantInstanceEClass, EXCHANGE_INVARIANT_INSTANCE__ENSEMBLE_DEFINITION);
 
+		assumptionInstanceEClass = createEClass(ASSUMPTION_INSTANCE);
+
 		// Create data types
 		invariantTypeEDataType = createEDataType(INVARIANT_TYPE);
 		irmComponentTypeEDataType = createEDataType(IRM_COMPONENT_TYPE);
@@ -639,6 +658,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		shadowInvariantInstanceEClass.getESuperTypes().add(this.getInvariantInstance());
 		processInvariantInstanceEClass.getESuperTypes().add(this.getPresentInvariantInstance());
 		exchangeInvariantInstanceEClass.getESuperTypes().add(this.getPresentInvariantInstance());
+		assumptionInstanceEClass.getESuperTypes().add(this.getPresentInvariantInstance());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(irmInstanceEClass, IRMInstance.class, "IRMInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -676,6 +696,8 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 
 		initEClass(exchangeInvariantInstanceEClass, ExchangeInvariantInstance.class, "ExchangeInvariantInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExchangeInvariantInstance_EnsembleDefinition(), this.getEnsembleDefinitionType(), "ensembleDefinition", null, 0, 1, ExchangeInvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(assumptionInstanceEClass, AssumptionInstance.class, "AssumptionInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize data types
 		initEDataType(invariantTypeEDataType, Invariant.class, "InvariantType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

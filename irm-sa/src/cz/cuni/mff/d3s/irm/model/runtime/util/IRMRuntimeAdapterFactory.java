@@ -122,6 +122,10 @@ public class IRMRuntimeAdapterFactory extends AdapterFactoryImpl {
 				return createExchangeInvariantInstanceAdapter();
 			}
 			@Override
+			public Adapter caseAssumptionInstance(AssumptionInstance object) {
+				return createAssumptionInstanceAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -250,6 +254,20 @@ public class IRMRuntimeAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createExchangeInvariantInstanceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance <em>Assumption Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance
+	 * @generated
+	 */
+	public Adapter createAssumptionInstanceAdapter() {
 		return null;
 	}
 

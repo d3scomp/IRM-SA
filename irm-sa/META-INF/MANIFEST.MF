@@ -22,7 +22,10 @@ Export-Package: cz.cuni.mff.d3s.irm.model.runtime.api,
  cz.cuni.mff.d3s.irm.model.trace.api,
  cz.cuni.mff.d3s.irm.model.trace.impl,
  cz.cuni.mff.d3s.irm.model.trace.meta,
- cz.cuni.mff.d3s.irm.model.trace.util
+ cz.cuni.mff.d3s.irm.model.trace.util,
+ runtime,
+ runtime.impl,
+ runtime.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy

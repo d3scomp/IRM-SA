@@ -17,7 +17,9 @@ package cz.cuni.mff.d3s.deeco.annotations.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
 import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.Invariant;
@@ -94,25 +96,28 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 				monitor.setInvariant(invariantInDesignModel);
 				monitor.setMethod(method);
 
-				Class<?>[] parameterTypes = method.getParameterTypes();
-				for (int i = 0; i < parameterTypes.length; i++) {
+				loop:
+				for (Parameter parameter : method.getParameters()) {
+					final Annotation[] annotations = parameter.getAnnotations();
+					for (Annotation annotation : annotations) {
+						if (annotation instanceof AssumptionParameter) {
+							continue loop; //skip assumption parameters completely
+						}
+					}
 					MonitorParameter mParameter = tFactory.createMonitorParameter();
-					mParameter.setType(parameterTypes[i]);
-
-					Annotation[][] allAnnotations = method.getParameterAnnotations();
-					Annotation directionAnnotation;
+					mParameter.setType(parameter.getClass());
 					try {
-						directionAnnotation = caller.getKindAnnotation(allAnnotations[i]);
+						Annotation directionAnnotation = caller.getKindAnnotation(annotations);
 						if (!(directionAnnotation instanceof In)) {
 							throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
 						}
 						String path = caller.getKindAnnotationValue(directionAnnotation);
 						mParameter.setKnowledgePath(KnowledgePathHelper.createKnowledgePath(path, PathOrigin.COMPONENT));
 					} catch (AnnotationProcessorException | ParseException e) {
-						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+(i+1) + "->" + e.getMessage(), e);
+						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+ parameter.getName() + "->" + e.getMessage(), e);
 					}
 					monitor.getMonitorParameters().add(mParameter);
-				  }
+				}
 				Class<?> returnType = method.getReturnType();
 				//TODO maybe create new special annotation for fitness monitors? instead of switching on return type?
 				if (returnType == Boolean.class || returnType == Boolean.TYPE) {
@@ -220,6 +225,13 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 		Log.d("Looking for process invariant: "+invariantRefId);
 		for (cz.cuni.mff.d3s.irm.model.design.Contributes c : design.getContributes()) {
 			cz.cuni.mff.d3s.irm.model.design.Invariant i = c.getEnd();
+			if (i.getRefID().equals(invariantRefId)) {
+				return i;
+			}
+		}
+		//TODO for now search for invariant (not process, but assumption) in assumed too
+		for (cz.cuni.mff.d3s.irm.model.design.Assumed a : design.getAssumed()) {
+			cz.cuni.mff.d3s.irm.model.design.Invariant i = a.getEnd();
 			if (i.getRefID().equals(invariantRefId)) {
 				return i;
 			}

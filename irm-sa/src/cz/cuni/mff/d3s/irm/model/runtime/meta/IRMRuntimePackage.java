@@ -699,6 +699,97 @@ public interface IRMRuntimePackage extends EPackage {
 	int EXCHANGE_INVARIANT_INSTANCE_OPERATION_COUNT = PRESENT_INVARIANT_INSTANCE_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link cz.cuni.mff.d3s.irm.model.runtime.impl.AssumptionInstanceImpl <em>Assumption Instance</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.AssumptionInstanceImpl
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getAssumptionInstance()
+	 * @generated
+	 */
+	int ASSUMPTION_INSTANCE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Diagram Instance</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__DIAGRAM_INSTANCE = PRESENT_INVARIANT_INSTANCE__DIAGRAM_INSTANCE;
+
+	/**
+	 * The feature id for the '<em><b>Satisfied</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__SATISFIED = PRESENT_INVARIANT_INSTANCE__SATISFIED;
+
+	/**
+	 * The feature id for the '<em><b>Selected</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__SELECTED = PRESENT_INVARIANT_INSTANCE__SELECTED;
+
+	/**
+	 * The feature id for the '<em><b>Alternatives</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__ALTERNATIVES = PRESENT_INVARIANT_INSTANCE__ALTERNATIVES;
+
+	/**
+	 * The feature id for the '<em><b>Fitness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__FITNESS = PRESENT_INVARIANT_INSTANCE__FITNESS;
+
+	/**
+	 * The feature id for the '<em><b>Invariant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__INVARIANT = PRESENT_INVARIANT_INSTANCE__INVARIANT;
+
+	/**
+	 * The number of structural features of the '<em>Assumption Instance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE_FEATURE_COUNT = PRESENT_INVARIANT_INSTANCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Parent</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE___GET_PARENT = PRESENT_INVARIANT_INSTANCE___GET_PARENT;
+
+	/**
+	 * The number of operations of the '<em>Assumption Instance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE_OPERATION_COUNT = PRESENT_INVARIANT_INSTANCE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '<em>Invariant Type</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -706,7 +797,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getInvariantType()
 	 * @generated
 	 */
-	int INVARIANT_TYPE = 8;
+	int INVARIANT_TYPE = 9;
 
 	/**
 	 * The meta object id for the '<em>IRM Component Type</em>' data type.
@@ -716,7 +807,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getIRMComponentType()
 	 * @generated
 	 */
-	int IRM_COMPONENT_TYPE = 9;
+	int IRM_COMPONENT_TYPE = 10;
 
 	/**
 	 * The meta object id for the '<em>Component Instance Type</em>' data type.
@@ -726,7 +817,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getComponentInstanceType()
 	 * @generated
 	 */
-	int COMPONENT_INSTANCE_TYPE = 10;
+	int COMPONENT_INSTANCE_TYPE = 11;
 
 	/**
 	 * The meta object id for the '<em>Value Set Type</em>' data type.
@@ -736,7 +827,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getValueSetType()
 	 * @generated
 	 */
-	int VALUE_SET_TYPE = 11;
+	int VALUE_SET_TYPE = 12;
 
 	/**
 	 * The meta object id for the '<em>IRM Design Model Type</em>' data type.
@@ -746,7 +837,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getIRMDesignModelType()
 	 * @generated
 	 */
-	int IRM_DESIGN_MODEL_TYPE = 12;
+	int IRM_DESIGN_MODEL_TYPE = 13;
 
 	/**
 	 * The meta object id for the '<em>Trace Model Type</em>' data type.
@@ -756,7 +847,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getTraceModelType()
 	 * @generated
 	 */
-	int TRACE_MODEL_TYPE = 13;
+	int TRACE_MODEL_TYPE = 14;
 
 	/**
 	 * The meta object id for the '<em>Component Process Type</em>' data type.
@@ -766,7 +857,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getComponentProcessType()
 	 * @generated
 	 */
-	int COMPONENT_PROCESS_TYPE = 14;
+	int COMPONENT_PROCESS_TYPE = 15;
 
 	/**
 	 * The meta object id for the '<em>Ensemble Definition Type</em>' data type.
@@ -776,7 +867,7 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getEnsembleDefinitionType()
 	 * @generated
 	 */
-	int ENSEMBLE_DEFINITION_TYPE = 15;
+	int ENSEMBLE_DEFINITION_TYPE = 16;
 
 
 	/**
@@ -1054,6 +1145,16 @@ public interface IRMRuntimePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getExchangeInvariantInstance_EnsembleDefinition();
+
+	/**
+	 * Returns the meta object for class '{@link cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance <em>Assumption Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Assumption Instance</em>'.
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance
+	 * @generated
+	 */
+	EClass getAssumptionInstance();
 
 	/**
 	 * Returns the meta object for data type '{@link cz.cuni.mff.d3s.irm.model.design.Invariant <em>Invariant Type</em>}'.
@@ -1389,6 +1490,16 @@ public interface IRMRuntimePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXCHANGE_INVARIANT_INSTANCE__ENSEMBLE_DEFINITION = eINSTANCE.getExchangeInvariantInstance_EnsembleDefinition();
+
+		/**
+		 * The meta object literal for the '{@link cz.cuni.mff.d3s.irm.model.runtime.impl.AssumptionInstanceImpl <em>Assumption Instance</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.AssumptionInstanceImpl
+		 * @see cz.cuni.mff.d3s.irm.model.runtime.impl.IRMRuntimePackageImpl#getAssumptionInstance()
+		 * @generated
+		 */
+		EClass ASSUMPTION_INSTANCE = eINSTANCE.getAssumptionInstance();
 
 		/**
 		 * The meta object literal for the '<em>Invariant Type</em>' data type.

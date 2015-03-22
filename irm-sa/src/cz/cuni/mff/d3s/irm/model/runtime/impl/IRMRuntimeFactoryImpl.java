@@ -91,6 +91,7 @@ public class IRMRuntimeFactoryImpl extends EFactoryImpl implements IRMRuntimeFac
 			case IRMRuntimePackage.SHADOW_INVARIANT_INSTANCE: return createShadowInvariantInstance();
 			case IRMRuntimePackage.PROCESS_INVARIANT_INSTANCE: return createProcessInvariantInstance();
 			case IRMRuntimePackage.EXCHANGE_INVARIANT_INSTANCE: return createExchangeInvariantInstance();
+			case IRMRuntimePackage.ASSUMPTION_INSTANCE: return createAssumptionInstance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -222,6 +223,16 @@ public class IRMRuntimeFactoryImpl extends EFactoryImpl implements IRMRuntimeFac
 	public ExchangeInvariantInstance createExchangeInvariantInstance() {
 		ExchangeInvariantInstanceImpl exchangeInvariantInstance = new ExchangeInvariantInstanceImpl();
 		return exchangeInvariantInstance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AssumptionInstance createAssumptionInstance() {
+		AssumptionInstanceImpl assumptionInstance = new AssumptionInstanceImpl();
+		return assumptionInstance;
 	}
 
 	/**

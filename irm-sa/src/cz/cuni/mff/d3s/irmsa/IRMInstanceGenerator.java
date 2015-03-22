@@ -17,8 +17,10 @@ package cz.cuni.mff.d3s.irmsa;
 
 import static cz.cuni.mff.d3s.deeco.task.KnowledgePathHelper.getAbsoluteStrippedPath;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.knowledge.ReadOnlyKnowledgeManager;
 import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
@@ -45,6 +48,7 @@ import cz.cuni.mff.d3s.deeco.task.KnowledgePathHelper;
 import cz.cuni.mff.d3s.deeco.task.KnowledgePathHelper.KnowledgePathAndRoot;
 import cz.cuni.mff.d3s.deeco.task.KnowledgePathHelper.PathRoot;
 import cz.cuni.mff.d3s.irm.model.design.AndNode;
+import cz.cuni.mff.d3s.irm.model.design.Assumed;
 import cz.cuni.mff.d3s.irm.model.design.Assumption;
 import cz.cuni.mff.d3s.irm.model.design.BranchingNode;
 import cz.cuni.mff.d3s.irm.model.design.Component;
@@ -228,6 +232,8 @@ public class IRMInstanceGenerator {
 			} else if (i instanceof ExchangeInvariant) {
 				invariantInstance = factory.createExchangeInvariantInstance();
 				((ExchangeInvariantInstance) invariantInstance).setEnsembleDefinition(trace.getEnsembleDefinitionFromInvariant(i));
+			} else if (i instanceof Assumption) {
+				invariantInstance = factory.createAssumptionInstance();
 			} else {
 				invariantInstance = factory.createPresentInvariantInstance();
 			}
@@ -410,14 +416,14 @@ public class IRMInstanceGenerator {
 
 			IRMComponentInstance contributingComponent = findContributingComponent(invariant, IRMComponentInstances);
 			if (contributingComponent == null) {
-				Log.w("No component contributing to process invariant " + invariant + ", so invariant evaluation trivially returned true.");
+				Log.w("No component contributing to process invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
 
 			InvariantMonitor monitor = getInvariantMonitor(invariant, monitors);
 
 			if (monitor == null) {
-				Log.w("No invariant monitor found for process invariant " + invariant + ", so invariant evaluation trivially returned true.");
+				Log.w("No invariant monitor found for process invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
 
@@ -436,7 +442,7 @@ public class IRMInstanceGenerator {
 				try {
 					absoluteKnowledgePath = KnowledgePathHelper.getAbsolutePath(formalParam.getKnowledgePath(), knowledgeManager);
 				} catch (KnowledgeNotFoundException e) {
-					Log.w("Knowledge path " + e.getNotFoundPath() + " could not be resolved, so invariant evaluation returned false.");
+					Log.w("Knowledge path " + e.getNotFoundPath() + " could not be resolved, so invariant evaluation returned " + failure);
 					return failure;
 				}
 				paths.add(absoluteKnowledgePath);
@@ -467,24 +473,24 @@ public class IRMInstanceGenerator {
 
 			EnsembleDefinition ed = trace.getEnsembleDefinitionFromInvariant(invariant);
 			if (ed == null) {
-				Log.i("No trace found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
+				Log.i("No trace found for exchange invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
 			if (!isEnsembleInstantiated(IRMComponentInstances, ed)) {
-				Log.i("EnsembleDefinition " + ed + " is not instantiated within this runtime, so invariant evaluation trivially returned true.");
+				Log.i("EnsembleDefinition " + ed + " is not instantiated within this runtime, so invariant evaluation trivially returned " + success);
 				return success;
 			}
 
 			IRMComponentInstance coord = findCoordinator(invariant, IRMComponentInstances);
 			IRMComponentInstance member = findMember(invariant, IRMComponentInstances);
 			if ((coord == null) || (member == null)) {
-				Log.w("No coordinator/member found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
+				Log.w("No coordinator/member found for exchange invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
 
 			InvariantMonitor monitor = getInvariantMonitor(invariant, monitors);
 			if (monitor == null) {
-				Log.w("No invariant monitor found for exchange invariant " + invariant + ", so invariant evaluation trivially returned true.");
+				Log.w("No invariant monitor found for exchange invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
 
@@ -506,7 +512,7 @@ public class IRMInstanceGenerator {
 					absoluteKnowledgePathAndRoot = getAbsoluteStrippedPath(formalParam.getKnowledgePath(), coordKnowledgeManager, memberKnowledgeManager);
 				} catch (KnowledgeNotFoundException e) {
 					Log.w("Not able to resolve the path for monitor " + method + " of invariant " + invariant
-							+ ", so invariant evaluation trivially returned true.");
+							+ ", so invariant evaluation trivially returned " + success);
 					return success;
 				}
 				allPathsWithRoots.add(absoluteKnowledgePathAndRoot);
@@ -532,15 +538,114 @@ public class IRMInstanceGenerator {
 				System.out.println("-------- Monitor " + method + " returned " + ret);
 				return ret;
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
-				Log.w("Error when invoking a monitor method, so invariant evaluation returned false.", e);
+				Log.w("Error when invoking a monitor method, so invariant evaluation returned " + failure, e);
 				return failure;
 			} finally {
 				MonitorContext.setMonitoredEnsemble(null);
 			}
+		} else if (invariant instanceof Assumption) {
+			IRMComponentInstance contributingComponent = findContributingComponent(invariant, IRMComponentInstances);
+			if (contributingComponent == null) {
+				Log.w("No component contributing to assumption " + invariant + ", so invariant evaluation trivially returned " + success);
+				return success;
+			}
 
+			InvariantMonitor monitor = getInvariantMonitor(invariant, monitors);
+
+			if (monitor == null) {
+				Log.w("No invariant monitor found for assumption " + invariant + ", so invariant evaluation trivially returned " + success);
+				return success;
+			}
+
+			Method method = monitor.getMethod();
+			ReadOnlyKnowledgeManager knowledgeManager = contributingComponent.getArchitectureInstance().getKnowledgeManager();
+			Collection<MonitorParameter> formalParams = monitor.getMonitorParameters();
+
+			List<KnowledgePath> paths = new ArrayList<KnowledgePath>();
+
+			for (MonitorParameter formalParam : formalParams) {
+				KnowledgePath absoluteKnowledgePath;
+				// FIXME: The call to getAbsolutePath is in theory wrong, because this way we are not obtaining the
+				// knowledge within one transaction. But fortunately this is not a problem with the single
+				// threaded scheduler we have at the moment, because once the invoke method starts there is no other
+				// activity whatsoever in the system. See also cz.cuni.mff.d3s.deeco.task.ProcessTask.invoke() method.
+				try {
+					absoluteKnowledgePath = KnowledgePathHelper.getAbsolutePath(formalParam.getKnowledgePath(), knowledgeManager);
+				} catch (KnowledgeNotFoundException e) {
+					Log.w("Knowledge path " + e.getNotFoundPath() + " could not be resolved, so invariant evaluation returned " + failure);
+					return failure;
+				}
+				paths.add(absoluteKnowledgePath);
+			}
+
+			// Construct the parameters for the process method invocation
+			Parameter[] methodFormalParams = method.getParameters();
+			Object[] actualParams = new Object[methodFormalParams.length];
+			int paramIdx = 0;
+			int knowledgeIdx = 0;
+			for (Parameter parameter : methodFormalParams) {
+				boolean knowledge = true;
+				for (Annotation a : parameter.getAnnotations()) {
+					if (a instanceof AssumptionParameter) {
+						knowledge = false;
+						AssumptionParameter ap = (AssumptionParameter) a;
+						AssumptionParameter.Scope scope = ap.scope();
+						Parameter param = methodFormalParams[paramIdx];
+						String paramId = knowledgeManager.getId();
+						if (scope == AssumptionParameter.Scope.MONITOR) {
+							paramId += ":" + method.toGenericString();
+						}
+						paramId += ap.name();
+						Object value = knowledgeManager.getComponent().getInternalData().get(paramId);
+						if (value == null) {
+							value = ap.defaultValue();
+						}
+						if (value instanceof Number) {
+							Number number = (Number) value;
+							Class<?> paramType = param.getType();
+							if (paramType.isAssignableFrom(double.class)) {
+								actualParams[paramIdx] = number.doubleValue();
+							} else if (paramType.isAssignableFrom(float.class)) {
+								actualParams[paramIdx] = number.floatValue();
+							} else if (paramType.isAssignableFrom(long.class)) {
+								actualParams[paramIdx] = number.longValue();
+							} else if (paramType.isAssignableFrom(int.class)) {
+								actualParams[paramIdx] = number.intValue();
+							} else if (paramType.isAssignableFrom(short.class)) {
+								actualParams[paramIdx] = number.shortValue();
+							} else if (paramType.isAssignableFrom(byte.class)) {
+								actualParams[paramIdx] = number.byteValue();
+							} else {
+								actualParams[paramIdx] = null;
+							}
+						} else {
+							actualParams[paramIdx] = null;
+						}
+					}
+				}
+				if (knowledge) {
+					KnowledgePath absoluteKnowledgePath = paths.get(knowledgeIdx);
+					actualParams[paramIdx] = contributingComponent.getKnowledgeSnapshot().getValue(absoluteKnowledgePath);
+					++knowledgeIdx;
+				}
+				++paramIdx;
+			}
+
+			try {
+				MonitorContext.setMonitoredComponent(knowledgeManager.getComponent());
+				@SuppressWarnings("unchecked")
+				T ret = (T) method.invoke(null, actualParams);
+				System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
+				return ret;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
+				Log.e("Error when invoking a monitor method, so invariant evaluation returned " + failure, e);
+				return failure;
+			} finally {
+				MonitorContext.setMonitoredComponent(null);
+			}
 		} else {
-			// if i is neither Process nor Exchange invariant
-			// TODO(IG) implement monitoring also for Assumption and non-leaf invariants
+			// if i is neither Process nor Exchange invariant nor Assumption
+			// TODO(IG) implement monitoring also non-leaf invariants
 			return success;
 		}
 	}
@@ -623,6 +728,11 @@ public class IRMInstanceGenerator {
 	private boolean contributesToInvariant(Component c, Invariant i) {
 		for (Contributes contr : design.getContributes()) {
 			if ((contr.getStart().equals(c)) && (contr.getEnd().equals(i))){
+				return true;
+			}
+		}
+		for (Assumed assumed : design.getAssumed()) {
+			if ((assumed.getStart().equals(c)) && (assumed.getEnd().equals(i))){
 				return true;
 			}
 		}

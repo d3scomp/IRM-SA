@@ -7,14 +7,6 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated irmRuntime -->
-      <package
-            uri="http://cz.cuni.mff.d3s.irm.model.runtime/1.0"
-            class="cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage"
-            genModel="model/irmRuntime.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated trace -->
       <package
             uri="http://cz.cuni.mff.d3s.irm.model.trace/1.0"
@@ -28,6 +20,14 @@
             uri="http://cz.cuni.mff.d3s.irm.model.monitors/1.0"
             class="cz.cuni.mff.d3s.irm.model.monitors.meta.MonitorsPackage"
             genModel="model/monitors.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated irmRuntime -->
+      <package
+            uri="http://cz.cuni.mff.d3s.irm.model.runtime/1.0"
+            class="cz.cuni.mff.d3s.irm.model.runtime.meta.IRMRuntimePackage"
+            genModel="model/irmRuntime.genmodel"/>
    </extension>
 
 </plugin>
