@@ -1,4 +1,4 @@
-package cz.cuni.mff.d3s.deeco.demo.vehicles.simple;
+package cz.cuni.mff.d3s.irmsa;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,8 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
@@ -20,9 +22,6 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.PresentInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.ArchitectureReconfigurator;
-import cz.cuni.mff.d3s.irmsa.EMFHelper;
-import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
 import cz.cuni.mff.d3s.irmsa.satsolver.SATSolver;
 import cz.cuni.mff.d3s.irmsa.satsolver.SATSolverPreProcessor;
 
@@ -43,19 +42,17 @@ public class AdaptationManager {
 	/** Internal data key for prefix of logs. */
 	public static final String LOG_PREFIX = "logPrefix";
 
-	public AdaptationManager(IRM design, TraceModel trace) {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Process
 	@PeriodicScheduling(period=2000)
 	public static void reason(@In("id") String id) {
 		// get runtime, architecture, design, and trace models from the process context
-		RuntimeMetadata runtime = (RuntimeMetadata) ProcessContext.getCurrentProcess().getComponentInstance().eContainer();
+		ComponentProcess process = ProcessContext.getCurrentProcess();
+		ComponentInstance component = process.getComponentInstance();
+		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 		Architecture architecture = ProcessContext.getArchitecture();
-		IRM design = (IRM) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(DESIGN_MODEL);
-		TraceModel trace = (TraceModel) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(TRACE_MODEL);
-		final boolean log = (Boolean) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(LOG);
+		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
+		TraceModel trace = (TraceModel) component.getInternalData().get(TRACE_MODEL);
+		boolean log = (Boolean) component.getInternalData().get(LOG);
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
@@ -65,13 +62,15 @@ public class AdaptationManager {
 			preProcessor.convertDAGToForest();
 		}
 		if (log) {
+			String base = (String) component.getInternalData().get(LOG_DIR);
+			String prefix = (String) component.getInternalData().get(LOG_PREFIX);
 			// clean up the files from previous run (if any)
-			deleteXMIFilesFromPreviousRun(AcceptanceTest.MODELS_BASE_PATH, AcceptanceTest.XMIFILE_PREFIX);
+			deleteXMIFilesFromPreviousRun(base, prefix);
 			// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
 			System.out.println("Number of IRMInstances: " + IRMInstances.size());
 			for (int i = 0; i< IRMInstances.size(); i++) {
 				System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
-				EMFHelper.saveModelInXMI(IRMInstances.get(i),AcceptanceTest.MODELS_BASE_PATH + AcceptanceTest.XMIFILE_PREFIX + i +".xmi");
+				EMFHelper.saveModelInXMI(IRMInstances.get(i), base + prefix + i +".xmi");
 			}
 		}
 		// create a reconfigurator of the current runtime

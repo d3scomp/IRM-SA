@@ -6,8 +6,6 @@ import java.util.List;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
-import cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AcceptanceTest;
-import cz.cuni.mff.d3s.deeco.demo.vehicles.simple.AdaptationManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
@@ -26,10 +24,10 @@ public class IRMPlugin implements DEECoPlugin {
 	private boolean log = true;
 
 	/** Passed to AdaptationManager. */
-	private String logDir = AcceptanceTest.MODELS_BASE_PATH;
+	private String logDir = "./";
 
 	/** Passed to AdaptationManager. */
-	private String logPrefix = AcceptanceTest.XMIFILE_PREFIX;
+	private String logPrefix = "";
 
 	public IRMPlugin(TraceModel trace, IRM design) {
 		this.trace = trace;
@@ -63,7 +61,7 @@ public class IRMPlugin implements DEECoPlugin {
 		container.getProcessor().addExtension(irmAwareAnnotationProcessorExtension);
 
 		try {
-			container.deployComponent(new AdaptationManager(design, trace));
+			container.deployComponent(new AdaptationManager());
 		} catch (AnnotationProcessorException e) {
 			Log.e("Error while trying to deploy AdaptationManager", e);
 		}
