@@ -25,7 +25,7 @@ public class DirectionSelectorImpl implements DirectionSelector {
 
 	@Override
 	public void selectDirection(InvariantInfo<?> info) {
-		//TODO implement ONLY DOWN FOR NOW AND ONLY FOR GPS
+		//TODO implement ONLY DOWN FOR NOW AND ONLY FOR GPS, notify interfaces about rollbacks and maybe about worsening/improving the overall fitness
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();

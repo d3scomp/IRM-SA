@@ -99,6 +99,7 @@ public final class PeriodAdaptationManager {
 	static public void monitorOverallFitness(
 			@In("id") String id,
 			@Out("fitness") ParamHolder<Double> fitness) {
+		fitness.value = 0.0;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
