@@ -1,4 +1,4 @@
-package period.model;
+package period;
 
 import java.util.HashMap;
 import java.util.Map;

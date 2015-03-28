@@ -15,8 +15,6 @@
  ******************************************************************************/
 package period;
 
-import period.model.Environment;
-import period.model.FireFighter;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -32,10 +30,14 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.period.AdapteeSelectorFitness;
+import cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed;
+import cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl;
+import cz.cuni.mff.d3s.irmsa.strategies.period.InvariantFitnessCombinerAverage;
+import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationPlugin;
 
 /**
  * This class contains main for centralized run.
- * Most of it is adapted from CentralizedRun in fire fighters demo.
  */
 public class CentralizedRun {
 
@@ -71,8 +73,8 @@ public class CentralizedRun {
 
 		// create IRMPeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		final IRMPeriodAdaptationPlugin periodAdaptionPlugin =
-				new IRMPeriodAdaptationPlugin(model, design, trace)
+		final PeriodAdaptationPlugin periodAdaptionPlugin =
+				new PeriodAdaptationPlugin(model, design, trace)
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new AdapteeSelectorFitness())
 						.withDirectionSelector(new DirectionSelectorImpl())
