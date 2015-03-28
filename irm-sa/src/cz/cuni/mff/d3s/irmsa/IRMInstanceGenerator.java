@@ -63,6 +63,7 @@ import cz.cuni.mff.d3s.irm.model.design.OrNode;
 import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
 import cz.cuni.mff.d3s.irm.model.design.Refinement;
 import cz.cuni.mff.d3s.irm.model.runtime.api.Alternative;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
@@ -233,7 +234,12 @@ public class IRMInstanceGenerator {
 				invariantInstance = factory.createExchangeInvariantInstance();
 				((ExchangeInvariantInstance) invariantInstance).setEnsembleDefinition(trace.getEnsembleDefinitionFromInvariant(i));
 			} else if (i instanceof Assumption) {
-				invariantInstance = factory.createAssumptionInstance();
+				final AssumptionInstance assumption = factory.createAssumptionInstance();
+				IRMComponentInstance ci = findContributingComponent(i, irmInstance.getIRMcomponentInstances());
+				if (ci != null) {
+					assumption.setComponentInstance(ci.getArchitectureInstance());
+				}
+				invariantInstance = assumption;
 			} else {
 				invariantInstance = factory.createPresentInvariantInstance();
 			}

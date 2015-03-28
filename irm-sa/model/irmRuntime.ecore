@@ -57,5 +57,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ComponentProcessType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess"/>
   <eClassifiers xsi:type="ecore:EDataType" name="EnsembleDefinitionType" instanceClassName="cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AssumptionInstance" eSuperTypes="#//PresentInvariantInstance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AssumptionInstance" eSuperTypes="#//PresentInvariantInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentInstance" eType="#//ComponentInstanceType"/>
+  </eClassifiers>
 </ecore:EPackage>

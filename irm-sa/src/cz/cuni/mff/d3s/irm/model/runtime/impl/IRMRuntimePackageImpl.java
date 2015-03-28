@@ -484,6 +484,15 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAssumptionInstance_ComponentInstance() {
+		return (EAttribute)assumptionInstanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getInvariantType() {
 		return invariantTypeEDataType;
 	}
@@ -614,6 +623,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		createEAttribute(exchangeInvariantInstanceEClass, EXCHANGE_INVARIANT_INSTANCE__ENSEMBLE_DEFINITION);
 
 		assumptionInstanceEClass = createEClass(ASSUMPTION_INSTANCE);
+		createEAttribute(assumptionInstanceEClass, ASSUMPTION_INSTANCE__COMPONENT_INSTANCE);
 
 		// Create data types
 		invariantTypeEDataType = createEDataType(INVARIANT_TYPE);
@@ -698,6 +708,7 @@ public class IRMRuntimePackageImpl extends EPackageImpl implements IRMRuntimePac
 		initEAttribute(getExchangeInvariantInstance_EnsembleDefinition(), this.getEnsembleDefinitionType(), "ensembleDefinition", null, 0, 1, ExchangeInvariantInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(assumptionInstanceEClass, AssumptionInstance.class, "AssumptionInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAssumptionInstance_ComponentInstance(), this.getComponentInstanceType(), "componentInstance", null, 0, 1, AssumptionInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(invariantTypeEDataType, Invariant.class, "InvariantType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
