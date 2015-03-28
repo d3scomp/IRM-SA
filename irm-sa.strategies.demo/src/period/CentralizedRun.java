@@ -44,7 +44,7 @@ public class CentralizedRun {
 
 	/** Path to design model of the simulation to run. */
 	static private final String DESIGN_MODEL_PATH =
-			MODELS_BASE_PATH + "firefighters.irmdesign";
+			MODELS_BASE_PATH + "firefighters.period.irmdesign";
 
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 200000;

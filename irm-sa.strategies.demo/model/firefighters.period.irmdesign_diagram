@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_6ynmUHu7EeSx2cI5eZxQNg" type="Design" name="firefighters.irmdesign_diagram" measurementUnit="Pixel">
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_6ynmUHu7EeSx2cI5eZxQNg" type="Design" name="firefighters.period.irmdesign_diagram" measurementUnit="Pixel">
   <children xmi:type="notation:Node" xmi:id="_2t6joJydEeSV4cO5EtOeQw" type="2013">
     <children xmi:type="notation:DecorationNode" xmi:id="_2t6jpZydEeSV4cO5EtOeQw" type="5010"/>
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_2t6joZydEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_2t6jopydEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_2t6jo5ydEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Invariant" href="firefighters.irmdesign#//@invariants.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Invariant" href="firefighters.period.irmdesign#//@invariants.0"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2t6jpJydEeSV4cO5EtOeQw" x="315" y="55" width="226" height="61"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_IBIX4JyeEeSV4cO5EtOeQw" type="2013">
@@ -13,7 +13,7 @@
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_IBIX4ZyeEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_IBIX4pyeEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_IBIX45yeEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Invariant" href="firefighters.irmdesign#//@invariants.1"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Invariant" href="firefighters.period.irmdesign#//@invariants.1"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IBIX5JyeEeSV4cO5EtOeQw" x="720" y="60"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_ehwFIJyeEeSV4cO5EtOeQw" type="2014">
@@ -24,7 +24,7 @@
         <styles xmi:type="notation:DescriptionStyle" xmi:id="_uL4bsZyeEeSV4cO5EtOeQw"/>
         <styles xmi:type="notation:FontStyle" xmi:id="_uL4bspyeEeSV4cO5EtOeQw" fontName="Segoe UI"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_uL4bs5yeEeSV4cO5EtOeQw"/>
-        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.irmdesign#//@components.0/@knowledgeElements.0"/>
+        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.period.irmdesign#//@components.0/@knowledgeElements.0"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_uL4btJyeEeSV4cO5EtOeQw"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_I3VxsJyfEeSV4cO5EtOeQw" type="3001">
@@ -32,7 +32,7 @@
         <styles xmi:type="notation:DescriptionStyle" xmi:id="_I3VxsZyfEeSV4cO5EtOeQw"/>
         <styles xmi:type="notation:FontStyle" xmi:id="_I3VxspyfEeSV4cO5EtOeQw" fontName="Segoe UI"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_I3Vxs5yfEeSV4cO5EtOeQw"/>
-        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.irmdesign#//@components.0/@knowledgeElements.1"/>
+        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.period.irmdesign#//@components.0/@knowledgeElements.1"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_I3VxtJyfEeSV4cO5EtOeQw"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_myuEoM5VEeSF0O0Gv-BjBQ" type="3001">
@@ -40,7 +40,7 @@
         <styles xmi:type="notation:DescriptionStyle" xmi:id="_myuEoc5VEeSF0O0Gv-BjBQ"/>
         <styles xmi:type="notation:FontStyle" xmi:id="_myuEos5VEeSF0O0Gv-BjBQ" fontName="Segoe UI"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_myuEo85VEeSF0O0Gv-BjBQ"/>
-        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.irmdesign#//@components.0/@knowledgeElements.2"/>
+        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="firefighters.period.irmdesign#//@components.0/@knowledgeElements.2"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_myuEpM5VEeSF0O0Gv-BjBQ"/>
       </children>
       <styles xmi:type="notation:SortingStyle" xmi:id="_ehwFKJyeEeSV4cO5EtOeQw"/>
@@ -50,7 +50,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_ehwFIpyeEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_ehwFI5yeEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:HintedDiagramLinkStyle" xmi:id="_ehwFJJyeEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Component" href="firefighters.irmdesign#//@components.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Component" href="firefighters.period.irmdesign#//@components.0"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ehwFJZyeEeSV4cO5EtOeQw" x="25" y="25" width="201" height="131"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_Pws2MJyfEeSV4cO5EtOeQw" type="2008">
@@ -58,14 +58,14 @@
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_Pws2MZyfEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_Pws2MpyfEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_Pws2M5yfEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="firefighters.irmdesign#//@invariants.2"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="firefighters.period.irmdesign#//@invariants.2"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Pws2NJyfEeSV4cO5EtOeQw" x="115" y="295"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_46znEJyfEeSV4cO5EtOeQw" type="2011">
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_46znEZyfEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_46znEpyfEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_46znE5yfEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:AndNode" href="firefighters.irmdesign#//@andNodes.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:AndNode" href="firefighters.period.irmdesign#//@andNodes.0"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_46znFJyfEeSV4cO5EtOeQw" x="425" y="210"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_ZlJO8JyjEeSV4cO5EtOeQw" type="2010">
@@ -73,7 +73,7 @@
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_ZlJO8ZyjEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_ZlJO8pyjEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_ZlJO85yjEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters.irmdesign#//@invariants.3"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters.period.irmdesign#//@invariants.3"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZlJO9JyjEeSV4cO5EtOeQw" x="510" y="185"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_jGozUJyjEeSV4cO5EtOeQw" type="2008">
@@ -81,14 +81,14 @@
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_jGozUZyjEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_jGozUpyjEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_jGozU5yjEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="firefighters.irmdesign#//@invariants.4"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="firefighters.period.irmdesign#//@invariants.4"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jGozVJyjEeSV4cO5EtOeQw" x="885" y="180"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_jcOMUJykEeSV4cO5EtOeQw" type="2011">
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_jcOMUZykEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_jcOMUpykEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_jcOMU5ykEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:AndNode" href="firefighters.irmdesign#//@andNodes.1"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:AndNode" href="firefighters.period.irmdesign#//@andNodes.1"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jcOMVJykEeSV4cO5EtOeQw" x="843" y="125"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_Hh7wEJzCEeSV4cO5EtOeQw" type="2010">
@@ -96,22 +96,22 @@
     <styles xmi:type="notation:DescriptionStyle" xmi:id="_Hh7wEZzCEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_Hh7wEpzCEeSV4cO5EtOeQw" fontName="Segoe UI"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_Hh7wE5zCEeSV4cO5EtOeQw"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters.irmdesign#//@invariants.5"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters.period.irmdesign#//@invariants.5"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Hh7wFJzCEeSV4cO5EtOeQw" x="465" y="295"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_6ynmUXu7EeSx2cI5eZxQNg"/>
-  <element xmi:type="cz.cuni.mff.d3s.irm.model.design:IRM" href="firefighters.irmdesign#/"/>
+  <element xmi:type="cz.cuni.mff.d3s.irm.model.design:IRM" href="firefighters.period.irmdesign#/"/>
   <edges xmi:type="notation:Edge" xmi:id="_6cLTMJyfEeSV4cO5EtOeQw" type="4003" source="_46znEJyfEeSV4cO5EtOeQw" target="_2t6joJydEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_6cLTMZyfEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_6cLTMpyfEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="firefighters.irmdesign#//@refinements.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="firefighters.period.irmdesign#//@refinements.0"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_6cLTM5yfEeSV4cO5EtOeQw" points="[3, -10, 0, 88]$[3, -40, 0, 58]$[3, -89, 0, 9]"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_6cRZ0JyfEeSV4cO5EtOeQw" id="(0.5442477876106194,0.8524590163934426)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_V3zh4JygEeSV4cO5EtOeQw" type="4005" source="_ehwFIJyeEeSV4cO5EtOeQw" target="_Pws2MJyfEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_V3zh4ZygEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_V3zh4pygEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Contributes" href="firefighters.irmdesign#//@contributes.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Contributes" href="firefighters.period.irmdesign#//@contributes.0"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_V3zh45ygEeSV4cO5EtOeQw" points="[0, 1, -36, -164]$[32, 145, -4, -20]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_V35ogJygEeSV4cO5EtOeQw" id="(0.6517412935323383,0.9465648854961832)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_2TfD0M5VEeSF0O0Gv-BjBQ" id="(0.1423487544483986,0.025)"/>
@@ -119,14 +119,14 @@
   <edges xmi:type="notation:Edge" xmi:id="_ziGAgJygEeSV4cO5EtOeQw" type="4004" source="_Pws2MJyfEeSV4cO5EtOeQw" target="_46znEJyfEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_ziGAgZygEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_ziGAgpygEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.irmdesign#//@decompositions.0"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.period.irmdesign#//@decompositions.0"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ziGAg5ygEeSV4cO5EtOeQw" points="[16, -12, -130, 90]$[144, -112, -2, -10]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_ziGAhJygEeSV4cO5EtOeQw" id="(0.9039145907473309,0.3)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_1PKe8JyjEeSV4cO5EtOeQw" type="4005" source="_ehwFIJyeEeSV4cO5EtOeQw" target="_jGozUJyjEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_1PKe8ZyjEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_1PKe8pyjEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Contributes" href="firefighters.irmdesign#//@contributes.1"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Contributes" href="firefighters.period.irmdesign#//@contributes.1"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1PKe85yjEeSV4cO5EtOeQw" points="[0, 1, -977, -60]$[0, 213, -977, 152]$[977, 213, 0, 152]$[977, 65, 0, 4]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1PKe9JyjEeSV4cO5EtOeQw" id="(0.22885572139303484,0.9923664122137404)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1PKe9ZyjEeSV4cO5EtOeQw" id="(0.4766081871345029,0.9)"/>
@@ -134,27 +134,27 @@
   <edges xmi:type="notation:Edge" xmi:id="_ks5xEJykEeSV4cO5EtOeQw" type="4003" source="_jcOMUJykEeSV4cO5EtOeQw" target="_IBIX4JyeEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_ks5xEZykEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_ks5xEpykEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="firefighters.irmdesign#//@refinements.1"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Refinement" href="firefighters.period.irmdesign#//@refinements.1"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ks5xE5ykEeSV4cO5EtOeQw" points="[1, -10, 18, 51]$[123, -56, 140, 5]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_HzIxkM5WEeSF0O0Gv-BjBQ" id="(0.55,0.1)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_lSejUJykEeSV4cO5EtOeQw" type="4004" source="_ZlJO8JyjEeSV4cO5EtOeQw" target="_jcOMUJykEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_lSejUZykEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_lSejUpykEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.irmdesign#//@decompositions.1"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.period.irmdesign#//@decompositions.1"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_lSejU5ykEeSV4cO5EtOeQw" points="[20, -20, -49, 39]$[64, -69, -5, -10]"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_lxqZsJykEeSV4cO5EtOeQw" type="4004" source="_jGozUJyjEeSV4cO5EtOeQw" target="_jcOMUJykEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_lxqZsZykEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_lxqZspykEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.irmdesign#//@decompositions.2"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.period.irmdesign#//@decompositions.2"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_lxqZs5ykEeSV4cO5EtOeQw" points="[-49, -7, 309, 45]$[-348, -51, 10, 1]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_lxqZtJykEeSV4cO5EtOeQw" id="(0.4766081871345029,0.05)"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_K5wAcJzCEeSV4cO5EtOeQw" type="4004" source="_Hh7wEJzCEeSV4cO5EtOeQw" target="_46znEJyfEeSV4cO5EtOeQw">
     <styles xmi:type="notation:RoutingStyle" xmi:id="_K5wAcZzCEeSV4cO5EtOeQw"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_K5wAcpzCEeSV4cO5EtOeQw" fontName="Segoe UI"/>
-    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.irmdesign#//@decompositions.3"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Decomposition" href="firefighters.period.irmdesign#//@decompositions.3"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_K5wAc5zCEeSV4cO5EtOeQw" points="[-9, -16, 75, 154]$[-86, -160, -2, 10]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_K52HEJzCEeSV4cO5EtOeQw" id="(0.10823529411764705,0.4)"/>
   </edges>
