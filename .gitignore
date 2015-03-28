@@ -10,14 +10,14 @@
 /cz.cuni.mff.d3s.jdeeco.irm-sa.demo/.settings
 /cz.cuni.mff.d3s.jdeeco.irm-sa.demo/.classpath
 
-/cz.cuni.mff.d3s.jdeeco.irm-sa.period.demo/bin
-/cz.cuni.mff.d3s.jdeeco.irm-sa.period.demo/target
-/cz.cuni.mff.d3s.jdeeco.irm-sa.period.demo/doc
-/cz.cuni.mff.d3s.jdeeco.irm-sa.period.demo/.settings
-/cz.cuni.mff.d3s.jdeeco.irm-sa.period.demo/.classpath
+/irm-sa.strategies/bin
+/irm-sa.strategies/target
+/irm-sa.strategies/doc
+/irm-sa.strategies/.settings
+/irm-sa.strategies/.classpath
 
-/cz.cuni.mff.d3s.jdeeco.irm-sa.strategies/bin
-/cz.cuni.mff.d3s.jdeeco.irm-sa.strategies/target
-/cz.cuni.mff.d3s.jdeeco.irm-sa.strategies/doc
-/cz.cuni.mff.d3s.jdeeco.irm-sa.strategies/.settings
-/cz.cuni.mff.d3s.jdeeco.irm-sa.strategies/.classpath
+/irm-sa.strategies.demo/bin
+/irm-sa.strategies.demo/target
+/irm-sa.strategies.demo/doc
+/irm-sa.strategies.demo/.settings
+/irm-sa.strategies.demo/.classpath
