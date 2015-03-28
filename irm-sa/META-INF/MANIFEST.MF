@@ -18,7 +18,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: cz.cuni.mff.d3s.deeco.annotations,
  cz.cuni.mff.d3s.deeco.annotations.processor,
  cz.cuni.mff.d3s.irm.model.runtime.api,
- cz.cuni.mff.d3s.irm.model.runtime.impl,
  cz.cuni.mff.d3s.irm.model.runtime.meta,
  cz.cuni.mff.d3s.irm.model.runtime.util,
  cz.cuni.mff.d3s.irm.model.trace.api,
