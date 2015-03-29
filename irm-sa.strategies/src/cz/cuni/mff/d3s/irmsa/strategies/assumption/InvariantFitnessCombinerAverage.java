@@ -18,8 +18,6 @@ package cz.cuni.mff.d3s.irmsa.strategies.assumption;
 import java.util.Collection;
 
 import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombiner;
 
@@ -31,22 +29,16 @@ public class InvariantFitnessCombinerAverage implements InvariantFitnessCombiner
 	@Override
 	public double combineInvariantFitness(final Collection<InvariantInfo<?>> infos) {
 		double result = 0.0;
+		double w = 0.0;
 		for (InvariantInfo<?> info : infos) {
-			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-				final ProcessInvariantInstance pii = info.getInvariant();
-				//a) weighted average
-				info.weight = info.fitness * pii.getInvariant().getWeight() /  infos.size();
-			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
-				final ExchangeInvariantInstance xii = info.getInvariant();
-				//a) weighted average
-				info.weight = info.fitness * xii.getInvariant().getWeight() /  infos.size();
-			} else if (AssumptionInstance.class.isAssignableFrom(info.clazz)) {
+			if (AssumptionInstance.class.isAssignableFrom(info.clazz)) {
 				final AssumptionInstance ai = info.getInvariant();
 				//a) weighted average
-				info.weight = info.fitness * ai.getInvariant().getWeight() /  infos.size();
+				info.weight = info.fitness * ai.getInvariant().getWeight();
+				w += ai.getInvariant().getWeight();
 			}
 			result += info.weight;
 		}
-		return result;
+		return result / w;
 	}
 }

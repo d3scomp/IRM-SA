@@ -2,6 +2,8 @@ package cz.cuni.mff.d3s.irmsa.strategies.assumption;
 
 import java.lang.reflect.Parameter;
 
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
+import cz.cuni.mff.d3s.deeco.knowledge.ReadOnlyKnowledgeManager;
 import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
@@ -43,5 +45,21 @@ public class AssumptionInfo extends InvariantInfo<AssumptionInstance> {
 		super(invariant, clazz);
 		this.monitor = monitor;
 		this.parameter = parameter;
+	}
+
+	/**
+	 * Creates parameter id.
+	 * @return parameter id
+	 */
+	public String getParameterId() {
+		final AssumptionInstance assumption = getInvariant();
+		final AssumptionParameter assumptionParameter = parameter.getAnnotation(AssumptionParameter.class);
+		final ReadOnlyKnowledgeManager knowledgeManager = assumption.getComponentInstance().getKnowledgeManager();
+		String paramId = knowledgeManager.getId();
+		if (assumptionParameter.scope() == AssumptionParameter.Scope.MONITOR) {
+			paramId += ":" + monitor.getMethod().toGenericString();
+		}
+		paramId += assumptionParameter.name();
+		return paramId;
 	}
 }

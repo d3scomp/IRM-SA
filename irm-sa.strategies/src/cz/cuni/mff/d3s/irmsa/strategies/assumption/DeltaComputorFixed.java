@@ -15,10 +15,10 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.irmsa.strategies.assumption;
 
-import cz.cuni.mff.d3s.irm.model.design.ExchangeInvariant;
-import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+import org.eclipse.emf.common.util.EMap;
+
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 
@@ -50,31 +50,28 @@ public class DeltaComputorFixed implements DeltaComputor {
 
 	@Override
 	public void computeDelta(final InvariantInfo<?> info) {
-		long per = 0;
-		long min = 250;
-		long max = 2000;
-		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-			final ProcessInvariantInstance pii = info.getInvariant();
-			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-			min = pi.getProcessMinPeriod();
-			max = pi.getProcessMaxPeriod();
-			per = DeltaComputor.getCurrentPeriod(pii);
-		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
-			final ExchangeInvariantInstance xii = info.getInvariant();
-			final ExchangeInvariant xi = (ExchangeInvariant) xii.getInvariant();
-			min = xi.getEnsembleMinPeriod();
-			max = xi.getEnsembleMaxPeriod();
-			per = DeltaComputor.getCurrentPeriod(xii);
+		if (!(info instanceof AssumptionInfo)) {
+			return;
 		}
-		if (max == -1L) {
-			max = Long.MAX_VALUE;
+		final AssumptionInfo assumption = (AssumptionInfo) info;
+		final AssumptionParameter parameter = assumption.parameter.getAnnotation(AssumptionParameter.class);
+		final double min = parameter.minValue();
+		final double max = parameter.maxValue();
+		final AssumptionInstance instance = assumption.getInvariant();
+		final EMap<String, Object> data = instance.getComponentInstance().getKnowledgeManager().getComponent().getInternalData();
+		final Object object = data.get(assumption.getParameterId());
+		double value;
+		if (object == null || !(object instanceof Number)) {
+			value = parameter.defaultValue();
+		} else {
+			value = ((Number) object).doubleValue();
 		}
 		switch (info.direction) {
 		case UP:
-			info.delta = per + delta > max ? max - per : delta;
+			info.delta = value + delta > max ? max - value : delta;
 			break;
 		case DOWN:
-			info.delta = per - delta < min ? per - min : delta;
+			info.delta = value - delta < min ? value - min : delta;
 			break;
 		case NO:
 			info.delta = delta;

@@ -44,24 +44,6 @@ public class AssumptionParameterAdaptationManagerDelegate implements AdaptationM
 		return infos;
 	}
 
-	/**
-	 * Extracts parameter id from invariant info.
-	 * @param invariantInfo parameter holder
-	 * @return parameter id from invariant info
-	 */
-	private String createParameterId(final InvariantInfo<?> invariantInfo) {
-		final AssumptionInfo info = (AssumptionInfo) invariantInfo;
-		final AssumptionInstance assumption = info.getInvariant();
-		final AssumptionParameter assumptionParameter = info.parameter.getAnnotation(AssumptionParameter.class);
-		final ReadOnlyKnowledgeManager knowledgeManager = assumption.getComponentInstance().getKnowledgeManager();
-		String paramId = knowledgeManager.getId();
-		if (assumptionParameter.scope() == AssumptionParameter.Scope.MONITOR) {
-			paramId += ":" + info.monitor.getMethod().toGenericString();
-		}
-		paramId += assumptionParameter.name();
-		return paramId;
-	}
-
 	@Override
 	public AssumptionParameterBackup applyChanges(
 			final Set<InvariantInfo<?>> adaptees, final AssumptionParameterBackup backup) {
@@ -71,7 +53,7 @@ public class AssumptionParameterAdaptationManagerDelegate implements AdaptationM
 			final AssumptionParameter assumptionParameter = info.parameter.getAnnotation(AssumptionParameter.class);
 			final ReadOnlyKnowledgeManager knowledgeManager = assumption.getComponentInstance().getKnowledgeManager();
 			final EMap<String, Object> data = knowledgeManager.getComponent().getInternalData();
-			final String paramId = createParameterId(invariantInfo);
+			final String paramId = info.getParameterId();
 			Object value = data.get(paramId);
 			if (value == null) {
 				value = assumptionParameter.defaultValue();
@@ -137,7 +119,7 @@ public class AssumptionParameterAdaptationManagerDelegate implements AdaptationM
 			final AssumptionInstance assumption = info.getInvariant();
 			final ReadOnlyKnowledgeManager knowledgeManager = assumption.getComponentInstance().getKnowledgeManager();
 			final EMap<String, Object> data = knowledgeManager.getComponent().getInternalData();
-			final String paramId = createParameterId(ii);
+			final String paramId = info.getParameterId();
 			final AssumptionParameterBackup.Change change = backup.parameters.get(paramId);
 			if (change == null) {
 				continue;
