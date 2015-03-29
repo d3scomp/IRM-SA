@@ -128,11 +128,13 @@ public abstract class TemplateAdaptationManager {
 
 		if (IRMInstances.isEmpty()) {
 			//nothing to monitor
+			InvariantInfosStorage.storeInvariantInfos(id, null);
 			return;
 		}
 
 		//Create data structure for processing
 		final Set<InvariantInfo<?>> infos = delegate.extractInvariants(IRMInstances);
+		InvariantInfosStorage.storeInvariantInfos(id, infos);
 
 		//Compute processes' fitnesses
 		computeInvariantsFitness(infos);
@@ -162,10 +164,7 @@ public abstract class TemplateAdaptationManager {
 			return;
 		}
 
-		// get architecture, design, trace models and plug-ins from the process context
-		final Architecture architecture = ProcessContext.getArchitecture();
-		final IRM design = retrieveFromInternalData(DESIGN_MODEL);
-		final TraceModel trace = retrieveFromInternalData(TRACE_MODEL);
+		// get variations from the process context
 		final AdapteeSelector adapteeSelector =
 				retrieveFromInternalData(ADAPTEE_SELECTOR);
 		final DirectionSelector directionSelector =
@@ -173,12 +172,10 @@ public abstract class TemplateAdaptationManager {
 		final DeltaComputor deltaComputor =
 				retrieveFromInternalData(DELTA_COMPUTOR);
 
-		// generate the IRM runtime model instances
-		final IRMInstanceGenerator generator =
-				new IRMInstanceGenerator(architecture, design, trace);
-		final List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+		//retrieve invariant infos from last monitor run
+		final Set<InvariantInfo<?>> infos = InvariantInfosStorage.retrieveInvariantInfos(id);
 
-		if (IRMInstances.isEmpty()) {
+		if (infos == null) {
 			//nothing to adapt, reset state
 			final TimeTrigger trigger = getTimeTrigger(process);
 			trigger.setPeriod(delegate.getDefaultAdaptingPeriod());
@@ -187,15 +184,12 @@ public abstract class TemplateAdaptationManager {
 		}
 
 		if (state.state == State.STARTED) { //first part of adaptation
-			//Create data structure for processing
-			final Set<InvariantInfo<?>> infos = delegate.extractInvariants(IRMInstances);
-
 			state.oldFitness = fitness;
 			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
 			final double adaptionBound = retrieveFromInternalData(ADAPTATION_BOUND);
 			if (state.oldFitness >= adaptionBound) {
 				final TimeTrigger trigger = getTimeTrigger(process);
-				trigger.setPeriod(ADAPTING_PERIOD);
+				trigger.setPeriod(delegate.getDefaultAdaptingPeriod());
 				state.reset();
 				return;
 			}
@@ -233,8 +227,6 @@ public abstract class TemplateAdaptationManager {
 				System.out.println("Adaptation invoked too soon, waiting");
 				return;
 			}
-			//Create data structure for processing
-			final Set<InvariantInfo<?>> infos = delegate.extractInvariants(IRMInstances);
 
 			System.out.println("NEW FITNESS: " + fitness);
 			if (fitness > state.oldFitness) {
