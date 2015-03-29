@@ -177,9 +177,7 @@ public abstract class TemplateAdaptationManager {
 
 		if (infos == null) {
 			//nothing to adapt, reset state
-			final TimeTrigger trigger = getTimeTrigger(process);
-			trigger.setPeriod(delegate.getDefaultAdaptingPeriod());
-			state.reset();
+			resetAdaptState(process, delegate, state);
 			return;
 		}
 
@@ -187,10 +185,8 @@ public abstract class TemplateAdaptationManager {
 			state.oldFitness = fitness;
 			System.out.println("OLD FITNESS: " + state.oldFitness + "(at " + simulatedTime + ")");
 			final double adaptionBound = retrieveFromInternalData(ADAPTATION_BOUND);
-			if (state.oldFitness >= adaptionBound) {
-				final TimeTrigger trigger = getTimeTrigger(process);
-				trigger.setPeriod(delegate.getDefaultAdaptingPeriod());
-				state.reset();
+			if (state.oldFitness >= adaptionBound) { //too good to mess with the system
+				resetAdaptState(process, delegate, state);
 				return;
 			}
 
@@ -291,5 +287,19 @@ public abstract class TemplateAdaptationManager {
 			InvariantInstance instance = info.getInvariant();
 			info.fitness = instance.getFitness();
 		}
+	}
+
+	/**
+	 * Resets process' period and manager's state.
+	 * @param process adapt process
+	 * @param delegate adaptation manager delegate, provides period
+	 * @param state  manager's current state
+	 */
+	static protected void resetAdaptState(final ComponentProcess process,
+			final AdaptationManagerDelegate<? extends Backup> delegate,
+			final StateHolder<?> state) {
+		final TimeTrigger trigger = getTimeTrigger(process);
+		trigger.setPeriod(delegate.getDefaultAdaptingPeriod());
+		state.reset();
 	}
 }
