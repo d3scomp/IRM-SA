@@ -30,18 +30,21 @@ public class InvariantFitnessCombinerAverage implements InvariantFitnessCombiner
 	@Override
 	public double combineInvariantFitness(final Collection<InvariantInfo<?>> infos) {
 		double result = 0.0;
+		double w = 0.0;
 		for (InvariantInfo<?> info : infos) {
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
 				//a) weighted average
-				info.weight = info.fitness * pii.getInvariant().getWeight() /  infos.size();
+				info.weight = info.fitness * pii.getInvariant().getWeight();
+				w += pii.getInvariant().getWeight();
 			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ExchangeInvariantInstance xii = info.getInvariant();
 				//a) weighted average
-				info.weight = info.fitness * xii.getInvariant().getWeight() /  infos.size();
+				info.weight = info.fitness * xii.getInvariant().getWeight();
+				w += xii.getInvariant().getWeight();
 			}
 			result += info.weight;
 		}
-		return result;
+		return result / w;
 	}
 }
