@@ -15,8 +15,10 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.irmsa.strategies.assumption;
 
-import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
-import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import cz.cuni.mff.d3s.irmsa.strategies.commons.Direction;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -26,19 +28,47 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
  */
 public class DirectionSelectorImpl implements DirectionSelector {
 
+	/** Assumptions adapted in the last run. */
+	final protected Map<String, AssumptionInfo> adaptees = new HashMap<>();
+
+	/** Suitable directions for individual ProcessInvariantInstances. */
+	final protected Map<String, Direction> directions = new HashMap<>();
+
 	@Override
-	public void selectDirection(InvariantInfo<?> info) {
-		//TODO implement ONLY DOWN FOR NOW AND ONLY FOR GPS, notify interfaces about rollbacks and maybe about worsening/improving the overall fitness
-		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
-			final ProcessInvariantInstance pii = info.getInvariant();
-			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-			if (pi.getProcessName().equals("determinePosition")) {
-				info.direction = Direction.DOWN;
-			} else {
-				info.direction = Direction.NO;
+	public void selectDirection(InvariantInfo<?> ii) {
+		if (ii instanceof AssumptionInfo) {
+			final AssumptionInfo info = (AssumptionInfo) ii;
+			final String id = info.getParameterId();
+			Direction direction = directions.get(id);
+			if (direction == null) {
+				direction = Direction.DOWN;
 			}
-		} else {
-			info.direction = Direction.NO;
+			info.direction = direction;
+			adaptees.put(id, info);
 		}
+	}
+
+	@Override
+	public void adaptationImprovement(final double improvement,
+			final Set<InvariantInfo<?>> infos) {
+		for (InvariantInfo<?> ii : infos) {
+			if (ii instanceof AssumptionInfo) {
+				final AssumptionInfo info = (AssumptionInfo) ii;
+				final String id = info.getParameterId();
+				final AssumptionInfo last = adaptees.get(id);
+				if (last == null) {
+					continue;
+				}
+				if (info.fitness > last.fitness) {
+					//improvement
+					directions.put(id, last.direction);
+				} else {
+					//worsening
+					directions.put(id, last.direction.opposite());
+				}
+			}
+		}
+		//prepare next run
+		adaptees.clear();
 	}
 }
