@@ -15,7 +15,11 @@
  ******************************************************************************/
 package cz.cuni.mff.d3s.irmsa.strategies.period;
 
-import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.Direction;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
@@ -26,19 +30,83 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
  */
 public class DirectionSelectorImpl implements DirectionSelector {
 
+	/** Processes adapted in the last run. */
+	final protected Map<String, InvariantInfo<ProcessInvariantInstance>> processAdaptees = new HashMap<>();
+
+	/** Exchanges adapted in the last run. */
+	final protected Map<String, InvariantInfo<ExchangeInvariantInstance>> exchangeAdaptees = new HashMap<>();
+
+	/** Suitable directions for individual ProcessInvariantInstances. */
+	final protected Map<String, Direction> processDirections = new HashMap<>();
+
+	/** Suitable directions for individual ExchangeInvariantInstances. */
+	final protected Map<String, Direction> exchangeDirections = new HashMap<>();
+
 	@Override
 	public void selectDirection(InvariantInfo<?> info) {
-		//TODO implement ONLY DOWN FOR NOW AND ONLY FOR GPS, notify interfaces about rollbacks and maybe about worsening/improving the overall fitness
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
-			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
-			if (pi.getProcessName().equals("determinePosition")) {
-				info.direction = Direction.DOWN;
-			} else {
-				info.direction = Direction.NO;
+			final String id = PeriodAdaptationManagerDelegate.getProcessInvariantInstanceId(pii);
+			Direction direction = processDirections.get(id);
+			if (direction == null) {
+				direction = Direction.DOWN;
 			}
-		} else {
-			info.direction = Direction.NO;
+			info.direction = direction;
+			@SuppressWarnings("unchecked")
+			final InvariantInfo<ProcessInvariantInstance> pi =
+					(InvariantInfo<ProcessInvariantInstance>) info;
+			processAdaptees.put(id, pi);
+		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ExchangeInvariantInstance xii = info.getInvariant();
+			final String id = PeriodAdaptationManagerDelegate.getExchangeInvariantInstanceId(xii);
+			Direction direction = exchangeDirections.get(id);
+			if (direction == null) {
+				direction = Direction.DOWN;
+			}
+			info.direction = direction;
+			@SuppressWarnings("unchecked")
+			final InvariantInfo<ExchangeInvariantInstance> xi =
+					(InvariantInfo<ExchangeInvariantInstance>) info;
+			exchangeAdaptees.put(id, xi);
 		}
+	}
+
+	@Override
+	public void adaptationImprovement(final double improvement,
+			final Set<InvariantInfo<?>> infos) {
+		for (InvariantInfo<?> info : infos) {
+			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ProcessInvariantInstance pii = info.getInvariant();
+				final String id = PeriodAdaptationManagerDelegate.getProcessInvariantInstanceId(pii);
+				final InvariantInfo<ProcessInvariantInstance> last = processAdaptees.get(id);
+				if (last == null) {
+					continue;
+				}
+				if (info.fitness > last.fitness) {
+					//improvement
+					processDirections.put(id, last.direction);
+				} else {
+					//worsening
+					processDirections.put(id, last.direction.opposite());
+				}
+			} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+				final ExchangeInvariantInstance xii = info.getInvariant();
+				final String id = PeriodAdaptationManagerDelegate.getExchangeInvariantInstanceId(xii);
+				final InvariantInfo<ExchangeInvariantInstance> last = exchangeAdaptees.get(id);
+				if (last == null) {
+					continue;
+				}
+				if (info.fitness > last.fitness) {
+					//improvement
+					exchangeDirections.put(id, last.direction);
+				} else {
+					//worsening
+					exchangeDirections.put(id, last.direction.opposite());
+				}
+			}
+		}
+		//prepare next run
+		processAdaptees.clear();
+		exchangeAdaptees.clear();
 	}
 }

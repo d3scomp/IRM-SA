@@ -76,7 +76,7 @@ public class PeriodAdaptationManagerDelegate implements AdaptationManagerDelegat
 	 * @param xii ExchangeInvariantInstance
 	 * @return knowledge manager id
 	 */
-	static private String getProcessInvariantInstanceId(final ProcessInvariantInstance pii) {
+	static String getProcessInvariantInstanceId(final ProcessInvariantInstance pii) {
 		final ComponentInstance com = pii.getComponentProcess().getComponentInstance();
 		return com.getKnowledgeManager().getId();
 	}
@@ -86,7 +86,7 @@ public class PeriodAdaptationManagerDelegate implements AdaptationManagerDelegat
 	 * @param xii ExchangeInvariantInstance
 	 * @return componentId-defName
 	 */
-	static private String getExchangeInvariantInstanceId(final ExchangeInvariantInstance xii) {
+	static String getExchangeInvariantInstanceId(final ExchangeInvariantInstance xii) {
 		final EnsembleDefinition def = xii.getEnsembleDefinition();
 //		final EnsembleController cont = null; //TODO getEnsembleController when ready
 //		final String id = cont.getComponentInstance().getKnowledgeManager().getId();
