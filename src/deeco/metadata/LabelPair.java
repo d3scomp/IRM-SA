@@ -1,12 +1,20 @@
 package deeco.metadata;
 
+import java.io.Serializable;
+
 
 /**
  * A simple holder of a pair of knowledge labels.
  * 
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  */
-public class LabelPair{
+public class LabelPair implements Serializable {
+
+	/**
+	 * Generated serial version UID.
+	 */
+	private static final long serialVersionUID = 544506009052039428L;
+	
 	/**
 	 * The first label.
 	 */

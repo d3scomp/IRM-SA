@@ -1,5 +1,7 @@
 package deeco.metadata;
 
+import java.io.Serializable;
+
 
 /**
  * This class encapsulates the correlation of knowledge identified by two labels.
@@ -10,7 +12,12 @@ package deeco.metadata;
  * 
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  */
-public class CorrelationLevel{
+public class CorrelationLevel implements Serializable {
+
+	/**
+	 * Generated serial version UID.
+	 */
+	private static final long serialVersionUID = 451221475569509379L;
 
 	/**
 	 * Enumerates the classes of distances.
