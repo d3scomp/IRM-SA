@@ -165,6 +165,8 @@ public abstract class TemplateAdaptationManager {
 		}
 
 		// get variations from the process context
+		final InvariantFitnessCombiner invariantFitnessCombiner =
+				retrieveFromInternalData(INVARIANT_FITNESS_COMBINER);
 		final AdapteeSelector adapteeSelector =
 				retrieveFromInternalData(ADAPTEE_SELECTOR);
 		final DirectionSelector directionSelector =
@@ -231,6 +233,13 @@ public abstract class TemplateAdaptationManager {
 				//Keep parent
 				delegate.restoreBackup(infos, state.backup);
 			}
+
+			//inform variations about adaptation results
+			final double improvement = fitness - state.oldFitness;
+			invariantFitnessCombiner.adaptationImprovement(improvement, infos);
+			adapteeSelector.adaptationImprovement(improvement, infos);
+			directionSelector.adaptationImprovement(improvement, infos);
+			deltaComputor.adaptationImprovement(improvement, infos);
 
 			//{Mark non-prospective specimen as dead end or utilize Simulated annealing}
 			final TimeTrigger trigger = getTimeTrigger(process);

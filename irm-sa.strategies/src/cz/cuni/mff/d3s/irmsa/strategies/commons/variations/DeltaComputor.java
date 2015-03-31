@@ -25,7 +25,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
  * Interface for selecting delta of adaptation.
  */
 @FunctionalInterface
-public interface DeltaComputor {
+public interface DeltaComputor extends AdaptationResultListener {
 
 	/**
 	 * Returns current period of the process or -1.

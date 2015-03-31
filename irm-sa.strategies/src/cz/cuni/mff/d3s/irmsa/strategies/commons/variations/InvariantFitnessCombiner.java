@@ -23,7 +23,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
  * Interface for combining overall system fitness.
  */
 @FunctionalInterface
-public interface InvariantFitnessCombiner {
+public interface InvariantFitnessCombiner extends AdaptationResultListener {
 
 	/**
 	 * Returns combined overall system fitness.

@@ -24,7 +24,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
  * Interface for selecting processes for period adaptation.
  */
 @FunctionalInterface
-public interface AdapteeSelector {
+public interface AdapteeSelector extends AdaptationResultListener {
 
 	/**
 	 * Returns filtered set of invariant instances to adapt.

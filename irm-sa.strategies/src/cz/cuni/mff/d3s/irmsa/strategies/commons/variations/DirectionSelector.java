@@ -21,7 +21,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
  * Interface for selecting direction of adaptation.
  */
 @FunctionalInterface
-public interface DirectionSelector {
+public interface DirectionSelector extends AdaptationResultListener {
 
 	/**
 	 * Selects direction of adaptation.
