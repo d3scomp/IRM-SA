@@ -13,31 +13,45 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import deeco.metadata.ComponentPair;
 import deeco.metadata.CorrelationLevel;
+import deeco.metadata.KnowledgeQuadruple;
 import deeco.metadata.LabelPair;
 import deeco.metadata.MetadataWrapper;
 
 @Component
 public class DEECoCorrelationManager {
 
-
 	public String id;
 	
-	public Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> knowledgeHistoryOfAllComponents;
+	/**
+	 * Integer - ID of a component
+	 * String - Label of a knowledge field of the component
+	 * MetadataWrapper - knowledge field value together with its meta data
+	 */
+	public Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> knowledgeHistoryOfAllComponents;
 
 	/**
 	 * The correlation of knowledge for a pair of knowledge fields.
 	 */
 	public List<CorrelationLevel> correlationLevels;
 	
-	public long lastProcessTime;
-	
-	
+	/**
+	 * The timestamps of the last processed knowledge related to component pair and theirs knowledge pairs.
+	 */
+	public Map<ComponentPair, Map<LabelPair, Long>> lastProcessedTimestamps;
 
+	/**
+	 * Time slot duration in milliseconds. Correlation of values is computed
+	 * within these time slots.
+	 */
+	private static final long TIME_SLOT_DURATION = 1000;
+	
+	
 	public DEECoCorrelationManager() {
 		knowledgeHistoryOfAllComponents = new HashMap<>();
 		correlationLevels = new ArrayList<>();
-		lastProcessTime = -1;
+		lastProcessedTimestamps = new HashMap<>();
 	}
 	
 	/*
@@ -46,13 +60,13 @@ public class DEECoCorrelationManager {
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void printHistory(
-			@In("knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> history,
+			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			@In("correlationLevels") List<CorrelationLevel> levels){
 		
 		StringBuilder b = new StringBuilder(1024);
 		b.append("Printing global history...\n");
 		
-		for (Integer id: history.keySet()) {
+		for (String id: history.keySet()) {
 
 			b.append("\tComponent " + id + "\n");
 			
@@ -91,33 +105,28 @@ public class DEECoCorrelationManager {
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void calculateCorrelation(
-			@In("knowledgeHistoryOfAllComponents") Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> history,
-			@In("lastProcessTime") Long processedDataTimestamp,
+			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
+			@InOut("lastProcessedTimestamps") ParamHolder<Map<ComponentPair, Map<LabelPair, Long>>> processedTimestamps,
 			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels){
 		
 		System.out.println("Correlation process started...");
+		Map<ComponentPair, Map<LabelPair, Long>> processedTimeSlots = processedTimestamps.value;
 		
 		// Compute the closeness between pairs of knowledge fields
-		// Consider the last knowledge entry only
-		for(int component1Id : history.keySet()){
-			for(int component2Id : history.keySet()){
-				if(component1Id == component2Id){
-					continue;
+		// Consider the unprocessed knowledge entries only
+		for(ComponentPair components : getComponentPairs(history.keySet())){
+			
+			if(!processedTimeSlots.containsKey(components)){
+				processedTimeSlots.put(components, new HashMap<>());
+			}
+			
+			// For pair labels
+			for(LabelPair labels : getLabelPairs(history, components)){
+				if(!processedTimeSlots.get(components).containsKey(labels)){
+					processedTimeSlots.get(components).put(labels, -1L);
 				}
-				// For pair labels
-				for(LabelPair labels : getLabelPairs(history, component1Id, component2Id)){
-					CorrelationLevel correlationLevel = getCorrelationLevel(levels.value, labels);
-					List<MetadataWrapper<? extends Object>> c1Values1 = history.get(component1Id).get(labels.getFirstLabel());
-					List<MetadataWrapper<? extends Object>> c1Values2 = history.get(component1Id).get(labels.getSecondLabel());
-					Object c1Value1 = c1Values1.get(c1Values1.size()-1).getValue();
-					Object c1Value2 = c1Values2.get(c1Values2.size()-1).getValue();
-					List<MetadataWrapper<? extends Object>> c2Values1 = history.get(component2Id).get(labels.getFirstLabel());
-					List<MetadataWrapper<? extends Object>> c2Values2 = history.get(component2Id).get(labels.getSecondLabel());
-					Object c2Value1 = c2Values1.get(c2Values1.size()-1).getValue();
-					Object c2Value2 = c2Values2.get(c2Values2.size()-1).getValue();
-					
-					correlationLevel.addValues(c1Value1, c2Value1, c1Value2, c2Value2);
-				}
+				correlationsForTimeSlots(history, processedTimeSlots,
+						levels.value, components, labels);
 			}
 		}
 	}
@@ -141,18 +150,20 @@ public class DEECoCorrelationManager {
 	}
 
 	/**
-	 * Returns the list of all the pairs of labels that are common to both the specified components.
+	 * Returns a list of all the pairs of labels that are common to both the specified components.
 	 * All the pairs are inserted in both the possible ways [a,b] and [b,a].
 	 * @param component1Id The ID of the first component.
 	 * @param component2Id The ID of the second component.
 	 * @return The list of all the pairs of labels that are common to both the specified components.
 	 * All the pairs are inserted in both the possible ways [a,b] and [b,a].
 	 */
-	private static List<LabelPair> getLabelPairs(Map<Integer, Map<String, List<MetadataWrapper<? extends Object>>>> history, int component1Id, int component2Id){
+	private static List<LabelPair> getLabelPairs(
+			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
+			ComponentPair components){
 		List<LabelPair> labelPairs = new ArrayList<LabelPair>();
 		
-		Set<String> c1Labels = history.get(component1Id).keySet();
-		Set<String> c2Labels = history.get(component2Id).keySet();
+		Set<String> c1Labels = history.get(components.component1Id).keySet();
+		Set<String> c2Labels = history.get(components.component2Id).keySet();
 		
 		// For all the label pairs
 		for(String label1 : c1Labels){
@@ -172,4 +183,173 @@ public class DEECoCorrelationManager {
 		return labelPairs;
 	}
 	
+	/**
+	 * Returns a list of all the pairs of components IDs from the given set of
+	 * components IDs. The ordering of the components in the pair doesn't matter,
+	 * therefore no two pairs with inverse ordering of the same two components
+	 * are returned. As well as no pair made of a single component is returned. 
+	 * @param componentIds The set of components IDs.
+	 * @return The list of pairs of components IDs.
+	 */
+	private static List<ComponentPair> getComponentPairs(Set<String> componentIds){
+		List<ComponentPair> componentPairs = new ArrayList<>();
+		
+		String[] componentArr = componentIds.toArray(new String[0]);
+		for(int i = 0 ; i < componentArr.length; i++){
+			for(int j = i+1; j < componentArr.length; j++){
+				componentPairs.add(new ComponentPair(componentArr[i], componentArr[j]));
+			}
+		}
+		
+		return componentPairs;
+	}
+	
+	/**
+	 * Computes data correlation for the given components between the specified
+	 * knowledge fields. The correlation is computed for the unprocessed interval
+	 * respecting the time slots.
+	 * @param history The knowledge history of all the components in the system.
+	 * @param processedTimeSlots The last time slots of the last processed data
+	 * 		  in the knowledge history.
+	 * @param levels The correlation computed so far.
+	 * @param components The pair of component for which the correlation will
+	 * 		  be computed.
+	 * @param labels The pair of labels for which the correlation will be computed.
+	 */
+	private static void correlationsForTimeSlots(
+			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
+			Map<ComponentPair, Map<LabelPair, Long>> processedTimeSlots,
+			List<CorrelationLevel> levels,
+			ComponentPair components,
+			LabelPair labels){
+		long lastTimeSlot = processedTimeSlots.get(components).get(labels);
+		
+		CorrelationLevel correlationLevel = getCorrelationLevel(levels, labels);
+		List<MetadataWrapper<? extends Object>> c1Values1 = getUnprocessedTimeSlotsValues(
+				history.get(components.component1Id).get(labels.getFirstLabel()), lastTimeSlot);
+		List<MetadataWrapper<? extends Object>> c1Values2 = getUnprocessedTimeSlotsValues(
+				history.get(components.component1Id).get(labels.getSecondLabel()), lastTimeSlot);
+		List<MetadataWrapper<? extends Object>> c2Values1 = getUnprocessedTimeSlotsValues(
+				history.get(components.component2Id).get(labels.getFirstLabel()), lastTimeSlot);
+		List<MetadataWrapper<? extends Object>> c2Values2 = getUnprocessedTimeSlotsValues(
+				history.get(components.component2Id).get(labels.getSecondLabel()), lastTimeSlot);
+		
+		KnowledgeQuadruple values = getMinCommonTimeSlotValues(
+				c1Values1, c1Values2, c2Values1, c2Values2);
+		if(values == null){
+			Log.d(String.format("Correlation for [%s:%s]{%s -> %s} Skipped",
+					components.component1Id, components.component2Id,
+					labels.getFirstLabel(), labels.getSecondLabel()));
+		}
+		long timeSlot = -1;
+		while(values != null){
+			timeSlot = values.timeSlot;
+			correlationLevel.addValues(values.c1Value1.getValue(), values.c2Value1.getValue(),
+									   values.c1Value2.getValue(), values.c2Value2.getValue());
+			
+			Log.d(String.format("Correlation for [%s:%s]{%s -> %s}(%d)",
+					components.component1Id, components.component2Id,
+					labels.getFirstLabel(), labels.getSecondLabel(), timeSlot));
+			
+			removeEarlierValuesForTimeSlot(c1Values1, timeSlot);
+			removeEarlierValuesForTimeSlot(c1Values2, timeSlot);
+			removeEarlierValuesForTimeSlot(c2Values1, timeSlot);
+			removeEarlierValuesForTimeSlot(c2Values2, timeSlot);
+			values = getMinCommonTimeSlotValues(c1Values1, c1Values2, c2Values1, c2Values2);
+		}
+		if(timeSlot > -1){
+			processedTimeSlots.get(components).put(labels, timeSlot);
+		}
+	}
+	
+	/**
+	 * Extracts a list of values that are newer than the given time slot.
+	 * @param values The list of values on which the extraction will be performed.
+	 * @param lastTimeSlot The time slot delimiting the values being extracted.
+	 * 		  Only newer values are extracted.
+	 * @return A list of values that are newer than the given time slot.
+	 */
+	private static List<MetadataWrapper<? extends Object>> getUnprocessedTimeSlotsValues(
+			List<MetadataWrapper<? extends Object>> values, long lastTimeSlot){
+		List<MetadataWrapper<? extends Object>> unprocessed = new ArrayList<>();
+		for(MetadataWrapper<? extends Object> value : values){
+			long valueTimeSlot = value.getTimestamp() / TIME_SLOT_DURATION;
+			if(valueTimeSlot > lastTimeSlot){
+				unprocessed.add(value);
+			}
+		}
+		
+		return unprocessed;
+	}
+	
+	/**
+	 * Provides a quadruple of values with the smallest common time slot.
+	 * @param c1Values1 List of values of component 1 for label 1.
+	 * @param c1Values2 List of values of component 1 for label 2.
+	 * @param c2Values1 List of values of component 2 for label 1.
+	 * @param c2Values2 List of values of component 2 for label 2.
+	 * @return A quadruple of values with the smallest common time slot.
+	 */
+	private static KnowledgeQuadruple getMinCommonTimeSlotValues(
+			List<MetadataWrapper<? extends Object>> c1Values1,
+			List<MetadataWrapper<? extends Object>> c1Values2,
+			List<MetadataWrapper<? extends Object>> c2Values1,
+			List<MetadataWrapper<? extends Object>> c2Values2){
+		// Supposing that c1Values1 are sorted by timestamps
+		for(MetadataWrapper<? extends Object> c1Value1 : c1Values1){
+			long timeSlot = c1Value1.getTimestamp() / TIME_SLOT_DURATION;
+			MetadataWrapper<? extends Object> c1Value2 =
+					getFirstValueForTimeSlot(c1Values2, timeSlot);
+			MetadataWrapper<? extends Object> c2Value1 =
+					getFirstValueForTimeSlot(c2Values1, timeSlot);
+			MetadataWrapper<? extends Object> c2Value2 =
+					getFirstValueForTimeSlot(c2Values2, timeSlot);
+			if(c1Value2 != null && c2Value1 != null && c2Value2 != null){
+				return new KnowledgeQuadruple(c1Value1, c1Value2,
+											  c2Value1, c2Value2, timeSlot);
+			}	
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the first value within the given time slot.
+	 * @param values The list of values from which the required value is extracted.
+	 * @param timeSlot The required time slot for the extracted value.
+	 * @return The first value within the given time slot.
+	 */
+	private static MetadataWrapper<? extends Object> getFirstValueForTimeSlot(
+			List<MetadataWrapper<? extends Object>> values, long timeSlot){
+		MetadataWrapper<? extends Object> earliestValue = null;
+		for(MetadataWrapper<? extends Object> value : values){
+			long valueTimeSlot = value.getTimestamp() / TIME_SLOT_DURATION;
+			if(valueTimeSlot == timeSlot){
+				if(earliestValue == null
+						|| earliestValue.getTimestamp() > value.getTimestamp()){
+					earliestValue = value;
+				}
+			}
+		}
+		
+		return earliestValue;
+	}
+	
+	/**
+	 * Removes all the values that have belong to the specified time slot or any preceding,
+	 * from the given list of values.
+	 * @param values The list of values from which the specified values will be removed.
+	 * @param timeSlot The time slot for which (and for all preceding) the values will
+	 * be removed.
+	 */
+	private static void removeEarlierValuesForTimeSlot(
+			List<MetadataWrapper<? extends Object>> values, long timeSlot){
+		List<MetadataWrapper<? extends Object>> toRemove = new ArrayList<>();
+		for(MetadataWrapper<? extends Object> value : values){
+			long valueTimeSlot = value.getTimestamp() / TIME_SLOT_DURATION;
+			if(valueTimeSlot <= timeSlot){
+				toRemove.add(value);
+			}
+		}
+		values.removeAll(toRemove);
+	}
 }

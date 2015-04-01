@@ -57,7 +57,7 @@ public class LabelPair implements Serializable {
 	 * @param other the LabelPair to compare with.
 	 * @return True if the other is an LabelPair and both its
 	 * labels equals to the labels in this instance. The ordering
-	 * of the labels matter in the comparision. False otherwise.
+	 * of the labels matter in the comparison. False otherwise.
 	 */
 	@Override
 	public boolean equals(Object other){
@@ -69,5 +69,10 @@ public class LabelPair implements Serializable {
 		
 		return firstLabel.equals(otherLabelPair.firstLabel)
 				&& secondLabel.equals(otherLabelPair.secondLabel);
+	}
+	
+	@Override
+	public int hashCode() {
+		return String.format("%s;%s", firstLabel, secondLabel).hashCode();
 	}
 }
