@@ -95,7 +95,7 @@ public abstract class TemplateAdaptationManager {
 	}
 
 	@Process
-	@PeriodicScheduling(period = MONITORING_PERIOD, order = 10)
+	@PeriodicScheduling(period = MONITORING_PERIOD, order = 5)
 	static public <T extends Backup> void monitorOverallFitness(
 			@In("id") String id,
 			@Out("fitness") ParamHolder<Double> fitness) {
@@ -134,7 +134,6 @@ public abstract class TemplateAdaptationManager {
 
 		//Create data structure for processing
 		final Set<InvariantInfo<?>> infos = delegate.extractInvariants(IRMInstances);
-		InvariantInfosStorage.storeInvariantInfos(id, infos);
 
 		//Compute processes' fitnesses
 		computeInvariantsFitness(infos);
@@ -142,6 +141,7 @@ public abstract class TemplateAdaptationManager {
 		//Compute overall fitness
 		fitness.value = invariantFitnessCombiner.combineInvariantFitness(infos);
 		System.out.println("Overall System Fitness: " + fitness.value + "(at " + simulatedTime + ")");
+		InvariantInfosStorage.storeInvariantInfos(id, infos);
 	}
 
 	@Process
