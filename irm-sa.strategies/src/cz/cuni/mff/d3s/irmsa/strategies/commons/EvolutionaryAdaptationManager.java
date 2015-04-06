@@ -37,7 +37,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
  */
 @Component
 @SystemComponent
-public abstract class TemplateAdaptationManager {
+public abstract class EvolutionaryAdaptationManager {
 
 	/** Default period of monitoring. */
 	static public final int MONITORING_PERIOD = 5000;
@@ -81,7 +81,7 @@ public abstract class TemplateAdaptationManager {
 	/**
 	 * Only constructor.
 	 */
-	protected TemplateAdaptationManager(final StateHolder<?> initState) {
+	protected EvolutionaryAdaptationManager(final StateHolder<?> initState) {
 		this.id = createId();
 		state = initState;
 	}
@@ -91,7 +91,7 @@ public abstract class TemplateAdaptationManager {
 	 * @return new id
 	 */
 	protected String createId() {
-		return String.format("TemplateAdapatationManager_%s", UUID.randomUUID());
+		return String.format("EvolutionaryAdapatationManager_%s", UUID.randomUUID());
 	}
 
 	@Process
@@ -101,7 +101,7 @@ public abstract class TemplateAdaptationManager {
 			@Out("fitness") ParamHolder<Double> fitness) {
 		fitness.value = 0.0;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
-		final AdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
+		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		getTimeTrigger(process).setPeriod(delegate.getMonitorPeriod()); //set monitor period
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
@@ -151,7 +151,7 @@ public abstract class TemplateAdaptationManager {
 			@In("fitness") Double fitness,
 			@InOut("state") ParamHolder<StateHolder<T>> stateHolder) {
 		final StateHolder<T> state = stateHolder.value;
-		final AdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
+		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
@@ -160,7 +160,7 @@ public abstract class TemplateAdaptationManager {
 		System.out.println("*** Adapting in runtime "+ runtime + " at time " + simulatedTime +" ***");
 		// skipping the first run of this process as replicas are not disseminated yet
 		if (simulatedTime <= 0) {
-			Log.w("First invocation of the TemplateAdaptationManager. Skipping this adapting cycle.");
+			Log.w("First invocation of the EvolutionaryAdaptationManager. Skipping this adapting cycle.");
 			return;
 		}
 
@@ -305,7 +305,7 @@ public abstract class TemplateAdaptationManager {
 	 * @param state  manager's current state
 	 */
 	static protected void resetAdaptState(final ComponentProcess process,
-			final AdaptationManagerDelegate<? extends Backup> delegate,
+			final EvolutionaryAdaptationManagerDelegate<? extends Backup> delegate,
 			final StateHolder<?> state) {
 		final TimeTrigger trigger = getTimeTrigger(process);
 		trigger.setPeriod(delegate.getDefaultAdaptingPeriod());

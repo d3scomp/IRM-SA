@@ -6,17 +6,17 @@ import java.util.Set;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 
 /**
- * TemplateAdaptationManager delegates specific operations to implementation of
+ * EvolutionaryAdaptationManager delegates specific operations to implementation of
  * this interface.
  */
-public interface AdaptationManagerDelegate<T extends Backup> {
+public interface EvolutionaryAdaptationManagerDelegate<T extends Backup> {
 
 	/**
 	 * Returns monitoring period.
 	 * @return monitoring period
 	 */
 	default long getMonitorPeriod() {
-		return TemplateAdaptationManager.MONITORING_PERIOD;
+		return EvolutionaryAdaptationManager.MONITORING_PERIOD;
 	}
 
 	/**
@@ -24,7 +24,7 @@ public interface AdaptationManagerDelegate<T extends Backup> {
 	 * @return default adapting period
 	 */
 	default long getDefaultAdaptingPeriod() {
-		return TemplateAdaptationManager.ADAPTING_PERIOD;
+		return EvolutionaryAdaptationManager.ADAPTING_PERIOD;
 	}
 
 	/**

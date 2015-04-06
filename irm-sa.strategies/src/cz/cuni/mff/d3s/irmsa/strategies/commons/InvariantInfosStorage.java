@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Stores last invariant infos from monitor to adapt methods of TemplateAdaptationManager.
+ * Stores last invariant infos from monitor to adapt methods of EvolutionaryAdaptationManager.
  */
 class InvariantInfosStorage {
 

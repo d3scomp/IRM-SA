@@ -3,8 +3,8 @@ package cz.cuni.mff.d3s.irmsa.strategies.period;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.TemplateAdaptationManager;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.TemplateAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManager;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -13,7 +13,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
 /**
  * Plugin for period adaptation strategy.
  */
-public class PeriodAdaptationPlugin extends TemplateAdaptationPlugin<PeriodAdaptationPlugin, PeriodBackup> {
+public class PeriodAdaptationPlugin extends EvolutionaryAdaptationPlugin<PeriodAdaptationPlugin, PeriodBackup> {
 
 	/**
 	 * Only constructor.
@@ -52,7 +52,7 @@ public class PeriodAdaptationPlugin extends TemplateAdaptationPlugin<PeriodAdapt
 	}
 
 	@Override
-	protected TemplateAdaptationManager createAdaptationManager() {
+	protected EvolutionaryAdaptationManager createAdaptationManager() {
 		return new PeriodAdaptationManager();
 	}
 

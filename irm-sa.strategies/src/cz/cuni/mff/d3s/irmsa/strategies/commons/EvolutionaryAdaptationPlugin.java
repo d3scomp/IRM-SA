@@ -23,7 +23,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
 /**
  * Template plugin for evolution adaptation strategies.
  */
-public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlugin<T, U>, U extends Backup> implements DEECoPlugin {
+public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdaptationPlugin<T, U>, U extends Backup> implements DEECoPlugin {
 
 	/** Plugin dependencies. */
 	static private List<Class<? extends DEECoPlugin>> dependencies =
@@ -38,8 +38,8 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	/** Trace model. */
 	protected final TraceModel trace;
 
-	/** TemplateAdaptationManager delegates operations to this object. */
-	protected final AdaptationManagerDelegate<U> delegate;
+	/** EvolutionaryAdaptationManager delegates operations to this object. */
+	protected final EvolutionaryAdaptationManagerDelegate<U> delegate;
 
 	/** Combines independent fitnesses into overall system fitness. */
 	protected InvariantFitnessCombiner invariantFitnessCombiner =
@@ -66,7 +66,7 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	 * @param design design
 	 * @param trace trace
 	 */
-	public TemplateAdaptationPlugin(final AdaptationManagerDelegate<U> delegate,
+	public EvolutionaryAdaptationPlugin(final EvolutionaryAdaptationManagerDelegate<U> delegate,
 			final RuntimeMetadata model, final IRM design, final TraceModel trace) {
 		this.delegate = delegate;
 		this.model = model;
@@ -155,7 +155,7 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	 * Creates new AdaptationManager. Unique class for each Plugin!
 	 * @return new AdaptationManager
 	 */
-	protected abstract TemplateAdaptationManager createAdaptationManager();
+	protected abstract EvolutionaryAdaptationManager createAdaptationManager();
 
 	/**
 	 * Here can descendant provide additional data to adaptation manager.
@@ -174,20 +174,20 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	public void init(final DEECoContainer container) {
 		//relying on annotation processor from IRMPlugin
 		try {
-			final TemplateAdaptationManager manager = createAdaptationManager();
+			final EvolutionaryAdaptationManager manager = createAdaptationManager();
 			container.deployComponent(manager);
 			// pass necessary data to the PeriodAdaptationManager
 			for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
 				if (c.getName().equals(manager.getClass().getName())) {
 					final EMap<String, Object> data = c.getInternalData();
-					data.put(TemplateAdaptationManager.DESIGN_MODEL, design);
-					data.put(TemplateAdaptationManager.TRACE_MODEL, trace);
-					data.put(TemplateAdaptationManager.ADAPTATION_DELEGATE, delegate);
-					data.put(TemplateAdaptationManager.INVARIANT_FITNESS_COMBINER, invariantFitnessCombiner);
-					data.put(TemplateAdaptationManager.ADAPTEE_SELECTOR, adapteeSelector);
-					data.put(TemplateAdaptationManager.DIRECTION_SELECTOR, directionSelector);
-					data.put(TemplateAdaptationManager.DELTA_COMPUTOR, deltaComputor);
-					data.put(TemplateAdaptationManager.ADAPTATION_BOUND, adaptationBound);
+					data.put(EvolutionaryAdaptationManager.DESIGN_MODEL, design);
+					data.put(EvolutionaryAdaptationManager.TRACE_MODEL, trace);
+					data.put(EvolutionaryAdaptationManager.ADAPTATION_DELEGATE, delegate);
+					data.put(EvolutionaryAdaptationManager.INVARIANT_FITNESS_COMBINER, invariantFitnessCombiner);
+					data.put(EvolutionaryAdaptationManager.ADAPTEE_SELECTOR, adapteeSelector);
+					data.put(EvolutionaryAdaptationManager.DIRECTION_SELECTOR, directionSelector);
+					data.put(EvolutionaryAdaptationManager.DELTA_COMPUTOR, deltaComputor);
+					data.put(EvolutionaryAdaptationManager.ADAPTATION_BOUND, adaptationBound);
 					provideDataToManager(data);
 				}
 			}

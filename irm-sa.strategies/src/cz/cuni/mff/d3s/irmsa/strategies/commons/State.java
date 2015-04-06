@@ -1,7 +1,7 @@
 package cz.cuni.mff.d3s.irmsa.strategies.commons;
 
 /**
- * Simple enum with possible states of the TemplateAdaptationManager's adapt method.
+ * Simple enum with possible states of the EvolutionaryAdaptationManager's adapt method.
  */
 public enum State {
 
