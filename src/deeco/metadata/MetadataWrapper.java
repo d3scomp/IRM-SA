@@ -7,10 +7,12 @@ public class MetadataWrapper<T> implements Serializable{
 	private static final long serialVersionUID = -1190064726886324861L;
 	private T value;
 	private long timestamp;
+	private boolean operational;
 	
 	public MetadataWrapper(T value){
 		this.value = value;
 		timestamp = 0;
+		operational = true;
 	}
 	
 	public T getValue(){
@@ -24,6 +26,14 @@ public class MetadataWrapper<T> implements Serializable{
 	public void setValue(T value, long timestamp){
 		this.value = value;
 		this.timestamp = timestamp;
+	}
+	
+	public boolean isOperational(){
+		return operational;
+	}
+	
+	public void malfunction(){
+		operational = false;	
 	}
 
 }
