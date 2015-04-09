@@ -69,6 +69,13 @@ public class DirectionSelectorImpl implements DirectionSelector {
 			}
 		}
 		//prepare next run
+		reset();
+	}
+
+	/**
+	 * Resets state for next run.
+	 */
+	protected void reset() {
 		adaptees.clear();
 	}
 }
