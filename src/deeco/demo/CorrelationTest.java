@@ -46,7 +46,7 @@ public class CorrelationTest {
 		
 		
 		/* WHEN simulation is performed */
-		realm.start(10000);
+		realm.start(15000);
 		
 /*		try{
 			CorrelationEnsembleFactory cef = new CorrelationEnsembleFactory();

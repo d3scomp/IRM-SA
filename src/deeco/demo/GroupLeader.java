@@ -48,7 +48,7 @@ public class GroupLeader {
 		
 		Random rand = new Random();
 		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
-		temperature.value.setValue(seed, ProcessContext.getTimeProvider().getCurrentMilliseconds());
+		temperature.value.setValue(20, ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		
 		System.out.println("GL#" + id + ",\ttemperature : " + temperature.value.getValue() + " (" + temperature.value.getTimestamp() + ")");
 	}

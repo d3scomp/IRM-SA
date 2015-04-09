@@ -46,10 +46,14 @@ public class GroupMember {
 	public static void changeTemperature(
 			@In("id") String id,
 			@InOut("temperature") ParamHolder<MetadataWrapper<Integer>> temperature) {
-		
-		Random rand = new Random();
-		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
-		temperature.value.setValue(seed, ProcessContext.getTimeProvider().getCurrentMilliseconds());
+
+		if(id.equals("1") && ProcessContext.getTimeProvider().getCurrentMilliseconds() > 10000){
+			temperature.value.malfunction();
+		} else {
+			Random rand = new Random();
+			int seed = rand.nextInt(Variances.SMALL_VARIANCE);
+			temperature.value.setValue(20, ProcessContext.getTimeProvider().getCurrentMilliseconds());
+		}
 		
 		System.out.println("GM#" + id + ",\ttemperature : " + temperature.value.getValue() + " (" + temperature.value.getTimestamp() + ")");
 	}
