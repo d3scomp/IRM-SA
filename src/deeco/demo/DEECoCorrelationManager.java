@@ -30,6 +30,8 @@ public class DEECoCorrelationManager {
 	public String id;
 	
 	/**
+	 * Holds the history of knowledge of all the other components in the system.
+	 * 
 	 * Integer - ID of a component
 	 * String - Label of a knowledge field of the component
 	 * MetadataWrapper - knowledge field value together with its meta data
@@ -38,6 +40,7 @@ public class DEECoCorrelationManager {
 
 	/**
 	 * The correlation of knowledge for a pair of knowledge fields.
+	 * e.g. position -> temperature
 	 */
 	public List<CorrelationLevel> correlationLevels;
 	
@@ -53,9 +56,18 @@ public class DEECoCorrelationManager {
 	@Local
 	private static final long TIME_SLOT_DURATION = 1000;
 	
+	/**
+	 * The list of the other DEECo nodes that exists in the system.
+	 * Except the node on which the CorrelaitonManager component is deployed.
+	 */
 	@Local
 	public final List<DEECoNode> otherNodes;
 	
+	/**
+	 * Create an instance of the {@link DEECoCorrelationManager} that will hold
+	 * a reference to the given {@link DEECoNode}s.
+	 * @param otherNodes The other {@link DEECoNode}s in the system.
+	 */
 	public DEECoCorrelationManager(List<DEECoNode> otherNodes) {
 		knowledgeHistoryOfAllComponents = new HashMap<>();
 		correlationLevels = new ArrayList<>();
@@ -108,9 +120,11 @@ public class DEECoCorrelationManager {
 	}
 	
 	/**
-	 * Method that performs the correlation between the data in the system 
+	 * Method that measures the correlation between the data in the system 
 	 * 
-	 * @param history the time series of all knowledge of all components
+	 * @param history The time series of all knowledge of all components.
+	 * @param processedTimestamps The timestamps of lastly processed knowledge.
+	 * @param levels The structure that holds the calculated correlations.
 	 */
 	@Process
 	@PeriodicScheduling(period=1000)
@@ -141,6 +155,13 @@ public class DEECoCorrelationManager {
 		}
 	}
 	
+	/**
+	 * Deploys, activates and deactivates correlation ensembles based on the current
+	 * correlation of the data in the system.
+	 * @param levels The structure that holds the calculated correlations. 
+	 * @param deecoNodes The {@link DEECoNode}s in the system, where the ensembles are managed on.
+	 * @throws Exception If there is a problem creating the ensemble definition class, or deploying it.
+	 */
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void manageCorrelationEnsembles(
@@ -172,6 +193,13 @@ public class DEECoCorrelationManager {
 		}
 	}
 	
+	/**
+	 * Find all the ensemble instances on the given {@link DEECoNode}s and set theirs active status.
+	 * @param deecoNodes The nodes on which the ensemble will be searched.
+	 * @param ensembleName The name of the ensemble to be found.
+	 * @param active The active status to be set.
+	 * @return True if any ensemble of the given name is found. False otherwise. 
+	 */
 	private static boolean setEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName, boolean active){
 		boolean ensemblesFound = false;
 		for(DEECoNode node : deecoNodes){
@@ -188,6 +216,13 @@ public class DEECoCorrelationManager {
 		return ensemblesFound;
 	}
 	
+	/**
+	 * Finds the ensemble instances of the given name and checks whether it is active.
+	 * @param deecoNodes The nodes on which the ensemble will be searched. 
+	 * @param ensembleName The name of the ensemble to be found.
+	 * @return True if at least one instance of the ensemble that is active is found.
+	 * 		False otherwise.
+	 */
 	private static boolean isEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName){
 		// Assume the ensemble is not deployed or inactive
 		boolean active = false;

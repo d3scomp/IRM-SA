@@ -48,6 +48,7 @@ public class CorrelationTest {
 		/* WHEN simulation is performed */
 		realm.start(15000);
 		
+		// The code bellow serves for testing the ensemble class created at runtime
 /*		try{
 			CorrelationEnsembleFactory cef = new CorrelationEnsembleFactory();
 			Class testClass = cef.getEnsembleDefinition("position", "temperature");

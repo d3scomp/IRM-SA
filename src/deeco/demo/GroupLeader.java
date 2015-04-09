@@ -48,6 +48,8 @@ public class GroupLeader {
 		
 		Random rand = new Random();
 		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
+		// Setting fixed value of temperature to ensure the correlation (should be random,
+		// the variance should reflect the boundary for temperature defined in KnowledgeMetadataHolder)
 		temperature.value.setValue(20, ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		
 		System.out.println("GL#" + id + ",\ttemperature : " + temperature.value.getValue() + " (" + temperature.value.getTimestamp() + ")");
