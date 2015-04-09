@@ -60,6 +60,11 @@ public class CorrelationLevel implements Serializable {
 	private int data2CloseCount;
 	
 	/**
+	 * Indicates whether an ensemble for the knowledge exchange defined in this instance is deployed.
+	 */
+	private boolean deployed;
+	
+	/**
 	 * Create new instance of CorrelationLevel for given pair of labels.
 	 * @param labels the pair of label for which the correlation will be held.
 	 */
@@ -67,6 +72,7 @@ public class CorrelationLevel implements Serializable {
 		this.labels = labels;
 		data1CloseCount = 0;
 		data2CloseCount = 0;
+		deployed = false;
 	}
 	
 	/**
@@ -105,5 +111,24 @@ public class CorrelationLevel implements Serializable {
 	public double getCorrelationLevel(){
 		return (double) data2CloseCount / (double) data1CloseCount;
 	}
+	
+
+	/**
+	 * Indicates whether an ensemble for the knowledge exchange defined in this instance is deployed.
+	 * @return true if the ensemble for the knowledge exchange defined in this instance is deployed.
+	 * 		False otherwise.
+	 */
+	public boolean isDeployed(){
+		return deployed;
+	}
+	
+	/**
+	 * Set the indication whether an ensemble for the knowledge exchange defined in this instance is deployed.
+	 * @param deployed indicates whether the ensemble for the knowledge exchange defined in this instance is deployed.
+	 */
+	public void setDeployed(boolean deployed){
+		this.deployed = deployed;
+	}
+	
 	
 }

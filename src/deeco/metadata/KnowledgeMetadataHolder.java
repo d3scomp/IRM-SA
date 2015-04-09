@@ -30,15 +30,27 @@ public class KnowledgeMetadataHolder {
 		 * The metric to compute the distance of values of the knowledge field.
 		 */
 		private Metric metric;
+		/**
+		 * The boundary that delimits when the correlation is accurate enough.
+		 * It is a number from the interval [0,1], that represent percentage.
+		 * The correlation itself reflects the percentage of "close" values when
+		 * the filtering values are "close".
+		 */
+		private double confidenceLevel;
 		
 		/**
 		 * Create a new instance of KnowledgeMetadata.
 		 * @param bound The distance bound delimiting close and far distance.
 		 * @param metric The metric to compute the distance of values of the knowledge field.
+		 * @Param confidence The boundary that delimits when the correlation is accurate enough.
+		 * 		It is a number from the interval [0,1], that represent percentage.
+		 * 		The correlation itself reflects the percentage of "close" values when
+		 * 		the filtering values are "close".
 		 */
-		public KnowledgeMetadata(int bound, Metric metric){
+		public KnowledgeMetadata(int bound, Metric metric, double confidence){
 			this.bound = bound;
 			this.metric = metric;
+			confidenceLevel = confidence;
 		}
 		
 		/**
@@ -55,6 +67,17 @@ public class KnowledgeMetadataHolder {
 		 */
 		public Metric getMetric(){
 			return metric;
+		}
+		
+		/**
+		 * The boundary that delimits when the correlation is accurate enough.
+		 * 		It is a number from the interval [0,1], that represent percentage.
+		 * 		The correlation itself reflects the percentage of "close" values when
+		 * 		the filtering values are "close".
+		 * @return The boundary that delimits when the correlation is accurate enough.
+		 */
+		public double getConfidenceLevel(){
+			return confidenceLevel;
 		}
 	}
 	
@@ -81,10 +104,14 @@ public class KnowledgeMetadataHolder {
 		final int batteryBoundary = 2;
 
 		final Metric simpleMetric = new DifferenceMetric();
+		
+		final double positionConfidence = 0.9;
+		final double temperatureConfidence = 0.9;
+		final double batteryConfidence = 0.9;
 
-		knowledgeMetadata.put(positionLabel, new KnowledgeMetadata(positionBoundary, simpleMetric));
-		knowledgeMetadata.put(temperatureLabel, new KnowledgeMetadata(temperatureBoundary, simpleMetric));
-		knowledgeMetadata.put(batteryLabel, new KnowledgeMetadata(batteryBoundary, simpleMetric));
+		knowledgeMetadata.put(positionLabel, new KnowledgeMetadata(positionBoundary, simpleMetric, positionConfidence));
+		knowledgeMetadata.put(temperatureLabel, new KnowledgeMetadata(temperatureBoundary, simpleMetric, temperatureConfidence));
+		knowledgeMetadata.put(batteryLabel, new KnowledgeMetadata(batteryBoundary, simpleMetric, batteryConfidence));
 	}
 	
 	/**
@@ -92,9 +119,13 @@ public class KnowledgeMetadataHolder {
 	 * @param label Identifies the metadata field.
 	 * @param bound The distance bound delimiting close and far distance.
 	 * @param metric The metric to compute the distance of values of the knowledge field.
+	 * @Param confidence The boundary that delimits when the correlation is accurate enough.
+	 * 		It is a number from the interval [0,1], that represent percentage.
+	 * 		The correlation itself reflects the percentage of "close" values when
+	 * 		the filtering values are "close".
 	 */
-	public static void setBoundAndMetric(String label, int bound, Metric metric){
-		knowledgeMetadata.put(label, new KnowledgeMetadata(bound, metric));
+	public static void setBoundAndMetric(String label, int bound, Metric metric, double confidence){
+		knowledgeMetadata.put(label, new KnowledgeMetadata(bound, metric, confidence));
 	}
 	
 	/**
@@ -126,6 +157,23 @@ public class KnowledgeMetadataHolder {
 		}
 		else {
 			return null;
+		}
+	}
+
+	/**
+	 * The confidence level is a boundary that delimits when the correlation is accurate enough.
+	 * It is a number from the interval [0,1], that represent percentage.
+	 * The correlation itself reflects the percentage of "close" values when
+	 * the filtering values are "close".
+	 * @param label Identifies the knowledge field.
+	 * @return The boundary that delimits when the correlation is accurate enough.
+	 */
+	public static double getConfidenceLevel(String label){
+		if(knowledgeMetadata.containsKey(label)){
+			return knowledgeMetadata.get(label).getConfidenceLevel();
+		}
+		else {
+			return Double.NaN;
 		}
 	}
 	

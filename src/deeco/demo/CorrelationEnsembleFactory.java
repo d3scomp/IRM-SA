@@ -1,5 +1,8 @@
 package deeco.demo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -18,6 +21,12 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 @PeriodicScheduling(period = 1000)
 public class CorrelationEnsembleFactory {
 	
+	/**
+	 * Once a new class is created it is stored here ready for further retrieval.
+	 */
+	@SuppressWarnings("rawtypes")
+	private static Map<String, Class> bufferedClasses = new HashMap<>();
+	
 	private static final long schedulingPeriod = 1000;
 	
 	/**
@@ -29,11 +38,31 @@ public class CorrelationEnsembleFactory {
 	 * @return A class that defines an ensemble for data exchange given by the specified knowledge fields.
 	 * @throws Exception
 	 */
-	public Class<Object> getEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
+	@SuppressWarnings("rawtypes")
+	public static Class getEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
+		String className = composeClassName(correlationFilter, correlationSubject);
+		Class requestedClass;
+		if(!bufferedClasses.containsKey(className)){
+			requestedClass = createEnsembleDefinition(correlationFilter, correlationSubject);
+			bufferedClasses.put(className, requestedClass);
+		}
+		else {
+			requestedClass = bufferedClasses.get(className);
+		}
+		
+		return requestedClass;
+	}
+	
+	private static String composeClassName(String correlationFilter, String correlationSubject){
+		return String.format("Correlation_%s2%s", correlationFilter, correlationSubject);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private static Class createEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
 		
 		// Create the class defining the ensemble
 		ClassPool classPool = ClassPool.getDefault();
-		CtClass ensembleClass = classPool.makeClass(String.format("Correlation_%s2%s", correlationFilter, correlationSubject));
+		CtClass ensembleClass = classPool.makeClass(composeClassName(correlationFilter, correlationSubject));
 		
 		ClassFile classFile = ensembleClass.getClassFile();
 		ConstPool constPool = classFile.getConstPool();

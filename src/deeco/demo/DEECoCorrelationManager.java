@@ -9,12 +9,19 @@ import java.util.Set;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
+import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import deeco.metadata.ComponentPair;
 import deeco.metadata.CorrelationLevel;
+import deeco.metadata.KnowledgeMetadataHolder;
 import deeco.metadata.KnowledgeQuadruple;
 import deeco.metadata.LabelPair;
 import deeco.metadata.MetadataWrapper;
@@ -47,11 +54,15 @@ public class DEECoCorrelationManager {
 	 */
 	private static final long TIME_SLOT_DURATION = 1000;
 	
+	@Local
+	public final List<DEECoNode> otherNodes;
 	
-	public DEECoCorrelationManager() {
+	public DEECoCorrelationManager(List<DEECoNode> otherNodes) {
 		knowledgeHistoryOfAllComponents = new HashMap<>();
 		correlationLevels = new ArrayList<>();
 		lastProcessedTimestamps = new HashMap<>();
+		
+		this.otherNodes = otherNodes;
 	}
 	
 	/*
@@ -129,6 +140,55 @@ public class DEECoCorrelationManager {
 						levels.value, components, labels);
 			}
 		}
+	}
+	
+	@Process
+	@PeriodicScheduling(period=1000)
+	public static void manageCorrelationEnsembles(
+			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels,
+			@In("otherNodes") List<DEECoNode> deecoNodes) throws Exception {
+		System.out.println("Correlation ensembles management process started...");
+		
+		for(CorrelationLevel level : levels.value){
+			String correlationFilter = level.getLabelPair().getFirstLabel();
+			String correlationSubject = level.getLabelPair().getSecondLabel();
+			if(level.getCorrelationLevel() > KnowledgeMetadataHolder.getConfidenceLevel(correlationSubject)
+					&& !level.isDeployed()){
+				// Deploy if confidence level is satisfied and the ensemble is not deployed
+				Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+				System.out.println(String.format("Deploying ensemble %s", ensemble.getName()));
+				if(!setEnsembleActive(deecoNodes, ensemble.getName(), true)){
+					for(DEECoNode node : deecoNodes){
+						node.deployEnsemble(ensemble);
+					}	
+				}
+				level.setDeployed(true);
+			} else if(level.getCorrelationLevel() < KnowledgeMetadataHolder.getConfidenceLevel(level.getLabelPair().getSecondLabel())
+					&& level.isDeployed()) {
+				// Undeploy if deployed and confidence level is not satisfied
+				Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+				System.out.println(String.format("Undeploying ensemble %s", ensemble.getName()));
+				if(setEnsembleActive(deecoNodes, ensemble.getName(), false)){
+					level.setDeployed(false);
+				}
+			}				
+		}
+	}
+	
+	private static boolean setEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName, boolean active){
+		boolean ensemblesFound = false;
+		for(DEECoNode node : deecoNodes){
+			for(ComponentInstance componentInstance : node.getRuntimeMetadata().getComponentInstances()){
+				for(EnsembleController ensemble : componentInstance.getEnsembleControllers()){
+					if(ensemble.getEnsembleDefinition().getName().equals(ensembleName)){
+						ensemble.setActive(active);
+						ensemblesFound = true;
+					}
+				}
+			}
+		}
+		
+		return ensemblesFound;
 	}
 
 	/**

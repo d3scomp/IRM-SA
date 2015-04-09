@@ -6,12 +6,19 @@ import java.util.List;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 
 public class CorrelationPlugin implements DEECoPlugin {
 
 	List<Class<? extends DEECoPlugin>> dependencies = new ArrayList<>();
+	
+	private List<DEECoNode> deecoNodes;
+	
+	public CorrelationPlugin(List<DEECoNode> nodesInRealm){
+		deecoNodes = nodesInRealm;
+	}
 	
 	@Override
 	public List<Class<? extends DEECoPlugin>> getDependencies() {
@@ -22,7 +29,7 @@ public class CorrelationPlugin implements DEECoPlugin {
 	@Override
 	public void init(DEECoContainer container) {
 		try {
-			container.deployComponent(new DEECoCorrelationManager());
+			container.deployComponent(new DEECoCorrelationManager(deecoNodes));
 			// FIXME these two ensembles could be unified if we implement the "member.*" in knowledge exchange parameters 
 			container.deployEnsemble(GroupMemberDataAggregation.class);
 			container.deployEnsemble(GroupLeaderDataAggregation.class);

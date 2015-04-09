@@ -1,8 +1,7 @@
 package deeco.demo;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
@@ -14,9 +13,6 @@ import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
-import deeco.metadata.CorrelationLevel.DistanceClass;
-import deeco.metadata.KnowledgeMetadataHolder;
-import deeco.metadata.MetadataWrapper;
 /**
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
  */
@@ -24,6 +20,8 @@ public class CorrelationTest {
 	
 	public static void main(String[] args) throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
 
+		List<DEECoNode> nodesInRealm = new ArrayList<DEECoNode>();
+		
 		SimulationTimer simulationTimer = new DiscreteEventTimer();
 		DEECoSimulation realm = new DEECoSimulation(simulationTimer);
 		realm.addPlugin(new BroadcastLoopback());
@@ -32,16 +30,20 @@ public class CorrelationTest {
 		realm.addPlugin(KnowledgeInsertingStrategy.class);
 		
 		DEECoNode deeco1 = realm.createNode(1);
+		nodesInRealm.add(deeco1);
 		deeco1.deployComponent(new GroupMember("1"));
 		
 		DEECoNode deeco2 = realm.createNode(2);
+		nodesInRealm.add(deeco2);
 		deeco2.deployComponent(new GroupMember("2"));
 		
 		DEECoNode deeco3 = realm.createNode(3);
+		nodesInRealm.add(deeco3);
 		deeco3.deployComponent(new GroupLeader("3"));
 		
 		/* Create node that holds the correlation component */
-		realm.createNode(4, new CorrelationPlugin());
+		realm.createNode(4, new CorrelationPlugin(nodesInRealm));
+		
 		
 		/* WHEN simulation is performed */
 		realm.start(10000);
