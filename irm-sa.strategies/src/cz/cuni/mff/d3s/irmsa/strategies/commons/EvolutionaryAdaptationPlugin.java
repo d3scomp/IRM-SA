@@ -192,7 +192,7 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 				}
 			}
 		} catch (AnnotationProcessorException e) {
-			Log.e("Error while trying to deploy AdaptationManager", e);
+			Log.e("Error while trying to deploy EvolutionaryAdaptationManager", e);
 		}
 	}
 }
