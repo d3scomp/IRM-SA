@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cz.cuni.mff.d3s.irm.model.design:IRM xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0">
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="TestAssumption" refID="A01"/>
+  <components name="TestComponent">
+    <knowledgeElements type="String" name="id"/>
+    <knowledgeElements type="Integer" name="testKnowledge"/>
+  </components>
+  <assumed start="//@components.0" end="//@invariants.0" assumptionInput="//@components.0/@knowledgeElements.1"/>
+</cz.cuni.mff.d3s.irm.model.design:IRM>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:cz.cuni.mff.d3s.irm.tool.deeco="http://cz.cuni.mff.d3s.irm.tool.deeco/1.0" name="TestComponent" IRMcomponent="TestComponent">
+  <initialKnowledge name="id" type="String"/>
+  <initialKnowledge name="testKnowledge" type="Integer"/>
+</cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance>
