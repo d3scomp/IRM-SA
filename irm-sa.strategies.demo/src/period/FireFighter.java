@@ -318,6 +318,12 @@ public class FireFighter {
 	}
 
 	@InvariantMonitor("P02")
+	public static boolean determinePositionSatisfaction() {
+		final int posBad = getPositionBadCounter();
+		return posBad == 0;
+	}
+
+	@InvariantMonitor("P02")
 	public static double determinePositionFitness() {
 		System.out.println("Determining PosFit at " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		final int posOk = getPositionOkCounter();

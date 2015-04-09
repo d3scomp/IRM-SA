@@ -5,6 +5,7 @@ import org.eclipse.emf.common.util.EMap;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManager;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
@@ -22,13 +23,15 @@ public class AssumptionParameterAdaptationPlugin extends EvolutionaryAdaptationP
 
 	/**
 	 * Only constructor.
+	 * @param metaAdaptationPlugin plugin managing this plugin
 	 * @param model model
 	 * @param design design
 	 * @param trace trace
 	 */
-	public AssumptionParameterAdaptationPlugin(
+	public AssumptionParameterAdaptationPlugin(final MetaAdaptationPlugin metaAdaptationPlugin,
 			final RuntimeMetadata model, final IRM design, final TraceModel trace) {
-		super(new AssumptionParameterAdaptationManagerDelegate(), model, design, trace);
+		super(new AssumptionParameterAdaptationManagerDelegate(),
+				metaAdaptationPlugin, model, design, trace);
 	}
 
 	public AssumptionParameterAdaptationPlugin withObserveTime(final long observeTime) {

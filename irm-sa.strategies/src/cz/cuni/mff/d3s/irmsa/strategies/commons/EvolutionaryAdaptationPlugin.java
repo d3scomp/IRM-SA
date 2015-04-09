@@ -14,7 +14,8 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.AdaptationManager;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -26,8 +27,8 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
 public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdaptationPlugin<T, U>, U extends Backup> implements DEECoPlugin {
 
 	/** Plugin dependencies. */
-	static private List<Class<? extends DEECoPlugin>> dependencies =
-			Collections.unmodifiableList(Arrays.asList(IRMPlugin.class));
+	static private List<Class<? extends DEECoPlugin>> DEPENDENCIES =
+			Collections.unmodifiableList(Arrays.asList(MetaAdaptationPlugin.class));
 
 	/** Runtime model. */
 	protected final RuntimeMetadata model;
@@ -40,6 +41,9 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 
 	/** EvolutionaryAdaptationManager delegates operations to this object. */
 	protected final EvolutionaryAdaptationManagerDelegate<U> delegate;
+
+	/** MetaAdaptationPlugin managing this plugin. */
+	protected final MetaAdaptationPlugin metaAdaptationPlugin;
 
 	/** Combines independent fitnesses into overall system fitness. */
 	protected InvariantFitnessCombiner invariantFitnessCombiner =
@@ -62,13 +66,17 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 
 	/**
 	 * Only constructor.
+	 * @param delegate adaptation manager delegate
+	 * @param metaAdaptationPlugin plugin managing this plugin
 	 * @param model model
 	 * @param design design
 	 * @param trace trace
 	 */
 	public EvolutionaryAdaptationPlugin(final EvolutionaryAdaptationManagerDelegate<U> delegate,
+			final MetaAdaptationPlugin metaAdaptationPlugin,
 			final RuntimeMetadata model, final IRM design, final TraceModel trace) {
 		this.delegate = delegate;
+		this.metaAdaptationPlugin = metaAdaptationPlugin;
 		this.model = model;
 		this.design = design;
 		this.trace = trace;
@@ -167,7 +175,7 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 
 	@Override
 	public List<Class<? extends DEECoPlugin>> getDependencies() {
-		return dependencies;
+		return DEPENDENCIES;
 	}
 
 	@Override
@@ -176,7 +184,7 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 		try {
 			final EvolutionaryAdaptationManager manager = createAdaptationManager();
 			container.deployComponent(manager);
-			// pass necessary data to the PeriodAdaptationManager
+			// pass necessary data to the EvolutionaryAdaptationManager
 			for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
 				if (c.getName().equals(manager.getClass().getName())) {
 					final EMap<String, Object> data = c.getInternalData();
@@ -189,6 +197,26 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 					data.put(EvolutionaryAdaptationManager.DELTA_COMPUTOR, deltaComputor);
 					data.put(EvolutionaryAdaptationManager.ADAPTATION_BOUND, adaptationBound);
 					provideDataToManager(data);
+					//
+					metaAdaptationPlugin.registerManager(new AdaptationManager() {
+
+						@Override
+						public void stop() {
+							data.put(EvolutionaryAdaptationManager.RUN_FLAG, false);
+						}
+
+						@Override
+						public void run() {
+							data.put(EvolutionaryAdaptationManager.RUN_FLAG, true);
+							data.put(EvolutionaryAdaptationManager.DONE_FLAG, false);
+						}
+
+						@Override
+						public boolean isDone() {
+							final Boolean result = (Boolean) data.get(EvolutionaryAdaptationManager.DONE_FLAG);
+							return result == null || result;
+						}
+					});
 				}
 			}
 		} catch (AnnotationProcessorException e) {

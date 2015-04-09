@@ -1,7 +1,8 @@
 package cz.cuni.mff.d3s.irmsa.strategies.commons;
 
+import static cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper.retrieveFromInternalData;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
@@ -44,6 +44,12 @@ public abstract class EvolutionaryAdaptationManager {
 
 	/** Default period of adapting. */
 	static public final int ADAPTING_PERIOD = 5000;
+
+	/** Run flag stored in internal data under this key. */
+	static public final String RUN_FLAG = "runFlag";
+
+	/** Done flag stored in internal data under this key. */
+	static public final String DONE_FLAG = "doneFlag";
 
 	/** Trace model stored in internal data under this key. */
 	static final String TRACE_MODEL = "trace";
@@ -99,10 +105,15 @@ public abstract class EvolutionaryAdaptationManager {
 	static public <T extends Backup> void monitorOverallFitness(
 			@In("id") String id,
 			@Out("fitness") ParamHolder<Double> fitness) {
-		fitness.value = 0.0;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		getTimeTrigger(process).setPeriod(delegate.getMonitorPeriod()); //set monitor period
+		//
+		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
+		if (run == null || !run) {
+			return; //manager tells us not to run
+		}
+		fitness.value = 0.0;
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
 		// get simulated time
@@ -150,6 +161,10 @@ public abstract class EvolutionaryAdaptationManager {
 			@In("id") String id,
 			@In("fitness") Double fitness,
 			@InOut("state") ParamHolder<StateHolder<T>> stateHolder) {
+		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
+		if (run == null || !run) {
+			return; //manager tells us not to run
+		}
 		final StateHolder<T> state = stateHolder.value;
 		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
@@ -247,29 +262,6 @@ public abstract class EvolutionaryAdaptationManager {
 			state.reset();
 		} else {
 			Log.w("Unknown state " + state.state);
-		}
-	}
-
-	/**
-	 * Not type-safe method for retrieving objects from component's internal data.
-	 * @param key key to search value for
-	 * @return typed object from component's internal data
-	 * @throws RuntimeException when no, null or wrongly typed data are provided
-	 */
-	static protected <T> T retrieveFromInternalData(final String key) {
-		final ComponentInstance instance =
-				ProcessContext.getCurrentProcess().getComponentInstance();
-		final Object value = instance.getInternalData().get(key);
-		try {
-			if (value != null) {
-				@SuppressWarnings("unchecked")
-				final T result = (T) value;
-				return result;
-			} else {
-				throw new NoSuchElementException("No or null data for key " + key);
-			}
-		} catch (ClassCastException | NoSuchElementException e) {
-			throw new RuntimeException(String.format("Could not retrieve %s from internal data.", key), e);
 		}
 	}
 

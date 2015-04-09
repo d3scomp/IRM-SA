@@ -42,6 +42,9 @@ public class AdaptationManager {
 	/** Internal data key for prefix of logs. */
 	public static final String LOG_PREFIX = "logPrefix";
 
+	/** Internal data key for adaptation listeners. */
+	public static final String ADAPTATION_LISTENERS = "adaptationListeners";
+
 	@Process
 	@PeriodicScheduling(period=2000)
 	public static void reason(@In("id") String id) {
@@ -56,6 +59,8 @@ public class AdaptationManager {
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+		@SuppressWarnings("unchecked")
+		final List<AdaptationListener> listeners = (List<AdaptationListener>) component.getInternalData().get(ADAPTATION_LISTENERS);
 		// preprocess the generated instances
 		for (IRMInstance i : IRMInstances) {
 			SATSolverPreProcessor preProcessor = new SATSolverPreProcessor(i);
@@ -75,9 +80,11 @@ public class AdaptationManager {
 		}
 		// create a reconfigurator of the current runtime
 		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
+		int solutions = 0;
 		for (IRMInstance i: IRMInstances) {
 			SATSolver solver = new SATSolver(i);
 			if (solver.solve()) {
+				++solutions;
 				if (log) {
 					printSelectedIRMInstance(i); // for debugging...
 				}
@@ -86,6 +93,10 @@ public class AdaptationManager {
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
 		reconfigurator.toggleProcessesAndEnsembles();
+
+		for (AdaptationListener listener : listeners) {
+			listener.adaptationResult(solutions, IRMInstances.size());
+		}
 	}
 
 	private static void printSelectedIRMInstance(IRMInstance i) {

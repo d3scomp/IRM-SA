@@ -30,6 +30,7 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.assumption.AdapteeSelectorFitness;
 import cz.cuni.mff.d3s.irmsa.strategies.assumption.AssumptionParameterAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed;
@@ -70,11 +71,12 @@ public class CentralizedRun {
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 
 		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 
 		// create IRMPeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
 		final AssumptionParameterAdaptationPlugin periodAdaptionPlugin =
-				new AssumptionParameterAdaptationPlugin(model, design, trace)
+				new AssumptionParameterAdaptationPlugin(metaAdaptationPlugin, model, design, trace)
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new AdapteeSelectorFitness())
 						.withDirectionSelector(new DirectionSelectorImpl())
@@ -84,6 +86,7 @@ public class CentralizedRun {
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 		simulation.addPlugin(irmPlugin);
+		simulation.addPlugin(metaAdaptationPlugin);
 		simulation.addPlugin(periodAdaptionPlugin);
 		/* deploy components and ensembles */
 		final DEECoNode deecoNode = simulation.createNode(1);

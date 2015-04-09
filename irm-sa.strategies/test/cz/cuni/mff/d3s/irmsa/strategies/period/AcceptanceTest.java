@@ -18,6 +18,7 @@ import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 
 public class AcceptanceTest {
 
@@ -33,10 +34,15 @@ public class AcceptanceTest {
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new IRMPlugin(trace, design).withLog(false));
+
+		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		simulation.addPlugin(irmPlugin);
+
+		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
+		simulation.addPlugin(metaAdaptationPlugin);
 
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		simulation.addPlugin(new PeriodAdaptationPlugin(model, design, trace));
+		simulation.addPlugin(new PeriodAdaptationPlugin(metaAdaptationPlugin, model, design, trace));
 
 		/* deploy components and ensembles */
 		final DEECoNode deecoNode = simulation.createNode(1);
