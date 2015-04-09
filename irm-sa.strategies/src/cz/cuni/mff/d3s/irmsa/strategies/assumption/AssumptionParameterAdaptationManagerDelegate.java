@@ -30,7 +30,7 @@ public class AssumptionParameterAdaptationManagerDelegate implements Evolutionar
 					final AssumptionInstance ai =(AssumptionInstance) invariant;
 					List<InvariantMonitor> monitors = ai.getDiagramInstance().getTraceModel().getInvariantSatisfactionMonitors();
 					for (InvariantMonitor im : monitors) {
-						if (im.getInvariant().equals(ai)) {
+						if (im.getInvariant().equals(ai.getInvariant())) {
 							for (Parameter p : im.getMethod().getParameters()) {
 								if (p.isAnnotationPresent(AssumptionParameter.class) && ai.getComponentInstance() != null) {
 									infos.add(AssumptionInfo.create(ai, im, p));
