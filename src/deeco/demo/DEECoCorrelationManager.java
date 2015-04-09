@@ -15,8 +15,6 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
-import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import deeco.metadata.ComponentPair;
@@ -52,6 +50,7 @@ public class DEECoCorrelationManager {
 	 * Time slot duration in milliseconds. Correlation of values is computed
 	 * within these time slots.
 	 */
+	@Local
 	private static final long TIME_SLOT_DURATION = 1000;
 	
 	@Local
@@ -152,25 +151,23 @@ public class DEECoCorrelationManager {
 		for(CorrelationLevel level : levels.value){
 			String correlationFilter = level.getLabelPair().getFirstLabel();
 			String correlationSubject = level.getLabelPair().getSecondLabel();
+			@SuppressWarnings("rawtypes")
+			Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
 			if(level.getCorrelationLevel() > KnowledgeMetadataHolder.getConfidenceLevel(correlationSubject)
-					&& !level.isDeployed()){
-				// Deploy if confidence level is satisfied and the ensemble is not deployed
-				Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+					&& !isEnsembleActive(deecoNodes, ensemble.getName())){
+				// Activate if confidence level is satisfied and the ensemble is not deployed or inactive
 				System.out.println(String.format("Deploying ensemble %s", ensemble.getName()));
 				if(!setEnsembleActive(deecoNodes, ensemble.getName(), true)){
+					// If the ensemble is not deployed, deploy it
 					for(DEECoNode node : deecoNodes){
 						node.deployEnsemble(ensemble);
 					}	
 				}
-				level.setDeployed(true);
 			} else if(level.getCorrelationLevel() < KnowledgeMetadataHolder.getConfidenceLevel(level.getLabelPair().getSecondLabel())
-					&& level.isDeployed()) {
-				// Undeploy if deployed and confidence level is not satisfied
-				Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+					&& isEnsembleActive(deecoNodes, ensemble.getName())) {
+				// deactivate if deployed and confidence level is not satisfied
 				System.out.println(String.format("Undeploying ensemble %s", ensemble.getName()));
-				if(setEnsembleActive(deecoNodes, ensemble.getName(), false)){
-					level.setDeployed(false);
-				}
+				setEnsembleActive(deecoNodes, ensemble.getName(), false);
 			}				
 		}
 	}
@@ -189,6 +186,25 @@ public class DEECoCorrelationManager {
 		}
 		
 		return ensemblesFound;
+	}
+	
+	private static boolean isEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName){
+		// Assume the ensemble is not deployed or inactive
+		boolean active = false;
+		
+		for(DEECoNode node : deecoNodes){
+			for(ComponentInstance componentInstance : node.getRuntimeMetadata().getComponentInstances()){
+				for(EnsembleController ensemble : componentInstance.getEnsembleControllers()){
+					if(ensemble.getEnsembleDefinition().getName().equals(ensembleName)
+							&& ensemble.isActive()){
+						// If the ensemble is deployed and active store this information
+						active = true;
+					}
+				}
+			}
+		}
+		
+		return active;
 	}
 
 	/**
