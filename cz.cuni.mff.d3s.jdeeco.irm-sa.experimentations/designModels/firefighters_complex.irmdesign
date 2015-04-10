@@ -17,12 +17,12 @@
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::temperature is monitored scarcely" refID="17" processName="monitorTemperatureScarcely" processPeriod="5000"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="No life threat" refID="16"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::temperature is monitored closely" refID="15" processName="monitorTemperatureClosely" processPeriod="1000"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="AVG(GM::acceleration)==0 in past 20" refID="13"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM in Danger" refID="13"/>
   <invariants description="GM::oxygenLevel is monitored when possible" refID="14"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is not used" refID="a8"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is used" refID="a9"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::oxygenLevel is monitored" refID="pi7" processName="monitorOxygenLevel" processPeriod="2000"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="Search and Rescue operation" refID="pi8" processName="searchAndRescue" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is not used" refID="28"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is used" refID="29"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::oxygenLevel is monitored" refID="30" processName="monitorOxygenLevel" processPeriod="2000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="Search and Rescue operation" refID="SOS" processName="searchAndRescue" processPeriod="1000"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Nearby GM in danger/critical state" refID="18"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GL::GMInDanger > 0" refID="6"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GL::GMInDanger == 0" refID="8"/>

@@ -110,4 +110,11 @@ public class Firefighter {
 			business logic to be provided here.
 		*/
 	}
+	
+	@InvariantMonitor("16") 
+	public static boolean noLifeThreatMonitor(
+		@In("acceleration") Integer acceleration
+	) {
+		return false;
+	}
 }

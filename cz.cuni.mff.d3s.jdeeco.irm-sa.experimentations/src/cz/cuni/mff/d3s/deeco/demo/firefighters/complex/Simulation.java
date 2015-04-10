@@ -48,7 +48,7 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			deecoNode.deployEnsemble(PhotosUpdate.class);
 			deecoNode.deployEnsemble(SensorDataUpdate.class);
 
-			simulation.start(20000);
+			simulation.start(2000);
 
 		}
 

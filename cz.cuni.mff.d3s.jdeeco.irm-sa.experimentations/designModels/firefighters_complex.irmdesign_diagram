@@ -212,7 +212,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_ZVV6QkYxEeSJKoA15y4WPw" fontName="Lucida Grande"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_ZVV6Q0YxEeSJKoA15y4WPw"/>
     <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters_complex.irmdesign#//@invariants.17"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZVV6REYxEeSJKoA15y4WPw" x="-543" y="924" width="242" height="82"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZVV6REYxEeSJKoA15y4WPw" x="-552" y="900" width="250" height="72"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_hporsEYxEeSJKoA15y4WPw" type="2013">
     <children xmi:type="notation:DecorationNode" xmi:id="_hppSwEYxEeSJKoA15y4WPw" type="5010"/>
@@ -250,7 +250,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_z0Eb0kYxEeSJKoA15y4WPw" fontName="Lucida Grande"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_z0Eb00YxEeSJKoA15y4WPw"/>
     <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" href="firefighters_complex.irmdesign#//@invariants.20"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z0Eb1EYxEeSJKoA15y4WPw" x="-536" y="1284" width="224" height="54"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z0Eb1EYxEeSJKoA15y4WPw" x="-588" y="1284" width="276" height="60"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_0arI0EYxEeSJKoA15y4WPw" type="2008">
     <children xmi:type="notation:DecorationNode" xmi:id="_0arv4EYxEeSJKoA15y4WPw" type="5007"/>
@@ -258,7 +258,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_0arI0kYxEeSJKoA15y4WPw" fontName="Lucida Grande"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_0arI00YxEeSJKoA15y4WPw"/>
     <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="firefighters_complex.irmdesign#//@invariants.21"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_0arI1EYxEeSJKoA15y4WPw" x="-275" y="1284" width="245" height="57"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_0arI1EYxEeSJKoA15y4WPw" x="-275" y="1284" width="313" height="57"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_fG3asEY2EeSJKoA15y4WPw" type="2014">
     <children xmi:type="notation:DecorationNode" xmi:id="_fG4BwEY2EeSJKoA15y4WPw" type="5011"/>
