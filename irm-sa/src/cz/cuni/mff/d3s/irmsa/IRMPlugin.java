@@ -13,6 +13,7 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
+import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 
 public class IRMPlugin implements DEECoPlugin {
 
@@ -33,8 +34,7 @@ public class IRMPlugin implements DEECoPlugin {
 	/** Listeners to adaptation. */
 	private final List<AdaptationListener> listeners = new ArrayList<>();
 
-	public IRMPlugin(TraceModel trace, IRM design) {
-		this.trace = trace;
+	public IRMPlugin(IRM design) {
 		this.design = design;
 	}
 
@@ -58,9 +58,14 @@ public class IRMPlugin implements DEECoPlugin {
 		this.logPrefix = logPrefix;
 		return this;
 	}
+	
+	public TraceModel getTrace(){
+		return trace;
+	}
 
 	@Override
 	public void init(DEECoContainer container) {
+		trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint irmAwareAnnotationProcessorExtension = new IrmAwareAnnotationProcessorExtension(design,trace);
 		container.getProcessor().addExtension(irmAwareAnnotationProcessorExtension);
 
