@@ -292,7 +292,7 @@ public class IRMInstanceGeneratorTest {
 		rci.setName(name+id);
 		aci.setRuntimeInstance(rci);
 		aci.setId(name+id);
-		aci.setKnowledgeManager(new CloningKnowledgeManager(name+id,rci));
+		aci.setKnowledgeManager(new CloningKnowledgeManager(name+id,rci,null));
 		architecture.getComponentInstances().add(aci);
 		
 		ComponentTrace cTrace = tFactory.createComponentTrace();

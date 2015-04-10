@@ -97,7 +97,7 @@ public class AdaptationManager {
 		}
 		System.out.println("Printing InvariantInstances' IDs...");
 		for (InvariantInstance ii : i.getInvariantInstances()) {
-			if (ii.isSelected()) {
+			if (ii.isSelected() && (ii instanceof PresentInvariantInstance)) {
 				System.out.println("Selected InvariantInstance's ID: " + ((PresentInvariantInstance) ii).getInvariant().getRefID() + " and name: " + ((PresentInvariantInstance) ii).getInvariant().getDescription());
 			}
 		}
@@ -108,7 +108,7 @@ public class AdaptationManager {
 		File[] filesList = new File (path).listFiles();
 		for (File f : filesList) {
 			String name = f.getName();
-			if (name.startsWith(prefix)) {
+			if (name.startsWith(prefix) && name.endsWith(".xmi")) {
 				System.out.println("Deleting file '" + name + "'");
 				try {
 					Files.delete(Paths.get(path + name));
