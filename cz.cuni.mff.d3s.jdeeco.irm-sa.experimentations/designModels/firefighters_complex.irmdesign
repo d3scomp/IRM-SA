@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cz.cuni.mff.d3s.irm.model.design:IRM xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0">
+  <invariants description="GL keeps track of the condition of his/her group members" refID="1"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM::groupLeaderId == GL::id" refID="2"/>
+  <invariants description="GL keeps track of the condition of the relevant members" refID="3"/>
+  <invariants description="Up-to-date GL::sensorDataList, w.r.t. GM::sensorData, is available" refID="5"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GL::GMInDanger is determined from the GL::sensorDataList" refID="4" processName="findGMsInDanger" processPeriod="4000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ExchangeInvariant" description="GM::nearbyGMInDanger – reflecting GL::noGMsInDanger – is up-to-date" refID="7" ensembleName="GMsInDangerUpdate" ensemblePeriod="3000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ExchangeInvariant" description="GL::sensorDataList - GL's belief over the GM::sensorData – is up-to-date" refID="10" ensembleName="SensorDataUpdate" ensemblePeriod="2000"/>
+  <invariants description="GM::sensorData is determined" refID="9"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::acceleration is monitored" refID="11" processName="monitorAcceleration" processPeriod="1000"/>
+  <invariants description="GM::position is determined" refID="12"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM indoors" refID="24"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM outdoors" refID="26"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::position is determined from indoors tracking system" refID="25" processName="monitorPositionITS" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::position is determined from GPS" refID="27" processName="monitorPositionGPS" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::temperature is monitored scarcely" refID="17" processName="monitorTemperatureScarcely" processPeriod="5000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="No life threat" refID="16"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::temperature is monitored closely" refID="15" processName="monitorTemperatureClosely" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="AVG(GM::acceleration)==0 in past 20" refID="13"/>
+  <invariants description="GM::oxygenLevel is monitored when possible" refID="14"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is not used" refID="a8"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Breathing apparatus is used" refID="a9"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="GM::oxygenLevel is monitored" refID="pi7" processName="monitorOxygenLevel" processPeriod="2000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="Search and Rescue operation" refID="pi8" processName="searchAndRescue" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Nearby GM in danger/critical state" refID="18"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GL::GMInDanger > 0" refID="6"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GL::GMInDanger == 0" refID="8"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="AVG(GM::acceleration)==0 in past 20 secs" refID="19"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="AVG(GM::acceleration)>0 in past 20 secs" refID="20"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM:nearbyGMsStatus==OK" refID="21"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="GM::nearbyGMsStatus==DANGER" refID="22"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description=" possibility(GM::nearbyGMsStatus==CRITICAL)" refID="23"/>
+  <invariants description="SL agreegates data from different sources" refID="ex1"/>
+  <invariants description="SL agrregates data from hexacopters" refID="ex2"/>
+  <invariants description="SL keeps track of the number of firefighters that are in danger" refID="ex3"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ExchangeInvariant" description="SL::noOfFFsInDanger - SL's belief of GL noOfGMsInDanger - is updated " refID="ex6" ensembleName="FFsInDangerUpdate" ensemblePeriod="8000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="visibility is low" refID="ex8"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="visibility is high" refID="ex7"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="New thermal photo is taken every 10 secs" refID="ex9" processName="takeThermalPhoto" processPeriod="10000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="New UAV::photo is taken every 10 secs " refID="ex4" processName="takePhoto" processPeriod="10000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ExchangeInvariant" description="Last photo and thermal photo are propagated to the SL" refID="ex5" ensembleName="PhotosUpdate" ensemblePeriod="10000"/>
+  <components name="Firefighter">
+    <knowledgeElements type="String" name="FF_ID"/>
+    <knowledgeElements type="Long" name="temperature"/>
+    <knowledgeElements type="Integer" name="acceleration"/>
+    <knowledgeElements type="Position" name="position"/>
+    <knowledgeElements type="Long" name="oxygenLevel"/>
+    <knowledgeElements type="String" name="leaderId"/>
+    <knowledgeElements type="Boolean" name="nearbyGMInDanger"/>
+    <knowledgeElements type="Boolean" name="alarmOn"/>
+  </components>
+  <components name="Officer">
+    <knowledgeElements type="String" name="GL_ID"/>
+    <knowledgeElements type="Integer" name="noOfGMsInDanger"/>
+    <knowledgeElements type="Map&lt;String,Long>" name="temperatureMap"/>
+    <knowledgeElements type="Map&lt;String,Position>" name="positionMap"/>
+    <knowledgeElements type="Map&lt;String,Integer>" name="accelerationMap"/>
+    <knowledgeElements type="Map&lt;String,Long>" name="oxygenLevelMap"/>
+  </components>
+  <components name="SiteLeader">
+    <knowledgeElements type="Map&lt;Integer,Integer>" name="noOfFFInDanger"/>
+    <knowledgeElements type="Map&lt;String,Photo>" name="photos"/>
+    <knowledgeElements type="Map&lt;String,ThermalPhoto> " name="thermalPhotos"/>
+  </components>
+  <components name="UnmannedAerialVehicle">
+    <knowledgeElements type="String" name="UAV_ID"/>
+    <knowledgeElements type="Photo" name="lastPhoto"/>
+    <knowledgeElements type="ThermalPhoto" name="lastThermalPhoto"/>
+  </components>
+  <refinements start="//@andNodes.0" end="//@invariants.0"/>
+  <refinements start="//@andNodes.1" end="//@invariants.2"/>
+  <refinements start="//@andNodes.2" end="//@invariants.3"/>
+  <refinements start="//@andNodes.3" end="//@invariants.7"/>
+  <refinements start="//@orNodes.0" end="//@invariants.9"/>
+  <refinements start="//@andNodes.4" end="//@orNodes.0"/>
+  <refinements start="//@andNodes.5" end="//@orNodes.0"/>
+  <refinements start="//@orNodes.1" end="//@andNodes.3"/>
+  <refinements start="//@andNodes.7" end="//@orNodes.1"/>
+  <refinements start="//@andNodes.6" end="//@orNodes.1"/>
+  <refinements start="//@orNodes.2" end="//@invariants.18"/>
+  <refinements start="//@andNodes.8" end="//@orNodes.2"/>
+  <refinements start="//@andNodes.9" end="//@orNodes.1"/>
+  <refinements start="//@orNodes.3" end="//@andNodes.1"/>
+  <refinements start="//@andNodes.10" end="//@orNodes.3"/>
+  <refinements start="//@andNodes.12" end="//@invariants.15"/>
+  <refinements start="//@andNodes.11" end="//@invariants.17"/>
+  <refinements start="//@orNodes.4" end="//@invariants.23"/>
+  <refinements start="//@andNodes.13" end="//@invariants.31"/>
+  <refinements start="//@andNodes.14" end="//@invariants.33"/>
+  <refinements start="//@andNodes.15" end="//@invariants.32"/>
+  <refinements start="//@orNodes.5" end="//@andNodes.15"/>
+  <refinements start="//@andNodes.16" end="//@orNodes.5"/>
+  <decompositions start="//@invariants.1" end="//@andNodes.0"/>
+  <decompositions start="//@invariants.2" end="//@andNodes.0"/>
+  <decompositions start="//@invariants.3" end="//@andNodes.1"/>
+  <decompositions start="//@invariants.4" end="//@andNodes.1"/>
+  <decompositions start="//@invariants.6" end="//@andNodes.2"/>
+  <decompositions start="//@invariants.7" end="//@andNodes.2"/>
+  <decompositions start="//@invariants.8" end="//@andNodes.3"/>
+  <decompositions start="//@invariants.9" end="//@andNodes.3"/>
+  <decompositions start="//@invariants.13" end="//@andNodes.5"/>
+  <decompositions start="//@invariants.11" end="//@andNodes.5"/>
+  <decompositions start="//@invariants.12" end="//@andNodes.4"/>
+  <decompositions start="//@invariants.10" end="//@andNodes.4"/>
+  <decompositions start="//@invariants.14" end="//@andNodes.7"/>
+  <decompositions start="//@invariants.15" end="//@andNodes.7"/>
+  <decompositions start="//@invariants.16" end="//@andNodes.6"/>
+  <decompositions start="//@invariants.17" end="//@andNodes.6"/>
+  <decompositions start="//@invariants.18" end="//@andNodes.6"/>
+  <decompositions start="//@invariants.19" end="//@orNodes.2"/>
+  <decompositions start="//@invariants.21" end="//@andNodes.8"/>
+  <decompositions start="//@invariants.20" end="//@andNodes.8"/>
+  <decompositions start="//@invariants.22" end="//@andNodes.9"/>
+  <decompositions start="//@invariants.23" end="//@andNodes.9"/>
+  <decompositions start="//@invariants.5" end="//@andNodes.10"/>
+  <decompositions start="//@invariants.24" end="//@andNodes.10"/>
+  <decompositions start="//@invariants.25" end="//@orNodes.3"/>
+  <decompositions start="//@invariants.27" end="//@andNodes.12"/>
+  <decompositions start="//@invariants.28" end="//@andNodes.12"/>
+  <decompositions start="//@invariants.26" end="//@andNodes.11"/>
+  <decompositions start="//@invariants.29" end="//@orNodes.4"/>
+  <decompositions start="//@invariants.30" end="//@orNodes.4"/>
+  <decompositions start="//@invariants.32" end="//@andNodes.13"/>
+  <decompositions start="//@invariants.0" end="//@andNodes.14"/>
+  <decompositions start="//@invariants.34" end="//@andNodes.14"/>
+  <decompositions start="//@invariants.33" end="//@andNodes.13"/>
+  <decompositions start="//@invariants.36" end="//@orNodes.5"/>
+  <decompositions start="//@invariants.35" end="//@andNodes.16"/>
+  <decompositions start="//@invariants.37" end="//@andNodes.16"/>
+  <decompositions start="//@invariants.39" end="//@andNodes.15"/>
+  <decompositions start="//@invariants.38" end="//@andNodes.15"/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <andNodes/>
+  <orNodes/>
+  <orNodes/>
+  <orNodes/>
+  <orNodes/>
+  <orNodes/>
+  <orNodes/>
+  <members start="//@components.0" end="//@invariants.6" membershipInput="//@components.0/@knowledgeElements.5" knowledgeExchangeInput="//@components.0/@knowledgeElements.2 //@components.0/@knowledgeElements.4 //@components.0/@knowledgeElements.3 //@components.0/@knowledgeElements.1 //@components.0/@knowledgeElements.0"/>
+  <members start="//@components.0" end="//@invariants.5" membershipInput="//@components.0/@knowledgeElements.5" knowledgeExchangeOutput="//@components.0/@knowledgeElements.6"/>
+  <members start="//@components.3" end="//@invariants.39" membershipInput="//@components.3/@knowledgeElements.0" knowledgeExchangeInput="//@components.3/@knowledgeElements.1 //@components.3/@knowledgeElements.2 //@components.3/@knowledgeElements.0"/>
+  <members start="//@components.1" end="//@invariants.34" membershipInput="//@components.1/@knowledgeElements.0" knowledgeExchangeInput="//@components.1/@knowledgeElements.1 //@components.1/@knowledgeElements.0"/>
+  <coordinators start="//@components.1" end="//@invariants.6" membershipInput="//@components.1/@knowledgeElements.0" knowledgeExchangeInput="//@components.1/@knowledgeElements.4 //@components.1/@knowledgeElements.5 //@components.1/@knowledgeElements.3 //@components.1/@knowledgeElements.2" knowledgeExchangeOutput="//@components.1/@knowledgeElements.4 //@components.1/@knowledgeElements.5 //@components.1/@knowledgeElements.2 //@components.1/@knowledgeElements.3"/>
+  <coordinators start="//@components.1" end="//@invariants.5" membershipInput="//@components.1/@knowledgeElements.0" knowledgeExchangeInput="//@components.1/@knowledgeElements.1"/>
+  <coordinators start="//@components.2" end="//@invariants.39" knowledgeExchangeOutput="//@components.2/@knowledgeElements.1 //@components.2/@knowledgeElements.2"/>
+  <coordinators start="//@components.2" end="//@invariants.34" knowledgeExchangeOutput="//@components.2/@knowledgeElements.0"/>
+  <contributes start="//@components.1" end="//@invariants.4" processInput="//@components.1/@knowledgeElements.2 //@components.1/@knowledgeElements.5 //@components.1/@knowledgeElements.4 //@components.1/@knowledgeElements.3" processOutput="//@components.1/@knowledgeElements.1"/>
+  <contributes start="//@components.0" end="//@invariants.14" processOutput="//@components.0/@knowledgeElements.1"/>
+  <contributes start="//@components.0" end="//@invariants.8" processOutput="//@components.0/@knowledgeElements.2"/>
+  <contributes start="//@components.0" end="//@invariants.12" processOutput="//@components.0/@knowledgeElements.3"/>
+  <contributes start="//@components.0" end="//@invariants.13" processOutput="//@components.0/@knowledgeElements.3"/>
+  <contributes start="//@components.0" end="//@invariants.16" processOutput="//@components.0/@knowledgeElements.1"/>
+  <contributes start="//@components.0" end="//@invariants.21" processOutput="//@components.0/@knowledgeElements.4"/>
+  <contributes start="//@components.0" end="//@invariants.22" processInput="//@components.0/@knowledgeElements.6"/>
+  <contributes start="//@components.3" end="//@invariants.37" processOutput="//@components.3/@knowledgeElements.2"/>
+  <contributes start="//@components.3" end="//@invariants.38" processOutput="//@components.3/@knowledgeElements.1"/>
+  <assumed start="//@components.3" end="//@invariants.35"/>
+  <assumed start="//@components.3" end="//@invariants.36"/>
+  <assumed start="//@components.1" end="//@invariants.1"/>
+  <assumed start="//@components.0" end="//@invariants.1"/>
+  <assumed start="//@components.1" end="//@invariants.25"/>
+  <assumed start="//@components.1" end="//@invariants.24"/>
+  <assumed start="//@components.0" end="//@invariants.10"/>
+  <assumed start="//@components.0" end="//@invariants.11"/>
+  <assumed start="//@components.0" end="//@invariants.23"/>
+  <assumed start="//@components.0" end="//@invariants.30"/>
+  <assumed start="//@components.0" end="//@invariants.29"/>
+  <assumed start="//@components.0" end="//@invariants.28"/>
+  <assumed start="//@components.0" end="//@invariants.27"/>
+  <assumed start="//@components.0" end="//@invariants.19"/>
+  <assumed start="//@components.0" end="//@invariants.20"/>
+  <assumed start="//@components.0" end="//@invariants.26"/>
+  <assumed start="//@components.0" end="//@invariants.17"/>
+  <assumed start="//@components.0" end="//@invariants.15"/>
+</cz.cuni.mff.d3s.irm.model.design:IRM>
