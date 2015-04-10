@@ -52,24 +52,24 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			
 			DEECoNode deecoNode2 = simulation.createNode(2);
 			deecoNode2.deployComponent(new Firefighter("FF1", "OF1"));
-//			deecoNode2.deployEnsemble(GMsInDangerUpdate.class);
-//			deecoNode2.deployEnsemble(FFsInDangerUpdate.class);
-//			deecoNode2.deployEnsemble(PhotosUpdate.class);
-//			deecoNode2.deployEnsemble(SensorDataUpdate.class);
+			deecoNode2.deployEnsemble(GMsInDangerUpdate.class);
+			deecoNode2.deployEnsemble(FFsInDangerUpdate.class);
+			deecoNode2.deployEnsemble(PhotosUpdate.class);
+			deecoNode2.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode3 = simulation.createNode(3);
 			deecoNode3.deployComponent(new SiteLeader());
-//			deecoNode3.deployEnsemble(GMsInDangerUpdate.class);
-//			deecoNode3.deployEnsemble(FFsInDangerUpdate.class);
-//			deecoNode3.deployEnsemble(PhotosUpdate.class);
-//			deecoNode3.deployEnsemble(SensorDataUpdate.class);
+			deecoNode3.deployEnsemble(GMsInDangerUpdate.class);
+			deecoNode3.deployEnsemble(FFsInDangerUpdate.class);
+			deecoNode3.deployEnsemble(PhotosUpdate.class);
+			deecoNode3.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode4 = simulation.createNode(4);
 			deecoNode4.deployComponent(new UnmannedAerialVehicle("UAV1"));
-//			deecoNode4.deployEnsemble(GMsInDangerUpdate.class);
-//			deecoNode4.deployEnsemble(FFsInDangerUpdate.class);
-//			deecoNode4.deployEnsemble(PhotosUpdate.class);
-//			deecoNode4.deployEnsemble(SensorDataUpdate.class);
+			deecoNode4.deployEnsemble(GMsInDangerUpdate.class);
+			deecoNode4.deployEnsemble(FFsInDangerUpdate.class);
+			deecoNode4.deployEnsemble(PhotosUpdate.class);
+			deecoNode4.deployEnsemble(SensorDataUpdate.class);
 
 			simulation.start(14000);
 
