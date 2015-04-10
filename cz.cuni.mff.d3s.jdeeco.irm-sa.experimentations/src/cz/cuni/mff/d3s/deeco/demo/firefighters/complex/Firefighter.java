@@ -20,11 +20,15 @@ public class Firefighter {
 	public Boolean nearbyGMInDanger;
 	public Boolean alarmOn;
  
-	public Firefighter() {
-		/* 
-			Just a skeleton,
-			business logic to be provided here.
-		*/
+	public Firefighter(String FF_ID, String GL_ID) {
+		this.FF_ID = FF_ID;
+		this.leaderId = GL_ID;
+		this.temperature = 25L;
+		this.acceleration = 30;
+		this.position = new Position(34,23);
+		this.oxygenLevel = 90L;
+		this.nearbyGMInDanger = false;
+		this.alarmOn = false;
 	}
  
 	@Process
@@ -88,7 +92,7 @@ public class Firefighter {
 	}
  
 	@Process
-	@Invariant("pi7")
+	@Invariant("30")
 	@PeriodicScheduling(period=2000) 
 	public static void monitorOxygenLevel(
 		@Out("oxygenLevel") ParamHolder<Long> oxygenLevel 
@@ -100,7 +104,7 @@ public class Firefighter {
 	}
  
 	@Process
-	@Invariant("pi8")
+	@Invariant("SOS")
 	@PeriodicScheduling(period=1000) 
 	public static void searchAndRescue(
 		@In("nearbyGMInDanger") Boolean nearbyGMInDanger 

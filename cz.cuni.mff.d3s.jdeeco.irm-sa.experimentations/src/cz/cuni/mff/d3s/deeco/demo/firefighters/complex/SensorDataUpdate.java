@@ -15,10 +15,10 @@ public class SensorDataUpdate {
 		@In("member.leaderId") String leaderId,  
 		@In("coord.GL_ID") String GL_ID 
 	) {
-			/*
-				replace next line with actual condition
-			*/
-			return true;
+		/*
+			replace next line with actual condition
+		 */
+		return true;
 	}
 
 	@KnowledgeExchange
@@ -33,8 +33,6 @@ public class SensorDataUpdate {
 		@InOut("coord.positionMap") ParamHolder<Map<String,Position>> positionMap,  
 		@InOut("coord.temperatureMap") ParamHolder<Map<String,Long>> temperatureMap 
 	) {
-		/*
-		    Add knowledge exchange function here. 
-		 */
+		System.out.println("SensorDataUpdate mapping!");
 	}	
 }

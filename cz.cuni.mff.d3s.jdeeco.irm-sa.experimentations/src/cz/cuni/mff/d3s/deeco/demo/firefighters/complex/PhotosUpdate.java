@@ -28,8 +28,6 @@ public class PhotosUpdate {
 		@Out("coord.photos") ParamHolder<Map<String,Photo>> photos,  
 		@Out("coord.thermalPhotos") ParamHolder<Map<String,ThermalPhoto> > thermalPhotos 
 	) {
-		/*
-		    Add knowledge exchange function here. 
-		 */
+		System.out.println("PhotosUpdate!");
 	}	
 }

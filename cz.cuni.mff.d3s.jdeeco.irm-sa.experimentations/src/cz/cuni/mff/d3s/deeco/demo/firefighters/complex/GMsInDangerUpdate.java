@@ -24,8 +24,6 @@ public class GMsInDangerUpdate {
 		@Out("member.nearbyGMInDanger") ParamHolder<Boolean> nearbyGMInDanger,  
 		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger 
 	) {
-		/*
-		    Add knowledge exchange function here. 
-		 */
+		System.out.println("GMInDangerUpdate!");
 	}	
 }

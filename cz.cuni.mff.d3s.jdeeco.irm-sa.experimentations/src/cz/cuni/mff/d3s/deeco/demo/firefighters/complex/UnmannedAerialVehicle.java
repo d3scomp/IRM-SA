@@ -15,11 +15,10 @@ public class UnmannedAerialVehicle {
 	public Photo lastPhoto;
 	public ThermalPhoto lastThermalPhoto;
  
-	public UnmannedAerialVehicle() {
-		/* 
-			Just a skeleton,
-			business logic to be provided here.
-		*/
+	public UnmannedAerialVehicle(String UAV_ID) {
+		this.UAV_ID = UAV_ID;
+		this.lastPhoto = new Photo();
+		this.lastThermalPhoto = new ThermalPhoto();
 	}
  
 	@Process

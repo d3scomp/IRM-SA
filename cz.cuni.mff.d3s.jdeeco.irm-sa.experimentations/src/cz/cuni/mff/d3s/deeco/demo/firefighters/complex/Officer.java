@@ -1,8 +1,14 @@
 package cz.cuni.mff.d3s.deeco.demo.firefighters.complex;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import cz.cuni.mff.d3s.deeco.annotations.*;
+import cz.cuni.mff.d3s.deeco.annotations.Component;
+import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
+import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.Invariant;
+import cz.cuni.mff.d3s.deeco.annotations.Out;
+import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
@@ -20,11 +26,13 @@ public class Officer {
 	public Map<String,Integer> accelerationMap;
 	public Map<String,Long> oxygenLevelMap;
  
-	public Officer() {
-		/* 
-			Just a skeleton,
-			business logic to be provided here.
-		*/
+	public Officer(String GL_ID) {
+		this.GL_ID = GL_ID;
+		this.noOfGMsInDanger = 0;
+		this.temperatureMap = new HashMap<>();
+		this.positionMap = new HashMap<>();
+		this.accelerationMap = new HashMap<>();
+		this.oxygenLevelMap = new HashMap<>();
 	}
  
 	@Process

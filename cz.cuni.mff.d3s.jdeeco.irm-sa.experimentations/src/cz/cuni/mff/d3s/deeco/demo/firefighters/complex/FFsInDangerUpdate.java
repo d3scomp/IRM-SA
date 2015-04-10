@@ -26,8 +26,6 @@ public class FFsInDangerUpdate {
 		@In("member.GL_ID") String GL_ID,  
 		@Out("coord.noOfFFInDanger") ParamHolder<Map<Integer,Integer>> noOfFFInDanger 
 	) {
-		/*
-		    Add knowledge exchange function here. 
-		 */
+		System.out.println("FFsInDangerUpdate!");
 	}	
 }

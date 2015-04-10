@@ -10,12 +10,10 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
-	public class Simulation {
+	public class SingleNodeSimulation {
 
 		static public final String MODELS_BASE_PATH = "designModels" + File.separator;
 		static public final String XMIFILE_PREFIX = "firefighters_complex";
@@ -24,7 +22,6 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 		public static void main(String[] args) throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 
 			/* create IRM plugin */
-			TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 			@SuppressWarnings("unused")
 			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 			IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
@@ -32,17 +29,17 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			SimulationTimer simulationTimer = new DiscreteEventTimer();
 			/* create main application container */
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-			simulation.addPlugin(new IRMPlugin(trace, design)
+			simulation.addPlugin(new IRMPlugin(design)
 					.withLog(true)
 					.withLogDir(MODELS_BASE_PATH)
 					.withLogPrefix(XMIFILE_PREFIX));
 			/* deploy components and ensembles */
 			DEECoNode deecoNode = simulation.createNode(1);
 
-			deecoNode.deployComponent(new Firefighter());
-			deecoNode.deployComponent(new Officer());
+			deecoNode.deployComponent(new Officer("OF1"));
+			deecoNode.deployComponent(new Firefighter("FF1", "OF1"));
 			deecoNode.deployComponent(new SiteLeader());
-			deecoNode.deployComponent(new UnmannedAerialVehicle());
+			deecoNode.deployComponent(new UnmannedAerialVehicle("UAV1"));
 			deecoNode.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode.deployEnsemble(PhotosUpdate.class);
