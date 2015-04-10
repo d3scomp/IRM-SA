@@ -25,7 +25,6 @@ public class AcceptanceTest {
 	@Test
 	public void sampleRun() throws InstantiationException, IllegalAccessException, DEECoException, AnnotationProcessorException {
 		/* create IRM plugin */
-		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final URL modelURL = getClass().getResource("assumption_simple.irmdesign");
@@ -35,14 +34,14 @@ public class AcceptanceTest {
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 
-		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		final IRMPlugin irmPlugin = new IRMPlugin(design).withLog(false);
 		simulation.addPlugin(irmPlugin);
 
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 		simulation.addPlugin(metaAdaptationPlugin);
 
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		simulation.addPlugin(new AssumptionParameterAdaptationPlugin(metaAdaptationPlugin, model, design, trace));
+		simulation.addPlugin(new AssumptionParameterAdaptationPlugin(metaAdaptationPlugin, model, design, irmPlugin.getTrace()));
 
 		/* deploy components and ensembles */
 		final DEECoNode deecoNode = simulation.createNode(1);
