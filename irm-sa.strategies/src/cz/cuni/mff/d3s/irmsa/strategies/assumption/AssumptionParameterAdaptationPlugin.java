@@ -5,8 +5,9 @@ import org.eclipse.emf.common.util.EMap;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.TemplateAdaptationManager;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.TemplateAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManager;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -15,20 +16,22 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
 /**
  * Plugin for period adaptation strategy.
  */
-public class AssumptionParameterAdaptationPlugin extends TemplateAdaptationPlugin<AssumptionParameterAdaptationPlugin, AssumptionParameterBackup> {
+public class AssumptionParameterAdaptationPlugin extends EvolutionaryAdaptationPlugin<AssumptionParameterAdaptationPlugin, AssumptionParameterBackup> {
 
 	/** Observe time. */
 	protected long observeTime = 5000;
 
 	/**
 	 * Only constructor.
+	 * @param metaAdaptationPlugin plugin managing this plugin
 	 * @param model model
 	 * @param design design
 	 * @param trace trace
 	 */
-	public AssumptionParameterAdaptationPlugin(
+	public AssumptionParameterAdaptationPlugin(final MetaAdaptationPlugin metaAdaptationPlugin,
 			final RuntimeMetadata model, final IRM design, final TraceModel trace) {
-		super(new AssumptionParameterAdaptationManagerDelegate(), model, design, trace);
+		super(new AssumptionParameterAdaptationManagerDelegate(),
+				metaAdaptationPlugin, model, design, trace);
 	}
 
 	public AssumptionParameterAdaptationPlugin withObserveTime(final long observeTime) {
@@ -62,7 +65,7 @@ public class AssumptionParameterAdaptationPlugin extends TemplateAdaptationPlugi
 	}
 
 	@Override
-	protected TemplateAdaptationManager createAdaptationManager() {
+	protected EvolutionaryAdaptationManager createAdaptationManager() {
 		return new AssumptionParameterAdaptationManager();
 	}
 

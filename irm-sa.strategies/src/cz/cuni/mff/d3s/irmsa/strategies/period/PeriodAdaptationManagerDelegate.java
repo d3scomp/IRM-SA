@@ -12,10 +12,10 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.AdaptationManagerDelegate;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManagerDelegate;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
-public class PeriodAdaptationManagerDelegate implements AdaptationManagerDelegate<PeriodBackup> {
+public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<PeriodBackup> {
 
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(

@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class IRMPlugin implements DEECoPlugin {
 
 	/** Passed to AdaptationManager. */
 	private String logPrefix = "";
+
+	/** Listeners to adaptation. */
+	private final List<AdaptationListener> listeners = new ArrayList<>();
 
 	public IRMPlugin(TraceModel trace, IRM design) {
 		this.trace = trace;
@@ -74,7 +78,24 @@ public class IRMPlugin implements DEECoPlugin {
 				c.getInternalData().put(AdaptationManager.LOG, log);
 				c.getInternalData().put(AdaptationManager.LOG_DIR, logDir);
 				c.getInternalData().put(AdaptationManager.LOG_PREFIX, logPrefix);
+				c.getInternalData().put(AdaptationManager.ADAPTATION_LISTENERS, listeners);
 			}
 		}
+	}
+
+	/**
+	 * Registers AdaptationListener.
+	 * @param listener adaptation listener to register
+	 */
+	public void registerListener(final AdaptationListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Unregisters AdaptationListener.
+	 * @param listener adaptation listener to unregister
+	 */
+	public void unregisterListener(final AdaptationListener listener) {
+		listeners.remove(listener);
 	}
 }

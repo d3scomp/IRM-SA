@@ -14,11 +14,11 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor;
-import cz.cuni.mff.d3s.irmsa.strategies.commons.AdaptationManagerDelegate;
+import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManagerDelegate;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.Direction;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
-public class AssumptionParameterAdaptationManagerDelegate implements AdaptationManagerDelegate<AssumptionParameterBackup> {
+public class AssumptionParameterAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<AssumptionParameterBackup> {
 
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
@@ -30,7 +30,7 @@ public class AssumptionParameterAdaptationManagerDelegate implements AdaptationM
 					final AssumptionInstance ai =(AssumptionInstance) invariant;
 					List<InvariantMonitor> monitors = ai.getDiagramInstance().getTraceModel().getInvariantSatisfactionMonitors();
 					for (InvariantMonitor im : monitors) {
-						if (im.getInvariant().equals(ai)) {
+						if (im.getInvariant().equals(ai.getInvariant())) {
 							for (Parameter p : im.getMethod().getParameters()) {
 								if (p.isAnnotationPresent(AssumptionParameter.class) && ai.getComponentInstance() != null) {
 									infos.add(AssumptionInfo.create(ai, im, p));

@@ -1,7 +1,8 @@
 package cz.cuni.mff.d3s.irmsa.strategies.commons;
 
+import static cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper.retrieveFromInternalData;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
@@ -37,13 +37,19 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
  */
 @Component
 @SystemComponent
-public abstract class TemplateAdaptationManager {
+public abstract class EvolutionaryAdaptationManager {
 
 	/** Default period of monitoring. */
 	static public final int MONITORING_PERIOD = 5000;
 
 	/** Default period of adapting. */
 	static public final int ADAPTING_PERIOD = 5000;
+
+	/** Run flag stored in internal data under this key. */
+	static public final String RUN_FLAG = "runFlag";
+
+	/** Done flag stored in internal data under this key. */
+	static public final String DONE_FLAG = "doneFlag";
 
 	/** Trace model stored in internal data under this key. */
 	static final String TRACE_MODEL = "trace";
@@ -81,7 +87,7 @@ public abstract class TemplateAdaptationManager {
 	/**
 	 * Only constructor.
 	 */
-	protected TemplateAdaptationManager(final StateHolder<?> initState) {
+	protected EvolutionaryAdaptationManager(final StateHolder<?> initState) {
 		this.id = createId();
 		state = initState;
 	}
@@ -91,18 +97,23 @@ public abstract class TemplateAdaptationManager {
 	 * @return new id
 	 */
 	protected String createId() {
-		return String.format("TemplateAdapatationManager_%s", UUID.randomUUID());
+		return String.format("EvolutionaryAdapatationManager_%s", UUID.randomUUID());
 	}
 
 	@Process
-	@PeriodicScheduling(period = MONITORING_PERIOD, order = 10)
+	@PeriodicScheduling(period = MONITORING_PERIOD, order = 5)
 	static public <T extends Backup> void monitorOverallFitness(
 			@In("id") String id,
 			@Out("fitness") ParamHolder<Double> fitness) {
-		fitness.value = 0.0;
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
-		final AdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
+		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		getTimeTrigger(process).setPeriod(delegate.getMonitorPeriod()); //set monitor period
+		//
+		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
+		if (run == null || !run) {
+			return; //manager tells us not to run
+		}
+		fitness.value = 0.0;
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
 		// get simulated time
@@ -134,7 +145,6 @@ public abstract class TemplateAdaptationManager {
 
 		//Create data structure for processing
 		final Set<InvariantInfo<?>> infos = delegate.extractInvariants(IRMInstances);
-		InvariantInfosStorage.storeInvariantInfos(id, infos);
 
 		//Compute processes' fitnesses
 		computeInvariantsFitness(infos);
@@ -142,6 +152,7 @@ public abstract class TemplateAdaptationManager {
 		//Compute overall fitness
 		fitness.value = invariantFitnessCombiner.combineInvariantFitness(infos);
 		System.out.println("Overall System Fitness: " + fitness.value + "(at " + simulatedTime + ")");
+		InvariantInfosStorage.storeInvariantInfos(id, infos);
 	}
 
 	@Process
@@ -150,8 +161,12 @@ public abstract class TemplateAdaptationManager {
 			@In("id") String id,
 			@In("fitness") Double fitness,
 			@InOut("state") ParamHolder<StateHolder<T>> stateHolder) {
+		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
+		if (run == null || !run) {
+			return; //manager tells us not to run
+		}
 		final StateHolder<T> state = stateHolder.value;
-		final AdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
+		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		final ComponentProcess process = ProcessContext.getCurrentProcess();
 		// get runtime model from the process context
 		final RuntimeMetadata runtime = (RuntimeMetadata) process.getComponentInstance().eContainer();
@@ -160,7 +175,7 @@ public abstract class TemplateAdaptationManager {
 		System.out.println("*** Adapting in runtime "+ runtime + " at time " + simulatedTime +" ***");
 		// skipping the first run of this process as replicas are not disseminated yet
 		if (simulatedTime <= 0) {
-			Log.w("First invocation of the TemplateAdaptationManager. Skipping this adapting cycle.");
+			Log.w("First invocation of the EvolutionaryAdaptationManager. Skipping this adapting cycle.");
 			return;
 		}
 
@@ -251,29 +266,6 @@ public abstract class TemplateAdaptationManager {
 	}
 
 	/**
-	 * Not type-safe method for retrieving objects from component's internal data.
-	 * @param key key to search value for
-	 * @return typed object from component's internal data
-	 * @throws RuntimeException when no, null or wrongly typed data are provided
-	 */
-	static protected <T> T retrieveFromInternalData(final String key) {
-		final ComponentInstance instance =
-				ProcessContext.getCurrentProcess().getComponentInstance();
-		final Object value = instance.getInternalData().get(key);
-		try {
-			if (value != null) {
-				@SuppressWarnings("unchecked")
-				final T result = (T) value;
-				return result;
-			} else {
-				throw new NoSuchElementException("No or null data for key " + key);
-			}
-		} catch (ClassCastException | NoSuchElementException e) {
-			throw new RuntimeException(String.format("Could not retrieve %s from internal data.", key), e);
-		}
-	}
-
-	/**
 	 * Returns time trigger of the given process or null.
 	 * @param process given process
 	 * @return time trigger of the given process or null
@@ -305,7 +297,7 @@ public abstract class TemplateAdaptationManager {
 	 * @param state  manager's current state
 	 */
 	static protected void resetAdaptState(final ComponentProcess process,
-			final AdaptationManagerDelegate<? extends Backup> delegate,
+			final EvolutionaryAdaptationManagerDelegate<? extends Backup> delegate,
 			final StateHolder<?> state) {
 		final TimeTrigger trigger = getTimeTrigger(process);
 		trigger.setPeriod(delegate.getDefaultAdaptingPeriod());

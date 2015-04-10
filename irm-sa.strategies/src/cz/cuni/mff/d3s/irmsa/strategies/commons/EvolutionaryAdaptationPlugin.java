@@ -14,7 +14,8 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.AdaptationManager;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -23,11 +24,11 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
 /**
  * Template plugin for evolution adaptation strategies.
  */
-public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlugin<T, U>, U extends Backup> implements DEECoPlugin {
+public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdaptationPlugin<T, U>, U extends Backup> implements DEECoPlugin {
 
 	/** Plugin dependencies. */
-	static private List<Class<? extends DEECoPlugin>> dependencies =
-			Collections.unmodifiableList(Arrays.asList(IRMPlugin.class));
+	static private List<Class<? extends DEECoPlugin>> DEPENDENCIES =
+			Collections.unmodifiableList(Arrays.asList(MetaAdaptationPlugin.class));
 
 	/** Runtime model. */
 	protected final RuntimeMetadata model;
@@ -38,8 +39,11 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	/** Trace model. */
 	protected final TraceModel trace;
 
-	/** TemplateAdaptationManager delegates operations to this object. */
-	protected final AdaptationManagerDelegate<U> delegate;
+	/** EvolutionaryAdaptationManager delegates operations to this object. */
+	protected final EvolutionaryAdaptationManagerDelegate<U> delegate;
+
+	/** MetaAdaptationPlugin managing this plugin. */
+	protected final MetaAdaptationPlugin metaAdaptationPlugin;
 
 	/** Combines independent fitnesses into overall system fitness. */
 	protected InvariantFitnessCombiner invariantFitnessCombiner =
@@ -62,13 +66,17 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 
 	/**
 	 * Only constructor.
+	 * @param delegate adaptation manager delegate
+	 * @param metaAdaptationPlugin plugin managing this plugin
 	 * @param model model
 	 * @param design design
 	 * @param trace trace
 	 */
-	public TemplateAdaptationPlugin(final AdaptationManagerDelegate<U> delegate,
+	public EvolutionaryAdaptationPlugin(final EvolutionaryAdaptationManagerDelegate<U> delegate,
+			final MetaAdaptationPlugin metaAdaptationPlugin,
 			final RuntimeMetadata model, final IRM design, final TraceModel trace) {
 		this.delegate = delegate;
+		this.metaAdaptationPlugin = metaAdaptationPlugin;
 		this.model = model;
 		this.design = design;
 		this.trace = trace;
@@ -155,7 +163,7 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 	 * Creates new AdaptationManager. Unique class for each Plugin!
 	 * @return new AdaptationManager
 	 */
-	protected abstract TemplateAdaptationManager createAdaptationManager();
+	protected abstract EvolutionaryAdaptationManager createAdaptationManager();
 
 	/**
 	 * Here can descendant provide additional data to adaptation manager.
@@ -167,32 +175,52 @@ public abstract class TemplateAdaptationPlugin <T extends TemplateAdaptationPlug
 
 	@Override
 	public List<Class<? extends DEECoPlugin>> getDependencies() {
-		return dependencies;
+		return DEPENDENCIES;
 	}
 
 	@Override
 	public void init(final DEECoContainer container) {
 		//relying on annotation processor from IRMPlugin
 		try {
-			final TemplateAdaptationManager manager = createAdaptationManager();
+			final EvolutionaryAdaptationManager manager = createAdaptationManager();
 			container.deployComponent(manager);
-			// pass necessary data to the PeriodAdaptationManager
+			// pass necessary data to the EvolutionaryAdaptationManager
 			for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
 				if (c.getName().equals(manager.getClass().getName())) {
 					final EMap<String, Object> data = c.getInternalData();
-					data.put(TemplateAdaptationManager.DESIGN_MODEL, design);
-					data.put(TemplateAdaptationManager.TRACE_MODEL, trace);
-					data.put(TemplateAdaptationManager.ADAPTATION_DELEGATE, delegate);
-					data.put(TemplateAdaptationManager.INVARIANT_FITNESS_COMBINER, invariantFitnessCombiner);
-					data.put(TemplateAdaptationManager.ADAPTEE_SELECTOR, adapteeSelector);
-					data.put(TemplateAdaptationManager.DIRECTION_SELECTOR, directionSelector);
-					data.put(TemplateAdaptationManager.DELTA_COMPUTOR, deltaComputor);
-					data.put(TemplateAdaptationManager.ADAPTATION_BOUND, adaptationBound);
+					data.put(EvolutionaryAdaptationManager.DESIGN_MODEL, design);
+					data.put(EvolutionaryAdaptationManager.TRACE_MODEL, trace);
+					data.put(EvolutionaryAdaptationManager.ADAPTATION_DELEGATE, delegate);
+					data.put(EvolutionaryAdaptationManager.INVARIANT_FITNESS_COMBINER, invariantFitnessCombiner);
+					data.put(EvolutionaryAdaptationManager.ADAPTEE_SELECTOR, adapteeSelector);
+					data.put(EvolutionaryAdaptationManager.DIRECTION_SELECTOR, directionSelector);
+					data.put(EvolutionaryAdaptationManager.DELTA_COMPUTOR, deltaComputor);
+					data.put(EvolutionaryAdaptationManager.ADAPTATION_BOUND, adaptationBound);
 					provideDataToManager(data);
+					//
+					metaAdaptationPlugin.registerManager(new AdaptationManager() {
+
+						@Override
+						public void stop() {
+							data.put(EvolutionaryAdaptationManager.RUN_FLAG, false);
+						}
+
+						@Override
+						public void run() {
+							data.put(EvolutionaryAdaptationManager.RUN_FLAG, true);
+							data.put(EvolutionaryAdaptationManager.DONE_FLAG, false);
+						}
+
+						@Override
+						public boolean isDone() {
+							final Boolean result = (Boolean) data.get(EvolutionaryAdaptationManager.DONE_FLAG);
+							return result == null || result;
+						}
+					});
 				}
 			}
 		} catch (AnnotationProcessorException e) {
-			Log.e("Error while trying to deploy AdaptationManager", e);
+			Log.e("Error while trying to deploy EvolutionaryAdaptationManager", e);
 		}
 	}
 }
