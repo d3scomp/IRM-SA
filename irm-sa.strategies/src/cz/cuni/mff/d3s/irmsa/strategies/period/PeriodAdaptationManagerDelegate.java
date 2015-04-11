@@ -26,11 +26,13 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 				if (invariant instanceof ProcessInvariantInstance) {
 					final ProcessInvariantInstance pii =
 							(ProcessInvariantInstance) invariant;
+					pii.getComponentProcess().setActive(true); //IRM may have turned it off
 					infos.add(InvariantInfo.create(pii));
 				} else if (invariant instanceof ExchangeInvariantInstance) {
 					final ExchangeInvariantInstance xii =
 							(ExchangeInvariantInstance) invariant;
 					infos.add(InvariantInfo.create(xii));
+					//xii.getEnsembleController().setActive(true); //TODO change to getEnsembleController when ready
 				}
 			}
 		}
