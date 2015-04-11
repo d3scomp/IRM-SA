@@ -23,6 +23,9 @@ public class MetaAdaptationManager {
 	/** Managed managers stored in internal data under this key. */
 	static public final String MANAGED_MANAGERS = "managedManagers";
 
+	/** Flag whether IRM adaptation can rum stored in internal data under this key. */
+	static public final String IRM_CAN_RUN = "irmCanRun";
+
 	/** Mandatory knowledge. */
 	public String id;
 

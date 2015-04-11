@@ -12,6 +12,7 @@ import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
+import cz.cuni.mff.d3s.irmsa.AdaptationListener;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 public class MetaAdaptationPlugin implements DEECoPlugin {
@@ -50,8 +51,19 @@ public class MetaAdaptationPlugin implements DEECoPlugin {
 					final EMap<String, Object> data = c.getInternalData();
 					data.put(MetaAdaptationManager.MANAGED_MANAGERS, managers);
 					//
-					irmPlugin.registerListener((solutions, total) -> {
-						data.put(MetaAdaptationManager.RUN_FLAG, solutions == 0);
+					irmPlugin.registerListener(new AdaptationListener() {
+						@Override
+						public boolean canIRMRun() {
+							final Boolean canRun = (Boolean) data.get(MetaAdaptationManager.IRM_CAN_RUN);
+							return canRun == null || canRun;
+						}
+						@Override
+						public void adaptationResult(int solutions, int total) {
+							data.put(MetaAdaptationManager.RUN_FLAG, solutions == 0);
+							if (solutions == 0) {
+								data.put(MetaAdaptationManager.IRM_CAN_RUN, false);
+							}
+						}
 					});
 				}
 			}

@@ -3,7 +3,6 @@ package cz.cuni.mff.d3s.irmsa;
 /**
  * Interface for listening to adaptation result.
  */
-@FunctionalInterface
 public interface AdaptationListener {
 
 	/**
@@ -12,4 +11,10 @@ public interface AdaptationListener {
 	 * @param total total number of instances to solve
 	 */
 	void adaptationResult(int solutions, int total);
+
+	/**
+	 * Returns true if IRM adaptation can safely run without interfering with anything.
+	 * @return true if IRM adaptation can run, false otherwise
+	 */
+	boolean canIRMRun();
 }
