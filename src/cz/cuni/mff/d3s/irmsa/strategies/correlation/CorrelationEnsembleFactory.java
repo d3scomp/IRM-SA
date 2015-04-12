@@ -109,15 +109,15 @@ public class CorrelationEnsembleFactory {
 		// Membership method
 		CtMethod membershipMethod = CtNewMethod.make(String.format(
 				"public static boolean membership("
-				+ "		deeco.metadata.MetadataWrapper member%1$s,"
-				+ "		deeco.metadata.MetadataWrapper member%2$s,"
-				+ "		deeco.metadata.MetadataWrapper coord%1$s,"
-				+ "		deeco.metadata.MetadataWrapper coord%2$s) {"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper member%1$s,"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper member%2$s,"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%2$s) {"
 				+ " return (!member%2$s.isOperational()"
 				+ "		&& coord%2$s.isOperational()"
-				+ "		&& deeco.metadata.KnowledgeMetadataHolder.classifyDistance("
+				+ "		&& cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder.classifyDistance("
 				+ "			\"%1$s\", member%1$s.getValue(), coord%1$s.getValue())"
-				+ "			 == deeco.metadata.CorrelationLevel.DistanceClass.Close);}",
+				+ "			 == cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass.Close);}",
 					correlationFilter, correlationSubject),
 				ensembleClass);
 		// Membership annotation for the membership method
@@ -151,7 +151,7 @@ public class CorrelationEnsembleFactory {
 		CtMethod mapMethod = CtNewMethod.make(String.format(
 				"public static void map("
 				+ "		String memberId,"
-				+ "		deeco.metadata.MetadataWrapper coord%1$s,"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,"
 				+ "		cz.cuni.mff.d3s.deeco.task.ParamHolder member%1$s) {"
 				+ " System.out.println(\"Knowledge injection (%1$s) for component \" + memberId);"
 				+ "	member%1$s.value = coord%1$s; }",
