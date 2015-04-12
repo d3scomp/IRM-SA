@@ -1,4 +1,4 @@
-package deeco.metadata;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata;
 
 import java.io.Serializable;
 

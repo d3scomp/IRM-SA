@@ -1,4 +1,4 @@
-package deeco.metric;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation.metric;
 
 
 /**

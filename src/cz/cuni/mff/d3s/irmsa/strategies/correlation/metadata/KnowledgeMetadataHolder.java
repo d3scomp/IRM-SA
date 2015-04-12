@@ -1,11 +1,11 @@
-package deeco.metadata;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import deeco.metadata.CorrelationLevel.DistanceClass;
-import deeco.metric.DifferenceMetric;
-import deeco.metric.Metric;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 
 /**
  * A class that maps additional metadata to individual knowledge fields.

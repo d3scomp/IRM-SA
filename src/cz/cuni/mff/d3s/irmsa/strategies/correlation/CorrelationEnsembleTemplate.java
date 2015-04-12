@@ -1,7 +1,5 @@
-package deeco.demo;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
-import deeco.metadata.KnowledgeMetadataHolder;
-import deeco.metadata.CorrelationLevel.DistanceClass;
 import cz.cuni.mff.d3s.deeco.annotations.Ensemble;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.KnowledgeExchange;
@@ -10,7 +8,9 @@ import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import deeco.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass;
 
 // This class is not used. It only illustrates what is being created inside the CorrelationEnsembleFactory
 @Ensemble

@@ -1,4 +1,4 @@
-package deeco.demo;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +17,12 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import deeco.metadata.ComponentPair;
-import deeco.metadata.CorrelationLevel;
-import deeco.metadata.KnowledgeMetadataHolder;
-import deeco.metadata.KnowledgeQuadruple;
-import deeco.metadata.LabelPair;
-import deeco.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.ComponentPair;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeQuadruple;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.LabelPair;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
 public class DEECoCorrelationManager {

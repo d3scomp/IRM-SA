@@ -1,4 +1,4 @@
-package deeco.demo;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
 import java.util.ArrayList;
 import java.util.List;

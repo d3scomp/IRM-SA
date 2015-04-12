@@ -1,4 +1,4 @@
-package deeco.demo;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Membership;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeNotFoundException;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import deeco.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Ensemble
 @PeriodicScheduling(period = 1000)

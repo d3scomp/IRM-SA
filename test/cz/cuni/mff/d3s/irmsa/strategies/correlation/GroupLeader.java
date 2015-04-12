@@ -1,4 +1,4 @@
-package deeco.demo;
+package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
 import java.util.Random;
 
@@ -9,8 +9,8 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
-import deeco.demo.CorrelationTest.Variances;
-import deeco.metadata.MetadataWrapper;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.CorrelationTest.Variances;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
 public class GroupLeader {
