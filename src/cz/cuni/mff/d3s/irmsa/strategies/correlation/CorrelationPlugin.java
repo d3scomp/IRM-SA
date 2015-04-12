@@ -29,7 +29,7 @@ public class CorrelationPlugin implements DEECoPlugin {
 	@Override
 	public void init(DEECoContainer container) {
 		try {
-			container.deployComponent(new DEECoCorrelationManager(deecoNodes));
+			container.deployComponent(new CorrelationManager(deecoNodes));
 			// FIXME these two ensembles could be unified if we implement the "member.*" in knowledge exchange parameters 
 			container.deployEnsemble(GroupMemberDataAggregation.class);
 			container.deployEnsemble(GroupLeaderDataAggregation.class);

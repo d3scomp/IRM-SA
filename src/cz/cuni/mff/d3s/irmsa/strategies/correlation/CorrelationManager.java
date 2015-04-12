@@ -25,7 +25,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.LabelPair;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
-public class DEECoCorrelationManager {
+public class CorrelationManager {
 
 	public String id;
 	
@@ -64,11 +64,11 @@ public class DEECoCorrelationManager {
 	public final List<DEECoNode> otherNodes;
 	
 	/**
-	 * Create an instance of the {@link DEECoCorrelationManager} that will hold
+	 * Create an instance of the {@link CorrelationManager} that will hold
 	 * a reference to the given {@link DEECoNode}s.
 	 * @param otherNodes The other {@link DEECoNode}s in the system.
 	 */
-	public DEECoCorrelationManager(List<DEECoNode> otherNodes) {
+	public CorrelationManager(List<DEECoNode> otherNodes) {
 		knowledgeHistoryOfAllComponents = new HashMap<>();
 		correlationLevels = new ArrayList<>();
 		lastProcessedTimestamps = new HashMap<>();
