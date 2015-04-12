@@ -47,7 +47,10 @@ public class CorrelationTest {
 		deeco3.deployComponent(new GroupLeader("3"));
 
 		/* Create node that holds the correlation component */
-		realm.createNode(4, new CorrelationPlugin(nodesInRealm));
+		DEECoNode deeco4 = realm.createNode(4, new CorrelationPlugin(nodesInRealm));
+		// FIXME these two ensembles could be unified if we implement the "member.*" in knowledge exchange parameters
+		deeco4.deployEnsemble(GroupMemberDataAggregation.class);
+		deeco4.deployEnsemble(GroupLeaderDataAggregation.class);
 
 
 		/* WHEN simulation is performed */
