@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,13 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
-import cz.cuni.mff.d3s.irmsa.strategies.correlation.CorrelationPlugin;
+import cz.cuni.mff.d3s.irm.model.design.IRM;
+import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
+import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
+import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
+import cz.cuni.mff.d3s.irmsa.EMFHelper;
+import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
@@ -46,8 +53,20 @@ public class CorrelationTest {
 		nodesInRealm.add(deeco3);
 		deeco3.deployComponent(new GroupLeader("3"));
 
+		/* create Plugins */
+		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
+		@SuppressWarnings("unused")
+		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
+		final URL modelURL = getClass().getResource("correlation_simple.irmdesign");
+		final IRM design = (IRM) EMFHelper.loadModelFromXMI(modelURL.toString());
+
+		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
+
 		/* Create node that holds the correlation component */
-		DEECoNode deeco4 = realm.createNode(4, new CorrelationPlugin(nodesInRealm));
+		DEECoNode deeco4 = realm.createNode(4,
+				irmPlugin, metaAdaptationPlugin,
+				new CorrelationPlugin(metaAdaptationPlugin, nodesInRealm));
 		// FIXME these two ensembles could be unified if we implement the "member.*" in knowledge exchange parameters
 		deeco4.deployEnsemble(GroupMemberDataAggregation.class);
 		deeco4.deployEnsemble(GroupLeaderDataAggregation.class);
