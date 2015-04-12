@@ -32,9 +32,9 @@ public class MetaAdaptationManager {
 	@Process
 	@PeriodicScheduling(period = MANAGING_PERIOD, order = 10)
 	static public void adapt(@In("id") String id) {
-		final Boolean run = retrieveFromInternalData(RUN_FLAG);
+		final Boolean run = retrieveFromInternalData(RUN_FLAG, Boolean.FALSE);
 		final List<AdaptationManager> managers = retrieveFromInternalData(MANAGED_MANAGERS);
-		if (run == null || !run) {
+		if (!run) {
 //			for (AdaptationManager manager : managers) {
 //				manager.stop();
 //			}
