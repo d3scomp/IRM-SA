@@ -54,13 +54,12 @@ public class CorrelationTest {
 		deeco3.deployComponent(new GroupLeader("3"));
 
 		/* create Plugins */
-		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final URL modelURL = getClass().getResource("correlation_simple.irmdesign");
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(modelURL.toString());
 
-		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		final IRMPlugin irmPlugin = new IRMPlugin( design).withLog(false);
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 
 		/* Create node that holds the correlation component */
