@@ -73,7 +73,7 @@ public class CentralizedRun {
 		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 
-		// create IRMPeriodAdaptationPlugin
+		// create PeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
 		final PeriodAdaptationPlugin periodAdaptionPlugin =
 				new PeriodAdaptationPlugin(metaAdaptationPlugin, model, design, trace)

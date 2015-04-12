@@ -46,10 +46,10 @@ public abstract class EvolutionaryAdaptationManager {
 	static public final int ADAPTING_PERIOD = 5000;
 
 	/** Run flag stored in internal data under this key. */
-	static public final String RUN_FLAG = "runFlag";
+	static final String RUN_FLAG = "runFlag";
 
 	/** Done flag stored in internal data under this key. */
-	static public final String DONE_FLAG = "doneFlag";
+	static final String DONE_FLAG = "doneFlag";
 
 	/** Trace model stored in internal data under this key. */
 	static final String TRACE_MODEL = "trace";
