@@ -65,18 +65,17 @@ public class CentralizedRun {
 		Log.i("Preparing simulation");
 
 		/* create IRM plugin */
-		final TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
 
-		final IRMPlugin irmPlugin = new IRMPlugin(trace, design).withLog(false);
+		final IRMPlugin irmPlugin = new IRMPlugin(design).withLog(false);
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 
 		// create PeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
 		final PeriodAdaptationPlugin periodAdaptionPlugin =
-				new PeriodAdaptationPlugin(metaAdaptationPlugin, model, design, trace)
+				new PeriodAdaptationPlugin(metaAdaptationPlugin, model, design, irmPlugin.getTrace())
 						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new AdapteeSelectorFitness())
 						.withDirectionSelector(new DirectionSelectorImpl())

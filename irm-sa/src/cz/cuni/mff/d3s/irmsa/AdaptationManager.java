@@ -12,6 +12,8 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.EnsembleInstance;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -46,7 +48,7 @@ public class AdaptationManager {
 	public static final String ADAPTATION_LISTENERS = "adaptationListeners";
 
 	@Process
-	@PeriodicScheduling(period=2000)
+	@PeriodicScheduling(period=12000)
 	public static void reason(@In("id") String id) {
 
 		// get runtime, architecture, design, and trace models from the process context
@@ -66,6 +68,7 @@ public class AdaptationManager {
 		}
 		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 		Architecture architecture = ProcessContext.getArchitecture();
+		printArchitectureModel(architecture);
 		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) component.getInternalData().get(TRACE_MODEL);
 		boolean log = (Boolean) component.getInternalData().get(LOG);
@@ -85,10 +88,13 @@ public class AdaptationManager {
 			// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
 			System.out.println("Number of IRMInstances: " + IRMInstances.size());
 			for (int i = 0; i< IRMInstances.size(); i++) {
-				System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
+//				System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
 				EMFHelper.saveModelInXMI(IRMInstances.get(i), base + prefix + i +".xmi");
 			}
 		}
+		
+		if (IRMInstances.isEmpty()) return;
+		
 		// create a reconfigurator of the current runtime
 		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
 		int solutions = 0;
@@ -110,6 +116,25 @@ public class AdaptationManager {
 		}
 	}
 
+	/**
+	 * for debugging
+	 * @param architecture
+	 */
+	private static void printArchitectureModel(Architecture architecture) {
+		System.out.println("Printing the architecture model:");
+		for (cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance ci : architecture.getComponentInstances()){
+			if (ci instanceof LocalComponentInstance) {
+				System.out.println("LocalComponentInstance: "+ ((LocalComponentInstance) ci).getRuntimeInstance().getName());
+			} else {
+				System.out.println("RemoteComponentInstance: " + ci.getId());	
+			}
+		}
+		for (EnsembleInstance ei : architecture.getEnsembleInstances()) {
+			System.out.println("EnsembleInstance: " + ei.getEnsembleDefinition().getName());
+		}
+		
+	}
+
 	private static void printSelectedIRMInstance(IRMInstance i) {
 		System.out.println("***********");
 		System.out.println("IRMInstance: "+i);
@@ -119,7 +144,7 @@ public class AdaptationManager {
 		}
 		System.out.println("Printing InvariantInstances' IDs...");
 		for (InvariantInstance ii : i.getInvariantInstances()) {
-			if (ii.isSelected()) {
+			if (ii.isSelected() && (ii instanceof PresentInvariantInstance)) {
 				System.out.println("Selected InvariantInstance's ID: " + ((PresentInvariantInstance) ii).getInvariant().getRefID() + " and name: " + ((PresentInvariantInstance) ii).getInvariant().getDescription());
 			}
 		}
@@ -130,7 +155,7 @@ public class AdaptationManager {
 		File[] filesList = new File (path).listFiles();
 		for (File f : filesList) {
 			String name = f.getName();
-			if (name.startsWith(prefix)) {
+			if (name.startsWith(prefix) && name.endsWith(".xmi")) {
 				System.out.println("Deleting file '" + name + "'");
 				try {
 					Files.delete(Paths.get(path + name));
