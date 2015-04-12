@@ -16,16 +16,14 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.Di
 @Ensemble
 @PeriodicScheduling(period = 1000)
 public class CorrelationEnsembleTemplate {
-	
-	private static final int timeTrashold = 1000;
-	
+
 	@Membership
 	public static boolean membership(
 			@In("member.position") MetadataWrapper<Integer> memberPosition,
 			@In("member.temperature") MetadataWrapper<Integer> memberTemperature,
 			@In("coord.position") MetadataWrapper<Integer> coordPosition,
 			@In("coord.temperature") MetadataWrapper<Integer> coordTemperature) {
-		
+
 		return (!memberTemperature.isOperational()
 				&& coordTemperature.isOperational()
 				&& KnowledgeMetadataHolder.classifyDistance("position", memberPosition.getValue(), coordPosition.getValue()) == DistanceClass.Close);

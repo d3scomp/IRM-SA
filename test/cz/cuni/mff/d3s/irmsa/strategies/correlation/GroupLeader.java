@@ -17,26 +17,26 @@ public class GroupLeader {
 
 	public String id;
 	public Integer leaderId;
-	
+
 	public MetadataWrapper<Integer> position;
 	public MetadataWrapper<Integer> temperature;
-	
+
 	public GroupLeader(String id) {
 		this.id = id;
 		position = new MetadataWrapper<>(0);
 		temperature = new MetadataWrapper<>(0);
 	}
-	
+
 	@Process
 	@PeriodicScheduling(period=500)
 	public static void changePosition(
 			@In("id") String id,
 			@InOut("position") ParamHolder<MetadataWrapper<Integer>> position) {
-		
+
 		Random rand = new Random();
 		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
 		position.value.setValue(seed, ProcessContext.getTimeProvider().getCurrentMilliseconds());
-		
+
 		System.out.println("GL#" + id + ",\tposition : " + position.value.getValue() + " (" + position.value.getTimestamp() + ")");
 	}
 
@@ -45,14 +45,14 @@ public class GroupLeader {
 	public static void changeTemperature(
 			@In("id") String id,
 			@InOut("temperature") ParamHolder<MetadataWrapper<Integer>> temperature) {
-		
-		Random rand = new Random();
-		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
+
+//		Random rand = new Random();
+//		int seed = rand.nextInt(Variances.SMALL_VARIANCE);
 		// Setting fixed value of temperature to ensure the correlation (should be random,
 		// the variance should reflect the boundary for temperature defined in KnowledgeMetadataHolder)
 		temperature.value.setValue(20, ProcessContext.getTimeProvider().getCurrentMilliseconds());
-		
+
 		System.out.println("GL#" + id + ",\ttemperature : " + temperature.value.getValue() + " (" + temperature.value.getTimestamp() + ")");
 	}
-	
+
 }

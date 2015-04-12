@@ -20,25 +20,24 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 /**
  * This class provides method for creating an ensemble definition at runtime.
  * Once the ensemble definition is created it i stored, so the next time it's
- * requested it is returned without being constructed again. 
- * 
+ * requested it is returned without being constructed again.
+ *
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  */
 @Ensemble
 @PeriodicScheduling(period = 1000)
 public class CorrelationEnsembleFactory {
-	
+
 	/**
 	 * Once a new class is created it is stored here ready for further retrieval.
 	 */
-	@SuppressWarnings("rawtypes")
-	private static Map<String, Class> bufferedClasses = new HashMap<>();
-	
+	private static Map<String, Class<?>> bufferedClasses = new HashMap<>();
+
 	/**
 	 * The period at which the ensemble is planned.
 	 */
 	private static final long schedulingPeriod = 1000;
-	
+
 	/**
 	 * Provides the ensemble definition for the knowledge fields of given name.
 	 * The correlation of knowledge denoted by correlationSubject depends on the
@@ -50,10 +49,9 @@ public class CorrelationEnsembleFactory {
 	 * @return A class that defines an ensemble for data exchange given by the specified knowledge fields.
 	 * @throws Exception If there is a problem creating the ensemble class.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static Class getEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
+	public static Class<?> getEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
 		String className = composeClassName(correlationFilter, correlationSubject);
-		Class requestedClass;
+		Class<?> requestedClass;
 		if(!bufferedClasses.containsKey(className)){
 			requestedClass = createEnsembleDefinition(correlationFilter, correlationSubject);
 			bufferedClasses.put(className, requestedClass);
@@ -61,10 +59,10 @@ public class CorrelationEnsembleFactory {
 		else {
 			requestedClass = bufferedClasses.get(className);
 		}
-		
+
 		return requestedClass;
 	}
-	
+
 	/**
 	 * Compose the name of the ensemble class for the defined knowledge fields.
 	 * @param correlationFilter Name of the knowledge field used for data filtering when calculating correlation.
@@ -76,7 +74,7 @@ public class CorrelationEnsembleFactory {
 	private static String composeClassName(String correlationFilter, String correlationSubject){
 		return String.format("Correlation_%s2%s", correlationFilter, correlationSubject);
 	}
-	
+
 	/**
 	 * Create the ensemble class definition at runtime with the help of
 	 * <a href="http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/">javassist</a>.
@@ -89,14 +87,14 @@ public class CorrelationEnsembleFactory {
 	 */
 	@SuppressWarnings("rawtypes")
 	private static Class createEnsembleDefinition(String correlationFilter, String correlationSubject) throws Exception {
-		
+
 		// Create the class defining the ensemble
 		ClassPool classPool = ClassPool.getDefault();
 		CtClass ensembleClass = classPool.makeClass(composeClassName(correlationFilter, correlationSubject));
-		
+
 		ClassFile classFile = ensembleClass.getClassFile();
 		ConstPool constPool = classFile.getConstPool();
-		
+
 		// Ensemble annotation for the class
 		Annotation ensembleAnnotation = new Annotation("cz.cuni.mff.d3s.deeco.annotations.Ensemble", constPool);
 		AnnotationsAttribute ensembleAttribute = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
@@ -107,7 +105,7 @@ public class CorrelationEnsembleFactory {
 		ensembleAttribute.addAnnotation(schedulingAnnotation);
 		// Add the class annotations
 		classFile.addAttribute(ensembleAttribute);
-		
+
 		// Membership method
 		CtMethod membershipMethod = CtNewMethod.make(String.format(
 				"public static boolean membership("
@@ -145,10 +143,10 @@ public class CorrelationEnsembleFactory {
 				String.format("coord.%s", correlationSubject), constPool));
 		membershipParamAnnotations.setAnnotations(membershipParamAnnotationsInfo);
 		membershipMethod.getMethodInfo().addAttribute(membershipParamAnnotations);
-		
+
 		// Add the method into the ensemble class
 		ensembleClass.addMethod(membershipMethod);
-		
+
 		// Map method
 		CtMethod mapMethod = CtNewMethod.make(String.format(
 				"public static void map("
@@ -178,10 +176,10 @@ public class CorrelationEnsembleFactory {
 				String.format("member.%s", correlationSubject), constPool));
 		mapParamAnnotations.setAnnotations(mapParamAnnotationsInfo);
 		mapMethod.getMethodInfo().addAttribute(mapParamAnnotations);
-		
+
 		// Add the method into the ensemble class
 		ensembleClass.addMethod(mapMethod);
-		
+
 		return ensembleClass.toClass();
 	}
 
