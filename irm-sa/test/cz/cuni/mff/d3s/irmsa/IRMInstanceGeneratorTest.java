@@ -18,7 +18,6 @@ package cz.cuni.mff.d3s.irmsa;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -292,7 +291,7 @@ public class IRMInstanceGeneratorTest {
 		rci.setName(name+id);
 		aci.setRuntimeInstance(rci);
 		aci.setId(name+id);
-		aci.setKnowledgeManager(new CloningKnowledgeManager(name+id,rci));
+		aci.setKnowledgeManager(new CloningKnowledgeManager(name+id,rci,null));
 		architecture.getComponentInstances().add(aci);
 		
 		ComponentTrace cTrace = tFactory.createComponentTrace();
