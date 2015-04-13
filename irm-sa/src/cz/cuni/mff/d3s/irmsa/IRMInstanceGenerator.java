@@ -63,6 +63,7 @@ import cz.cuni.mff.d3s.irm.model.design.OrNode;
 import cz.cuni.mff.d3s.irm.model.design.ProcessInvariant;
 import cz.cuni.mff.d3s.irm.model.design.Refinement;
 import cz.cuni.mff.d3s.irm.model.runtime.api.Alternative;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
@@ -233,7 +234,12 @@ public class IRMInstanceGenerator {
 				invariantInstance = factory.createExchangeInvariantInstance();
 				((ExchangeInvariantInstance) invariantInstance).setEnsembleDefinition(trace.getEnsembleDefinitionFromInvariant(i));
 			} else if (i instanceof Assumption) {
-				invariantInstance = factory.createAssumptionInstance();
+				final AssumptionInstance assumption = factory.createAssumptionInstance();
+				IRMComponentInstance ci = findContributingComponent(i, irmInstance.getIRMcomponentInstances());
+				if (ci != null) {
+					assumption.setComponentInstance(ci.getArchitectureInstance());
+				}
+				invariantInstance = assumption;
 			} else {
 				invariantInstance = factory.createPresentInvariantInstance();
 			}
@@ -476,10 +482,6 @@ public class IRMInstanceGenerator {
 				Log.i("No trace found for exchange invariant " + invariant + ", so invariant evaluation trivially returned " + success);
 				return success;
 			}
-			if (!isEnsembleInstantiated(IRMComponentInstances, ed)) {
-				Log.i("EnsembleDefinition " + ed + " is not instantiated within this runtime, so invariant evaluation trivially returned " + success);
-				return success;
-			}
 
 			IRMComponentInstance coord = findCoordinator(invariant, IRMComponentInstances);
 			IRMComponentInstance member = findMember(invariant, IRMComponentInstances);
@@ -648,36 +650,6 @@ public class IRMInstanceGenerator {
 			// TODO(IG) implement monitoring also non-leaf invariants
 			return success;
 		}
-	}
-
-	/**
-	 * <p>
-	 * Checks is the ensemble represented by the ensemble definition
-	 * <code>ed</code> is instantiated in the current runtime by looking at the
-	 * ensemble instances at the architecture model.
-	 * </p>
-	 * <p>
-	 * Note that an ensemble might not be instantiated in the current runtime,
-	 * because, e.g. it has a bigger period than the adaptation loop. So the
-	 * first time the adaptation loop runs, the ensemble might not have been
-	 * evaluated yet.
-	 * </p>
-	 */
-	boolean isEnsembleInstantiated(Collection<IRMComponentInstance> instances, EnsembleDefinition ed) {
-		// get the list of architecture component instances out of the IRM runtime model instances
-		Collection<ComponentInstance> architectureComponentInstances = new ArrayList<>();
-		for (IRMComponentInstance instance : instances) {
-			architectureComponentInstances.add(instance.getArchitectureInstance());
-		}
-		// go through the ensemble instances and try to find the instance that corresponds to ed
-		for (EnsembleInstance ei : architecture.getEnsembleInstances()) {
-			if ((ei.getEnsembleDefinition().equals(ed))
-					&& (architectureComponentInstances.contains(ei.getCoordinator()))
-					&& (architectureComponentInstances.containsAll(ei.getMembers()))) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private IRMComponentInstance findMember(Invariant i, List<IRMComponentInstance> IRMComponentInstances) {

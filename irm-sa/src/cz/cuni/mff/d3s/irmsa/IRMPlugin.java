@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
+import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 
 public class IRMPlugin implements DEECoPlugin {
 
@@ -29,8 +31,10 @@ public class IRMPlugin implements DEECoPlugin {
 	/** Passed to AdaptationManager. */
 	private String logPrefix = "";
 
-	public IRMPlugin(TraceModel trace, IRM design) {
-		this.trace = trace;
+	/** Listeners to adaptation. */
+	private final List<AdaptationListener> listeners = new ArrayList<>();
+
+	public IRMPlugin(IRM design) {
 		this.design = design;
 	}
 
@@ -54,9 +58,14 @@ public class IRMPlugin implements DEECoPlugin {
 		this.logPrefix = logPrefix;
 		return this;
 	}
+	
+	public TraceModel getTrace(){
+		return trace;
+	}
 
 	@Override
 	public void init(DEECoContainer container) {
+		trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint irmAwareAnnotationProcessorExtension = new IrmAwareAnnotationProcessorExtension(design,trace);
 		container.getProcessor().addExtension(irmAwareAnnotationProcessorExtension);
 
@@ -74,7 +83,24 @@ public class IRMPlugin implements DEECoPlugin {
 				c.getInternalData().put(AdaptationManager.LOG, log);
 				c.getInternalData().put(AdaptationManager.LOG_DIR, logDir);
 				c.getInternalData().put(AdaptationManager.LOG_PREFIX, logPrefix);
+				c.getInternalData().put(AdaptationManager.ADAPTATION_LISTENERS, listeners);
 			}
 		}
+	}
+
+	/**
+	 * Registers AdaptationListener.
+	 * @param listener adaptation listener to register
+	 */
+	public void registerListener(final AdaptationListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Unregisters AdaptationListener.
+	 * @param listener adaptation listener to unregister
+	 */
+	public void unregisterListener(final AdaptationListener listener) {
+		listeners.remove(listener);
 	}
 }

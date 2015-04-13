@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cz.cuni.mff.d3s.irm.model.design:IRM xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0">
+  <invariants description="RootInvariant" refID="I01"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="ProcessInvariant1" refID="I02" processName="Process1" processPeriod="1000"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ExchangeInvariant" description="EnsempleInvariant1" refID="I03" ensembleName="Ensemble1" ensemblePeriod="2000"/>
+  <components name="Component1">
+    <knowledgeElements type="String" name="Knowledge1"/>
+  </components>
+  <components name="Component2">
+    <knowledgeElements type="String" name="Knowledge2"/>
+  </components>
+  <refinements start="//@andNodes.0" end="//@invariants.0"/>
+  <decompositions start="//@invariants.1" end="//@andNodes.0"/>
+  <decompositions start="//@invariants.2" end="//@andNodes.0"/>
+  <andNodes/>
+  <members start="//@components.0" end="//@invariants.2" membershipInput="//@components.0/@knowledgeElements.0" knowledgeExchangeInput="//@components.0/@knowledgeElements.0"/>
+  <coordinators start="//@components.1" end="//@invariants.2" membershipInput="//@components.1/@knowledgeElements.0" knowledgeExchangeInput="//@components.1/@knowledgeElements.0" knowledgeExchangeOutput="//@components.1/@knowledgeElements.0"/>
+  <contributes start="//@components.0" end="//@invariants.1" processOutput="//@components.0/@knowledgeElements.0"/>
+</cz.cuni.mff.d3s.irm.model.design:IRM>

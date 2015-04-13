@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:cz.cuni.mff.d3s.irm.model.design="http://cz.cuni.mff.d3s.irm.model.design/1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_8-4EMN6wEeSnccpSrKlBGg" type="Design" measurementUnit="Pixel">
+  <children xmi:type="notation:Node" xmi:id="_-O9MAN6wEeSnccpSrKlBGg" type="2014">
+    <children xmi:type="notation:DecorationNode" xmi:id="_-O-aIN6wEeSnccpSrKlBGg" type="5011"/>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_-O-aId6wEeSnccpSrKlBGg" type="7002">
+      <children xmi:type="notation:Node" xmi:id="_AqxHIN6xEeSnccpSrKlBGg" type="3001">
+        <children xmi:type="notation:DecorationNode" xmi:id="_AqxuMN6xEeSnccpSrKlBGg" type="5005"/>
+        <styles xmi:type="notation:DescriptionStyle" xmi:id="_AqxHId6xEeSnccpSrKlBGg"/>
+        <styles xmi:type="notation:FontStyle" xmi:id="_AqxHIt6xEeSnccpSrKlBGg" fontName="Segoe UI"/>
+        <styles xmi:type="notation:LineStyle" xmi:id="_AqxHI96xEeSnccpSrKlBGg"/>
+        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="period_simple.irmdesign#//@components.0/@knowledgeElements.0"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_AqxHJN6xEeSnccpSrKlBGg"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_d15nwN61EeSnccpSrKlBGg" type="3001">
+        <children xmi:type="notation:DecorationNode" xmi:id="_d16O0N61EeSnccpSrKlBGg" type="5005"/>
+        <styles xmi:type="notation:DescriptionStyle" xmi:id="_d15nwd61EeSnccpSrKlBGg"/>
+        <styles xmi:type="notation:FontStyle" xmi:id="_d15nwt61EeSnccpSrKlBGg" fontName="Segoe UI"/>
+        <styles xmi:type="notation:LineStyle" xmi:id="_d15nw961EeSnccpSrKlBGg"/>
+        <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Knowledge" href="period_simple.irmdesign#//@components.0/@knowledgeElements.1"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_d15nxN61EeSnccpSrKlBGg"/>
+      </children>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_-O-aIt6wEeSnccpSrKlBGg"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_-O-aI96wEeSnccpSrKlBGg"/>
+    </children>
+    <styles xmi:type="notation:DescriptionStyle" xmi:id="_-O9MAd6wEeSnccpSrKlBGg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_-O9MAt6wEeSnccpSrKlBGg" fontName="Segoe UI"/>
+    <styles xmi:type="notation:LineStyle" xmi:id="_-O9MA96wEeSnccpSrKlBGg"/>
+    <styles xmi:type="notation:HintedDiagramLinkStyle" xmi:id="_-O9MBN6wEeSnccpSrKlBGg"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Component" href="period_simple.irmdesign#//@components.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-O9MBd6wEeSnccpSrKlBGg" x="101" y="81" width="170" height="80"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_LjKNAN6xEeSnccpSrKlBGg" type="2008">
+    <children xmi:type="notation:DecorationNode" xmi:id="_LjK0EN6xEeSnccpSrKlBGg" type="5007"/>
+    <styles xmi:type="notation:DescriptionStyle" xmi:id="_LjKNAd6xEeSnccpSrKlBGg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_LjKNAt6xEeSnccpSrKlBGg" fontName="Segoe UI"/>
+    <styles xmi:type="notation:LineStyle" xmi:id="_LjKNA96xEeSnccpSrKlBGg"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" href="period_simple.irmdesign#//@invariants.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LjKNBN6xEeSnccpSrKlBGg" x="472" y="105"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_8-4EMd6wEeSnccpSrKlBGg"/>
+  <element xmi:type="cz.cuni.mff.d3s.irm.model.design:IRM" href="period_simple.irmdesign#/"/>
+  <edges xmi:type="notation:Edge" xmi:id="_Y_TpEN6xEeSnccpSrKlBGg" type="4005" source="_-O9MAN6wEeSnccpSrKlBGg" target="_LjKNAN6xEeSnccpSrKlBGg">
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_Y_TpEd6xEeSnccpSrKlBGg"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_Y_TpEt6xEeSnccpSrKlBGg" fontName="Segoe UI"/>
+    <element xmi:type="cz.cuni.mff.d3s.irm.model.design:Contributes" href="period_simple.irmdesign#//@contributes.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Y_TpE96xEeSnccpSrKlBGg" points="[82, 5, -316, -4]$[290, 5, -108, -4]"/>
+  </edges>
+</notation:Diagram>

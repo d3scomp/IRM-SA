@@ -763,13 +763,22 @@ public interface IRMRuntimePackage extends EPackage {
 	int ASSUMPTION_INSTANCE__INVARIANT = PRESENT_INVARIANT_INSTANCE__INVARIANT;
 
 	/**
+	 * The feature id for the '<em><b>Component Instance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSUMPTION_INSTANCE__COMPONENT_INSTANCE = PRESENT_INVARIANT_INSTANCE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Assumption Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSUMPTION_INSTANCE_FEATURE_COUNT = PRESENT_INVARIANT_INSTANCE_FEATURE_COUNT + 0;
+	int ASSUMPTION_INSTANCE_FEATURE_COUNT = PRESENT_INVARIANT_INSTANCE_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Parent</em>' operation.
@@ -1157,6 +1166,17 @@ public interface IRMRuntimePackage extends EPackage {
 	EClass getAssumptionInstance();
 
 	/**
+	 * Returns the meta object for the attribute '{@link cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance#getComponentInstance <em>Component Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Component Instance</em>'.
+	 * @see cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance#getComponentInstance()
+	 * @see #getAssumptionInstance()
+	 * @generated
+	 */
+	EAttribute getAssumptionInstance_ComponentInstance();
+
+	/**
 	 * Returns the meta object for data type '{@link cz.cuni.mff.d3s.irm.model.design.Invariant <em>Invariant Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1500,6 +1520,14 @@ public interface IRMRuntimePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ASSUMPTION_INSTANCE = eINSTANCE.getAssumptionInstance();
+
+		/**
+		 * The meta object literal for the '<em><b>Component Instance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSUMPTION_INSTANCE__COMPONENT_INSTANCE = eINSTANCE.getAssumptionInstance_ComponentInstance();
 
 		/**
 		 * The meta object literal for the '<em>Invariant Type</em>' data type.

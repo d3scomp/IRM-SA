@@ -239,6 +239,10 @@
   <children xmi:type="notation:Node" xmi:id="_JtRvYNCNEeSQkbwNMrjMBw" type="1001">
     <children xmi:type="notation:Node" xmi:id="_JtS9gNCNEeSQkbwNMrjMBw" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_JtULoNCNEeSQkbwNMrjMBw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_uFhLgNGEEeSXkK1iVyBXzA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="irmRuntime.ecore#//AssumptionInstance/componentInstance"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_uFhLgdGEEeSXkK1iVyBXzA"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_JtULodCNEeSQkbwNMrjMBw"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_JtULotCNEeSQkbwNMrjMBw"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_JtULo9CNEeSQkbwNMrjMBw"/>
@@ -250,7 +254,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_JtRvYdCNEeSQkbwNMrjMBw" fontColor="4210752" fontName="Segoe UI" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="irmRuntime.ecore#//AssumptionInstance"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_JtRvYtCNEeSQkbwNMrjMBw" x="-145" y="450"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_JtRvYtCNEeSQkbwNMrjMBw" x="-275" y="440"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_mxmawfezEeOX55S23Shv6w"/>
   <element xmi:type="ecore:EPackage" href="irmRuntime.ecore#/"/>

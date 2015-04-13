@@ -214,6 +214,13 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 		if (componentInstance instanceof RemoteComponentInstance) {
 			// this runtime instance is not present in the trace model, so we have to look it up by name in the design model 
 			// retrieve the role stored in the knowledge manager of the component
+			
+			// FIXME this is a system component, and should not be published at all.
+			// Workaround to make IRM work - REALLY TEMPORARY:
+			if (componentInstance.getId().startsWith("AdaptationManager")) {
+				return IRMDesignFactory.eINSTANCE.createComponent();
+			}
+			
 			String IRMComponentRole = getComponentRole(componentInstance);
 			// use the role to identify the design component by String matching
 			ret = getComponentFromDesignModelByNameMatching(design, IRMComponentRole);

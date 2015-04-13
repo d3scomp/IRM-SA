@@ -51,19 +51,18 @@ public class ArchitectureReconfiguratorTest {
 	static public final String XMIFILE_PREFIX = "vehicles_simple_";
 
 	IRM design;
-	TraceModel trace;
+	IRMPlugin irmPlugin;
 
 	DEECoNode deecoNode;
 
 	@Before
 	public void createRuntime() throws AnnotationProcessorException, DEECoException {
 
-		trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		design = (IRM) EMFHelper.loadModelFromXMI(MODELS_BASE_PATH + "vehicles_simple.irmdesign");
 
-		IRMPlugin irmPlugin = new IRMPlugin(trace, design)
+		irmPlugin = new IRMPlugin(design)
 				.withLog(true)
 				.withLogDir(MODELS_BASE_PATH)
 				.withLogPrefix(XMIFILE_PREFIX);
@@ -126,7 +125,7 @@ public class ArchitectureReconfiguratorTest {
 	}
 
 	private Invariant getInvariantForProcess(ComponentProcess p) {
-		for (ProcessTrace pt : trace.getProcessTraces()) {
+		for (ProcessTrace pt : irmPlugin.getTrace().getProcessTraces()) {
 			if (pt.getFrom().equals(p)) {
 				return pt.getTo();
 			}

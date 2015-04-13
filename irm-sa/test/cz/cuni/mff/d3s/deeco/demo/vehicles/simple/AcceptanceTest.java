@@ -25,7 +25,6 @@ public class AcceptanceTest {
 	public void sampleRun() throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 
 		/* create IRM plugin */
-		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		@SuppressWarnings("unused")
 		IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
@@ -33,7 +32,7 @@ public class AcceptanceTest {
 		SimulationTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
 		DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new IRMPlugin(trace, design)
+		simulation.addPlugin(new IRMPlugin(design)
 				.withLog(true)
 				.withLogDir(MODELS_BASE_PATH)
 				.withLogPrefix(XMIFILE_PREFIX));
