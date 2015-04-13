@@ -42,6 +42,9 @@ public class AdaptationManager {
 	/** Internal data key for prefix of logs. */
 	public static final String LOG_PREFIX = "logPrefix";
 
+	/** Internal data key for adaptation listeners. */
+	public static final String ADAPTATION_LISTENERS = "adaptationListeners";
+
 	@Process
 	@PeriodicScheduling(period=2000)
 	public static void reason(@In("id") String id) {

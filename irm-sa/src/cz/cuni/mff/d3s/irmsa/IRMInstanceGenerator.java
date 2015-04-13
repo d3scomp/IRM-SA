@@ -38,7 +38,6 @@ import cz.cuni.mff.d3s.deeco.knowledge.ValueSet;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.architecture.api.EnsembleInstance;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
