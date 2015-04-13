@@ -97,7 +97,7 @@ public class AdaptationManager {
 		}
 		System.out.println("Printing InvariantInstances' IDs...");
 		for (InvariantInstance ii : i.getInvariantInstances()) {
-			if (ii.isSelected()) {
+			if (ii.isSelected() && ii instanceof PresentInvariantInstance) {
 				System.out.println("Selected InvariantInstance's ID: " + ((PresentInvariantInstance) ii).getInvariant().getRefID() + " and name: " + ((PresentInvariantInstance) ii).getInvariant().getDescription());
 			}
 		}

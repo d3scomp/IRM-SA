@@ -30,6 +30,9 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
+import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
 import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
@@ -37,15 +40,17 @@ import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
 import cz.cuni.mff.d3s.deeco.simulation.JDEECoSimulation;
 import cz.cuni.mff.d3s.deeco.simulation.SimulationRuntimeBuilder;
 import cz.cuni.mff.d3s.deeco.task.TimerTaskListener;
+import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
+import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 /**
- * Experiment run for the IRM-JSS paper evaluation.
- * TODO make it work with jDEECo 3.0 
+ * Experiment run for the IRM-JSS paper evaluation. TODO make it work with
+ * jDEECo 3.0
  * 
  * @author Ilias
  *
@@ -55,17 +60,19 @@ public class DecentralizedRun {
 	private static final String MODELS_BASE_PATH = "designModels/";
 	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH
 			+ "firefighters.irmdesign";
-	private static final long SIMULATION_START = 0; // in milliseconds
-	private static final long SIMULATION_END = 15000; // in milliseconds
+	private static final long SIMULATION_DURATION = 15000; // in milliseconds
+
+	static public final String XMIFILE_PREFIX = "vehicles_simple_";// !!!!!!!!!
 
 	private static IRM design;
-	private static JDEECoSimulation simulation;
+	private static DEECoSimulation simulation;
 	private static SimulationRuntimeBuilder builder;
 
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws AnnotationProcessorException,
 			InterruptedException, DuplicateEnsembleDefinitionException {
-		System.setProperty(DeecoProperties.PUBLISHING_PERIOD, new Integer(Settings.BROADCAST_PERIOD).toString());
+		System.setProperty(DeecoProperties.PUBLISHING_PERIOD, new Integer(
+				Settings.BROADCAST_PERIOD).toString());
 		int networkDelay;
 		int numberOfIterations = 5;
 		List<String> afterTimes = new LinkedList<>();
@@ -73,21 +80,47 @@ public class DecentralizedRun {
 		afterTimes.add("----------Inaccuracy disabled-------------");
 		afterTimes.add("\n");
 		for (int i = 0; i <= numberOfIterations; i++) {
+
+			/**
+			 * System.out.println("Preparing simulation...");
+			 * 
+			 * @SuppressWarnings("unused") IRMDesignPackage p =
+			 *                             IRMDesignPackage.eINSTANCE; design =
+			 *                             (IRM) EMFHelper.loadModelFromXMI(
+			 *                             DESIGN_MODEL_PATH); TraceModel trace
+			 *                             = TraceFactory.eINSTANCE.
+			 *                             createTraceModel();
+			 *                             DiscreteEventTimer simulationTimer =
+			 *                             new DiscreteEventTimer(); simulation
+			 *                             = new
+			 *                             DEECoSimulation(simulationTimer);
+			 *                             simulation.addPlugin(new
+			 *                             IRMPlugin(trace, design)
+			 *                             .withLog(true)
+			 *                             .withLogDir(MODELS_BASE_PATH)
+			 *                             .withLogPrefix(XMIFILE_PREFIX));
+			 *                             createAndDeployComponents();
+			 * 
+			 *                             simulation.start(SIMULATION_DURATION)
+			 *                             ;
+			 * 
+			 *                             System.out.println(
+			 *                             "Simulation finished...");
+			 */
+
 			InDangerTimeHelper.getInstance().reset();
 			Results.getInstance().reset();
-			Log.i("Preparing simulation");
+			System.out.println("Preparing simulation");
 			networkDelay = i * Settings.NETWORK_DELAY;
 			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 			design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-			DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new CustomDelayedNetworkKnowledgeDataHandler(networkDelay);
-
-			simulation = new JDEECoSimulation(SIMULATION_START, SIMULATION_END,
-					networkKnowledgeDataHandler);
-
-			builder = new SimulationRuntimeBuilder();
-
-			List<TimerTaskListener> listeners = new LinkedList<>();
-			listeners.add(networkKnowledgeDataHandler);
+			TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
+			DiscreteEventTimer simulationTimer = new DiscreteEventTimer();
+			simulation = new DEECoSimulation(simulationTimer);
+			simulation
+					.addPlugin(new IRMPlugin(trace, design).withLog(true)
+							.withLogDir(MODELS_BASE_PATH)
+							.withLogPrefix(XMIFILE_PREFIX));
 
 			createAndDeployGroupLeader("L1", listeners);
 			createAndDeployGroupMember("M1", "L1", listeners);
@@ -101,7 +134,7 @@ public class DecentralizedRun {
 			// NearbyGMInDangerInaccuaracy.enableInaccuarcyChecking(400);
 
 			Log.i("Simulation Starts");
-			simulation.run();
+			simulation.start(SIMULATION_DURATION);
 			Log.i("Simulation Finished");
 			long srTime = Results.getInstance().getReactionTime();
 			long idTime = InDangerTimeHelper.getInstance().getInDangerTime();
@@ -115,8 +148,10 @@ public class DecentralizedRun {
 		afterTimes.add("\n");
 		long inaccuracy;
 		for (int j = 0; j < 3; j++) {
-			inaccuracy = Settings.BASE_INACCURACY + j*Settings.INACCURACY_INTERVAL;
-			afterTimes.add("----------Inaccuracy "+inaccuracy+"-------------");
+			inaccuracy = Settings.BASE_INACCURACY + j
+					* Settings.INACCURACY_INTERVAL;
+			afterTimes.add("----------Inaccuracy " + inaccuracy
+					+ "-------------");
 			for (int i = 0; i <= numberOfIterations; i++) {
 				InDangerTimeHelper.getInstance().reset();
 				Results.getInstance().reset();
@@ -124,18 +159,12 @@ public class DecentralizedRun {
 				networkDelay = i * Settings.NETWORK_DELAY;
 				IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 				design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-
-				// Here we set the arbitrary value for the network delay.
-				DelayedKnowledgeDataHandler networkKnowledgeDataHandler = new CustomDelayedNetworkKnowledgeDataHandler(
-						networkDelay);
-
-				simulation = new JDEECoSimulation(SIMULATION_START,
-						SIMULATION_END, networkKnowledgeDataHandler);
-
-				builder = new SimulationRuntimeBuilder();
-
-				List<TimerTaskListener> listeners = new LinkedList<>();
-				listeners.add(networkKnowledgeDataHandler);
+				TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
+				DiscreteEventTimer simulationTimer = new DiscreteEventTimer();
+				simulation = new DEECoSimulation(simulationTimer);
+				simulation.addPlugin(new IRMPlugin(trace, design).withLog(true)
+						.withLogDir(MODELS_BASE_PATH)
+						.withLogPrefix(XMIFILE_PREFIX));
 
 				createAndDeployGroupLeader("L1", listeners);
 				createAndDeployGroupMember("M1", "L1", listeners);
@@ -147,13 +176,14 @@ public class DecentralizedRun {
 				// milliseconds). Please comment the following line if you would
 				// like to disable the
 				// inaccuracy checking and have just the first (simple) case.
-				NearbyGMInDangerInaccuaracy.enableInaccuarcyChecking(inaccuracy);
+				NearbyGMInDangerInaccuaracy
+						.enableInaccuarcyChecking(inaccuracy);
 
 				Log.i("Simulation Starts");
-				simulation.run();
+				simulation.start(SIMULATION_DURATION);
 				Log.i("Simulation Finished");
-				StringBuilder resultString = new StringBuilder(
-						"inaccuracy: " + inaccuracy);
+				StringBuilder resultString = new StringBuilder("inaccuracy: "
+						+ inaccuracy);
 				resultString.append(", network delay: " + networkDelay);
 				resultString
 						.append(" - "
@@ -167,34 +197,53 @@ public class DecentralizedRun {
 		for (String result : afterTimes) {
 			System.out.println(result);
 		}
-		
-		System.out.println(NearbyGMInDangerInaccuaracy.getInstance().getInaccuracies());
+
+		System.out.println(NearbyGMInDangerInaccuaracy.getInstance()
+				.getInaccuracies());
 	}
+	
+	private static void createAndDeployComponents() throws AnnotationProcessorException, InstantiationException, IllegalAccessException, DEECoException {
+		DEECoNode deecoNode = simulation.createNode(1);
+
+		deecoNode.deployComponent(new GroupLeader("L1"));
+		deecoNode.deployComponent(new GroupMember("M1", "L1"));
+		deecoNode.deployComponent(new GroupMember("M2", "L1"));
+		deecoNode.deployEnsemble(SensorDataUpdate.class);
+		deecoNode.deployEnsemble(GMsInDangerUpdate.class);
+	}
+	
+	
 
 	private static void createAndDeployGroupMember(String idx,
 			String leaderIdx,
 			Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
+			throws AnnotationProcessorException,
+			DuplicateEnsembleDefinitionException {
 		GroupMember component = new GroupMember(idx, leaderIdx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
 
 	private static void createAndDeployGroupLeader(String idx,
 			Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
+			throws AnnotationProcessorException,
+			DuplicateEnsembleDefinitionException {
 		GroupLeader component = new GroupLeader(idx);
 		createAndDeployComponent(component, idx, simulationListeners);
 	}
 
-	private static void createAndDeployComponent(Object component, String hostId, Collection<? extends TimerTaskListener> simulationListeners)
-			throws AnnotationProcessorException, DuplicateEnsembleDefinitionException {
+	private static void createAndDeployComponent(Object component,
+			String hostId,
+			Collection<? extends TimerTaskListener> simulationListeners)
+			throws AnnotationProcessorException,
+			DuplicateEnsembleDefinitionException {
 		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE
 				.createRuntimeMetadata();
 		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(
 				design, trace);
 		AnnotationProcessor processor = new AnnotationProcessor(
-				RuntimeMetadataFactoryExt.eINSTANCE, model, new CloningKnowledgeManagerFactory(), extension);
+				RuntimeMetadataFactoryExt.eINSTANCE, model,
+				new CloningKnowledgeManagerFactory(), extension);
 		processor.processComponent(component);
 		// new AdaptationManager(), ???
 		processor.processEnsemble(SensorDataUpdate.class);
@@ -210,10 +259,13 @@ public class DecentralizedRun {
 
 		DirectSimulationHost host = simulation.getHost(hostId);
 		RuntimeFramework runtime = builder.build(host, simulation,
-				simulationListeners, model,
-				new DefaultKnowledgeDataManager(model.getEnsembleDefinitions(), null),
+				simulationListeners, model, new DefaultKnowledgeDataManager(
+						model.getEnsembleDefinitions(), null),
 				new CloningKnowledgeManagerFactory(), null,
-					/* FIXME the following argument throws an exception in task invocation */ null);
+				/*
+				 * FIXME the following argument throws an exception in task
+				 * invocation
+				 */null);
 
 		runtime.start();
 	}
