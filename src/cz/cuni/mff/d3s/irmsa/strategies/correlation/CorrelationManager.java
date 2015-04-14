@@ -15,11 +15,10 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.ComponentPair;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
@@ -177,12 +176,7 @@ public class CorrelationManager {
 	public static void manageCorrelationEnsembles(
 			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels,
 			@In("otherNodes") List<DEECoNode> deecoNodes) throws Exception {
-		final ComponentProcess process = ProcessContext.getCurrentProcess();
-		final Boolean run = (Boolean) process.getComponentInstance().getInternalData().get(RUN_FLAG);
-		if (run == null || !run) {
-			return; //meta manager tells us not to run
-		}
-
+		final boolean run = ComponentHelper.retrieveFromInternalData(RUN_FLAG, false);
 		System.out.println("Correlation ensembles management process started...");
 
 		for(CorrelationLevel level : levels.value){
@@ -191,8 +185,10 @@ public class CorrelationManager {
 			@SuppressWarnings("rawtypes")
 			Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
 			if(level.getCorrelationLevel() > KnowledgeMetadataHolder.getConfidenceLevel(correlationSubject)
-					&& !isEnsembleActive(deecoNodes, ensemble.getName())){
+					&& !isEnsembleActive(deecoNodes, ensemble.getName())
+					&& run){
 				// Activate if confidence level is satisfied and the ensemble is not deployed or inactive
+				// AND the MetaAdaptationManager tells us to run
 				System.out.println(String.format("Deploying ensemble %s", ensemble.getName()));
 				if(!setEnsembleActive(deecoNodes, ensemble.getName(), true)){
 					// If the ensemble is not deployed, deploy it
