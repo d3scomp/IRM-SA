@@ -84,36 +84,8 @@ public class KnowledgeMetadataHolder {
 	/**
 	 * Mapping of the metadata to knowledge fields identified by theirs labels.
 	 */
-	private static Map<String, KnowledgeMetadata> knowledgeMetadata;
-	
-	/**
-	 * Ititialize the static instance of the KnowledgeMetadataHolder and fill in
-	 * default metadata values for predefined knowledge fields.
-	 */
-	static {
-		knowledgeMetadata = new HashMap<String, KnowledgeMetadata>();
-		
-		/* default data */
+	private static final Map<String, KnowledgeMetadata> knowledgeMetadata = new HashMap<String, KnowledgeMetadata>();
 
-		final String positionLabel = "position";
-		final String temperatureLabel = "temperature";
-		final String batteryLabel = "battery";
-		
-		final int positionBoundary = 8;
-		final int temperatureBoundary = 3;
-		final int batteryBoundary = 2;
-
-		final Metric simpleMetric = new DifferenceMetric();
-		
-		final double positionConfidence = 0.9;
-		final double temperatureConfidence = 0.9;
-		final double batteryConfidence = 0.9;
-
-		knowledgeMetadata.put(positionLabel, new KnowledgeMetadata(positionBoundary, simpleMetric, positionConfidence));
-		knowledgeMetadata.put(temperatureLabel, new KnowledgeMetadata(temperatureBoundary, simpleMetric, temperatureConfidence));
-		knowledgeMetadata.put(batteryLabel, new KnowledgeMetadata(batteryBoundary, simpleMetric, batteryConfidence));
-	}
-	
 	/**
 	 * Set the given metadata for the knowledge field identified by the given label. 
 	 * @param label Identifies the metadata field.

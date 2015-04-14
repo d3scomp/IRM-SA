@@ -14,11 +14,12 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
@@ -61,6 +62,25 @@ public class CorrelationTest {
 
 		final IRMPlugin irmPlugin = new IRMPlugin( design).withLog(false);
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
+
+		/* Register metadata for fields */
+		final String positionLabel = "position";
+		final String temperatureLabel = "temperature";
+		final String batteryLabel = "battery";
+
+		final int positionBoundary = 8;
+		final int temperatureBoundary = 3;
+		final int batteryBoundary = 2;
+
+		final Metric simpleMetric = new DifferenceMetric();
+
+		final double positionConfidence = 0.9;
+		final double temperatureConfidence = 0.9;
+		final double batteryConfidence = 0.9;
+
+		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, simpleMetric, positionConfidence);
+		KnowledgeMetadataHolder.setBoundAndMetric(temperatureLabel, temperatureBoundary, simpleMetric, temperatureConfidence);
+		KnowledgeMetadataHolder.setBoundAndMetric(batteryLabel, batteryBoundary, simpleMetric, batteryConfidence);
 
 		/* Create node that holds the correlation component */
 		DEECoNode deeco4 = realm.createNode(4,
