@@ -42,7 +42,7 @@ public class MetaAdaptationManager {
 		}
 		//TODO implement meta managing
 		for (AdaptationManager manager : managers) {
-			manager.run();;
+			manager.run();
 		}
 	}
 }
