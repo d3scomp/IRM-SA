@@ -27,7 +27,7 @@ public class MetaAdaptationManager {
 	static public final String IRM_CAN_RUN = "irmCanRun";
 
 	/** Mandatory knowledge. */
-	public String id;
+	public String id = "MetaAdaptationManager";
 
 	@Process
 	@PeriodicScheduling(period = MANAGING_PERIOD, order = 10)
