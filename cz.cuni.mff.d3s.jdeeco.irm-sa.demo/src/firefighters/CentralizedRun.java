@@ -22,14 +22,12 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
 /**
- * Experiment run for the IRM-JSS paper evaluation.
- * TODO make it work with jDEECo 3.0 
+ * Experiment run for the IRM-JSS paper evaluation. TODO make it work with
+ * jDEECo 3.0
  * 
  * @author Ilias
  *
@@ -37,28 +35,27 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 public class CentralizedRun {
 
 	private static final String MODELS_BASE_PATH = "designModels/";
-	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters.irmdesign";
-	private static final long SIMULATION_DURATION = 2000; // in milliseconds
-	
-	
-	static public final String XMIFILE_PREFIX = "vehicles_simple_";//!!!!!!!!!
-	
+	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH
+			+ "firefighters.irmdesign";
+	private static final long SIMULATION_DURATION = 120000; // in milliseconds
+
+	static public final String XMIFILE_PREFIX = "firefighters";// !!!!!!!!!
+
 	private static IRM design;
 	private static DEECoSimulation simulation;
-	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, AnnotationProcessorException, DEECoException {
+
+	public static void main(String[] args) throws InstantiationException,
+			IllegalAccessException, AnnotationProcessorException,
+			DEECoException {
 		System.out.println("Preparing simulation...");
 		@SuppressWarnings("unused")
-		IRMDesignPackage p = IRMDesignPackage.eINSTANCE; 
+		IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 		DiscreteEventTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
 		simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new IRMPlugin(trace, design)
-				.withLog(true)
-				.withLogDir(MODELS_BASE_PATH)
-				.withLogPrefix(XMIFILE_PREFIX));
+		simulation.addPlugin(new IRMPlugin(design).withLog(true)
+				.withLogDir(MODELS_BASE_PATH).withLogPrefix(XMIFILE_PREFIX));
 		/* deploy components and ensembles */
 		createAndDeployComponents();
 
@@ -66,8 +63,10 @@ public class CentralizedRun {
 
 		System.out.println("Simulation finished...");
 	}
-	
-	private static void createAndDeployComponents() throws AnnotationProcessorException, InstantiationException, IllegalAccessException, DEECoException {
+
+	private static void createAndDeployComponents()
+			throws AnnotationProcessorException, InstantiationException,
+			IllegalAccessException, DEECoException {
 		DEECoNode deecoNode = simulation.createNode(1);
 
 		deecoNode.deployComponent(new GroupLeader("L1"));

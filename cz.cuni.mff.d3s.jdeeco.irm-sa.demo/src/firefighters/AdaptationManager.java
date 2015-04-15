@@ -70,7 +70,7 @@ public class AdaptationManager {
 		Architecture architecture = ProcessContext.getArchitecture();
 		IRM design = (IRM) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) ProcessContext.getCurrentProcess().getComponentInstance().getInternalData().get(TRACE_MODEL);
-		printArchitectureModel(architecture); // for debugging...
+		//printArchitectureModel(architecture); // for debugging...
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
@@ -100,7 +100,7 @@ public class AdaptationManager {
 			
 			if (solver.solve()) {
 				System.out.println("SOLUTION exists");
-				printSelectedIRMInstance(i); // for debugging...
+				//printSelectedIRMInstance(i); // for debugging...
 				reconfigurator.addInstance(i);
 			} else {
 				System.out.println("NO SOLUTION exists");
@@ -180,7 +180,7 @@ public class AdaptationManager {
 		File[] filesList = new File (path).listFiles();
 		for (File f : filesList) {
 			String name = f.getName();
-			if (name.startsWith(prefix)) {
+			if (name.startsWith(prefix) && name.endsWith(".xmi")) {
 				System.out.println("Deleting file '" + name + "'");
 				try {
 					Files.delete(Paths.get(path + name));

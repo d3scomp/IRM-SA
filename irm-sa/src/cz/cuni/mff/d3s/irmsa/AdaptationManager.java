@@ -111,7 +111,7 @@ public class AdaptationManager {
 		File[] filesList = new File (path).listFiles();
 		for (File f : filesList) {
 			String name = f.getName();
-			if (name.startsWith(prefix)) {
+			if (name.startsWith(prefix) && name.endsWith(".xmi")) {
 				System.out.println("Deleting file '" + name + "'");
 				try {
 					Files.delete(Paths.get(path + name));

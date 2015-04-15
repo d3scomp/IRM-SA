@@ -1,6 +1,8 @@
 package firefighters;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
 
 	public int latitude;
 	public int longitude;

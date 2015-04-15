@@ -15,38 +15,24 @@
  ******************************************************************************/
 package firefighters;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.DeecoProperties;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessor;
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
-import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionPoint;
-import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
-import cz.cuni.mff.d3s.deeco.knowledge.CloningKnowledgeManagerFactory;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
-import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
-import cz.cuni.mff.d3s.deeco.network.DefaultKnowledgeDataManager;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
-import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
-import cz.cuni.mff.d3s.deeco.runtime.RuntimeFramework;
-import cz.cuni.mff.d3s.deeco.simulation.DelayedKnowledgeDataHandler;
-import cz.cuni.mff.d3s.deeco.simulation.DirectSimulationHost;
-import cz.cuni.mff.d3s.deeco.simulation.JDEECoSimulation;
-import cz.cuni.mff.d3s.deeco.simulation.SimulationRuntimeBuilder;
-import cz.cuni.mff.d3s.deeco.task.TimerTaskListener;
 import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
+import cz.cuni.mff.d3s.jdeeco.network.Network;
+import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
+import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
+import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
  * Experiment run for the IRM-JSS paper evaluation. TODO make it work with
@@ -60,17 +46,17 @@ public class DecentralizedRun {
 	private static final String MODELS_BASE_PATH = "designModels/";
 	private static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH
 			+ "firefighters.irmdesign";
-	private static final long SIMULATION_DURATION = 15000; // in milliseconds
+	private static final long SIMULATION_DURATION = 120000; // in milliseconds
 
-	static public final String XMIFILE_PREFIX = "vehicles_simple_";// !!!!!!!!!
+	static public final String XMIFILE_PREFIX = "firefighters0";// !!!!!!!!!
 
 	private static IRM design;
 	private static DEECoSimulation simulation;
-	private static SimulationRuntimeBuilder builder;
+	private static int hostId = 1;
 
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws AnnotationProcessorException,
-			InterruptedException, DuplicateEnsembleDefinitionException {
+			InterruptedException, InstantiationException, IllegalAccessException, DEECoException {
 		System.setProperty(DeecoProperties.PUBLISHING_PERIOD, new Integer(
 				Settings.BROADCAST_PERIOD).toString());
 		int networkDelay;
@@ -81,32 +67,6 @@ public class DecentralizedRun {
 		afterTimes.add("\n");
 		for (int i = 0; i <= numberOfIterations; i++) {
 
-			/**
-			 * System.out.println("Preparing simulation...");
-			 * 
-			 * @SuppressWarnings("unused") IRMDesignPackage p =
-			 *                             IRMDesignPackage.eINSTANCE; design =
-			 *                             (IRM) EMFHelper.loadModelFromXMI(
-			 *                             DESIGN_MODEL_PATH); TraceModel trace
-			 *                             = TraceFactory.eINSTANCE.
-			 *                             createTraceModel();
-			 *                             DiscreteEventTimer simulationTimer =
-			 *                             new DiscreteEventTimer(); simulation
-			 *                             = new
-			 *                             DEECoSimulation(simulationTimer);
-			 *                             simulation.addPlugin(new
-			 *                             IRMPlugin(trace, design)
-			 *                             .withLog(true)
-			 *                             .withLogDir(MODELS_BASE_PATH)
-			 *                             .withLogPrefix(XMIFILE_PREFIX));
-			 *                             createAndDeployComponents();
-			 * 
-			 *                             simulation.start(SIMULATION_DURATION)
-			 *                             ;
-			 * 
-			 *                             System.out.println(
-			 *                             "Simulation finished...");
-			 */
 
 			InDangerTimeHelper.getInstance().reset();
 			Results.getInstance().reset();
@@ -114,17 +74,19 @@ public class DecentralizedRun {
 			networkDelay = i * Settings.NETWORK_DELAY;
 			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 			design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-			TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 			DiscreteEventTimer simulationTimer = new DiscreteEventTimer();
 			simulation = new DEECoSimulation(simulationTimer);
-			simulation
-					.addPlugin(new IRMPlugin(trace, design).withLog(true)
+			simulation.addPlugin(new IRMPlugin(design).withLog(true)
 							.withLogDir(MODELS_BASE_PATH)
 							.withLogPrefix(XMIFILE_PREFIX));
+			simulation.addPlugin(new BroadcastLoopback());
+			simulation.addPlugin(Network.class);
+			simulation.addPlugin(DefaultKnowledgePublisher.class);
+			simulation.addPlugin(KnowledgeInsertingStrategy.class);
 
-			createAndDeployGroupLeader("L1", listeners);
-			createAndDeployGroupMember("M1", "L1", listeners);
-			createAndDeployGroupMember("M2", "L1", listeners);
+			createAndDeployGroupLeader("L1");
+			createAndDeployGroupMember("M1", "L1");
+			createAndDeployGroupMember("M2", "L1");
 
 			// Here we enable the inaccuracy checking - i.e. the second case.
 			// The parameter sets the threashold (maximum) inaccuracy (in
@@ -159,16 +121,15 @@ public class DecentralizedRun {
 				networkDelay = i * Settings.NETWORK_DELAY;
 				IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 				design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-				TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
 				DiscreteEventTimer simulationTimer = new DiscreteEventTimer();
 				simulation = new DEECoSimulation(simulationTimer);
-				simulation.addPlugin(new IRMPlugin(trace, design).withLog(true)
+				simulation.addPlugin(new IRMPlugin(design).withLog(true)
 						.withLogDir(MODELS_BASE_PATH)
 						.withLogPrefix(XMIFILE_PREFIX));
 
-				createAndDeployGroupLeader("L1", listeners);
-				createAndDeployGroupMember("M1", "L1", listeners);
-				createAndDeployGroupMember("M2", "L1", listeners);
+				createAndDeployGroupLeader("L1");
+				createAndDeployGroupMember("M1", "L1");
+				createAndDeployGroupMember("M2", "L1");
 
 				// Here we enable the inaccuracy checking - i.e. the second
 				// case.
@@ -200,73 +161,29 @@ public class DecentralizedRun {
 
 		System.out.println(NearbyGMInDangerInaccuaracy.getInstance()
 				.getInaccuracies());
-	}
-	
-	private static void createAndDeployComponents() throws AnnotationProcessorException, InstantiationException, IllegalAccessException, DEECoException {
-		DEECoNode deecoNode = simulation.createNode(1);
-
-		deecoNode.deployComponent(new GroupLeader("L1"));
-		deecoNode.deployComponent(new GroupMember("M1", "L1"));
-		deecoNode.deployComponent(new GroupMember("M2", "L1"));
-		deecoNode.deployEnsemble(SensorDataUpdate.class);
-		deecoNode.deployEnsemble(GMsInDangerUpdate.class);
-	}
-	
-	
+	}	
 
 	private static void createAndDeployGroupMember(String idx,
-			String leaderIdx,
-			Collection<? extends TimerTaskListener> simulationListeners)
+			String leaderIdx)
 			throws AnnotationProcessorException,
-			DuplicateEnsembleDefinitionException {
+			InstantiationException, IllegalAccessException, DEECoException {
 		GroupMember component = new GroupMember(idx, leaderIdx);
-		createAndDeployComponent(component, idx, simulationListeners);
+		createAndDeployComponent(component);
 	}
 
-	private static void createAndDeployGroupLeader(String idx,
-			Collection<? extends TimerTaskListener> simulationListeners)
+	private static void createAndDeployGroupLeader(String idx)
 			throws AnnotationProcessorException,
-			DuplicateEnsembleDefinitionException {
+			InstantiationException, IllegalAccessException, DEECoException {
 		GroupLeader component = new GroupLeader(idx);
-		createAndDeployComponent(component, idx, simulationListeners);
+		createAndDeployComponent(component);
 	}
 
-	private static void createAndDeployComponent(Object component,
-			String hostId,
-			Collection<? extends TimerTaskListener> simulationListeners)
+	private static void createAndDeployComponent(Object component)
 			throws AnnotationProcessorException,
-			DuplicateEnsembleDefinitionException {
-		RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE
-				.createRuntimeMetadata();
-		TraceModel trace = TraceFactory.eINSTANCE.createTraceModel();
-		AnnotationProcessorExtensionPoint extension = new IrmAwareAnnotationProcessorExtension(
-				design, trace);
-		AnnotationProcessor processor = new AnnotationProcessor(
-				RuntimeMetadataFactoryExt.eINSTANCE, model,
-				new CloningKnowledgeManagerFactory(), extension);
-		processor.processComponent(component);
-		// new AdaptationManager(), ???
-		processor.processEnsemble(SensorDataUpdate.class);
-		processor.processEnsemble(GMsInDangerUpdate.class);
-
-		// pass design and trace models to the AdaptationManager
-		for (ComponentInstance c : model.getComponentInstances()) {
-			if (c.getName().equals(AdaptationManager.class.getName())) {
-				c.getInternalData().put(AdaptationManager.DESIGN_MODEL, design);
-				c.getInternalData().put(AdaptationManager.TRACE_MODEL, trace);
-			}
-		}
-
-		DirectSimulationHost host = simulation.getHost(hostId);
-		RuntimeFramework runtime = builder.build(host, simulation,
-				simulationListeners, model, new DefaultKnowledgeDataManager(
-						model.getEnsembleDefinitions(), null),
-				new CloningKnowledgeManagerFactory(), null,
-				/*
-				 * FIXME the following argument throws an exception in task
-				 * invocation
-				 */null);
-
-		runtime.start();
+			InstantiationException, IllegalAccessException, DEECoException {
+		DEECoNode deecoNode = simulation.createNode(hostId++);
+		deecoNode.deployComponent(component);
+		deecoNode.deployEnsemble(SensorDataUpdate.class);
+		deecoNode.deployEnsemble(GMsInDangerUpdate.class);
 	}
 }

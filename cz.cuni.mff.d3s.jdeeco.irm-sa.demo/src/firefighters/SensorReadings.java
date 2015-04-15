@@ -1,6 +1,8 @@
 package firefighters;
 
-public class SensorReadings {
+import java.io.Serializable;
+
+public class SensorReadings implements Serializable {
 	public final Long temperature;
 	public final Position position;
 	public final Integer acceleration;
