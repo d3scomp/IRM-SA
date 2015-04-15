@@ -3,6 +3,7 @@ package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 import java.util.Random;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
+import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
@@ -13,10 +14,12 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.CorrelationTest.Variances;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
+@IRMComponent("GroupLeader")
 public class GroupLeader {
 
 	public String id;
 	public Integer leaderId;
+	public String role = "GroupLeader";
 
 	public MetadataWrapper<Integer> position;
 	public MetadataWrapper<Integer> temperature;
