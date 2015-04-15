@@ -19,7 +19,6 @@ public class GroupLeader {
 
 	public String id;
 	public Integer leaderId;
-	public String role = "GroupLeader";
 
 	public MetadataWrapper<Integer> position;
 	public MetadataWrapper<Integer> temperature;

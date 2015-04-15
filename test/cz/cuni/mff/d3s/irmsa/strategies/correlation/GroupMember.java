@@ -18,7 +18,6 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 public class GroupMember {
 
 	public String id;
-	public String role = "GroupMember";
 
 	public MetadataWrapper<Integer> position;
 	public MetadataWrapper<Integer> temperature;

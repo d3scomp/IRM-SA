@@ -36,7 +36,7 @@ public class CorrelationManager {
 	/** Done flag stored in internal data under this key. */
 	static final String DONE_FLAG = "doneFlag";
 
-	public String id;
+	public String id = "CorrelationManager";
 
 	/**
 	 * Holds the history of knowledge of all the other components in the system.
