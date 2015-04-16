@@ -48,7 +48,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("17")
-	@PeriodicScheduling(period = 5000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorTemperatureScarcely(
 			@In("FF_ID") String FF_ID,
 			@In("clock") CurrentTimeProvider clock,
@@ -61,7 +61,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("11")
-	@PeriodicScheduling(period = 1000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorAcceleration(
 			@Out("acceleration") ParamHolder<Integer> acceleration) {
 		acceleration.value = 3;
@@ -69,7 +69,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("25")
-	@PeriodicScheduling(period = 1000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorPositionITS(
 			@Out("position") ParamHolder<Position> position) {
 		position.value = new Position(1, 1);
@@ -77,7 +77,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("27")
-	@PeriodicScheduling(period = 1000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorPositionGPS(
 			@Out("position") ParamHolder<Position> position) {
 		position.value = new Position(5, 5);
@@ -85,7 +85,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("15")
-	@PeriodicScheduling(period = 1000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorTemperatureClosely(
 			@Out("temperature") ParamHolder<Long> temperature) {
 		System.out.println("monitorTemperatureClosely");
@@ -94,7 +94,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("30")
-	@PeriodicScheduling(period = 2000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorOxygenLevel(
 			@Out("oxygenLevel") ParamHolder<Long> oxygenLevel) {
 		oxygenLevel.value = 70l;
@@ -102,7 +102,7 @@ public class Firefighter {
 
 	@Process
 	@Invariant("SOS")
-	@PeriodicScheduling(period = 1000)
+	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void searchAndRescue(
 			@In("FF_ID") String FF_ID,
 			@In("clock") CurrentTimeProvider clock) {

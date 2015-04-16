@@ -15,7 +15,7 @@ import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
-	public class MultiNodeSimulation extends FFSimulation {
+	public class MultiNodeSimulation {
 
 		public static void main(String[] args) throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 
@@ -23,18 +23,18 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			/* create main application container */
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 			/* add network plugins */
-			simulation.addPlugin(new BroadcastLoopback(NETWORK_DELAY));
+			simulation.addPlugin(new BroadcastLoopback(Settings.NETWORK_DELAY));
 			simulation.addPlugin(Network.class);
 			simulation.addPlugin(DefaultKnowledgePublisher.class);
 			simulation.addPlugin(KnowledgeInsertingStrategy.class);
 			/* create and add irm plugin */
 			@SuppressWarnings("unused")
 			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
-			IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
-			simulation.addPlugin(new IRMPlugin(design)
+			IRM design = (IRM) EMFHelper.loadModelFromXMI(Settings.DESIGN_MODEL_PATH);
+			simulation.addPlugin(new IRMPlugin(design).withPeriod(Settings.ADAPTATION_PERIOD)
 					.withLog(true)
-					.withLogDir(MODELS_BASE_PATH)
-					.withLogPrefix(XMIFILE_PREFIX));
+					.withLogDir(Settings.MODELS_BASE_PATH)
+					.withLogPrefix(Settings.XMIFILE_PREFIX));
 			
 			/* create nodes and deploy components and ensembles */
 			DEECoNode deecoNode1 = simulation.createNode(1);
@@ -79,7 +79,7 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			deecoNode6.deployEnsemble(PhotosUpdate.class);
 			deecoNode6.deployEnsemble(SensorDataUpdate.class);
 
-			simulation.start(14000);
+			simulation.start(Settings.SIMULATION_DURATION);
 
 		}
 
