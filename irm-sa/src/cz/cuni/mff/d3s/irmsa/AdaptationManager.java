@@ -46,7 +46,7 @@ public class AdaptationManager {
 	public static final String ADAPTATION_LISTENERS = "adaptationListeners";
 
 	@Process
-	@PeriodicScheduling(period=2000)
+	@PeriodicScheduling(period=1) // this period is set here just to pass the annotation processor checks, the real period is set from the IRMPlugin
 	public static void reason(@In("id") String id) {
 		// get runtime, architecture, design, and trace models from the process context
 		ComponentProcess process = ProcessContext.getCurrentProcess();
