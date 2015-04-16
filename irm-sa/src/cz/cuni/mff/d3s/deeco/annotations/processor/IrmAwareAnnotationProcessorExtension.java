@@ -79,55 +79,55 @@ public class IrmAwareAnnotationProcessorExtension extends AnnotationProcessorExt
 	 */
 	@Override
 	public void onUnknownMethodAnnotation(AnnotationProcessor caller, boolean inComponent, Method method, Annotation unknownAnnotation) throws AnnotationProcessorException {
-		if (unknownAnnotation instanceof InvariantMonitor) {
+		if (!(unknownAnnotation instanceof InvariantMonitor)) return;
 
-			String invariantRefID = ((InvariantMonitor) unknownAnnotation).value();
-			cz.cuni.mff.d3s.irm.model.design.Invariant invariantInDesignModel;
-			if (inComponent) {
-				invariantInDesignModel = getProcessInvariantFromDesignModel(invariantRefID);
-			} else {
-				invariantInDesignModel = getExchangeInvariantFromDesignModel(invariantRefID);
-			}
+		String invariantRefID = ((InvariantMonitor) unknownAnnotation).value();
+		cz.cuni.mff.d3s.irm.model.design.Invariant invariantInDesignModel;
+		if (inComponent) {
+			invariantInDesignModel = getProcessInvariantFromDesignModel(invariantRefID);
+		} else {
+			invariantInDesignModel = getExchangeInvariantFromDesignModel(invariantRefID);
+		}
 
-			if (invariantInDesignModel == null) {
-				Log.w("No monitor created out of the method " + method.getName());
-			} else {
-				cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor monitor = tFactory.createInvariantMonitor();
-				monitor.setInvariant(invariantInDesignModel);
-				monitor.setMethod(method);
+		if (invariantInDesignModel == null) {
+			Log.w("No monitor created out of the method " + method.getName());
+			return;
+		} 
+		
+		cz.cuni.mff.d3s.irm.model.trace.api.InvariantMonitor monitor = tFactory.createInvariantMonitor();
+		monitor.setInvariant(invariantInDesignModel);
+		monitor.setMethod(method);
 
-				loop:
-				for (Parameter parameter : method.getParameters()) {
-					final Annotation[] annotations = parameter.getAnnotations();
-					for (Annotation annotation : annotations) {
-						if (annotation instanceof AssumptionParameter) {
-							continue loop; //skip assumption parameters completely
-						}
-					}
-					MonitorParameter mParameter = tFactory.createMonitorParameter();
-					mParameter.setType(parameter.getClass());
-					try {
-						Annotation directionAnnotation = caller.getKindAnnotation(annotations);
-						if (!(directionAnnotation instanceof In)) {
-							throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
-						}
-						String path = caller.getKindAnnotationValue(directionAnnotation);
-						mParameter.setKnowledgePath(KnowledgePathHelper.createKnowledgePath(path, PathOrigin.COMPONENT));
-					} catch (AnnotationProcessorException | ParseException e) {
-						throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+ parameter.getName() + "->" + e.getMessage(), e);
-					}
-					monitor.getMonitorParameters().add(mParameter);
-				}
-				Class<?> returnType = method.getReturnType();
-				//TODO maybe create new special annotation for fitness monitors? instead of switching on return type?
-				if (returnType == Boolean.class || returnType == Boolean.TYPE) {
-					trace.getInvariantSatisfactionMonitors().add(monitor);
-				} else if (returnType == Double.class || returnType == Double.TYPE) {
-					trace.getInvariantFitnessMonitors().add(monitor);
-				} else {
-					throw new AnnotationProcessorException("Return type of method " + method.getName() + " does not match supported InvariantMonitors (double/boolean).");
+		loop:
+		for (Parameter parameter : method.getParameters()) {
+			final Annotation[] annotations = parameter.getAnnotations();
+			for (Annotation annotation : annotations) {
+				if (annotation instanceof AssumptionParameter) {
+					continue loop; //skip assumption parameters completely
 				}
 			}
+			MonitorParameter mParameter = tFactory.createMonitorParameter();
+			mParameter.setType(parameter.getClass());
+			try {
+				Annotation directionAnnotation = caller.getKindAnnotation(annotations);
+				if (!(directionAnnotation instanceof In)) {
+					throw new AnnotationProcessorException("The only direction allowed in monitor parameters is @" + In.class.getSimpleName());
+				}
+				String path = caller.getKindAnnotationValue(directionAnnotation);
+				mParameter.setKnowledgePath(KnowledgePathHelper.createKnowledgePath(path, inComponent ? PathOrigin.COMPONENT : PathOrigin.ENSEMBLE));
+			} catch (AnnotationProcessorException | ParseException e) {
+				throw new AnnotationProcessorException("Method: " + method.getName() + "->Parameter: "+ parameter.getName() + "->" + e.getMessage(), e);
+			}
+			monitor.getMonitorParameters().add(mParameter);
+		}
+		Class<?> returnType = method.getReturnType();
+		//TODO maybe create new special annotation for fitness monitors? instead of switching on return type?
+		if (returnType == Boolean.class || returnType == Boolean.TYPE) {
+			trace.getInvariantSatisfactionMonitors().add(monitor);
+		} else if (returnType == Double.class || returnType == Double.TYPE) {
+			trace.getInvariantFitnessMonitors().add(monitor);
+		} else {
+			throw new AnnotationProcessorException("Return type of method " + method.getName() + " does not match supported InvariantMonitors (double/boolean).");
 		}
 	}
 

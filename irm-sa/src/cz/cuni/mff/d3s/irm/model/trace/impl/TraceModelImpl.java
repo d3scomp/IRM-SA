@@ -217,7 +217,9 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 			
 			// FIXME this is a system component, and should not be published at all.
 			// Workaround to make IRM work - REALLY TEMPORARY:
-			String componentName = componentInstance.getKnowledgeManager().getComponent().getName();
+			String componentName = componentInstance.getId();
+			// to be removed:
+			// String componentName = componentInstance.getKnowledgeManager().getComponent().getName();
 			if (componentName.contains("AdaptationManager") 
 					|| componentName.contains("MetaAdaptationManager")
 					|| componentName.contains("CorrelationManager")) {

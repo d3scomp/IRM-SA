@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("10")
-@PeriodicScheduling(period=2000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class SensorDataUpdate {
 
 	@Membership
@@ -34,5 +34,9 @@ public class SensorDataUpdate {
 		@InOut("coord.temperatureMap") ParamHolder<Map<String,Long>> temperatureMap 
 	) {
 		System.out.println("SensorDataUpdate mapping!");
+		accelerationMap.value.put(FF_ID, acceleration);
+		oxygenLevelMap.value.put(FF_ID, oxygenLevel);
+		positionMap.value.put(FF_ID, position);
+		temperatureMap.value.put(FF_ID, temperature);
 	}	
 }

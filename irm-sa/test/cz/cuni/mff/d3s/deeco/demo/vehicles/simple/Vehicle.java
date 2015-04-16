@@ -1,6 +1,7 @@
 package cz.cuni.mff.d3s.deeco.demo.vehicles.simple;
 
 import java.util.Map;
+import java.util.Random;
 
 import cz.cuni.mff.d3s.deeco.annotations.*;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
@@ -103,9 +104,7 @@ public class Vehicle {
 		@Out("position") ParamHolder<Integer> position 
 	) {
 		System.out.println("Inside " + id + "#monitorPosition");
-		/*
-			Just a skeleton,
-			business logic to be provided here.
-		*/
+		Random r = new Random();
+		position.value = r.nextInt(100);
 	}
 }

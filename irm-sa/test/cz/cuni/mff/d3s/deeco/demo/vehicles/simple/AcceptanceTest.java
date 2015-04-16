@@ -10,8 +10,6 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
@@ -32,7 +30,7 @@ public class AcceptanceTest {
 		SimulationTimer simulationTimer = new DiscreteEventTimer();
 		/* create main application container */
 		DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new IRMPlugin(design)
+		simulation.addPlugin(new IRMPlugin(design).withPeriod(1000)
 				.withLog(true)
 				.withLogDir(MODELS_BASE_PATH)
 				.withLogPrefix(XMIFILE_PREFIX));

@@ -9,8 +9,11 @@ import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorExtensionP
 import cz.cuni.mff.d3s.deeco.annotations.processor.IrmAwareAnnotationProcessorExtension;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
+import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
@@ -31,6 +34,11 @@ public class IRMPlugin implements DEECoPlugin {
 	/** Passed to AdaptationManager. */
 	private String logPrefix = "";
 
+	/** Period of the reason process of the AdaptationManager, 
+	 * changed after EMF model is created in the init(), 
+	 * default period is 2000 ms */
+	private int period = 2000;
+	
 	/** Listeners to adaptation. */
 	private final List<AdaptationListener> listeners = new ArrayList<>();
 
@@ -59,6 +67,11 @@ public class IRMPlugin implements DEECoPlugin {
 		return this;
 	}
 	
+	public IRMPlugin withPeriod(int period) {
+		this.period = period;
+		return this;
+	}
+	
 	public TraceModel getTrace(){
 		return trace;
 	}
@@ -84,6 +97,15 @@ public class IRMPlugin implements DEECoPlugin {
 				c.getInternalData().put(AdaptationManager.LOG_DIR, logDir);
 				c.getInternalData().put(AdaptationManager.LOG_PREFIX, logPrefix);
 				c.getInternalData().put(AdaptationManager.ADAPTATION_LISTENERS, listeners);
+				
+				for (ComponentProcess p: c.getComponentProcesses()) {
+					for (Trigger t : p.getTriggers()){
+						if (t instanceof TimeTrigger) {
+							((TimeTrigger) t).setPeriod(period);
+						}
+					}
+				}
+				
 			}
 		}
 	}
