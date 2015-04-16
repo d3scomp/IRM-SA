@@ -11,7 +11,10 @@ import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.RemoteComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -56,9 +59,19 @@ public class AdaptationManager {
 		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) component.getInternalData().get(TRACE_MODEL);
 		boolean log = (Boolean) component.getInternalData().get(LOG);
+		
+//		printArchitectureInstances(architecture);
+		
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+
+		// if there are no IRMinstances abort
+		if (IRMInstances.isEmpty()) {
+			Log.w("There were no IRMInstances.");
+			return;
+		}
+		
 		// preprocess the generated instances
 		for (IRMInstance i : IRMInstances) {
 			SATSolverPreProcessor preProcessor = new SATSolverPreProcessor(i);
@@ -89,6 +102,18 @@ public class AdaptationManager {
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
 		reconfigurator.toggleProcessesAndEnsembles();
+	}
+
+	private static void printArchitectureInstances(Architecture architecture) {
+		System.out.println("------------");
+		for (cz.cuni.mff.d3s.deeco.model.architecture.api.ComponentInstance ci: architecture.getComponentInstances()) {
+			if (ci instanceof LocalComponentInstance) {
+				System.out.println("Local ComponentInstance: " + ((LocalComponentInstance) ci).getId());
+			} else {
+				System.out.println("Remote ComponentInstance: " + ((RemoteComponentInstance) ci).getId());
+			}
+		}
+		System.out.println("------------");
 	}
 
 	private static void printSelectedIRMInstance(IRMInstance i) {
