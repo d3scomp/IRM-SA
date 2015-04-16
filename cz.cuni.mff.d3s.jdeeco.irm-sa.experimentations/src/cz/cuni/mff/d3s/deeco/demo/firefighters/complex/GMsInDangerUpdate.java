@@ -13,10 +13,7 @@ public class GMsInDangerUpdate {
 		@In("member.leaderId") String leaderId,  
 		@In("coord.GL_ID") String GL_ID 
 	) {
-			/*
-				replace next line with actual condition
-			*/
-			return true;
+			return leaderId.equals(GL_ID);
 	}
 
 	@KnowledgeExchange
@@ -25,5 +22,6 @@ public class GMsInDangerUpdate {
 		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger 
 	) {
 		System.out.println("GMInDangerUpdate!");
+		nearbyGMInDanger.value = noOfGMsInDanger > 0;
 	}	
 }

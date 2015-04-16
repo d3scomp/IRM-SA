@@ -1,7 +1,5 @@
 package cz.cuni.mff.d3s.deeco.demo.firefighters.complex;
 
-import java.io.File;
-
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoException;
@@ -13,11 +11,7 @@ import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 
-	public class SingleNodeSimulation {
-
-		static public final String MODELS_BASE_PATH = "designModels" + File.separator;
-		static public final String XMIFILE_PREFIX = "firefighters_complex";
-		static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters_complex.irmdesign";
+	public class SingleNodeSimulation extends FFSimulation {
 
 		public static void main(String[] args) throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 
@@ -36,8 +30,10 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			/* deploy components and ensembles */
 			DEECoNode deecoNode = simulation.createNode(1);
 
-			deecoNode.deployComponent(new Officer("OF1"));
-			deecoNode.deployComponent(new Firefighter("FF1", "OF1"));
+			deecoNode.deployComponent(new Officer("OF1", simulationTimer));
+			deecoNode.deployComponent(new Firefighter("FF1", "OF1", simulationTimer));
+			deecoNode.deployComponent(new Firefighter("FF2", "OF1", simulationTimer));
+			deecoNode.deployComponent(new Firefighter("FF3", "OF1", simulationTimer));
 			deecoNode.deployComponent(new SiteLeader());
 			deecoNode.deployComponent(new UnmannedAerialVehicle("UAV1"));
 			deecoNode.deployEnsemble(GMsInDangerUpdate.class);
@@ -45,7 +41,9 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			deecoNode.deployEnsemble(PhotosUpdate.class);
 			deecoNode.deployEnsemble(SensorDataUpdate.class);
 
-			simulation.start(2000);
+			simulation.start(SIMULATION_DURATION);
+			
+			System.out.println(FFSHelper.getInstance().print());
 
 		}
 
