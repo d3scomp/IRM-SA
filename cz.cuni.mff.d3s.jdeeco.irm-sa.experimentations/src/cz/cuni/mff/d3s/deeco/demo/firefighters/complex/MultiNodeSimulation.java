@@ -31,7 +31,7 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			@SuppressWarnings("unused")
 			IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 			IRM design = (IRM) EMFHelper.loadModelFromXMI(Settings.DESIGN_MODEL_PATH);
-			simulation.addPlugin(new IRMPlugin(design)
+			simulation.addPlugin(new IRMPlugin(design).withPeriod(Settings.ADAPTATION_PERIOD)
 					.withLog(true)
 					.withLogDir(Settings.MODELS_BASE_PATH)
 					.withLogPrefix(Settings.XMIFILE_PREFIX));

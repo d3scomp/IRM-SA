@@ -24,7 +24,7 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			SimulationTimer simulationTimer = new DiscreteEventTimer();
 			/* create main application container */
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-			simulation.addPlugin(new IRMPlugin(design)
+			simulation.addPlugin(new IRMPlugin(design).withPeriod(Settings.ADAPTATION_PERIOD)
 					.withLog(true)
 					.withLogDir(Settings.MODELS_BASE_PATH)
 					.withLogPrefix(Settings.XMIFILE_PREFIX));
