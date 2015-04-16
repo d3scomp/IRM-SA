@@ -7,6 +7,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.Invariant;
+import cz.cuni.mff.d3s.deeco.annotations.InvariantMonitor;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
@@ -44,7 +45,7 @@ public class Officer {
  
 	@Process
 	@Invariant("4")
-	@PeriodicScheduling(period=4000) 
+	@PeriodicScheduling(period=Settings.PROCESS_PERIOD) 
 	public static void findGMsInDanger(
 		@In("temperatureMap") Map<String,Long> temperatureMap,  
 		@In("oxygenLevelMap") Map<String,Long> oxygenLevelMap,  
@@ -60,5 +61,17 @@ public class Officer {
 			}
 		}
 		System.out.println("End");
+	}
+	
+	@InvariantMonitor("6")
+	public static boolean gmInDanger(
+			@In("noOfGMsInDanger") Integer noOfGMsInDanger ) {
+		return noOfGMsInDanger > 0;
+	}
+	
+	@InvariantMonitor("8")
+	public static boolean gmNotInDanger(
+			@In("noOfGMsInDanger") Integer noOfGMsInDanger ) {
+		return noOfGMsInDanger == 0;
 	}
 }

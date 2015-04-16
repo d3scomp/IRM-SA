@@ -5,7 +5,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("7")
-@PeriodicScheduling(period=3000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class GMsInDangerUpdate {
 
 	@Membership

@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("10")
-@PeriodicScheduling(period=2000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class SensorDataUpdate {
 
 	@Membership

@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("ex5")
-@PeriodicScheduling(period=10000)
+@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
 public class PhotosUpdate {
 
 	@Membership
