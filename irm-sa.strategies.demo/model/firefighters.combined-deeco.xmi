@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ASCII"?>
+<cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cz.cuni.mff.d3s.irm.tool.deeco="http://cz.cuni.mff.d3s.irm.tool.deeco/1.0" name="FireFighter" IRMcomponent="FireFighter">
+  <componentProcesses name="determineBatteryLevel" isActive="false" IRMinvariant="P01">
+    <parameters direction="IN" type="String">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="id"/>
+      </knowledgePath>
+    </parameters>
+    <parameters direction="INOUT" type="MetadataWrapper&lt;Integer>">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="batteryLevel"/>
+      </knowledgePath>
+    </parameters>
+    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1000"/>
+  </componentProcesses>
+  <componentProcesses name="determinePosition" isActive="false" IRMinvariant="P02">
+    <parameters direction="IN" type="String">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="id"/>
+      </knowledgePath>
+    </parameters>
+    <parameters direction="INOUT" type="MetadataWrapper&lt;Integer>">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="position"/>
+      </knowledgePath>
+    </parameters>
+    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1250"/>
+  </componentProcesses>
+  <componentProcesses name="determineTemperature" isActive="false" IRMinvariant="P03">
+    <parameters direction="IN" type="String">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="id"/>
+      </knowledgePath>
+    </parameters>
+    <parameters direction="INOUT" type="MetadataWrapper&lt;Integer>">
+      <knowledgePath>
+        <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="temperature"/>
+      </knowledgePath>
+    </parameters>
+    <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1000"/>
+  </componentProcesses>
+  <initialKnowledge name="batteryLevel" type="MetadataWrapper&lt;Integer>"/>
+  <initialKnowledge name="position" type="MetadataWrapper&lt;Integer>"/>
+  <initialKnowledge name="id" type="String"/>
+  <initialKnowledge name="temperature" type="MetadataWrapper&lt;Integer>"/>
+</cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance>
