@@ -17,6 +17,7 @@ package cz.cuni.mff.d3s.irmsa.strategies.period;
 
 import java.util.Collection;
 
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
@@ -42,6 +43,11 @@ public class InvariantFitnessCombinerAverage implements InvariantFitnessCombiner
 				//a) weighted average
 				info.weight = info.fitness * xii.getInvariant().getWeight();
 				w += xii.getInvariant().getWeight();
+			} else if (AssumptionInstance.class.isAssignableFrom(info.clazz)) {
+				final AssumptionInstance ai = info.getInvariant();
+				//a) weighted average
+				info.weight = info.fitness * ai.getInvariant().getWeight();
+				w += ai.getInvariant().getWeight();
 			}
 			result += info.weight;
 		}

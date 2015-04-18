@@ -15,14 +15,14 @@
     <knowledgeElements type="MetadataWrapper&lt;Integer>" name="temperature"/>
   </components>
   <refinements start="//@andNodes.0" end="//@invariants.0"/>
+  <refinements start="//@andNodes.2" end="//@invariants.6"/>
   <refinements start="//@andNodes.1" end="//@invariants.1"/>
-  <refinements start="//@andNodes.2" end="//@invariants.1"/>
-  <refinements start="//@andNodes.2" end="//@invariants.7"/>
   <decompositions start="//@invariants.2" end="//@andNodes.0"/>
   <decompositions start="//@invariants.3" end="//@andNodes.1"/>
   <decompositions start="//@invariants.4" end="//@andNodes.1"/>
   <decompositions start="//@invariants.5" end="//@andNodes.0"/>
-  <decompositions start="//@invariants.6" end="//@andNodes.2"/>
+  <decompositions start="//@invariants.1" end="//@andNodes.2"/>
+  <decompositions start="//@invariants.7" end="//@andNodes.2"/>
   <andNodes/>
   <andNodes/>
   <andNodes/>
@@ -30,4 +30,5 @@
   <contributes start="//@components.0" end="//@invariants.4" processInput="//@components.0/@knowledgeElements.2 //@components.0/@knowledgeElements.1" processOutput="//@components.0/@knowledgeElements.1"/>
   <contributes start="//@components.0" end="//@invariants.7" processInput="//@components.0/@knowledgeElements.2 //@components.0/@knowledgeElements.3" processOutput="//@components.0/@knowledgeElements.3"/>
   <assumed start="//@components.0" end="//@invariants.3" assumptionInput="//@components.0/@knowledgeElements.2 //@components.0/@knowledgeElements.1"/>
+  <assumed start="//@components.0" end="//@invariants.5" assumptionInput="//@components.0/@knowledgeElements.0"/>
 </cz.cuni.mff.d3s.irm.model.design:IRM>

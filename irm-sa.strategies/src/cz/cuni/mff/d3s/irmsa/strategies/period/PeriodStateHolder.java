@@ -4,6 +4,8 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.StateHolder;
 
 public class PeriodStateHolder extends StateHolder<PeriodBackup> {
 
+	private static final long serialVersionUID = 8934463139475027143L;
+
 	@Override
 	protected String createStateHolderName() {
 		return "PeriodStateHolder";

@@ -14,6 +14,7 @@ import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 import static combined.HeatMap.heatMap;
 
 /**
@@ -31,7 +32,7 @@ public class Environment {
 	static public final Integer INITIAL_INACCURACY = 0;
 
 	/** Firefighters' initial battery level. */
-	static public final Integer INITIAL_BATTERY_LEVEL = 1000;
+	static public final Integer INITIAL_BATTERY_LEVEL = 1600;
 
 	/** Firefighters' initial temperature. */
 	static public final Integer INITIAL_TEMPERATURE = heatMap[INITIAL_POSITION];
@@ -39,14 +40,17 @@ public class Environment {
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
 
-	/** GPS breaks at this time. */
-	static private final int GPS_BREAK_TIME = 50000;
+	/** FF1's GPS loses precision at this time. */
+	static private final int GPS_BREAK_TIME = 50_000;
+
+	/** FF1's thermometer dies at this time. */
+	static private final int THERMO_DEAD_TIME = 150_000;
 
 	/** Maximal distance between group members. */
-	static final int MAX_GROUP_DISTANCE = 6;
+	static final int MAX_GROUP_DISTANCE = 8;
 
-	/** Firefighters' states stored in internal data under this key. */
-	static private final String FIREFIGHTERS = "Firefighters";
+//	/** Firefighters' states stored in internal data under this key. */
+//	static private final String FIREFIGHTERS = "Firefighters";
 
 	/** Firefighter leading the group. */
 	static final String FF_LEADER_ID = "FF1";
@@ -121,7 +125,7 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return position of given firefighter or NaN with insufficient energy
 	 */
-	static public int getPosition(final String ffId) {
+	static public int getPosition(final String ffId, final MetadataWrapper<Integer> position) {
 		final FireFighterState ff = getFirefighter(ffId);
 		ff.batteryLevel -= GPS_ENERGY_COST;
 		if (ff.batteryLevel <= 0.0) {
@@ -154,9 +158,15 @@ public class Environment {
 	/**
 	 * Returns temperature of given firefighter.
 	 * @param ffId firefighter id
+	 * @param temperature needed for making it non-operational
 	 * @return battery level of given firefighter
 	 */
-	static public int getTemperature(final String ffId) {
+	static public int getTemperature(final String ffId,
+			final MetadataWrapper<Integer> temperature) {
+		if (ffId.equals(FF_LEADER_ID)
+				&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= THERMO_DEAD_TIME) {
+			temperature.malfunction();
+		}
 		final FireFighterState ff =  getFirefighter(ffId);
 		return heatMap[ff.position];
 	}
@@ -184,7 +194,7 @@ public class Environment {
 
 			if (ffId.equals(FF_FOLLOWER_ID)) {
 				final FireFighterState leader = firefighters.get(FF_LEADER_ID);
-				if (Math.abs(leader.position - ff.position) >= MAX_GROUP_DISTANCE) {
+				if (leader != null && Math.abs(leader.position - ff.position) >= MAX_GROUP_DISTANCE) {
 					if (leader.position < ff.position) {
 						ff.position = leader.position + MAX_GROUP_DISTANCE;
 					} else {
@@ -193,14 +203,21 @@ public class Environment {
 				}
 			}
 
-			System.out.println(ffId + " position =" + ff.position);
-			System.out.println(ffId + " temperature =" + heatMap[ff.position]);
+			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
+			System.out.println(ffId + " position = " + ff.position);
+			System.out.println(ffId + " temperature = " + heatMap[ff.position]);
 
-//			if (ProcessContext.getTimeProvider().getCurrentMilliseconds() < GPS_BREAK_TIME) {
-//				ff.inaccuracy += FF_MOVEMENT;
-//			} else {
-//				ff.inaccuracy += BROKEN_GSP_INACURRACY;
-//			}
+			if (ffId.equals(FF_LEADER_ID)) {
+				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
+				if (time >= GPS_BREAK_TIME) {
+					ff.inaccuracy += BROKEN_GSP_INACURRACY;
+				} else {
+					ff.inaccuracy += FF_MOVEMENT;
+				}
+			} else {
+				ff.inaccuracy += FF_MOVEMENT;
+			}
 		}
 	}
 

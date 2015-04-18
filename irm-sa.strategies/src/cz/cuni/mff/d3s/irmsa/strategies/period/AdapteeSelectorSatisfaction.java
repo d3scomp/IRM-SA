@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 
@@ -46,7 +48,21 @@ public class AdapteeSelectorSatisfaction implements AdapteeSelector {
 			if (invariant.fitness < fitness) {
 				result.clear();
 				fitness = invariant.fitness;
-				result.add(invariant);
+				if (AssumptionInstance.class.isAssignableFrom(invariant.clazz)) {
+					//use process or  exchange siblings instead of assumptions
+					final InvariantInstance parent = invariant.getInvariant().getParent();
+					if (parent == null) {
+						continue;
+					}
+					for (InvariantInfo<?> ii : infos) {
+						if (parent.equals(ii.getInvariant().getParent())
+								&& !AssumptionInstance.class.isAssignableFrom(invariant.clazz)) {
+							result.add(ii);
+						}
+					}
+				} else {
+					result.add(invariant);
+				}
 			} else if (toleranceEqual(invariant.fitness, fitness)) {
 				result.add(invariant);
 			}

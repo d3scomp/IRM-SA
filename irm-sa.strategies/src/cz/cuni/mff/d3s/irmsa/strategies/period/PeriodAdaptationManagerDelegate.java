@@ -8,10 +8,12 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
+import cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManagerDelegate;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
@@ -20,6 +22,10 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
 			final List<IRMInstance> irmInstances) {
+		final boolean considerAssumptions =
+				ComponentHelper.retrieveFromInternalData(
+						PeriodAdaptationManager.CONSIDER_ASSUMPTIONS,
+						Boolean.FALSE);
 		final Set<InvariantInfo<?>> infos = new HashSet<>();
 		for (IRMInstance irm: irmInstances) {
 			for (InvariantInstance invariant: irm.getInvariantInstances()) {
@@ -33,6 +39,9 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 							(ExchangeInvariantInstance) invariant;
 					infos.add(InvariantInfo.create(xii));
 					//xii.getEnsembleController().setActive(true); //TODO change to getEnsembleController when ready
+				} else if (invariant instanceof AssumptionInstance && considerAssumptions) {
+					final AssumptionInstance ai = (AssumptionInstance) invariant;
+					infos.add(new InvariantInfo<AssumptionInstance>(ai, AssumptionInstance.class) {});
 				}
 			}
 		}
