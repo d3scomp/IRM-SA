@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa.strategies.period;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.Backup;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.Direction;
 
 public class PeriodBackup extends Backup {
+
+	private static final long serialVersionUID = -8717072638497619764L;
 
 	/** Changes of process invariants. */
 	public Map<String, Change> processes = new HashMap<>();
@@ -28,7 +31,9 @@ public class PeriodBackup extends Backup {
 	/**
 	 * Simple wrapper around period change of an invariant.
 	 */
-	static public class Change extends KnowledgeImpl {
+	static public class Change extends KnowledgeImpl implements Serializable {
+
+		private static final long serialVersionUID = 5931592887055094809L;
 
 		/** Period delta. */
 		public long delta;

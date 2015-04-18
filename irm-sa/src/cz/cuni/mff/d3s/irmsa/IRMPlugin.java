@@ -34,16 +34,17 @@ public class IRMPlugin implements DEECoPlugin {
 	/** Passed to AdaptationManager. */
 	private String logPrefix = "";
 
-	/** Period of the reason process of the AdaptationManager, 
-	 * changed after EMF model is created in the init(), 
+	/** Period of the reason process of the AdaptationManager,
+	 * changed after EMF model is created in the init(),
 	 * default period is 2000 ms */
 	private int period = 2000;
-	
+
 	/** Listeners to adaptation. */
 	private final List<AdaptationListener> listeners = new ArrayList<>();
 
 	public IRMPlugin(IRM design) {
 		this.design = design;
+		trace = TraceFactory.eINSTANCE.createTraceModel();
 	}
 
 	@Override
@@ -66,19 +67,18 @@ public class IRMPlugin implements DEECoPlugin {
 		this.logPrefix = logPrefix;
 		return this;
 	}
-	
+
 	public IRMPlugin withPeriod(int period) {
 		this.period = period;
 		return this;
 	}
-	
+
 	public TraceModel getTrace(){
 		return trace;
 	}
 
 	@Override
 	public void init(DEECoContainer container) {
-		trace = TraceFactory.eINSTANCE.createTraceModel();
 		AnnotationProcessorExtensionPoint irmAwareAnnotationProcessorExtension = new IrmAwareAnnotationProcessorExtension(design,trace);
 		container.getProcessor().addExtension(irmAwareAnnotationProcessorExtension);
 
@@ -97,7 +97,7 @@ public class IRMPlugin implements DEECoPlugin {
 				c.getInternalData().put(AdaptationManager.LOG_DIR, logDir);
 				c.getInternalData().put(AdaptationManager.LOG_PREFIX, logPrefix);
 				c.getInternalData().put(AdaptationManager.ADAPTATION_LISTENERS, listeners);
-				
+
 				for (ComponentProcess p: c.getComponentProcesses()) {
 					for (Trigger t : p.getTriggers()){
 						if (t instanceof TimeTrigger) {
@@ -105,7 +105,7 @@ public class IRMPlugin implements DEECoPlugin {
 						}
 					}
 				}
-				
+
 			}
 		}
 	}

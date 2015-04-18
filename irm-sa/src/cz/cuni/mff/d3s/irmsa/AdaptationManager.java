@@ -69,13 +69,15 @@ public class AdaptationManager {
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
+		@SuppressWarnings("unchecked")
+		final List<AdaptationListener> listeners = (List<AdaptationListener>) component.getInternalData().get(ADAPTATION_LISTENERS);
 
 		// if there are no IRMinstances abort
 		if (IRMInstances.isEmpty()) {
 			Log.w("There were no IRMInstances.");
 			return;
 		}
-		
+
 		// preprocess the generated instances
 		for (IRMInstance i : IRMInstances) {
 			SATSolverPreProcessor preProcessor = new SATSolverPreProcessor(i);
@@ -95,9 +97,11 @@ public class AdaptationManager {
 		}
 		// create a reconfigurator of the current runtime
 		ArchitectureReconfigurator reconfigurator = new ArchitectureReconfigurator(runtime);
+		int solutions = 0;
 		for (IRMInstance i: IRMInstances) {
 			SATSolver solver = new SATSolver(i);
 			if (solver.solve()) {
+				++solutions;
 				if (log) {
 					printSelectedIRMInstance(i); // for debugging...
 				}
@@ -106,6 +110,10 @@ public class AdaptationManager {
 		}
 		// enact changes to the runtime be starting/stopping processes to be run
 		reconfigurator.toggleProcessesAndEnsembles();
+
+		for (AdaptationListener listener : listeners) {
+			listener.adaptationResult(solutions, IRMInstances.size());
+		}
 	}
 
 	private static void printArchitectureInstances(Architecture architecture) {

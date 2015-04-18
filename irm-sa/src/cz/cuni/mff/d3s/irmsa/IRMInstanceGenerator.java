@@ -377,8 +377,12 @@ public class IRMInstanceGenerator {
 	private List<ComponentInstance> getAllArchitectureInstancesOfDesignComponent(Component irmC) {
 		List<ComponentInstance> ret = new ArrayList<>();
 		for (ComponentInstance c: architecture.getComponentInstances()) {
-			if (trace.getIRMComponentForArchitectureComponentInstance(c, design).equals(irmC)) {
-				ret.add(c);
+			try {
+				if (trace.getIRMComponentForArchitectureComponentInstance(c, design).equals(irmC)) {
+					ret.add(c);
+				}
+			} catch (Exception e) {
+				//TODO maybe at least log the exception?
 			}
 		}
 		return ret;

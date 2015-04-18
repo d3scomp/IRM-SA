@@ -15,6 +15,9 @@
  ******************************************************************************/
 package combined;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -26,16 +29,19 @@ import cz.cuni.mff.d3s.deeco.timer.DiscreteEventTimer;
 import cz.cuni.mff.d3s.deeco.timer.SimulationTimer;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
-import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irm.model.trace.meta.TraceFactory;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
-import cz.cuni.mff.d3s.irmsa.strategies.assumption.AdapteeSelectorFitness;
 import cz.cuni.mff.d3s.irmsa.strategies.assumption.AssumptionParameterAdaptationPlugin;
-import cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed;
-import cz.cuni.mff.d3s.irmsa.strategies.assumption.DirectionSelectorImpl;
-import cz.cuni.mff.d3s.irmsa.strategies.assumption.InvariantFitnessCombinerAverage;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.CorrelationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
+import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationPlugin;
+import cz.cuni.mff.d3s.jdeeco.network.Network;
+import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
+import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
+import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
  * This class contains main for centralized run.
@@ -64,7 +70,26 @@ public class Run {
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
 		Log.i("Preparing simulation");
 
-		/* create IRM plugin */
+		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
+		final SimulationTimer simulationTimer = new DiscreteEventTimer();
+
+		/* create main application container */
+		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
+		simulation.addPlugin(new BroadcastLoopback());
+		simulation.addPlugin(Network.class);
+		simulation.addPlugin(DefaultKnowledgePublisher.class);
+		simulation.addPlugin(KnowledgeInsertingStrategy.class);
+
+		//create nodes without adaptation
+		DEECoNode deeco1 = simulation.createNode(1);
+		nodesInSimulation.add(deeco1);
+		deeco1.deployComponent(new FireFighter(Environment.FF_FOLLOWER_ID));
+
+		DEECoNode deeco2 = simulation.createNode(2);
+		nodesInSimulation.add(deeco2);
+		deeco2.deployComponent(new FireFighter(Environment.LONELY_FF_ID));
+
+		//create adaptation plugins
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(DESIGN_MODEL_PATH);
@@ -72,31 +97,69 @@ public class Run {
 		final IRMPlugin irmPlugin = new IRMPlugin(design).withLog(false);
 		final MetaAdaptationPlugin metaAdaptationPlugin = new MetaAdaptationPlugin(irmPlugin);
 
-		// create IRMPeriodAdaptationPlugin
+		// create PeriodAdaptationPlugin
 		final RuntimeMetadata model = RuntimeMetadataFactoryExt.eINSTANCE.createRuntimeMetadata();
-		final AssumptionParameterAdaptationPlugin periodAdaptionPlugin =
+		final PeriodAdaptationPlugin periodAdaptionPlugin =
+				new PeriodAdaptationPlugin(metaAdaptationPlugin, model, design, irmPlugin.getTrace())
+						.withInvariantFitnessCombiner(new cz.cuni.mff.d3s.irmsa.strategies.period.InvariantFitnessCombinerAverage())
+						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.AdapteeSelectorFitness())
+						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl())
+						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(250))
+						.withConsiderAssumptions(true)
+						.withAdaptationBound(0.9);
+
+		// create AssumptionParameterAdaptationPlugin
+		// TODO reasonable parameters
+		final AssumptionParameterAdaptationPlugin assumptionParameterAdaptionPlugin =
 				new AssumptionParameterAdaptationPlugin(metaAdaptationPlugin, model, design, irmPlugin.getTrace())
-						.withInvariantFitnessCombiner(new InvariantFitnessCombinerAverage())
-						.withAdapteeSelector(new AdapteeSelectorFitness())
-						.withDirectionSelector(new DirectionSelectorImpl())
-						.withDeltaComputor(new DeltaComputorFixed(250));
+						.withInvariantFitnessCombiner(new cz.cuni.mff.d3s.irmsa.strategies.assumption.InvariantFitnessCombinerAverage())
+						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.AdapteeSelectorFitness())
+						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DirectionSelectorImpl())
+						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed(250));
 
-		final SimulationTimer simulationTimer = new DiscreteEventTimer();
-		/* create main application container */
-		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-//		simulation.addPlugin(irmPlugin);
-//		simulation.addPlugin(metaAdaptationPlugin);
-//		simulation.addPlugin(periodAdaptionPlugin);
+		// create correlation plugin
+		registerMetadataForFields();
+		final CorrelationPlugin correlationPlugin =
+				new CorrelationPlugin(metaAdaptationPlugin, nodesInSimulation);
+
 		/* deploy components and ensembles */
-		final DEECoNode deecoNode = simulation.createNode(1);
+		final DEECoNode deeco3 = simulation.createNode(3,
+				irmPlugin, metaAdaptationPlugin,
+				periodAdaptionPlugin,
+				assumptionParameterAdaptionPlugin//,
+//				correlationPlugin
+			);
 
-		deecoNode.deployComponent(new FireFighter("FF1"));
-		deecoNode.deployComponent(new FireFighter("FF2"));
-		deecoNode.deployComponent(new FireFighter("FF3"));
-		deecoNode.deployComponent(new Environment());
+		//deploy components
+		deeco3.deployComponent(new FireFighter(Environment.FF_LEADER_ID));
+		deeco3.deployComponent(new Environment());
+		deeco3.deployEnsemble(FireFighterDataAggregation.class);
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		Log.i("Simulation Finished");
+	}
+
+	/**
+	 * Prepare and register metadata for fields.
+	 */
+	private static void registerMetadataForFields() {
+		final String positionLabel = "position";
+		final String temperatureLabel = "temperature";
+		final String batteryLabel = "battery";
+
+		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
+		final int temperatureBoundary = 12;
+		final int batteryBoundary = 2;
+
+		final Metric simpleMetric = new DifferenceMetric();
+
+		final double positionConfidence = 0.9;
+		final double temperatureConfidence = 0.9;
+		final double batteryConfidence = 0.9;
+
+		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, simpleMetric, positionConfidence);
+		KnowledgeMetadataHolder.setBoundAndMetric(temperatureLabel, temperatureBoundary, simpleMetric, temperatureConfidence);
+		KnowledgeMetadataHolder.setBoundAndMetric(batteryLabel, batteryBoundary, simpleMetric, batteryConfidence);
 	}
 }

@@ -1,8 +1,12 @@
 package cz.cuni.mff.d3s.irmsa.strategies.commons;
 
+import java.io.Serializable;
+
 import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 
-public abstract class StateHolder<T extends Backup> extends KnowledgeImpl {
+public abstract class StateHolder<T extends Backup> extends KnowledgeImpl implements Serializable {
+
+	private static final long serialVersionUID = 9124252960213765211L;
 
 	/** State of the method adaptPeriods. */
 	public State state;

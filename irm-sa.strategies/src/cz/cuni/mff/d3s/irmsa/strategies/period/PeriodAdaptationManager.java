@@ -8,6 +8,9 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.EvolutionaryAdaptationManager;
 @SystemComponent
 public class PeriodAdaptationManager extends EvolutionaryAdaptationManager {
 
+	/** Flag indicating whether assumptions should be considered is stored in internal data under this key. */
+	static final String CONSIDER_ASSUMPTIONS = "considerAssumptions";
+
 	/**
 	 * Only constructor
 	 */
