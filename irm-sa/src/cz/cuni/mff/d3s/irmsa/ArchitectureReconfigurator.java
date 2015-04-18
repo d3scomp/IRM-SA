@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2014 Charles University in Prague
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,55 +35,60 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
  * instances to the jDEEco runtime metadata model. These changes are then
  * translated (by EMF listeners) to starting/stopping tasks on the jDEECo
  * scheduler.
- * 
+ *
  * @author Ilias Gerostathopoulos <iliasg@d3s.mff.cuni.cz>
- * 
+ *
  */
 public class ArchitectureReconfigurator {
 
-	private RuntimeMetadata runtime; 
-	private List<IRMInstance> IRMInstances = new ArrayList<>();
-	
-	private Set<ComponentProcess> processesToRun = new HashSet<>(); 
-	private Set<EnsembleDefinition> ensemblesToRun = new HashSet<>(); 
+	private final RuntimeMetadata runtime;
+	private final List<IRMInstance> IRMInstances = new ArrayList<>();
+
+	private final Set<ComponentProcess> processesToRun = new HashSet<>();
+	private final Set<EnsembleDefinition> ensemblesToRun = new HashSet<>();
+
+	private final Set<ComponentProcess> processesToStop = new HashSet<>();
+	private final Set<EnsembleDefinition> ensemblesToStop = new HashSet<>();
 
 	public ArchitectureReconfigurator(RuntimeMetadata runtime) {
 		super();
 		this.runtime = runtime;
 	}
-	
+
 	public void addInstance(IRMInstance i) {
 		IRMInstances.add(i);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void toggleProcessesAndEnsembles() {
 		// mark the processes and ensembles that should be scheduled (active) by traversing all models
 		// if a process/ensemble is active in *at least one* IRM instance, then it's marked as active
 		for (IRMInstance irmInstance : IRMInstances) {
 			for (InvariantInstance ii: irmInstance.getInvariantInstances()) {
-				if (ii.isSelected()) {
-					if (ii instanceof ProcessInvariantInstance) {
-						ComponentProcess p = ((ProcessInvariantInstance) ii).getComponentProcess();
-						if (p != null) {
-							processesToRun.add(p);	
+				if (ii instanceof ProcessInvariantInstance) {
+					ComponentProcess p = ((ProcessInvariantInstance) ii).getComponentProcess();
+					if (p != null) {
+						if (ii.isSelected()) {
+							processesToRun.add(p);
+						} else {
+							processesToStop.add(p);
 						}
 					}
-					if (ii instanceof ExchangeInvariantInstance) {
-						EnsembleDefinition e = ((ExchangeInvariantInstance) ii).getEnsembleDefinition();
-						// NOTE: the next line means that an ensemble without a trace will *not* be scheduled to run,
-						// (in any case), as such ensemble results into an ExchangeInvariantInstance with null value 
-						// in the 'ensembleDefinition' field (see also IRMInstanceGenerator#createIRMInstance)
-						if (e != null) { 
-							ensemblesToRun.add(e);							
+				} else if (ii instanceof ExchangeInvariantInstance) {
+					EnsembleDefinition e = ((ExchangeInvariantInstance) ii).getEnsembleDefinition();
+					if (e != null) {
+						if (ii.isSelected()) {
+							ensemblesToRun.add(e);
+						} else {
+							ensemblesToStop.add(e);
 						}
 					}
 				}
 			}
 		}
-		// apply changes to the runtime model using ecore listeners 
+		// apply changes to the runtime model using ecore listeners
 		// by changing ComponentProcess.isActive and EnsembleContoller.isActive
 		for (ComponentInstance c : runtime.getComponentInstances()) {
 			// system components are excepted from this process
@@ -92,7 +97,7 @@ public class ArchitectureReconfigurator {
 				for (ComponentProcess p : c.getComponentProcesses()) {
 					if (processesToRun.contains(p)) {
 						p.setActive(true);
-					} else {
+					} else if (processesToStop.contains(p)) {
 						p.setActive(false);
 					}
 				}
@@ -100,12 +105,12 @@ public class ArchitectureReconfigurator {
 				for (EnsembleController ec : c.getEnsembleControllers()) {
 					if (ensemblesToRun.contains(ec.getEnsembleDefinition())) {
 						ec.setActive(true);
-					} else {
+					} else if (ensemblesToStop.contains(ec.getEnsembleDefinition())) {
 						ec.setActive(false);
 					}
 				}
 			}
 		}
 	}
-	
+
 }
