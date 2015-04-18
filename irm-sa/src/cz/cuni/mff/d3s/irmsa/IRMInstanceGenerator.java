@@ -140,7 +140,7 @@ public class IRMInstanceGenerator {
 	 */
 	public List<IRMInstance> generateIRMInstances() {
 		IRMinstances = new ArrayList<>();
-		constructInstances(new HashMap<Component,ComponentInstance>(), design.getComponents().listIterator(0));
+		constructInstances(new HashMap<Component,ComponentInstance>(),-1);
 
 		// flush all ensemble instances from architecture model (they are anyway used as volatile data)
 		Log.i("Removing all ensemble instances from architectural model.");
@@ -162,29 +162,30 @@ public class IRMInstanceGenerator {
 	 * @param designComponentIt
 	 *            iterator over the IRM design model components
 	 */
-	void constructInstances(Map<Component,ComponentInstance> selectedComponentInstances, ListIterator<Component> designComponentIt) {
-		if (designComponentIt.hasNext()) {
-			Component currentType = designComponentIt.next();
+	void constructInstances(Map<Component,ComponentInstance> selectedComponentInstances, int designComponentIndex) {
+		List<Component> designComponents = design.getComponents();
+		designComponentIndex++;
+		if (designComponentIndex < designComponents.size()) {
+			Component currentType = designComponents.get(designComponentIndex);
 			List<ComponentInstance> componentInstancesInArchitecture = getAllArchitectureInstancesOfDesignComponent(currentType);
 
 			for (ComponentInstance c: componentInstancesInArchitecture) {
 				HashMap<Component, ComponentInstance> newTuple = new HashMap<>(selectedComponentInstances);
 				newTuple.put(currentType,c);
-				constructInstances(newTuple, designComponentIt);
+				constructInstances(newTuple,designComponentIndex);
 			}
+			
 		} else {
-			// end of recursion: check if the final list contains at least one local component. If not, do not create instance.
+			// went through all design components: check if the final list contains at least one local component; if not, do not create instance.
 			if (containsLocalComponent(selectedComponentInstances)) {
 				try {
-					// create a new IRM model instances with the selected architecture component instances,
-					// and add it to the list of generated instances.
+					// create a new IRM model instance with the selected architecture component instances and add it to the list of generated instances.
 					IRMinstances.add(createIRMInstance(selectedComponentInstances));
 				} catch (KnowledgeNotFoundException e) {
 					Log.e("Error when creating IRMinstance.", e);
 				}
 			}
-			// backtrack one position
-			designComponentIt.previous();
+			
 		}
 	}
 
@@ -465,7 +466,7 @@ public class IRMInstanceGenerator {
 				MonitorContext.setMonitoredComponent(knowledgeManager.getComponent());
 				@SuppressWarnings("unchecked")
 				T ret = (T) method.invoke(null, actualParams);
-				System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
+				Log.i("Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
 				return ret;
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.e("Error when invoking a monitor method, so invariant evaluation returned false.", e);
@@ -536,7 +537,7 @@ public class IRMInstanceGenerator {
 				MonitorContext.setMonitoredEnsemble(ed);
 				@SuppressWarnings("unchecked")
 				T ret = (T) method.invoke(null, actualParams);
-				System.out.println("-------- Monitor " + method + " returned " + ret);
+				Log.i("Monitor of ensemble " + method + " returned " + ret);
 				return ret;
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.w("Error when invoking a monitor method, so invariant evaluation returned " + failure, e);
@@ -544,6 +545,7 @@ public class IRMInstanceGenerator {
 			} finally {
 				MonitorContext.setMonitoredEnsemble(null);
 			}
+			
 		} else if (invariant instanceof Assumption) {
 			IRMComponentInstance contributingComponent = findContributingComponent(invariant, IRMComponentInstances);
 			if (contributingComponent == null) {
@@ -636,7 +638,7 @@ public class IRMInstanceGenerator {
 				MonitorContext.setMonitoredComponent(knowledgeManager.getComponent());
 				@SuppressWarnings("unchecked")
 				T ret = (T) method.invoke(null, actualParams);
-				System.out.println("++++++++ Monitor of component " + knowledgeManager.getId() + " " + method + " returned " + ret);
+				Log.i("Monitor of assumption evaluated in component " + knowledgeManager.getId() + " " + method + " returned " + ret);
 				return ret;
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | ClassCastException e) {
 				Log.e("Error when invoking a monitor method, so invariant evaluation returned " + failure, e);
