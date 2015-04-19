@@ -33,7 +33,7 @@ public class SensorDataUpdate {
 		@InOut("coord.positionMap") ParamHolder<Map<String,Position>> positionMap,  
 		@InOut("coord.temperatureMap") ParamHolder<Map<String,Long>> temperatureMap 
 	) {
-		System.out.println("SensorDataUpdate mapping!");
+		System.out.println("SensorDataUpdate! on member with FF_ID " + FF_ID);
 		accelerationMap.value.put(FF_ID, acceleration);
 		oxygenLevelMap.value.put(FF_ID, oxygenLevel);
 		positionMap.value.put(FF_ID, position);

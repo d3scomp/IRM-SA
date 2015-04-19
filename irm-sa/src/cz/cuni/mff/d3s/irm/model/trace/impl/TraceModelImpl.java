@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Charles University in Prague
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -149,6 +149,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ComponentTrace> getComponentTraces() {
 		if (componentTraces == null) {
 			componentTraces = new EObjectContainmentEList<ComponentTrace>(ComponentTrace.class, this, TracePackage.TRACE_MODEL__COMPONENT_TRACES);
@@ -161,6 +162,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<ProcessTrace> getProcessTraces() {
 		if (processTraces == null) {
 			processTraces = new EObjectContainmentEList<ProcessTrace>(ProcessTrace.class, this, TracePackage.TRACE_MODEL__PROCESS_TRACES);
@@ -173,6 +175,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EnsembleDefinitionTrace> getEnsembleDefinitionTraces() {
 		if (ensembleDefinitionTraces == null) {
 			ensembleDefinitionTraces = new EObjectContainmentEList<EnsembleDefinitionTrace>(EnsembleDefinitionTrace.class, this, TracePackage.TRACE_MODEL__ENSEMBLE_DEFINITION_TRACES);
@@ -185,6 +188,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InvariantMonitor> getInvariantSatisfactionMonitors() {
 		if (invariantSatisfactionMonitors == null) {
 			invariantSatisfactionMonitors = new EObjectContainmentEList<InvariantMonitor>(InvariantMonitor.class, this, TracePackage.TRACE_MODEL__INVARIANT_SATISFACTION_MONITORS);
@@ -197,6 +201,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<InvariantMonitor> getInvariantFitnessMonitors() {
 		if (invariantFitnessMonitors == null) {
 			invariantFitnessMonitors = new EObjectContainmentEList<InvariantMonitor>(InvariantMonitor.class, this, TracePackage.TRACE_MODEL__INVARIANT_FITNESS_MONITORS);
@@ -209,23 +214,24 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public Component getIRMComponentForArchitectureComponentInstance(ComponentInstance componentInstance, IRM design) {
 		Component ret = null;
 		if (componentInstance instanceof RemoteComponentInstance) {
-			// this runtime instance is not present in the trace model, so we have to look it up by name in the design model 
+			// this runtime instance is not present in the trace model, so we have to look it up by name in the design model
 			// retrieve the role stored in the knowledge manager of the component
-			
+
 			// FIXME this is a system component, and should not be published at all.
 			// Workaround to make IRM work - REALLY TEMPORARY:
 			String componentName = componentInstance.getId();
 			// to be removed:
 			// String componentName = componentInstance.getKnowledgeManager().getComponent().getName();
-			if (componentName.contains("AdaptationManager") 
+			if (componentName.contains("AdaptationManager")
 					|| componentName.contains("MetaAdaptationManager")
 					|| componentName.contains("CorrelationManager")) {
 				return IRMDesignFactory.eINSTANCE.createComponent();
 			}
-			
+
 			String IRMComponentRole = getComponentRole(componentInstance);
 			// use the role to identify the design component by String matching
 			ret = getComponentFromDesignModelByNameMatching(design, IRMComponentRole);
@@ -233,19 +239,19 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 				try {
 					throw new IRMComponentNotFoundException(IRMComponentRole);
 				} catch (IRMComponentNotFoundException e) {
-					Log.e("Error while trying to find role of remote component with id " + componentInstance.getId() + "in the design model.", e);
+//					Log.e("Error while trying to find role of remote component with id " + componentInstance.getId() + "in the design model.", e);
 				}
-			} 
+			}
 		} else {
 			// componentInstance is an instance of LocalComponentInstance, so we can use the trace model
-			cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance componentRuntimeInstance = 
+			cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance componentRuntimeInstance =
 					((LocalComponentInstance) componentInstance).getRuntimeInstance();
-			// if the component instance is a system component, return a new empty component 
+			// if the component instance is a system component, return a new empty component
 			// (so that it matches no component on the caller's side, but still it's not null)
 			if (componentRuntimeInstance.isSystemComponent()){
 				return IRMDesignFactory.eINSTANCE.createComponent();
 			}
-			
+
 			for (ComponentTrace cTrace : getComponentTraces()) {
 				if (cTrace.getFrom().equals(componentRuntimeInstance)) {
 					ret =  cTrace.getTo();
@@ -267,10 +273,11 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public ComponentProcess getComponentProcessFromComponentInstanceAndInvariant(
 			cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance componentInstance, Invariant invariant) {
 		for (ComponentProcess p : componentInstance.getComponentProcesses()) {
-			Invariant i = null; 
+			Invariant i = null;
 			for (ProcessTrace t : getProcessTraces()) {
 				if (t.getFrom().equals(p)) {
 					i = t.getTo();
@@ -288,6 +295,7 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public EnsembleDefinition getEnsembleDefinitionFromInvariant(Invariant invariant) {
 		for (EnsembleDefinitionTrace edt : getEnsembleDefinitionTraces()) {
 			if (edt.getTo().equals(invariant)) {
@@ -312,12 +320,12 @@ public class TraceModelImpl extends MinimalEObjectImpl.Container implements Trac
 		try {
 			return (String) componentInstance.getKnowledgeManager().get(paths).getValue(path);
 		} catch (KnowledgeNotFoundException e) {
-			Log.e("Error while getting the role of the remote component with id "
-					+ componentInstance.getId() + " from its KnowledgeManager", e);
+//			Log.e("Error while getting the role of the remote component with id "
+//					+ componentInstance.getId() + " from its KnowledgeManager", e);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

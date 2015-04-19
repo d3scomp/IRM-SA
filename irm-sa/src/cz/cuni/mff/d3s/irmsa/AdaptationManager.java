@@ -51,6 +51,7 @@ public class AdaptationManager {
 	@Process
 	@PeriodicScheduling(period=1) // this period is set here just to pass the annotation processor checks, the real period is set from the IRMPlugin
 	public static void reason(@In("id") String id) {
+<<<<<<< HEAD
 		// get runtime, architecture, design, and trace models from the process context
 		ComponentProcess process = ProcessContext.getCurrentProcess();
 		ComponentInstance component = process.getComponentInstance();
@@ -66,11 +67,23 @@ public class AdaptationManager {
 		if (!canRun) {
 			return;
 		}
+=======
+		
+		ComponentInstance component = ProcessContext.getCurrentProcess().getComponentInstance();
+		
+>>>>>>> 56c5f290973900f88f5fdfe8424555fce72a726c
 		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 		Architecture architecture = ProcessContext.getArchitecture();
+		
 		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) component.getInternalData().get(TRACE_MODEL);
+		
 		boolean log = (Boolean) component.getInternalData().get(LOG);
+		
+		if (log) {
+			printArchitectureInstances(architecture);
+		}
+		
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
@@ -94,7 +107,7 @@ public class AdaptationManager {
 			// print the generated IRM runtime instances to the console and to XMI files (for manual checks)
 			System.out.println("Number of IRMInstances: " + IRMInstances.size());
 			for (int i = 0; i< IRMInstances.size(); i++) {
-				System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
+				// System.out.println(EMFHelper.getXMIStringFromModel(IRMInstances.get(i)));
 				EMFHelper.saveModelInXMI(IRMInstances.get(i), base + prefix + i +".xmi");
 			}
 		}
