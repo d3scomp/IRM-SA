@@ -138,12 +138,26 @@ public class CorrelationManager {
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void calculateCorrelation(
-			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
+			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<?>>>> history,
 			@InOut("lastProcessedTimestamps") ParamHolder<Map<ComponentPair, Map<LabelPair, Long>>> processedTimestamps,
 			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels){
 
 		System.out.println("Correlation process started...");
 		Map<ComponentPair, Map<LabelPair, Long>> processedTimeSlots = processedTimestamps.value;
+
+		boolean done = true;
+		for (String s1 : history.keySet()) {
+			final Map<String, List<MetadataWrapper<?>>> map = history.get(s1);
+			for (String s2 : map.keySet()) {
+				final List<MetadataWrapper<?>> list = map.get(s2);
+				if (!list.isEmpty()) {
+					done &= list.get(list.size() - 1).isOperational();
+				}
+			}
+		}
+		if (done) {
+			ComponentHelper.storeInInternalData(DONE_FLAG, true);
+		}
 
 		// Compute the closeness between pairs of knowledge fields
 		// Consider the unprocessed knowledge entries only
@@ -182,8 +196,7 @@ public class CorrelationManager {
 		for(CorrelationLevel level : levels.value){
 			String correlationFilter = level.getLabelPair().getFirstLabel();
 			String correlationSubject = level.getLabelPair().getSecondLabel();
-			@SuppressWarnings("rawtypes")
-			Class ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+			Class<?> ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
 			if(level.getCorrelationLevel() > KnowledgeMetadataHolder.getConfidenceLevel(correlationSubject)
 					&& !isEnsembleActive(deecoNodes, ensemble.getName())
 					&& run){
