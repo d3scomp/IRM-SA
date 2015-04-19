@@ -57,6 +57,18 @@ public final class ComponentHelper {
 	}
 
 	/**
+	 * Stores value inside internal data of current component.
+	 * @param key map key
+	 * @param value data value
+	 * @return previous data store for key
+	 */
+	static public Object storeInInternalData(final String key, Object value) {
+		final ComponentInstance instance =
+				ProcessContext.getCurrentProcess().getComponentInstance();
+		return instance.getInternalData().put(key, value);
+	}
+
+	/**
 	 * Utility classes needs no constructor.
 	 */
 	private ComponentHelper() {

@@ -13,6 +13,8 @@ public @interface AssumptionParameter {
 	double minValue();
 	double maxValue();
 	Scope scope() default Scope.MONITOR;
+	Direction initialDirection() default Direction.UP;
 
 	enum Scope { MONITOR, COMPONENT }
+	enum Direction { UP, DOWN }
 }

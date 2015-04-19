@@ -60,9 +60,7 @@ public class MetaAdaptationPlugin implements DEECoPlugin {
 						@Override
 						public void adaptationResult(int solutions, int total) {
 							data.put(MetaAdaptationManager.RUN_FLAG, solutions == 0);
-							if (solutions == 0) {
-								data.put(MetaAdaptationManager.IRM_CAN_RUN, false);
-							}
+							data.put(MetaAdaptationManager.IRM_CAN_RUN, solutions != 0);
 						}
 					});
 				}

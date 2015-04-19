@@ -66,7 +66,7 @@ public class AssumptionParameterAdaptationPlugin extends EvolutionaryAdaptationP
 
 	@Override
 	protected EvolutionaryAdaptationManager createAdaptationManager() {
-		return new AssumptionParameterAdaptationManager();
+		return new AssumptionParameterAdaptationManager(maximumTries);
 	}
 
 	@Override

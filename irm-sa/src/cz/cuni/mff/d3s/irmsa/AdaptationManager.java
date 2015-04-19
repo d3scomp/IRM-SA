@@ -54,6 +54,18 @@ public class AdaptationManager {
 		// get runtime, architecture, design, and trace models from the process context
 		ComponentProcess process = ProcessContext.getCurrentProcess();
 		ComponentInstance component = process.getComponentInstance();
+		@SuppressWarnings("unchecked")
+		final List<AdaptationListener> listeners = (List<AdaptationListener>) component.getInternalData().get(ADAPTATION_LISTENERS);
+		boolean canRun = true;
+		for (AdaptationListener listener : listeners) {
+			if (!listener.canIRMRun()) {
+				canRun = false;
+				break;
+			}
+		}
+		if (!canRun) {
+			return;
+		}
 		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 		Architecture architecture = ProcessContext.getArchitecture();
 		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
@@ -62,8 +74,6 @@ public class AdaptationManager {
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
-		@SuppressWarnings("unchecked")
-		final List<AdaptationListener> listeners = (List<AdaptationListener>) component.getInternalData().get(ADAPTATION_LISTENERS);
 
 		// if there are no IRMinstances abort
 		if (IRMInstances.isEmpty()) {

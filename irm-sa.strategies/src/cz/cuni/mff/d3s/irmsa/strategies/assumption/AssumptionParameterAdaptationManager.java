@@ -12,9 +12,10 @@ public class AssumptionParameterAdaptationManager extends EvolutionaryAdaptation
 	static final String OBSERVE_TIME = "observeTime";
 
 	/**
-	 * Only constructor
+	 * Only constructor.
+	 * @param maximumTries maximal number of tries for adaptation, -1 for unbounded
 	 */
-	protected AssumptionParameterAdaptationManager() {
-		super(new AssumptionParameterStateHolder());
+	protected AssumptionParameterAdaptationManager(final int maximumTries) {
+		super(new AssumptionParameterStateHolder(), maximumTries);
 	}
 }

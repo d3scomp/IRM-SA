@@ -56,7 +56,7 @@ public class Run {
 			MODELS_BASE_PATH + "firefighters.combined.irmdesign";
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 200000;
+	static private final long SIMULATION_END = 300_000;
 
 	/**
 	 * Runs centralized simulation.
@@ -106,16 +106,17 @@ public class Run {
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl())
 						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(250))
 						.withConsiderAssumptions(true)
-						.withAdaptationBound(0.9);
+						.withAdaptationBound(0.9)
+						.withMaximumTries(5);
 
 		// create AssumptionParameterAdaptationPlugin
-		// TODO reasonable parameters
 		final AssumptionParameterAdaptationPlugin assumptionParameterAdaptionPlugin =
 				new AssumptionParameterAdaptationPlugin(metaAdaptationPlugin, model, design, irmPlugin.getTrace())
 						.withInvariantFitnessCombiner(new cz.cuni.mff.d3s.irmsa.strategies.assumption.InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.AdapteeSelectorFitness())
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DirectionSelectorImpl())
-						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed(250));
+						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed(5))
+						.withMaximumTries(5);
 
 		// create correlation plugin
 		registerMetadataForFields();
@@ -126,8 +127,8 @@ public class Run {
 		final DEECoNode deeco3 = simulation.createNode(3,
 				irmPlugin, metaAdaptationPlugin,
 				periodAdaptionPlugin,
-				assumptionParameterAdaptionPlugin//,
-//				correlationPlugin
+				assumptionParameterAdaptionPlugin,
+				correlationPlugin
 			);
 
 		//deploy components
@@ -150,7 +151,7 @@ public class Run {
 
 		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
 		final int temperatureBoundary = 12;
-		final int batteryBoundary = 2;
+		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();
 

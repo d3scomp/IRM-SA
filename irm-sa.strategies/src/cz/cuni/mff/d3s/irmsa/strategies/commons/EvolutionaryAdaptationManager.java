@@ -1,6 +1,7 @@
 package cz.cuni.mff.d3s.irmsa.strategies.commons;
 
 import static cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper.retrieveFromInternalData;
+import static cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper.storeInInternalData;
 
 import java.util.List;
 import java.util.Set;
@@ -75,21 +76,35 @@ public abstract class EvolutionaryAdaptationManager {
 	/** Adaptation bound stored in internal data under this key. */
 	static final String ADAPTATION_BOUND = "adaptationBound";
 
+	/** Constant meaning unbounded tries. */
+	static final Integer TRIES_UNBOUDED = new Integer(-1);
+
 	/** Manager ID. */
 	public String id;
 
-	/** Holds the state of the adaptPeriods method. */
+	/** Holds the state of the adapt method. */
 	public StateHolder<? extends Backup> state;
+
+	/** Number of tries to adapt left. -1 for unbounded. */
+	public Integer maximumTries;
+
+	/** Number of tries to adapt left. -1 for unbounded. */
+	public Integer triesLeft;
 
 	/** Overall system fitness. */
 	public Double fitness = 0.0;
 
 	/**
 	 * Only constructor.
+	 * @param initState initial state
+	 * @param maximumTries maximal number of tries for adaptation, -1 for unbounded
 	 */
-	protected EvolutionaryAdaptationManager(final StateHolder<?> initState) {
+	protected EvolutionaryAdaptationManager(final StateHolder<?> initState,
+			final int maximumTries) {
 		this.id = createId();
 		state = initState;
+		this.maximumTries = maximumTries;
+		triesLeft = maximumTries;
 	}
 
 	/**
@@ -109,9 +124,10 @@ public abstract class EvolutionaryAdaptationManager {
 		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
 		getTimeTrigger(process).setPeriod(delegate.getMonitorPeriod()); //set monitor period
 		//
-		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
-		if (run == null || !run) {
-			return; //manager tells us not to run
+		final boolean run =  retrieveFromInternalData(RUN_FLAG, false);
+		final boolean done =  retrieveFromInternalData(DONE_FLAG, false);
+		if (!run || done) {
+			return; //manager tells us not to run or our work is done
 		}
 		fitness.value = 0.0;
 		// get runtime model from the process context
@@ -160,10 +176,13 @@ public abstract class EvolutionaryAdaptationManager {
 	static public <T extends Backup> void adapt(
 			@In("id") String id,
 			@In("fitness") Double fitness,
-			@InOut("state") ParamHolder<StateHolder<T>> stateHolder) {
-		final Boolean run =  retrieveFromInternalData(RUN_FLAG);
-		if (run == null || !run) {
-			return; //manager tells us not to run
+			@InOut("state") ParamHolder<StateHolder<T>> stateHolder,
+			@In("maximumTries") Integer maximumTries,
+			@InOut("triesLeft") ParamHolder<Integer> triesLeft) {
+		final boolean run =  retrieveFromInternalData(RUN_FLAG, false);
+		final boolean done =  retrieveFromInternalData(DONE_FLAG, false);
+		if (!run || done) {
+			return; //manager tells us not to run or our work is done
 		}
 		final StateHolder<T> state = stateHolder.value;
 		final EvolutionaryAdaptationManagerDelegate<T> delegate = retrieveFromInternalData(ADAPTATION_DELEGATE);
@@ -244,9 +263,26 @@ public abstract class EvolutionaryAdaptationManager {
 			System.out.println("NEW FITNESS: " + fitness);
 			if (fitness > state.oldFitness) {
 				//Take child as new parent
+
+				//are we done?
+				final double adaptionBound = retrieveFromInternalData(ADAPTATION_BOUND);
+				if (fitness >= adaptionBound) {
+					System.out.println("Adaptation successfully ended.");
+					storeInInternalData(DONE_FLAG, true);
+				}
 			} else {
 				//Keep parent
 				delegate.restoreBackup(infos, state.backup);
+
+				if (!maximumTries.equals(TRIES_UNBOUDED)) {
+					triesLeft.value = triesLeft.value - 1;
+					//are we done?
+					if (triesLeft.value <= 0) {
+						System.out.println("Adaptation failed, abort.");
+						storeInInternalData(DONE_FLAG, true);
+						triesLeft.value = maximumTries;
+					}
+				}
 			}
 
 			//inform variations about adaptation results

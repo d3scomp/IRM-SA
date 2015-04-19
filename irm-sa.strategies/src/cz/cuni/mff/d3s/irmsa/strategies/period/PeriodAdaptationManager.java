@@ -12,9 +12,10 @@ public class PeriodAdaptationManager extends EvolutionaryAdaptationManager {
 	static final String CONSIDER_ASSUMPTIONS = "considerAssumptions";
 
 	/**
-	 * Only constructor
+	 * Only constructor.
+	 * @param maximumTries maximal number of tries for adaptation, -1 for unbounded
 	 */
-	protected PeriodAdaptationManager() {
-		super(new PeriodStateHolder());
+	protected PeriodAdaptationManager(final int maximumTries) {
+		super(new PeriodStateHolder(), maximumTries);
 	}
 }

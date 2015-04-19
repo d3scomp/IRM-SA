@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.Direction;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -41,7 +42,12 @@ public class DirectionSelectorImpl implements DirectionSelector {
 			final String id = info.getParameterId();
 			Direction direction = directions.get(id);
 			if (direction == null) {
-				direction = Direction.DOWN;
+				AssumptionParameter param = info.parameter.getAnnotation(AssumptionParameter.class);
+				if (param.initialDirection() == AssumptionParameter.Direction.DOWN) {
+					direction = Direction.DOWN;
+				} else {
+					direction = Direction.UP;
+				}
 			}
 			info.direction = direction;
 			adaptees.put(id, info);

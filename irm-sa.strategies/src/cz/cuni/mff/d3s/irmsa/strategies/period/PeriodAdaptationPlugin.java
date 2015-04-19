@@ -72,7 +72,7 @@ public class PeriodAdaptationPlugin extends EvolutionaryAdaptationPlugin<PeriodA
 
 	@Override
 	protected EvolutionaryAdaptationManager createAdaptationManager() {
-		return new PeriodAdaptationManager();
+		return new PeriodAdaptationManager(maximumTries);
 	}
 
 	@Override

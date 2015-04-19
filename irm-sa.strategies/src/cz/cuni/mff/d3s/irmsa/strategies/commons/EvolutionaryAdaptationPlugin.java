@@ -64,6 +64,9 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 	/** No adaptation takes place if overall fitness is at least this bound. */
 	protected double adaptationBound = 0.5;
 
+	/** Maximal number of tries to adapt. -1 for unbounded. */
+	protected int maximumTries = EvolutionaryAdaptationManager.TRIES_UNBOUDED;
+
 	/**
 	 * Only constructor.
 	 * @param delegate adaptation manager delegate
@@ -132,6 +135,16 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 	 */
 	public T withAdaptationBound(final double adaptationBound) {
 		this.adaptationBound = adaptationBound;
+		return self();
+	}
+
+	/**
+	 * Sets maximum tries. -1 for unbounded.
+	 * @param maximumTries new maximum tries
+	 * @return this
+	 */
+	public T withMaximumTries(final int maximumTries) {
+		this.maximumTries = maximumTries;
 		return self();
 	}
 

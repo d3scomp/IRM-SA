@@ -1,13 +1,19 @@
 package combined;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 import java.util.Optional;
 
-import cz.cuni.mff.d3s.deeco.annotations.*;
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter;
+import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter.Direction;
 import cz.cuni.mff.d3s.deeco.annotations.AssumptionParameter.Scope;
+import cz.cuni.mff.d3s.deeco.annotations.Component;
+import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
+import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.InOut;
+import cz.cuni.mff.d3s.deeco.annotations.Invariant;
+import cz.cuni.mff.d3s.deeco.annotations.InvariantMonitor;
+import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
@@ -24,9 +30,6 @@ public class FireFighter {
 
 	/** Position fitness should reset its state after this number of determinePosition. */
 	static private final int POSION_STATE_HISTORY = 20;
-
-	/** Maximal allowed inaccuracy. */
-	static private final double MAX_INACCURACY = 20.0;
 
 	/** Invariants with fitness less than this value are considered unsatisfied. */
 	static private final double SATISFACTION_BOUND = 0.8;
@@ -50,13 +53,6 @@ public class FireFighter {
 	 * for determining the fitness of the battery level invariant.
 	 */
 	static private final String LAST_BATTERY_CHECK = "lastBatteryCheck";
-
-	/**
-	 * Key for storing and retrieving last period of determineBatteryLevel from internal data.
-	 * Time of last battery check is needed for estimation of battery drainage
-	 * for determining the fitness of the battery level invariant.
-	 */
-	static private final String LAST_BATTERY_PERIOD = "lastBatteryPeriod";
 
 	/**
 	 * Key for storing and retrieving value of inaccuracy history from internal data.
@@ -335,7 +331,8 @@ public class FireFighter {
 	@InvariantMonitor("A02")
 	public static boolean positionAccuracySatisfaction(
 			@AssumptionParameter(name = "bound", defaultValue = 20,
-			maxValue = 30, minValue = 15, scope = Scope.COMPONENT)
+			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
+			initialDirection = Direction.UP)
 			int bound) {
 		resetPositionStateIfNeeded(bound);
 		int bad = 0;
@@ -350,7 +347,8 @@ public class FireFighter {
 	@InvariantMonitor("A02")
 	public static double positionAccuracyFitness(
 			@AssumptionParameter(name = "bound", defaultValue = 20,
-			maxValue = 30, minValue = 15, scope = Scope.COMPONENT)
+			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
+			initialDirection = Direction.UP)
 			int bound) {
 		resetPositionStateIfNeeded(bound);
 		int posBad = 0;
@@ -386,6 +384,21 @@ public class FireFighter {
 	) {
 		if (temperature.value.isOperational()) {
 			temperature.value.setValue(Environment.getTemperature(id, temperature.value), currentTime());
+		} else {
+			System.out.println("Q");
 		}
+	}
+
+	@InvariantMonitor("P03")
+	public static boolean determineTemperatureSatisfaction(
+			@In("temperature") MetadataWrapper<Integer> temperature) {
+		return currentTime() - temperature.getTimestamp() < TOO_OLD;
+	}
+
+	@InvariantMonitor("P03")
+	public static double determineTemperatureFitness(
+			@In("temperature") MetadataWrapper<Integer> temperature) {
+		final boolean satisfied = determineBatteryLevelSatisfaction(temperature);
+		return satisfied ? 1.0 : 0.0;
 	}
 }
