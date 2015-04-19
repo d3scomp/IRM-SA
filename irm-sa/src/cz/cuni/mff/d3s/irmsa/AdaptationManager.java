@@ -51,10 +51,9 @@ public class AdaptationManager {
 	@Process
 	@PeriodicScheduling(period=1) // this period is set here just to pass the annotation processor checks, the real period is set from the IRMPlugin
 	public static void reason(@In("id") String id) {
-<<<<<<< HEAD
-		// get runtime, architecture, design, and trace models from the process context
-		ComponentProcess process = ProcessContext.getCurrentProcess();
-		ComponentInstance component = process.getComponentInstance();
+
+		ComponentInstance component = ProcessContext.getCurrentProcess().getComponentInstance();
+
 		@SuppressWarnings("unchecked")
 		final List<AdaptationListener> listeners = (List<AdaptationListener>) component.getInternalData().get(ADAPTATION_LISTENERS);
 		boolean canRun = true;
@@ -67,23 +66,19 @@ public class AdaptationManager {
 		if (!canRun) {
 			return;
 		}
-=======
-		
-		ComponentInstance component = ProcessContext.getCurrentProcess().getComponentInstance();
-		
->>>>>>> 56c5f290973900f88f5fdfe8424555fce72a726c
+
 		RuntimeMetadata runtime = (RuntimeMetadata) component.eContainer();
 		Architecture architecture = ProcessContext.getArchitecture();
-		
+
 		IRM design = (IRM) component.getInternalData().get(DESIGN_MODEL);
 		TraceModel trace = (TraceModel) component.getInternalData().get(TRACE_MODEL);
-		
+
 		boolean log = (Boolean) component.getInternalData().get(LOG);
-		
+
 		if (log) {
 			printArchitectureInstances(architecture);
 		}
-		
+
 		// generate the IRM runtime model instances
 		IRMInstanceGenerator generator = new IRMInstanceGenerator(architecture, design, trace);
 		List<IRMInstance> IRMInstances = generator.generateIRMInstances();
