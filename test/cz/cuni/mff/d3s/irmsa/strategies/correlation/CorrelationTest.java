@@ -23,6 +23,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
+import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
@@ -41,6 +42,7 @@ public class CorrelationTest {
 		realm.addPlugin(Network.class);
 		realm.addPlugin(DefaultKnowledgePublisher.class);
 		realm.addPlugin(KnowledgeInsertingStrategy.class);
+		realm.addPlugin(new PositionAware(0.0,0.0));
 
 		DEECoNode deeco1 = realm.createNode(1);
 		nodesInRealm.add(deeco1);
