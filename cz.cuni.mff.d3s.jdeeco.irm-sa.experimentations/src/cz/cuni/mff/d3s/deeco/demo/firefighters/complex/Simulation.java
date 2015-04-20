@@ -12,9 +12,9 @@ public class Simulation {
 //		SingleNodeSimulation.main(null);
 //		result.append("-------------BSELINE-------------\n");
 //		result.append(FFSHelper.getInstance().print() + "\n");
-//		result.append("-------------NO INACCURACY THREASHOLD-------------\n");
-//		FFSHelper.getInstance().reset();
-//		Settings.NETWORK_DELAY = 500;
+		result.append("-------------NO INACCURACY THREASHOLD-------------\n");
+		FFSHelper.getInstance().reset();
+		Settings.NETWORK_DELAY = 500;
 		MultiNodeSimulation.main(null);
 		result.append("Network Delay: " + Settings.NETWORK_DELAY + " - " + FFSHelper.getInstance().print() + "\n");
 //		FFSHelper.getInstance().reset();

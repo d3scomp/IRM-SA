@@ -23,7 +23,7 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			/* create main application container */
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 			/* add network plugins */
-			simulation.addPlugin(new BroadcastLoopback(Settings.NETWORK_DELAY));
+			simulation.addPlugin(new BroadcastLoopback());
 			simulation.addPlugin(Network.class);
 			simulation.addPlugin(DefaultKnowledgePublisher.class);
 			simulation.addPlugin(KnowledgeInsertingStrategy.class);

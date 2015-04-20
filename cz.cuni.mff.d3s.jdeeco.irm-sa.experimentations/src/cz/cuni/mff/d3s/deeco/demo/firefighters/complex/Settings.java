@@ -14,12 +14,12 @@ public class Settings {
 //	public static final long BASE_INACCURACY = 1000;
 //	public static final long INACCURACY_INTERVAL = 1000;
 	
-	public static final int PROCESS_PERIOD = 500; // in milliseconds
-	public static final int ENSEMBLE_PERIOD = 500; 
-	public static final int ADAPTATION_PERIOD = 500;
+	public static final int PROCESS_PERIOD = 1000; // in milliseconds
+	public static final int ENSEMBLE_PERIOD = 1000; 
+	public static final int ADAPTATION_PERIOD = 1000;
 	public static final int BROADCAST_PERIOD = 400;
 	
-	public static int NETWORK_DELAY = 500; // in milliseconds
+	public static int NETWORK_DELAY = 100; // in milliseconds
 	public static final long BASE_INACCURACY = 1000;
 	public static final long INACCURACY_INTERVAL = 1000;
 	
