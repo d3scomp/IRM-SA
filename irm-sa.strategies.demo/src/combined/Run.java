@@ -41,6 +41,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
+import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
@@ -79,6 +80,7 @@ public class Run {
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
+		simulation.addPlugin(new PositionAware(0, 0));
 
 		//create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);
