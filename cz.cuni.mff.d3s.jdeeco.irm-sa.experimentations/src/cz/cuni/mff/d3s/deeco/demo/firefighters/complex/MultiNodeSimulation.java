@@ -36,30 +36,32 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 					.withLogDir(Settings.MODELS_BASE_PATH)
 					.withLogPrefix(Settings.XMIFILE_PREFIX));
 			
+			ClockProvider.init(simulationTimer);
+			
 			/* create nodes and deploy components and ensembles */
 			DEECoNode deecoNode1 = simulation.createNode(1);
-			deecoNode1.deployComponent(new Officer("OF1", simulationTimer));
+			deecoNode1.deployComponent(new Officer("OF1"));
 			deecoNode1.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode1.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode1.deployEnsemble(PhotosUpdate.class);
 			deecoNode1.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode2 = simulation.createNode(2);
-			deecoNode2.deployComponent(new Firefighter("FF1", "OF1", simulationTimer));
+			deecoNode2.deployComponent(new Firefighter("FF1", "OF1"));
 			deecoNode2.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode2.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode2.deployEnsemble(PhotosUpdate.class);
 			deecoNode2.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode3 = simulation.createNode(3);
-			deecoNode3.deployComponent(new Firefighter("FF2", "OF1", simulationTimer));
+			deecoNode3.deployComponent(new Firefighter("FF2", "OF1"));
 			deecoNode3.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode3.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode3.deployEnsemble(PhotosUpdate.class);
 			deecoNode3.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode4 = simulation.createNode(4);
-			deecoNode4.deployComponent(new Firefighter("FF3", "OF1", simulationTimer));
+			deecoNode4.deployComponent(new Firefighter("FF3", "OF1"));
 			deecoNode4.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode4.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode4.deployEnsemble(PhotosUpdate.class);

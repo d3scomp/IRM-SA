@@ -30,11 +30,11 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 					.withLogPrefix(Settings.XMIFILE_PREFIX));
 			/* deploy components and ensembles */
 			DEECoNode deecoNode = simulation.createNode(1);
-
-			deecoNode.deployComponent(new Officer("OF1", simulationTimer));
-			deecoNode.deployComponent(new Firefighter("FF1", "OF1", simulationTimer));
-			deecoNode.deployComponent(new Firefighter("FF2", "OF1", simulationTimer));
-			deecoNode.deployComponent(new Firefighter("FF3", "OF1", simulationTimer));
+			ClockProvider.init(simulationTimer);
+			deecoNode.deployComponent(new Officer("OF1"));
+			deecoNode.deployComponent(new Firefighter("FF1", "OF1"));
+			deecoNode.deployComponent(new Firefighter("FF2", "OF1"));
+			deecoNode.deployComponent(new Firefighter("FF3", "OF1"));
 			deecoNode.deployComponent(new SiteLeader());
 			deecoNode.deployComponent(new UnmannedAerialVehicle("UAV1"));
 			deecoNode.deployEnsemble(GMsInDangerUpdate.class);

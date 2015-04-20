@@ -8,12 +8,10 @@ import cz.cuni.mff.d3s.deeco.annotations.IRMComponent;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.Invariant;
 import cz.cuni.mff.d3s.deeco.annotations.InvariantMonitor;
-import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.Out;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
-import cz.cuni.mff.d3s.deeco.timer.CurrentTimeProvider;
 
 @Component
 @IRMComponent("Officer")
@@ -30,17 +28,14 @@ public class Officer {
 	public Map<String,Position> positionMap;
 	public Map<String,Integer> accelerationMap;
 	public Map<String,Long> oxygenLevelMap;
-	
-	@Local public CurrentTimeProvider clock;
  
-	public Officer(String GL_ID, CurrentTimeProvider clock) {
+	public Officer(String GL_ID) {
 		this.GL_ID = GL_ID;
 		this.noOfGMsInDanger = 0;
 		this.temperatureMap = new HashMap<>();
 		this.positionMap = new HashMap<>();
 		this.accelerationMap = new HashMap<>();
 		this.oxygenLevelMap = new HashMap<>();
-		this.clock = clock;
 	}
  
 	@Process
