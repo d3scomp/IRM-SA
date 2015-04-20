@@ -87,9 +87,8 @@ public class Firefighter {
 	@Invariant("15")
 	@PeriodicScheduling(period = Settings.PROCESS_PERIOD)
 	public static void monitorTemperatureClosely(
-			@Out("temperature") ParamHolder<Long> temperature) {
+			@InOut("temperature") ParamHolder<Long> temperature) {
 		System.out.println("monitorTemperatureClosely");
-		temperature.value = 40l;
 	}
 
 	@Process
