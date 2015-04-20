@@ -43,6 +43,9 @@ public class AdapteeSelectorSatisfaction implements AdapteeSelector {
 		final Set<InvariantInfo<?>> result = new HashSet<>();
 		double fitness = Double.MAX_VALUE; //fitness of invariants in result
 		for (InvariantInfo<?> invariant: infos) {
+			if (AdapteeSelector.isRemoteComponent(invariant)) {
+				continue;
+			}
 			if (invariant.fitness < fitness) {
 				result.clear();
 				fitness = invariant.fitness;

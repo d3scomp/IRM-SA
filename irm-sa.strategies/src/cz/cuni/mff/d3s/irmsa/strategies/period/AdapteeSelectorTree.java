@@ -32,6 +32,9 @@ public class AdapteeSelectorTree implements AdapteeSelector {
 		final Set<InvariantInfo<?>> result = new HashSet<>();
 		int level = Integer.MAX_VALUE; //level of invariants in result
 		for (InvariantInfo<?> invariant: infos) {
+			if (AdapteeSelector.isRemoteComponent(invariant)) {
+				continue;
+			}
 			if (invariant.level < 0) {
 				invariant.computeInvariantLevel();
 			}
@@ -46,7 +49,8 @@ public class AdapteeSelectorTree implements AdapteeSelector {
 					}
 					for (InvariantInfo<?> ii : infos) {
 						if (parent.equals(ii.getInvariant().getParent())
-								&& !AssumptionInstance.class.isAssignableFrom(invariant.clazz)) {
+								&& !AssumptionInstance.class.isAssignableFrom(invariant.clazz)
+								&& !AdapteeSelector.isRemoteComponent(ii)) {
 							result.add(ii);
 						}
 					}

@@ -45,6 +45,9 @@ public class AdapteeSelectorFitness implements AdapteeSelector {
 		final Set<InvariantInfo<?>> result = new HashSet<>();
 		double fitness = Double.MAX_VALUE; //fitness of invariants in result
 		for (InvariantInfo<?> invariant: infos) {
+			if (AdapteeSelector.isRemoteComponent(invariant)) {
+				continue;
+			}
 			if (invariant.fitness < fitness) {
 				result.clear();
 				fitness = invariant.fitness;
@@ -56,7 +59,8 @@ public class AdapteeSelectorFitness implements AdapteeSelector {
 					}
 					for (InvariantInfo<?> ii : infos) {
 						if (parent.equals(ii.getInvariant().getParent())
-								&& !AssumptionInstance.class.isAssignableFrom(ii.clazz)) {
+								&& !AssumptionInstance.class.isAssignableFrom(ii.clazz)
+								&& !AdapteeSelector.isRemoteComponent(ii)) {
 							result.add(ii);
 						}
 					}

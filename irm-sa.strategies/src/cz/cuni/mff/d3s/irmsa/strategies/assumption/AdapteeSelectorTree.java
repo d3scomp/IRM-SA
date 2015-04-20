@@ -30,6 +30,9 @@ public class AdapteeSelectorTree implements AdapteeSelector {
 		final Set<InvariantInfo<?>> result = new HashSet<>();
 		int level = Integer.MAX_VALUE; //level of invariants in result
 		for (InvariantInfo<?> invariant: infos) {
+			if (AdapteeSelector.isRemoteComponent(invariant)) {
+				continue;
+			}
 			if (invariant.level < 0) {
 				invariant.computeInvariantLevel();
 			}

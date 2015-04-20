@@ -18,6 +18,11 @@ package cz.cuni.mff.d3s.irmsa.strategies.commons.variations;
 import java.util.Collection;
 import java.util.Set;
 
+import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
+import cz.cuni.mff.d3s.deeco.model.architecture.api.RemoteComponentInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
+import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
 /**
@@ -25,6 +30,19 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
  */
 @FunctionalInterface
 public interface AdapteeSelector extends AdaptationResultListener {
+
+	static boolean isRemoteComponent(final InvariantInfo<?> info) {
+		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			final ProcessInvariantInstance pii = info.getInvariant();
+			return pii.getComponentProcess().getComponentInstance() instanceof RemoteComponentInstance;
+		} else if (ExchangeInvariantInstance.class.isAssignableFrom(info.clazz)) {
+			return false; //TODO we assume ensembles are always local, right?
+		} else if (AssumptionInstance.class.isAssignableFrom(info.clazz)) {
+			final AssumptionInstance aii = info.getInvariant();
+			return aii.getComponentInstance() instanceof RemoteComponentInstance;
+		}
+		return false;
+	}
 
 	/**
 	 * Returns filtered set of invariant instances to adapt.
