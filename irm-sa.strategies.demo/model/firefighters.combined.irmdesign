@@ -10,7 +10,7 @@
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="FF::temperature is determined" refID="P03" processName="determineTemperature" processPeriod="1000"/>
   <components name="FireFighter">
     <knowledgeElements type="MetadataWrapper&lt;Integer>" name="batteryLevel"/>
-    <knowledgeElements type="MetadataWrapper&lt;Integer>" name="position"/>
+    <knowledgeElements type="MetadataWrapper&lt;Position>" name="position"/>
     <knowledgeElements type="String" name="id"/>
     <knowledgeElements type="MetadataWrapper&lt;Integer>" name="temperature"/>
   </components>

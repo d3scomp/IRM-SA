@@ -19,7 +19,7 @@
         <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="id"/>
       </knowledgePath>
     </parameters>
-    <parameters direction="INOUT" type="MetadataWrapper&lt;Integer>">
+    <parameters direction="INOUT" type="MetadataWrapper&lt;Position>">
       <knowledgePath>
         <nodes xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:PathNodeField" name="position"/>
       </knowledgePath>
@@ -40,7 +40,7 @@
     <triggers xsi:type="cz.cuni.mff.d3s.irm.tool.deeco:TimeTrigger" period="1000"/>
   </componentProcesses>
   <initialKnowledge name="batteryLevel" type="MetadataWrapper&lt;Integer>"/>
-  <initialKnowledge name="position" type="MetadataWrapper&lt;Integer>"/>
+  <initialKnowledge name="position" type="MetadataWrapper&lt;Position>"/>
   <initialKnowledge name="id" type="String"/>
   <initialKnowledge name="temperature" type="MetadataWrapper&lt;Integer>"/>
 </cz.cuni.mff.d3s.irm.tool.deeco:ComponentInstance>

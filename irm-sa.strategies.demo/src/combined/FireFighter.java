@@ -180,7 +180,7 @@ public class FireFighter {
 	public MetadataWrapper<Integer> batteryLevel;
 
 	/** For now the position is 1D only. */
-	public MetadataWrapper<Integer> position;
+	public MetadataWrapper<Position> position;
 
 	/** Environment temperature. */
 	public MetadataWrapper<Integer> temperature;
@@ -192,7 +192,7 @@ public class FireFighter {
 	public FireFighter(final String id) {
 		this.id = id;
 		batteryLevel = new MetadataWrapper<Integer>(Environment.INITIAL_BATTERY_LEVEL);
-		position = new MetadataWrapper<Integer>(Environment.INITIAL_POSITION);
+		position = new MetadataWrapper<Position>(Environment.INITIAL_POSITION);
 		temperature = new MetadataWrapper<Integer>(Environment.INITIAL_TEMPERATURE);
 	}
 
@@ -301,7 +301,7 @@ public class FireFighter {
 	@PeriodicScheduling(period=1250)
 	public static void determinePosition(
 		@In("id") String id,
-		@InOut("position") ParamHolder<MetadataWrapper<Integer>> position
+		@InOut("position") ParamHolder<MetadataWrapper<Position>> position
 	) {
 		final int inacc = Environment.getInaccuracy(id);
 		final Deque<Integer> history = getInaccuracyHistory();
@@ -310,19 +310,19 @@ public class FireFighter {
 		}
 		history.add(inacc);
 		if (position.value.isOperational()) {
-			position.value.setValue(Environment.getPosition(id, position.value), currentTime());
+			position.value.setValue(Environment.getPosition(id), currentTime());
 		}
 	}
 
 	@InvariantMonitor("P02")
 	public static boolean determinePositionSatisfaction(
-			@In("position") MetadataWrapper<Integer> position) {
+			@In("position") MetadataWrapper<Position> position) {
 		return currentTime() - position.getTimestamp() < TOO_OLD;
 	}
 
 	@InvariantMonitor("P02")
 	public static double determinePositionFitness(
-			@In("position") MetadataWrapper<Integer> position) {
+			@In("position") MetadataWrapper<Position> position) {
 		final long time = currentTime();
 		final boolean recent = time - position.getTimestamp() < TOO_OLD;
 		return recent ? 1.0 : 0.0;
@@ -385,7 +385,7 @@ public class FireFighter {
 		if (temperature.value.isOperational()) {
 			temperature.value.setValue(Environment.getTemperature(id, temperature.value), currentTime());
 		} else {
-			System.out.println("Q");
+			System.out.println("Temperature sensor not operational!");
 		}
 	}
 

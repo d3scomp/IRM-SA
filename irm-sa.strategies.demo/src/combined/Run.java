@@ -156,12 +156,13 @@ public class Run {
 		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();
+		final Metric positionMetric = new PositionMetric();
 
 		final double positionConfidence = 0.9;
 		final double temperatureConfidence = 0.9;
 		final double batteryConfidence = 0.9;
 
-		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, simpleMetric, positionConfidence);
+		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, positionMetric, positionConfidence);
 		KnowledgeMetadataHolder.setBoundAndMetric(temperatureLabel, temperatureBoundary, simpleMetric, temperatureConfidence);
 		KnowledgeMetadataHolder.setBoundAndMetric(batteryLabel, batteryBoundary, simpleMetric, batteryConfidence);
 	}

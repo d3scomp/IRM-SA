@@ -1,21 +1,20 @@
 package combined;
 
+import static combined.HeatMap.SEGMENTS;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.eclipse.emf.common.util.EMap;
+import combined.HeatMap.Segment;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
-import static combined.HeatMap.heatMap;
 
 /**
  * This whole component is a kind of hack.
@@ -26,7 +25,7 @@ import static combined.HeatMap.heatMap;
 public class Environment {
 
 	/** Firefighters' initial position. */
-	static public final Integer INITIAL_POSITION = 100;
+	static public final Position INITIAL_POSITION = new Position(19, 0);
 
 	/** Firefighters' initial inaccuracy. */
 	static public final Integer INITIAL_INACCURACY = 0;
@@ -35,7 +34,7 @@ public class Environment {
 	static public final Integer INITIAL_BATTERY_LEVEL = 1600;
 
 	/** Firefighters' initial temperature. */
-	static public final Integer INITIAL_TEMPERATURE = heatMap[INITIAL_POSITION];
+	static public final Integer INITIAL_TEMPERATURE = SEGMENTS[INITIAL_POSITION.segment].temps[INITIAL_POSITION.index];
 
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
@@ -49,8 +48,8 @@ public class Environment {
 	/** Maximal distance between group members. */
 	static final int MAX_GROUP_DISTANCE = 8;
 
-//	/** Firefighters' states stored in internal data under this key. */
-//	static private final String FIREFIGHTERS = "Firefighters";
+	/** Returned when battery is too low to provide GPS readings. */
+	static final Position BAD_POSITION = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 	/** Firefighter leading the group. */
 	static final String FF_LEADER_ID = "FF1";
@@ -78,7 +77,7 @@ public class Environment {
 	/////////////////////
 
 	/** Firefighters state. */
-	static private Map<String, FireFighterState> $$firefighters = new HashMap<>();
+	static private Map<String, FireFighterState> firefighters = new HashMap<>();
 
 	/**
 	 * Returns Firefighter's states.
@@ -86,20 +85,7 @@ public class Environment {
 	 * @return map with firefighters map
 	 */
 	static protected Map<String, FireFighterState> getFirefighters() {
-//		final ComponentProcess process = ProcessContext.getCurrentProcess();
-//		final ComponentInstance instance = process.getComponentInstance();
-//		final EMap<String, Object> data = instance.getInternalData();
-//		final Object obj = data.get(FIREFIGHTERS);
-//		if (obj == null || !(obj instanceof Map)) {
-//			final Map<String, FireFighterState> ffs = new HashMap<>();
-//			data.put(FIREFIGHTERS, ffs);
-//			return ffs;
-//		} else {
-//			@SuppressWarnings("unchecked")
-//			final Map<String, FireFighterState> ffs = (Map<String, FireFighterState>) obj;
-//			return ffs;
-//		}
-		return $$firefighters;
+		return firefighters;
 	}
 
 	/**
@@ -125,12 +111,12 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return position of given firefighter or NaN with insufficient energy
 	 */
-	static public int getPosition(final String ffId, final MetadataWrapper<Integer> position) {
+	static public Position getPosition(final String ffId) {
 		final FireFighterState ff = getFirefighter(ffId);
 		ff.batteryLevel -= GPS_ENERGY_COST;
 		if (ff.batteryLevel <= 0.0) {
 			ff.batteryLevel = 0;
-			return Integer.MIN_VALUE;
+			return BAD_POSITION;
 		} else {
 			ff.inaccuracy = 0;
 			return ff.position;
@@ -168,11 +154,26 @@ public class Environment {
 			temperature.malfunction();
 		}
 		final FireFighterState ff =  getFirefighter(ffId);
-		return heatMap[ff.position];
+		return SEGMENTS[ff.position.segment].temps[ff.position.index];
 	}
 
 	/** Environment component id. Not used, but mandatory. */
 	public String id;
+
+	/**
+	 * Returns true if key is contained in the array
+	 * @param array array to search in
+	 * @param key key to search for
+	 * @return true if key is contained in the array, false otherwise
+	 */
+	static private boolean contains(int[] array, int key) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == key) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Process
 	@PeriodicScheduling(period=500)
@@ -182,31 +183,83 @@ public class Environment {
 		for (final String ffId : firefighters.keySet()) {
 			final FireFighterState ff = getFirefighter(ffId);
 
-			final int d = RANDOM.nextInt(FF_MOVEMENT + 1);
-			ff.position += ff.direction * d;
-			if (ff.position < 0) {
-				ff.position = -ff.position;
-				ff.direction = 1;
-			} else if (ff.position >= heatMap.length) {
-				ff.position = heatMap.length - (ff.position - heatMap.length) - 1;
-				ff.direction = -1;
-			}
-
-			if (ffId.equals(FF_FOLLOWER_ID)) {
-				final FireFighterState leader = firefighters.get(FF_LEADER_ID);
-				if (leader != null && Math.abs(leader.position - ff.position) >= MAX_GROUP_DISTANCE) {
-					if (leader.position < ff.position) {
-						ff.position = leader.position + MAX_GROUP_DISTANCE;
-					} else {
-						ff.position = leader.position - MAX_GROUP_DISTANCE;
+			int steps = RANDOM.nextInt(FF_MOVEMENT + 1);
+			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
+			int prevSeg = -1; //previously occupied segment
+			while (steps > 0) {
+				final Segment currSeg = SEGMENTS[ff.position.segment];
+				int nextSegIndex = -1;
+				if (decide) { //we need to decide whether stay in this segment, or go immediately to other
+					int[] candidates;
+					if (ff.position.index == 0) {
+						candidates = currSeg.starts; //we are at the start
+					} else /*if (ff.position.index == currSeg.temps.length - 1)*/ {
+						candidates = currSeg.ends; //we are at the end
 					}
+					final int r = RANDOM.nextInt(candidates.length);
+					if (candidates[r] == prevSeg) {
+						//we stay
+					} else {
+						nextSegIndex = candidates[r];
+					}
+				} else {
+					if (ff.direction > 0) { //going up
+						ff.position.index += steps;
+						steps = 0;
+						if (ff.position.index >= currSeg.temps.length) { //end hit?
+							//correct our position and steps left
+							steps = ff.position.index - currSeg.temps.length + 1;
+							ff.position.index = currSeg.temps.length - 1;
+
+							//decide where to go next
+							if (currSeg.ends.length == 0) {
+								ff.direction = -1; //dead end, return
+							} else {
+								final int r = RANDOM.nextInt(currSeg.ends.length);
+								nextSegIndex = currSeg.ends[r];
+							}
+						}
+					} else /*if (ff.direction < 0)*/ { //going down
+						ff.position.index -= steps;
+						steps = 0;
+						if (ff.position.index < 0) { //start hit?
+							//correct our position and steps left
+							steps = -ff.position.index;
+							ff.position.index = 0;
+
+							//decide where to go next
+							if (currSeg.starts.length == 0) {
+								ff.direction = 1; //dead end, return
+							} else {
+								final int r = RANDOM.nextInt(currSeg.starts.length);
+								nextSegIndex = currSeg.starts[r];
+							}
+						}
+					}
+				}
+				if (nextSegIndex != -1) {
+					final Segment nextSeg = SEGMENTS[nextSegIndex];
+					if (contains(nextSeg.ends, ff.position.segment)) {
+						prevSeg = ff.position.segment;
+						decide = nextSeg.ends.length > 1;
+						ff.position.segment = nextSegIndex;
+						ff.position.index = nextSeg.temps.length - 1;
+					} else if (contains(nextSeg.starts, ff.position.segment)) {
+						prevSeg = ff.position.segment;
+						decide = nextSeg.starts.length > 1;
+						ff.position.segment = nextSegIndex;
+						ff.position.index = 0;
+					} else {
+						throw new IllegalArgumentException("Segments must be bidirectionally connected! (" + ff.position.segment + ", " + nextSegIndex + ")");
+					}
+					--steps; //we made a step
 				}
 			}
 
 			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
 			System.out.println(ffId + " position = " + ff.position);
-			System.out.println(ffId + " temperature = " + heatMap[ff.position]);
+			System.out.println(ffId + " temperature = " + SEGMENTS[ff.position.segment].temps[ff.position.index]);
 
 			if (ffId.equals(FF_LEADER_ID)) {
 				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
@@ -227,7 +280,7 @@ public class Environment {
 	protected static class FireFighterState {
 
 		/** Firefighter's position. */
-		protected int position = INITIAL_POSITION;
+		protected Position position = INITIAL_POSITION;
 
 		/** Firefighter's position inaccuracy. */
 		protected int inaccuracy = INITIAL_INACCURACY;
