@@ -1,5 +1,8 @@
 package combined;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Environment heat map holder.
  */
@@ -32,7 +35,15 @@ public class HeatMap {
 		{  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }
 	};
 
-	/** Segments/corridors. */
+	/**
+	 * Segments/corridors. Minimal length at least 2!
+	 * Do not use adjacent crossings! Ie. do not create the following:
+	 *   #
+	 *   #
+	 * ######
+	 *    #
+	 *    #
+	 */
 	static final Segment[] SEGMENTS = new Segment[] {
 		/* 0*/ null, //zero segment => indexing starts from 1 :-( //TODO reindex
 		/* 1*/ new Segment(new int[0], new int[] {2}, 0, 0, 3, 0),
@@ -69,6 +80,125 @@ public class HeatMap {
 		/*32*/ new Segment(new int[] {31}, new int[0], 18, 9, 12, 9)
 	};
 
+	static final Map<Position, Vertex<Position, Integer>> GRAPH;
+
+	static {
+		//TODO convert segments to graph
+		GRAPH = new HashMap<>();
+		for (int i = 1; i < SEGMENTS.length; ++i) { //TODO fix when segments are reindexed
+			final Segment s = SEGMENTS[i];
+
+			//create start crossing if needed
+			if (s.startCrossing == null) {
+				if (s.starts.length == 0) {
+					s.startCrossing = new Position(i, 0);
+				} else if (s.starts.length == 1) {
+					final Segment other = SEGMENTS[s.starts[0]];
+					//decide who contains the crossing
+					if (Utils.contains(other.starts, i)) {
+						if (other.startCrossing != null) {
+							s.startCrossing = other.startCrossing;
+						} else {
+							if (s.x1 == other.x2 || s.y1 == other.y2) { //our start
+								s.startCrossing = new Position(i, 0);
+							} else if (other.x1 == s.x2 || other.y1 == s.y2) { //their start
+								s.startCrossing = new Position(s.starts[0], 0);
+							} else {
+								throw new RuntimeException("This should never happen! Probably badly defined segments!");
+							}
+							other.startCrossing = s.startCrossing;
+						}
+					} else if (Utils.contains(other.ends, i)) {
+						if (other.endCrossing != null) {
+							s.startCrossing = other.endCrossing;
+						} else {
+							//decide who contains the crossing
+							if (s.x1 == other.x1 || s.y1 == other.y1) { //our start
+								s.startCrossing = new Position(i, 0);
+							} else if (other.x2 == s.x2 || other.y2 == s.y2) { //their end
+								s.startCrossing = new Position(s.starts[0], other.temps.length - 1);
+							} else {
+								throw new RuntimeException("This should never happen! Probably badly defined segments!");
+							}
+							other.endCrossing = s.startCrossing;
+						}
+					} else { // not bidirectional?
+						throw new RuntimeException("This should never happen! Probably badly defined segments!");
+					}
+				} else /*if (s.starts.length > 1)*/ {
+					//do nothing, one of the other ends will take care of it
+				}
+			}
+
+			//create end crossing if needed
+			if (s.endCrossing == null) {
+				if (s.ends.length == 0) {
+					s.endCrossing = new Position(i, s.temps.length - 1);
+				} else if (s.ends.length == 1) {
+					final Segment other = SEGMENTS[s.ends[0]];
+					//decide who contains the crossing
+					if (Utils.contains(other.starts, i)) {
+						if (other.startCrossing != null) {
+							s.endCrossing = other.startCrossing;
+						} else {
+							if (s.x2 == other.x2 || s.y2 == other.y2) { //our end
+								s.endCrossing = new Position(i, s.temps.length - 1);
+							} else if (other.x1 == s.x1 || other.y1 == s.y1) { //their start
+								s.endCrossing = new Position(s.ends[0], 0);
+							} else {
+								throw new RuntimeException("This should never happen! Probably badly defined segments!");
+							}
+							other.startCrossing = s.endCrossing;
+						}
+					} else if (Utils.contains(other.ends, i)) {
+						if (other.endCrossing != null) {
+							s.endCrossing = other.endCrossing;
+						} else {
+							//decide who contains the crossing
+							if (s.x2 == other.x1 || s.y2 == other.y1) { //our end
+								s.endCrossing = new Position(i, s.temps.length - 1);
+							} else if (other.x2 == s.x1 || other.y2 == s.y1) { //their end
+								s.endCrossing = new Position(s.ends[0], other.temps.length - 1);
+							} else {
+								throw new RuntimeException("This should never happen! Probably badly defined segments!");
+							}
+							other.endCrossing = s.endCrossing;
+						}
+					} else { // not bidirectional?
+						throw new RuntimeException("This should never happen! Probably badly defined segments!");
+					}
+				} else /*if (s.endss.length > 1)*/ {
+					//do nothing, one of the other ends will take care of it
+				}
+			}
+		}
+
+		for (int i = 1; i < SEGMENTS.length; ++i) { //TODO fix when segments are reindexed
+			final Segment s = SEGMENTS[i];
+			if (s.startCrossing == null) {
+				throw new RuntimeException("This should never happen! Check segment definitions.");
+			}
+			if (s.endCrossing == null) {
+				throw new RuntimeException("This should never happen! Check segment definitions.");
+			}
+			final double w = PositionMetric.distance(s.startCrossing, s.endCrossing);
+			Vertex<Position, Integer> start = GRAPH.get(s.startCrossing);
+			if (start == null) {
+				start = new Vertex<>(s.startCrossing);
+				GRAPH.put(start.value, start);
+			}
+			Vertex<Position, Integer> end = GRAPH.get(s.endCrossing);
+			if (end == null) {
+				end = new Vertex<>(s.endCrossing);
+				GRAPH.put(end.value, end);
+			}
+			final Edge<Position, Integer> edge1 = new Edge<>(end, w, i);
+			start.adjacencies.add(edge1);
+			final Edge<Position, Integer> edge2 = new Edge<>(start, w, i);
+			end.adjacencies.add(edge2);
+		}
+	}
+
 	/**
 	 * Class representing corridor in which FF move.
 	 */
@@ -97,6 +227,15 @@ public class HeatMap {
 
 		/** Segment orientation. */
 		public final Orientation orientation;
+
+		/** Crossing at the start. */
+		public Position startCrossing;
+
+		/** Crossing at the start. */
+		public Position endCrossing;
+
+		/** Weight for dijkstra. */
+		public double weigth;
 
 		/**
 		 * Only constructor

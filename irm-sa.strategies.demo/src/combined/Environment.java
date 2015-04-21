@@ -3,11 +3,11 @@ package combined;
 import static combined.HeatMap.SEGMENTS;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import combined.HeatMap.Segment;
-
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
@@ -160,19 +160,70 @@ public class Environment {
 	/** Environment component id. Not used, but mandatory. */
 	public String id;
 
+	static class PathSoFar {
+
+	}
+
 	/**
-	 * Returns true if key is contained in the array
-	 * @param array array to search in
-	 * @param key key to search for
-	 * @return true if key is contained in the array, false otherwise
+	 * Returns index of segment to go on shortest path.
+	 * @param from start position, must be start/end of corridor
+	 * @param to target position
+	 * @return index of segment to go on shortest path
 	 */
-	static private boolean contains(int[] array, int key) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == key) {
-				return true;
+	static private int findShortestPath(final Position from, final Position to) {
+		//TODO do not compute this on every crossing, but store the result?
+		final Segment s = HeatMap.SEGMENTS[from.segment];
+		final Segment e = HeatMap.SEGMENTS[to.segment];
+
+		final Vertex<Position, Integer> start = new Vertex<>(from);
+
+		final double w1 = PositionMetric.distance(from, s.startCrossing);
+		final Vertex<Position, Integer> n1 = HeatMap.GRAPH.get(s.startCrossing);
+		final Edge<Position, Integer> e1 = new Edge<>(n1, w1, -1);
+		start.adjacencies.add(e1);
+
+		final double w2 = PositionMetric.distance(from, s.endCrossing);
+		final Vertex<Position, Integer> n2 = HeatMap.GRAPH.get(s.endCrossing);
+		final Edge<Position, Integer> e2 = new Edge<>(n2, w2, -1);
+		start.adjacencies.add(e2);
+
+		final Vertex<Position, Integer> end = new Vertex<>(to);
+
+		final double w3 = PositionMetric.distance(to, e.startCrossing);
+		final Vertex<Position, Integer> n3 = HeatMap.GRAPH.get(e.startCrossing);
+		final Edge<Position, Integer> e3 = new Edge<>(end, w3, to.segment);
+		n3.adjacencies.add(e3);
+
+		final double w4 = PositionMetric.distance(to, e.endCrossing);
+		final Vertex<Position, Integer> n4 = HeatMap.GRAPH.get(e.endCrossing);
+		final Edge<Position, Integer> e4 = new Edge<>(end, w4, to.segment);
+		n4.adjacencies.add(e4);
+
+		try {
+			Dijkstra.computePaths(start);
+			final List<Vertex<Position, Integer>> path = Dijkstra.getShortestPathTo(end);
+			if (path.size() < 3) {
+				//ups
+				System.err.println("NO PATH FOUND?! " + from + "->" + to);
+				return -1;
+			}
+			final Vertex<Position, Integer> first = path.get(1); //zero is start
+			final Vertex<Position, Integer> second = path.get(2);
+			int result = -1;
+			for (Edge<Position, Integer> edge : first.adjacencies) {
+				if (edge.target.equals(second)) {
+					result = edge.value;
+					break;
+				}
+			}
+			return result;
+		} finally {
+			n3.adjacencies.remove(e3);
+			n4.adjacencies.remove(e4);
+			for (Vertex<Position, Integer> v : HeatMap.GRAPH.values()) {
+				v.reset();
 			}
 		}
-		return false;
 	}
 
 	@Process
@@ -183,7 +234,9 @@ public class Environment {
 		for (final String ffId : firefighters.keySet()) {
 			final FireFighterState ff = getFirefighter(ffId);
 
-			int steps = RANDOM.nextInt(FF_MOVEMENT + 1);
+			final int bonus = ffId.equals(FF_FOLLOWER_ID) ? 2 : 0;
+			int steps = RANDOM.nextInt(FF_MOVEMENT + 1 + bonus);
+			System.err.println(ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
 			int prevSeg = -1; //previously occupied segment
 			while (steps > 0) {
@@ -196,12 +249,26 @@ public class Environment {
 					} else /*if (ff.position.index == currSeg.temps.length - 1)*/ {
 						candidates = currSeg.ends; //we are at the end
 					}
-					final int r = RANDOM.nextInt(candidates.length);
-					if (candidates[r] == prevSeg) {
-						//we stay
+					if (ffId.equals(FF_FOLLOWER_ID)) {
+						final FireFighterState leader = getFirefighter(FF_LEADER_ID);
+						if (leader.position.segment == ff.position.segment) {
+							//we stay
+						} else {
+							nextSegIndex = findShortestPath(ff.position, leader.position);
+							if (!Utils.contains(candidates, nextSegIndex)) { //should we turn around?
+								nextSegIndex = -1;
+								ff.direction = (byte) -ff.direction;
+							}
+						}
 					} else {
-						nextSegIndex = candidates[r];
+						final int r = RANDOM.nextInt(candidates.length);
+						if (candidates[r] == prevSeg) {
+							//we stay
+						} else {
+							nextSegIndex = candidates[r];
+						}
 					}
+					decide = false; // we have decided
 				} else {
 					if (ff.direction > 0) { //going up
 						ff.position.index += steps;
@@ -215,8 +282,22 @@ public class Environment {
 							if (currSeg.ends.length == 0) {
 								ff.direction = -1; //dead end, return
 							} else {
-								final int r = RANDOM.nextInt(currSeg.ends.length);
-								nextSegIndex = currSeg.ends[r];
+								if (ffId.equals(FF_FOLLOWER_ID)) {
+									final FireFighterState leader = getFirefighter(FF_LEADER_ID);
+									if (leader.position.segment == ff.position.segment) {
+										//we stay
+										steps = 0;
+									} else {
+										nextSegIndex = findShortestPath(ff.position, leader.position);
+										if (!Utils.contains(currSeg.ends, nextSegIndex)) { //should we turn around?
+											nextSegIndex = -1;
+											ff.direction = (byte) -ff.direction;
+										}
+									}
+								} else {
+									final int r = RANDOM.nextInt(currSeg.ends.length);
+									nextSegIndex = currSeg.ends[r];
+								}
 							}
 						}
 					} else /*if (ff.direction < 0)*/ { //going down
@@ -231,24 +312,40 @@ public class Environment {
 							if (currSeg.starts.length == 0) {
 								ff.direction = 1; //dead end, return
 							} else {
-								final int r = RANDOM.nextInt(currSeg.starts.length);
-								nextSegIndex = currSeg.starts[r];
+								if (ffId.equals(FF_FOLLOWER_ID)) {
+									final FireFighterState leader = getFirefighter(FF_LEADER_ID);
+									if (leader.position.segment == ff.position.segment) {
+										//we stay
+										steps = 0;
+									} else {
+										nextSegIndex = findShortestPath(ff.position, leader.position);
+										if (!Utils.contains(currSeg.starts, nextSegIndex)) { //should we turn around?
+											nextSegIndex = -1;
+											ff.direction = (byte) -ff.direction;
+										}
+									}
+								} else {
+									final int r = RANDOM.nextInt(currSeg.starts.length);
+									nextSegIndex = currSeg.starts[r];
+								}
 							}
 						}
 					}
 				}
-				if (nextSegIndex != -1) {
+				if (nextSegIndex > 0) { //TODO fix when segments are reindexed
 					final Segment nextSeg = SEGMENTS[nextSegIndex];
-					if (contains(nextSeg.ends, ff.position.segment)) {
+					if (Utils.contains(nextSeg.ends, ff.position.segment)) {
 						prevSeg = ff.position.segment;
 						decide = nextSeg.ends.length > 1;
 						ff.position.segment = nextSegIndex;
 						ff.position.index = nextSeg.temps.length - 1;
-					} else if (contains(nextSeg.starts, ff.position.segment)) {
+						ff.direction = -1;
+					} else if (Utils.contains(nextSeg.starts, ff.position.segment)) {
 						prevSeg = ff.position.segment;
 						decide = nextSeg.starts.length > 1;
 						ff.position.segment = nextSegIndex;
 						ff.position.index = 0;
+						ff.direction = 1;
 					} else {
 						throw new IllegalArgumentException("Segments must be bidirectionally connected! (" + ff.position.segment + ", " + nextSegIndex + ")");
 					}
@@ -272,6 +369,14 @@ public class Environment {
 				ff.inaccuracy += FF_MOVEMENT;
 			}
 		}
+		final FireFighterState leader = getFirefighter(FF_LEADER_ID);
+		final FireFighterState follower = getFirefighter(FF_FOLLOWER_ID);
+		if (leader != null && follower != null) {
+			System.out.println("#########################################");
+			System.out.println("LEADER POS: " + leader.position + "(" + leader.position.segment + ", " + leader.position.index + ")");
+			System.out.println("FOLLOW POS: " + follower.position  + "(" + follower.position.segment + ", " + follower.position.index + ")");
+			System.out.println("DISTANCE  : " + PositionMetric.distance(leader.position, follower.position));
+		}
 	}
 
 	/**
@@ -280,7 +385,7 @@ public class Environment {
 	protected static class FireFighterState {
 
 		/** Firefighter's position. */
-		protected Position position = INITIAL_POSITION;
+		protected Position position = INITIAL_POSITION.clone();
 
 		/** Firefighter's position inaccuracy. */
 		protected int inaccuracy = INITIAL_INACCURACY;
