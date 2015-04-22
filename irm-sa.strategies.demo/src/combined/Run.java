@@ -154,7 +154,7 @@ public class Run {
 		final String batteryLabel = "batteryLevel";
 
 		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
-		final int temperatureBoundary = 12;
+		final int temperatureBoundary = 20;
 		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();
