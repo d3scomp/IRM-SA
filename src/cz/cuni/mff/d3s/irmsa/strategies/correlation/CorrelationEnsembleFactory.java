@@ -231,7 +231,8 @@ public class CorrelationEnsembleFactory {
 				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,"
 				+ "		cz.cuni.mff.d3s.deeco.task.ParamHolder member%1$s) {"
 				+ " System.out.println(\"Knowledge injection \" + coordId + \" -> \" + memberId + \" %1$s \" + coord%1$s.getValue() + \" at \" +  coord%1$s.getTimestamp());"
-				+ "	member%1$s.value = coord%1$s; }",
+				+ "	member%1$s.value = coord%1$s; "
+				+ " ((cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper) member%1$s.value).malfunction();}",
 					correlationSubject),
 				ensembleClass);
 		// KnowledgeExchange annotation for the map method

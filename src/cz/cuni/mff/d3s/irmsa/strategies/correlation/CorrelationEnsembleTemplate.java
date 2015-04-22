@@ -39,5 +39,6 @@ public class CorrelationEnsembleTemplate {
 		System.out.println("Knowledge injection " + coordId + " -> " + memberId + " temperature " + coordTemperature.getValue() + " at " + coordTemperature.getTimestamp());
 
 		memberTemperature.value = coordTemperature;
+		memberTemperature.value.malfunction();
 	}
 }
