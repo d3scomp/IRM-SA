@@ -1,5 +1,8 @@
 package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,9 @@ import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
@@ -31,6 +36,7 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
  */
 public class CorrelationTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void acceptanceTest() throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
 
@@ -98,8 +104,8 @@ public class CorrelationTest {
 
 		// The code bellow serves for testing the ensemble class created at runtime
 /*		try{
-			CorrelationEnsembleFactory cef = new CorrelationEnsembleFactory();
-			Class testClass = cef.getEnsembleDefinition("position", "temperature");
+			@SuppressWarnings("rawtypes")
+			Class testClass = CorrelationEnsembleFactory.getEnsembleDefinition("position", "temperature");
 			System.out.println(String.format("Class: %s", testClass.toGenericString()));
 			for(Annotation a : testClass.getAnnotations()){
 				System.out.println(String.format("Annotation: %s", a.toString()));
@@ -112,10 +118,10 @@ public class CorrelationTest {
 					System.out.println(String.format("Annotation: %s", a.toString()));
 				}
 
-				for(Parameter p : m.getParameters()){
-					System.out.println(String.format("Parameter: %s", p.getName()));
+				for(Parameter param : m.getParameters()){
+					System.out.println(String.format("Parameter: %s", param.getName()));
 
-					for(Annotation a : p.getAnnotations()){
+					for(Annotation a : param.getAnnotations()){
 						System.out.println(String.format("Annotation: %s", a.toString()));
 					}
 				}
@@ -132,6 +138,23 @@ public class CorrelationTest {
 					MetadataWrapper.class,
 					MetadataWrapper.class});
 			boolean ret = (boolean) m.invoke(testClass.newInstance(), new Object[]{
+				memberPosition,
+				memberTemperature,
+				coordPosition,
+				coordTemperature});
+			System.out.println(ret);
+			System.out.println(!memberTemperature.isOperational()
+					&& coordTemperature.isOperational()
+					&& KnowledgeMetadataHolder.classifyDistance("position", memberPosition.getValue(), coordPosition.getValue()) == DistanceClass.Close);
+
+			CorrelationEnsembleFactory.setEnsembleMembershipBoundary("position", "temperature", 0.9);
+			testClass = CorrelationEnsembleFactory.getEnsembleDefinition("position", "temperature");
+			m = testClass.getMethod("membership", new Class[]{
+					MetadataWrapper.class,
+					MetadataWrapper.class,
+					MetadataWrapper.class,
+					MetadataWrapper.class});
+			ret = (boolean) m.invoke(testClass.newInstance(), new Object[]{
 				memberPosition,
 				memberTemperature,
 				coordPosition,

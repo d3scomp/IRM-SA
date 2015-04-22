@@ -182,4 +182,21 @@ public class KnowledgeMetadataHolder {
 		
 		return DistanceClass.Undefined;
 	}
+
+	/**
+	 * Computes the distance between the given values
+	 * using the metric specific to the knowledge field identified by the given label.
+	 * @param label Identifies the knowledge field.
+	 * @param value1 The value to classify the distance from.
+	 * @param value2 The value to classify the distance to.
+	 * @return The value of the measured distance for the specified knowledge field.
+	 */
+	public static double distance(String label, Object value1, Object value2){
+		if(containsLabel(label)){
+			Metric metric = getMetric(label);	
+			return metric.distance(value1, value2);
+		}
+		
+		return Double.NaN;
+	}
 }

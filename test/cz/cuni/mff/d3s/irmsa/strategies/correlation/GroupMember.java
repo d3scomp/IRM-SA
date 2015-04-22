@@ -52,11 +52,11 @@ public class GroupMember {
 		if(id.equals("1") && ProcessContext.getTimeProvider().getCurrentMilliseconds() > 10000){
 			temperature.value.malfunction();
 		} else {
-//			Random rand = new Random();
-//			int seed = rand.nextInt(Variances.SMALL_VARIANCE);
+			Random rand = new Random();
+			int seed = rand.nextInt(Variances.SMALL_VARIANCE);
 			// Setting fixed value of temperature to ensure the correlation (should be random,
 			// the variance should reflect the boundary for temperature defined in KnowledgeMetadataHolder)
-			temperature.value.setValue(20, ProcessContext.getTimeProvider().getCurrentMilliseconds());
+			temperature.value.setValue(seed, ProcessContext.getTimeProvider().getCurrentMilliseconds());
 		}
 
 		System.out.println("GM#" + id + ",\ttemperature : " + temperature.value.getValue() + " (" + temperature.value.getTimestamp() + ")");

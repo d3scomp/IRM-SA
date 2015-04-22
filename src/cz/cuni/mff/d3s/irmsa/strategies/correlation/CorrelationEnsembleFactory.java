@@ -1,6 +1,8 @@
 package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javassist.ClassPool;
@@ -10,6 +12,7 @@ import javassist.CtNewMethod;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
+import javassist.bytecode.MethodInfo;
 import javassist.bytecode.ParameterAnnotationsAttribute;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.LongMemberValue;
@@ -62,6 +65,79 @@ public class CorrelationEnsembleFactory {
 
 		return requestedClass;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public static void setEnsembleMembershipBoundary(String correlationFilter, String correlationSubject, double boundary) throws Exception {
+		Class<?> requestedClass = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
+		String className = requestedClass.getName();
+		
+		ClassPool classPool = ClassPool.getDefault();
+		CtClass ensembleClass = classPool.getCtClass(className);
+		ensembleClass.defrost();
+		ClassFile classFile = ensembleClass.getClassFile();
+		ConstPool constPool = classFile.getConstPool();
+		
+		// Remove the existing membership method
+		MethodInfo oldMembershipMethod = classFile.getMethod("membership");
+		if(oldMembershipMethod != null){
+			List ensembleMethods = classFile.getMethods();
+			ensembleMethods.remove(oldMembershipMethod);
+		}
+		
+		String methodBody = String.format(Locale.ENGLISH, 
+				"public static boolean membership(\n"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper member%1$s,\n"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper member%2$s,\n"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,\n"
+				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%2$s) {\n"
+				+ " final double %1$s_bound = %3$f;\n"
+				+ "	System.out.println(\"Membership for %1$s -> %2$s with %1$s_bound = %3$.1f\");\n"
+				+ " return (!member%2$s.isOperational()\n"
+				+ "		&& coord%2$s.isOperational()\n"
+				+ "		&& cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder.distance(\n"
+				+ "			\"%1$s\", member%1$s.getValue(), coord%1$s.getValue()) < %1$s_bound);}",
+					correlationFilter, correlationSubject, boundary);
+		
+//		System.out.println(methodBody);
+		
+		// Create new Membership method
+		CtMethod membershipMethod = CtNewMethod.make(methodBody, ensembleClass);
+		// Membership annotation for the membership method
+		Annotation membershipAnnotation = new Annotation("cz.cuni.mff.d3s.deeco.annotations.Membership", constPool);
+		AnnotationsAttribute membershipAttribute = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
+		membershipAttribute.addAnnotation(membershipAnnotation);
+		membershipMethod.getMethodInfo().addAttribute(membershipAttribute);
+		// Membership parameters annotations
+		ParameterAnnotationsAttribute membershipParamAnnotations = new ParameterAnnotationsAttribute(constPool,
+				ParameterAnnotationsAttribute.visibleTag);
+		Annotation[][] membershipParamAnnotationsInfo = new Annotation[4][1];
+		membershipParamAnnotationsInfo[0][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
+		membershipParamAnnotationsInfo[0][0].addMemberValue("value", new StringMemberValue(
+				String.format("member.%s", correlationFilter), constPool));
+		membershipParamAnnotationsInfo[1][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
+		membershipParamAnnotationsInfo[1][0].addMemberValue("value", new StringMemberValue(
+				String.format("member.%s", correlationSubject), constPool));
+		membershipParamAnnotationsInfo[2][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
+		membershipParamAnnotationsInfo[2][0].addMemberValue("value", new StringMemberValue(
+				String.format("coord.%s", correlationFilter), constPool));
+		membershipParamAnnotationsInfo[3][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
+		membershipParamAnnotationsInfo[3][0].addMemberValue("value", new StringMemberValue(
+				String.format("coord.%s", correlationSubject), constPool));
+		membershipParamAnnotations.setAnnotations(membershipParamAnnotationsInfo);
+		membershipMethod.getMethodInfo().addAttribute(membershipParamAnnotations);
+
+		// Add the method into the ensemble class
+		ensembleClass.addMethod(membershipMethod);
+		
+		// Buffer the modified class
+		if(bufferedClasses.containsKey(className)){
+			bufferedClasses.remove(className);
+		}
+		ensembleClass.writeFile();
+		CorrelationClassLoader loader = new CorrelationClassLoader(CorrelationClassLoader.class.getClassLoader());
+		Class loadedClass = loader.loadClass(className);
+		bufferedClasses.put(className, loadedClass);
+	}
 
 	/**
 	 * Compose the name of the ensemble class for the defined knowledge fields.
@@ -71,7 +147,7 @@ public class CorrelationEnsembleFactory {
 	 * 		the values has been filtered. In our example this refers to "temperature".
 	 * @return The name of the ensemble class for the defined knowledge fields.
 	 */
-	private static String composeClassName(String correlationFilter, String correlationSubject){
+	public static String composeClassName(String correlationFilter, String correlationSubject){
 		return String.format("Correlation_%s2%s", correlationFilter, correlationSubject);
 	}
 
@@ -180,7 +256,9 @@ public class CorrelationEnsembleFactory {
 		// Add the method into the ensemble class
 		ensembleClass.addMethod(mapMethod);
 
-		return ensembleClass.toClass();
+		ensembleClass.writeFile();
+		CorrelationClassLoader loader = new CorrelationClassLoader(CorrelationClassLoader.class.getClassLoader());
+		return loader.loadClass(ensembleClass.getName());
 	}
 
 }
