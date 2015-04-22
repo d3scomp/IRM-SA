@@ -24,7 +24,7 @@ public class FireFighterDataAggregation {
 			@In("member.id") String memberId,
 			@In("member.batteryLevel") MetadataWrapper<Integer> batteryLevel,
 			@In("member.position") MetadataWrapper<Integer> position,
-			@In("member.position") MetadataWrapper<Integer> temperature,
+			@In("member.temperature") MetadataWrapper<Integer> temperature,
 			@In("coord.knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<?>>>> knowledgeHistoryOfAllComponents) {
 		return true;
 	}

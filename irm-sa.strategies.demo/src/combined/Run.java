@@ -133,6 +133,7 @@ public class Run {
 				correlationPlugin,
 				new MonitorPlugin(model, design, irmPlugin.getTrace())
 			);
+		nodesInSimulation.add(deeco3);
 
 		//deploy components
 		deeco3.deployComponent(new FireFighter(Environment.FF_LEADER_ID));
@@ -150,7 +151,7 @@ public class Run {
 	private static void registerMetadataForFields() {
 		final String positionLabel = "position";
 		final String temperatureLabel = "temperature";
-		final String batteryLabel = "battery";
+		final String batteryLabel = "batteryLevel";
 
 		final int positionBoundary = Environment.MAX_GROUP_DISTANCE;
 		final int temperatureBoundary = 12;
