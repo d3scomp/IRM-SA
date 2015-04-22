@@ -130,7 +130,8 @@ public class Run {
 				irmPlugin, metaAdaptationPlugin,
 				periodAdaptionPlugin,
 				assumptionParameterAdaptionPlugin,
-				correlationPlugin
+				correlationPlugin,
+				new MonitorPlugin(model, design, irmPlugin.getTrace())
 			);
 
 		//deploy components
