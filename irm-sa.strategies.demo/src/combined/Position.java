@@ -57,8 +57,12 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		final Point p = HeatMap.SEGMENTS[segment].toPoint(index);
-		return "[" + p.x + ", " + p.y + "]";
+		try {
+			final Point p = HeatMap.SEGMENTS[segment].toPoint(index);
+			return "[" + p.x + ", " + p.y + "]";
+		} catch (IndexOutOfBoundsException e) {
+			return "{ segment = " + segment + ", index = " + index + "}";
+		}
 	}
 
 	@Override
