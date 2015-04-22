@@ -1,6 +1,9 @@
 package combined;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -197,6 +200,17 @@ public class HeatMap {
 			final Edge<Position, Integer> edge2 = new Edge<>(start, w, i);
 			end.adjacencies.add(edge2);
 		}
+
+		//debug
+//		List<Vertex<Position, Integer>>  list = new ArrayList<>(GRAPH.values());
+//		Dijkstra.computePaths(GRAPH.get(new Position(1, 0)));
+//		Collections.sort(list);
+//		for (Vertex<Position, Integer> v : list) {
+//			System.out.println("Crossing " + v.value);
+//			for (Edge<Position, Integer> e : v.adjacencies) {
+//				System.out.println("Corridor " + e.value + " to " + e.target.value + " of length " + e.weight);
+//			}
+//		}
 	}
 
 	/**

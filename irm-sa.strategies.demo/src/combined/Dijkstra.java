@@ -100,21 +100,6 @@ class Edge<T, U> {
 		this.weight = weight;
 		this.value = value;
 	}
-
-	@Override
-	public boolean equals(final Object other) {
-		if (!(other instanceof Edge)) {
-			return false;
-		}
-		final Edge<?, ?> edge = (Edge<?, ?>) other;
-		if (weight != edge.weight) {
-			return false;
-		}
-		if (target == null) {
-			return edge.target == null;
-		}
-		return target.equals(edge.target);
-	}
 }
 
 /**

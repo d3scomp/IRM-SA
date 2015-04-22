@@ -207,15 +207,20 @@ public class Environment {
 				System.err.println("NO PATH FOUND?! " + from + "->" + to);
 				return -1;
 			}
-			final Vertex<Position, Integer> first = path.get(1); //zero is start
-			final Vertex<Position, Integer> second = path.get(2);
 			int result = -1;
-			for (Edge<Position, Integer> edge : first.adjacencies) {
-				if (edge.target.equals(second)) {
-					result = edge.value;
-					break;
+			final Vertex<Position, Integer> first = path.get(1); //zero is start
+			if (from.segment != first.value.segment) {
+				result = first.value.segment;
+			} else {
+				final Vertex<Position, Integer> second = path.get(2);
+				for (Edge<Position, Integer> edge : first.adjacencies) {
+					if (edge.target.equals(second)) {
+						result = edge.value;
+						break;
+					}
 				}
 			}
+			System.out.println("+++Dijkstra says: " + result);
 			return result;
 		} finally {
 			n3.adjacencies.remove(e3);
@@ -236,7 +241,7 @@ public class Environment {
 
 			final int bonus = ffId.equals(FF_FOLLOWER_ID) ? 2 : 0;
 			int steps = RANDOM.nextInt(FF_MOVEMENT + 1 + bonus);
-			System.err.println(ffId + " STEPS: " + steps);
+			System.out.println("+++" + ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
 			int prevSeg = -1; //previously occupied segment
 			while (steps > 0) {
