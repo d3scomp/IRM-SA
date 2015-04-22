@@ -32,10 +32,11 @@ public class CorrelationEnsembleTemplate {
 	@KnowledgeExchange
 	public static void map(
 			@In("member.id") String memberId,
+			@In("coord.id") String coordId,
 			@In("coord.temperature") MetadataWrapper<Integer> coordTemperature,
 			@Out("member.temperature") ParamHolder<MetadataWrapper<Integer>> memberTemperature) throws KnowledgeNotFoundException {
 
-		System.out.println("Knowledge injection for component " + memberId);
+		System.out.println("Knowledge injection " + coordId + " -> " + memberId + " temperature " + coordTemperature.getValue() + " at " + coordTemperature.getTimestamp());
 
 		memberTemperature.value = coordTemperature;
 	}

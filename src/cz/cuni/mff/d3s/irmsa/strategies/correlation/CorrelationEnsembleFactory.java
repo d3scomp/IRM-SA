@@ -227,9 +227,10 @@ public class CorrelationEnsembleFactory {
 		CtMethod mapMethod = CtNewMethod.make(String.format(
 				"public static void map("
 				+ "		String memberId,"
+				+ "		String coordId,"
 				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,"
 				+ "		cz.cuni.mff.d3s.deeco.task.ParamHolder member%1$s) {"
-				+ " System.out.println(\"Knowledge injection (%1$s) for component \" + memberId);"
+				+ " System.out.println(\"Knowledge injection \" + coordId + \" -> \" + memberId + \" %1$s \" + coord%1$s.getValue() + \" at \" +  coord%1$s.getTimestamp());"
 				+ "	member%1$s.value = coord%1$s; }",
 					correlationSubject),
 				ensembleClass);
@@ -241,14 +242,16 @@ public class CorrelationEnsembleFactory {
 		// Map parameters annotations
 		ParameterAnnotationsAttribute mapParamAnnotations = new ParameterAnnotationsAttribute(constPool,
 				ParameterAnnotationsAttribute.visibleTag);
-		Annotation[][] mapParamAnnotationsInfo = new Annotation[3][1];
+		Annotation[][] mapParamAnnotationsInfo = new Annotation[4][1];
 		mapParamAnnotationsInfo[0][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
 		mapParamAnnotationsInfo[0][0].addMemberValue("value", new StringMemberValue("member.id", constPool));
 		mapParamAnnotationsInfo[1][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
-		mapParamAnnotationsInfo[1][0].addMemberValue("value", new StringMemberValue(
-				String.format("coord.%s", correlationSubject), constPool));
-		mapParamAnnotationsInfo[2][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.Out", constPool);
+		mapParamAnnotationsInfo[1][0].addMemberValue("value", new StringMemberValue("coord.id", constPool));
+		mapParamAnnotationsInfo[2][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.In", constPool);
 		mapParamAnnotationsInfo[2][0].addMemberValue("value", new StringMemberValue(
+				String.format("coord.%s", correlationSubject), constPool));
+		mapParamAnnotationsInfo[3][0] = new Annotation("cz.cuni.mff.d3s.deeco.annotations.Out", constPool);
+		mapParamAnnotationsInfo[3][0].addMemberValue("value", new StringMemberValue(
 				String.format("member.%s", correlationSubject), constPool));
 		mapParamAnnotations.setAnnotations(mapParamAnnotationsInfo);
 		mapMethod.getMethodInfo().addAttribute(mapParamAnnotations);
