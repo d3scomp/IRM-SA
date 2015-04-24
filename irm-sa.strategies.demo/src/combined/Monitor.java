@@ -2,13 +2,17 @@ package combined;
 
 import static cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper.retrieveFromInternalData;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Locale;
 
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
+import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
@@ -34,6 +38,23 @@ public class Monitor {
 
 	/** Mandatory field. */
 	public String id;
+	
+	public static final PrintWriter writer;
+	
+	static {
+		PrintWriter w = null;
+		try {
+			w = new PrintWriter("fitnessData.txt", "UTF-8");
+
+			StringBuilder builder = new StringBuilder();
+			builder.append(String.format("%s %s %s %s\n", "time", "battery", "temperature", "inaccuracy"));
+			w.write(builder.toString());
+			
+		} catch (IOException e) {
+			Log.e("Can't open fitnessData.txt file", e);
+		}
+		writer = w; 
+	}
 
 	@Process
 	@PeriodicScheduling(period = MONITORING_PERIOD, order = 20)
@@ -51,6 +72,9 @@ public class Monitor {
 				new IRMInstanceGenerator(architecture, design, trace);
 		final List<IRMInstance> IRMInstances = generator.generateIRMInstances();
 
+		StringBuilder builder = new StringBuilder();
+		builder.append(time).append(" ");
+		
 		System.out.println("=============");
 		System.out.println("=GRAPH DATA=");
 		System.out.println("=============");
@@ -81,12 +105,17 @@ public class Monitor {
 		}
 		if (batteryInvariant != null) {
 			System.out.println("FF1 battery fitness: " + batteryInvariant.getFitness());
+			builder.append(String.format(Locale.ENGLISH, "%.3f ", batteryInvariant.getFitness()));
 		}
 		if (temperatureInvariant != null) {
 			System.out.println("FF1 temperature fitness: " + temperatureInvariant.getFitness());
+			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureInvariant.getFitness()));
 		}
 		if (inaccuracyInvariant != null) {
 			System.out.println("FF1 inaccuracy fitness: " + inaccuracyInvariant.getFitness());
+			builder.append(String.format(Locale.ENGLISH, "%.3f\n", inaccuracyInvariant.getFitness()));
 		}
+		
+		writer.write(builder.toString());
 	}
 }

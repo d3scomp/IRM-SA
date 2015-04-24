@@ -58,6 +58,8 @@ public class Run {
 
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 300_000;
+	
+	static final boolean enableMetaAdaptation = true;
 
 	/**
 	 * Runs centralized simulation.
@@ -122,19 +124,28 @@ public class Run {
 
 		// create correlation plugin
 		registerMetadataForFields();
-		final CorrelationPlugin correlationPlugin =
-				new CorrelationPlugin(metaAdaptationPlugin, nodesInSimulation);
 
-		/* deploy components and ensembles */
-		final DEECoNode deeco3 = simulation.createNode(3,
-				irmPlugin, metaAdaptationPlugin,
-				periodAdaptionPlugin,
-				assumptionParameterAdaptionPlugin,
-				correlationPlugin,
-				new MonitorPlugin(model, design, irmPlugin.getTrace())
-			);
-		nodesInSimulation.add(deeco3);
-
+		MonitorPlugin monitorPlugin = new MonitorPlugin(model, design, irmPlugin.getTrace());
+		final DEECoNode deeco3;
+		if(enableMetaAdaptation){
+			final CorrelationPlugin correlationPlugin =
+					new CorrelationPlugin(metaAdaptationPlugin, nodesInSimulation);
+			// Meta-adaptation enabled
+			deeco3 = simulation.createNode(3,
+					irmPlugin, metaAdaptationPlugin,
+					periodAdaptionPlugin,
+					assumptionParameterAdaptionPlugin,
+					correlationPlugin,
+					monitorPlugin);
+			nodesInSimulation.add(deeco3);
+		} else {
+			// Meta-adaptation disabled
+				deeco3 = simulation.createNode(3,
+						irmPlugin,
+						metaAdaptationPlugin,
+						monitorPlugin);
+				nodesInSimulation.add(deeco3);
+		}
 		//deploy components
 		deeco3.deployComponent(new FireFighter(Environment.FF_LEADER_ID));
 		deeco3.deployComponent(new Environment());
@@ -142,6 +153,7 @@ public class Run {
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
+		monitorPlugin.finit();
 		Log.i("Simulation Finished");
 	}
 
@@ -161,7 +173,7 @@ public class Run {
 		final Metric positionMetric = new PositionMetric();
 
 		final double positionConfidence = 0.9;
-		final double temperatureConfidence = 0.9;
+		final double temperatureConfidence = 0.8;
 		final double batteryConfidence = 0.9;
 
 		KnowledgeMetadataHolder.setBoundAndMetric(positionLabel, positionBoundary, positionMetric, positionConfidence);

@@ -33,6 +33,8 @@ public class MonitorPlugin implements DEECoPlugin {
 
 	/** Trace model. */
 	protected final TraceModel trace;
+	
+	Monitor monitor;
 
 	/**
 	 * Only constructor.
@@ -54,7 +56,7 @@ public class MonitorPlugin implements DEECoPlugin {
 	@Override
 	public void init(final DEECoContainer container) {
 		try {
-			final Monitor monitor = new Monitor();
+			monitor = new Monitor();
 			container.deployComponent(monitor);
 			// pass necessary data to the EvolutionaryAdaptationManager
 			for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
@@ -67,5 +69,9 @@ public class MonitorPlugin implements DEECoPlugin {
 		} catch (AnnotationProcessorException e) {
 			Log.e("Error while trying to deploy Monitor", e);
 		}
+	}
+	
+	public void finit(){
+		monitor.writer.close();
 	}
 }
