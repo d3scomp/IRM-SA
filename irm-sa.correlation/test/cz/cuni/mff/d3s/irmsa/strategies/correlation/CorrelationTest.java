@@ -60,7 +60,7 @@ public class CorrelationTest {
 		/* create Plugins */
 		@SuppressWarnings("unused")
 		final IRMDesignPackage p = IRMDesignPackage.eINSTANCE;
-		final URL modelURL = getClass().getResource("correlation_simple.irmdesign");
+		final URL modelURL = getClass().getResource("models/correlation_simple.irmdesign");
 		final IRM design = (IRM) EMFHelper.loadModelFromXMI(modelURL.toString());
 
 		final IRMPlugin irmPlugin = new IRMPlugin( design).withLog(false);
