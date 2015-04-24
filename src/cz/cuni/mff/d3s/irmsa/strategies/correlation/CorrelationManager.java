@@ -33,6 +33,9 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 @SystemComponent
 public class CorrelationManager {
 
+	/**
+	 * Specify whether to print the values being processed by the correlation computation.
+	 */
 	private static final boolean dumpValues = false;
 	
 	/** Run flag stored in internal data under this key. */
@@ -53,16 +56,10 @@ public class CorrelationManager {
 	public Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> knowledgeHistoryOfAllComponents;
 
 	/**
-	 * The correlation of knowledge for a pair of knowledge fields.
-	 * e.g. position -> temperature
+	 * Computed distance bounds that ensures the correlation between the data satisfies given confidence level.
+	 * If the data are not correlated the value stored is Double.NaN.
+	 * The bound applies to the distance of knowledge values identified by the first label in the LabelPair.
 	 */
-	public List<CorrelationLevel> correlationLevels;
-
-	/**
-	 * The timestamps of the last processed knowledge related to component pair and theirs knowledge pairs.
-	 */
-	public Map<ComponentPair, Map<LabelPair, Long>> lastProcessedTimestamps;
-	
 	public Map<LabelPair, Double> distanceBounds;
 
 	/**
@@ -86,21 +83,20 @@ public class CorrelationManager {
 	 */
 	public CorrelationManager(List<DEECoNode> otherNodes) {
 		knowledgeHistoryOfAllComponents = new HashMap<>();
-		correlationLevels = new ArrayList<>();
-		lastProcessedTimestamps = new HashMap<>();
 		distanceBounds = new HashMap<>();
 
 		this.otherNodes = otherNodes;
 	}
 
-	/*
+	/**
 	 * For quick debugging.
+	 * Uncomment the annotations to enable this method.
 	 */
 //	@Process
 //	@PeriodicScheduling(period=1000)
 	public static void printHistory(
 			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
-			@In("correlationLevels") List<CorrelationLevel> levels){
+			@In("distanceBounds") Map<LabelPair, Double> bounds){
 
 		StringBuilder b = new StringBuilder(1024);
 		b.append("Printing global history...\n");
@@ -129,13 +125,13 @@ public class CorrelationManager {
 
 		}
 
-		b.append("Printing correlations...\n");
+		b.append("Printing correlation bounds...\n");
 
-		for(CorrelationLevel correlationLevel : levels){
+		for(LabelPair labels : bounds.keySet()){
 			b.append(String.format("%s -> %s : %.2f\n",
-				correlationLevel.getLabelPair().getFirstLabel(),
-				correlationLevel.getLabelPair().getSecondLabel(),
-				correlationLevel.getCorrelationLevel()));
+					labels.getFirstLabel(),
+					labels.getSecondLabel(),
+					bounds.get(labels)));
 		}
 
 		System.out.println(b.toString());
@@ -145,15 +141,12 @@ public class CorrelationManager {
 	 * Method that measures the correlation between the data in the system
 	 *
 	 * @param history The time series of all knowledge of all components.
-	 * @param processedTimestamps The timestamps of lastly processed knowledge.
-	 * @param levels The structure that holds the calculated correlations.
+	 * @param bounds The distance bounds, that satisfies the correlation confidence level, to be computed.
 	 */
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void calculateCorrelation(
 			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<?>>>> history,
-			@InOut("lastProcessedTimestamps") ParamHolder<Map<ComponentPair, Map<LabelPair, Long>>> processedTimestamps,
-			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels,
 			@InOut("distanceBounds") ParamHolder<Map<LabelPair, Double>> bounds){
 
 		System.out.println("Correlation process started...");
@@ -170,24 +163,23 @@ public class CorrelationManager {
 	/**
 	 * Deploys, activates and deactivates correlation ensembles based on the current
 	 * correlation of the data in the system.
-	 * @param levels The structure that holds the calculated correlations.
 	 * @param deecoNodes The {@link DEECoNode}s in the system, where the ensembles are managed on.
+	 * @param bounds The distance bounds that satisfies the correlation confidence level.
 	 * @throws Exception If there is a problem creating the ensemble definition class, or deploying it.
 	 */
 	@Process
 	@PeriodicScheduling(period=1000)
 	public static void manageCorrelationEnsembles(
-			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels,
-			@InOut("distanceBounds") ParamHolder<Map<LabelPair, Double>> bounds,
+			@In("distanceBounds") Map<LabelPair, Double> bounds,
 			@In("otherNodes") List<DEECoNode> deecoNodes) throws Exception {
 		
 		final boolean run = ComponentHelper.retrieveFromInternalData(RUN_FLAG, true);
 		System.out.println("Correlation ensembles management process started...");
 
-		for(LabelPair labels : bounds.value.keySet()){
+		for(LabelPair labels : bounds.keySet()){
 			String correlationFilter = labels.getFirstLabel();
 			String correlationSubject = labels.getSecondLabel();
-			double distance = bounds.value.get(labels);
+			double distance = bounds.get(labels);
 			if (Double.isNaN(distance) || !run) {
 				String ensembleName = CorrelationEnsembleFactory
 						.composeClassName(correlationFilter, correlationSubject);
@@ -244,6 +236,11 @@ public class CorrelationManager {
 		return labelPairs;
 	}
 	
+	/**
+	 * Returns a set of all label pairs available among all the components in the system.
+	 * @param history The history of knowledge of all the components in the system.
+	 * @return The set of all label pairs available among all the components in the system.
+	 */
 	private static Set<LabelPair> getAllLabelPairs(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history){
 		Set<LabelPair> labelPairs = new HashSet<LabelPair>();
@@ -277,7 +274,11 @@ public class CorrelationManager {
 		return componentPairs;
 	}
 	
-	// Get all the components containing the given pair of knowledge fields
+	/** Get all the components containing the given pair of knowledge fields.
+	 * @param history The history of knowledge of all the components in the system.
+	 * @param labels The pair knowledge fields required the components to have. 
+	 * @return All the components containing the given pair of knowledge fields.
+	 */
 	private static Set<String> getComponents(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			LabelPair labels){
@@ -295,6 +296,13 @@ public class CorrelationManager {
 		return components;
 	}
 	
+	/**
+	 * Returns a list of knowledge values identified by given labels from given components.
+	 * @param history The history of knowledge of all the components in the system.
+	 * @param components A pair of components containing the given pair of knowledge fields.
+	 * @param labels The pair knowledge fields the values will be extracted from.
+	 * @return The list of knowledge values identified by given labels from given components.
+	 */
 	private static List<KnowledgeQuadruple> extractKnowledgeHistory(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			ComponentPair components,
@@ -336,7 +344,11 @@ public class CorrelationManager {
 		return knowledgeVectors;
 	}
 	
-	// Return matrix of distances and distance classes for given knowledge fields anoung all the components
+	/** Returns a matrix of distances and distance classes for given knowledge fields among all the components.
+	 * @param history The history of knowledge of all the components in the system.
+	 * @param labels The pair knowledge fields the values will be extracted from.
+	 * @return The matrix of distances and distance classes for given knowledge fields among all the components.
+	 */
 	private static List<DistancePair> computeDistances(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			LabelPair labels){
@@ -377,6 +389,17 @@ public class CorrelationManager {
 		return distancePairs;
 	}
 	
+	/**
+	 * Returns the distance boundary of the knowledge identified by the first label in the given labels,
+	 * that ensures the satisfaction of confidence level by the correlation of the knowledge identified by the labels.
+	 * Double.NaN if returned if the confidence level can't be satisfied.
+	 * @param distancePairs A list of distances of the knowledge labeled by the first label and distance
+	 * classes of the knowledge labeled by the second label.
+	 * @param labels The labels identifying the knowledge.
+	 * @return The distance boundary of the knowledge identified by the first label in the given labels,
+	 * that ensures the satisfaction of confidence level by the correlation of the knowledge identified by the labels.
+	 * Double.NaN if returned if the confidence level can't be satisfied.
+	 */
 	private static double getDistanceBoundary(List<DistancePair> distancePairs, LabelPair labels){
 		// Sort the data by the distance of first knowledge field
 		Collections.sort(distancePairs);
@@ -407,28 +430,34 @@ public class CorrelationManager {
 		return Double.NaN;
 	}
 	
-	private static void fillDistances(List<DistancePair> distancePairs, StringBuilder b){
-		b.append("time: ");
+	/**
+	 * Fill the given StringBuilder with the given values.
+	 * For debug print purposes.
+	 * @param distancePairs The values to be filled into the builder.
+	 * @param builder The StringBuilder to be filled.
+	 */
+	private static void fillDistances(List<DistancePair> distancePairs, StringBuilder builder){
+		builder.append("time: ");
 		for(DistancePair dp : distancePairs)
 		{
-			b.append(dp.timestamp + ", ");
+			builder.append(dp.timestamp + ", ");
 		}
-		b.delete(b.length()-2, b.length());
-		b.append("\n");
-		b.append("distance: ");
+		builder.delete(builder.length()-2, builder.length());
+		builder.append("\n");
+		builder.append("distance: ");
 		for(DistancePair dp : distancePairs)
 		{
-			b.append(String.format(Locale.ENGLISH, "%.1f, ", dp.distance));
+			builder.append(String.format(Locale.ENGLISH, "%.1f, ", dp.distance));
 		}
-		b.delete(b.length()-2, b.length());
-		b.append("\n");
-		b.append("class: ");
+		builder.delete(builder.length()-2, builder.length());
+		builder.append("\n");
+		builder.append("class: ");
 		for(DistancePair dp : distancePairs)
 		{
-			b.append(dp.distanceClass + ", ");
+			builder.append(dp.distanceClass + ", ");
 		}
-		b.delete(b.length()-2, b.length());
-		b.append("\n");
+		builder.delete(builder.length()-2, builder.length());
+		builder.append("\n");
 	}
 
 	/**
