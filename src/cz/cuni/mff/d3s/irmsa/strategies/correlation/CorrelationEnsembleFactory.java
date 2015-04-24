@@ -91,7 +91,7 @@ public class CorrelationEnsembleFactory {
 				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%1$s,\n"
 				+ "		cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper coord%2$s) {\n"
 				+ " final double %1$s_bound = %3$f;\n"
-				+ "	System.out.println(\"Membership for %1$s -> %2$s with %1$s_bound = %3$.1f\");\n"
+//				+ "	System.out.println(\"Membership for %1$s -> %2$s with %1$s_bound = %3$.1f\");\n"
 				+ " return (!member%2$s.isOperational()\n"
 				+ "		&& coord%2$s.isOperational()\n"
 				+ "		&& cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder.distance(\n"
