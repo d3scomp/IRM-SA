@@ -39,9 +39,9 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
-import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
+import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
-import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
+import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
@@ -78,11 +78,11 @@ public class Run {
 
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new BroadcastLoopback());
+		simulation.addPlugin(new SimpleBroadcastDevice());
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
-		simulation.addPlugin(new PositionAware(0, 0));
+		simulation.addPlugin(new PositionPlugin(0, 0));
 
 		//create nodes without adaptation
 		DEECoNode deeco1 = simulation.createNode(1);

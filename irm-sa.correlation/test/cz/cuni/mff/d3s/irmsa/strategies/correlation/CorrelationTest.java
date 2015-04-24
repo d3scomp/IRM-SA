@@ -1,8 +1,5 @@
 package cz.cuni.mff.d3s.irmsa.strategies.correlation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +17,13 @@ import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
-import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
-import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
-import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
+import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
-import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
+import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 /**
@@ -44,11 +39,11 @@ public class CorrelationTest {
 
 		SimulationTimer simulationTimer = new DiscreteEventTimer();
 		DEECoSimulation realm = new DEECoSimulation(simulationTimer);
-		realm.addPlugin(new BroadcastLoopback());
+		realm.addPlugin(new SimpleBroadcastDevice());
 		realm.addPlugin(Network.class);
 		realm.addPlugin(DefaultKnowledgePublisher.class);
 		realm.addPlugin(KnowledgeInsertingStrategy.class);
-		realm.addPlugin(new PositionAware(0.0,0.0));
+		realm.addPlugin(new PositionPlugin(0.0,0.0));
 
 		DEECoNode deeco1 = realm.createNode(1);
 		nodesInRealm.add(deeco1);
