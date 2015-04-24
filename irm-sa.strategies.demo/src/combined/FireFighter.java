@@ -284,18 +284,6 @@ public class FireFighter {
 		return fitness;
 	}
 
-	private static void resetPositionStateIfNeeded(final int inaccBound) {
-		final long currentPeriod = getCurrentProcessPeriod("determinePosition");
-		final long previousPeriod = getLastPositionPeriod();
-		final int previousBound = getLastInaccuracyBound();
-		if (currentPeriod != previousPeriod || inaccBound != previousBound) {
-			//reset state if adaptation happened
-			getInaccuracyHistory().clear();
-			setLastPositionPeriod(currentPeriod);
-			setLastInaccuracyBound(inaccBound);
-		}
-	}
-
 	@Process
 	@Invariant("P02")
 	@PeriodicScheduling(period=1250)
@@ -334,7 +322,6 @@ public class FireFighter {
 			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
 			int bound) {
-		resetPositionStateIfNeeded(bound);
 		int bad = 0;
 		for (Integer i : getInaccuracyHistory()) {
 			if (i > bound) {
@@ -350,7 +337,6 @@ public class FireFighter {
 			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
 			int bound) {
-		resetPositionStateIfNeeded(bound);
 		int posBad = 0;
 		int posOk = 0;
 		int inacc = 0;
@@ -397,8 +383,14 @@ public class FireFighter {
 
 	@InvariantMonitor("P03")
 	public static double determineTemperatureFitness(
+			@In("id") String id,
 			@In("temperature") MetadataWrapper<Integer> temperature) {
-		final boolean satisfied = determineBatteryLevelSatisfaction(temperature);
-		return satisfied ? 1.0 : 0.0;
+		long heldTemperatureTime = temperature.getTimestamp();
+		long currentTime = currentTime();
+		long delta = currentTime - heldTemperatureTime;
+		double oldnessTreshold = 15000.0;
+		
+		double fitness = 1 - Math.min(1, ((double) delta / oldnessTreshold));
+		return fitness;
 	}
 }
