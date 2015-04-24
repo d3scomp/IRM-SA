@@ -14,3 +14,6 @@ This will download (among others) the main dependency, which is [jDEECo core v. 
 
 ##Testing
 You can run the combined demo by running the "Run" class inside the "combined" package of the demo project. 
+
+###Colored Output in Eclipse
+In order to be able to see the output in Eclipse correctly this plugin ([eclipse-plugin-ansi-in-console](http://mihai-nita.net/2013/06/03/eclipse-plugin-ansi-in-console/)) needs to be installed into your Eclipse.
