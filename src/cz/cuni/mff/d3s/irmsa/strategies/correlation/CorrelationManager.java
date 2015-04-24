@@ -17,8 +17,6 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
-import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleController;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 import cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper;
@@ -35,6 +33,8 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 @SystemComponent
 public class CorrelationManager {
 
+	private static final boolean dumpValues = false;
+	
 	/** Run flag stored in internal data under this key. */
 	static final String RUN_FLAG = "runFlag";
 
@@ -96,8 +96,8 @@ public class CorrelationManager {
 	/*
 	 * For quick debugging.
 	 */
-	@Process
-	@PeriodicScheduling(period=1000)
+//	@Process
+//	@PeriodicScheduling(period=1000)
 	public static void printHistory(
 			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			@In("correlationLevels") List<CorrelationLevel> levels){
@@ -157,39 +157,6 @@ public class CorrelationManager {
 			@InOut("distanceBounds") ParamHolder<Map<LabelPair, Double>> bounds){
 
 		System.out.println("Correlation process started...");
-		/*Map<ComponentPair, Map<LabelPair, Long>> processedTimeSlots = processedTimestamps.value;
-
-		boolean done = true;
-		for (String s1 : history.keySet()) {
-			final Map<String, List<MetadataWrapper<?>>> map = history.get(s1);
-			for (String s2 : map.keySet()) {
-				final List<MetadataWrapper<?>> list = map.get(s2);
-				if (!list.isEmpty()) {
-					done &= list.get(list.size() - 1).isOperational();
-				}
-			}
-		}
-		if (done) {
-			ComponentHelper.storeInInternalData(DONE_FLAG, true);
-		}
-
-		// Compute the closeness between pairs of knowledge fields
-		// Consider the unprocessed knowledge entries only
-		for(ComponentPair components : getComponentPairs(history.keySet())){
-
-			if(!processedTimeSlots.containsKey(components)){
-				processedTimeSlots.put(components, new HashMap<>());
-			}
-
-			// For pair labels
-			for(LabelPair labels : getLabelPairs(history, components)){
-				if(!processedTimeSlots.get(components).containsKey(labels)){
-					processedTimeSlots.get(components).put(labels, -1L);
-				}
-				correlationsForTimeSlots(history, processedTimeSlots,
-						levels.value, components, labels);
-			}
-		}*/
 		
 		for(LabelPair labels : getAllLabelPairs(history)){
 			System.out.println(String.format("%s -> %s", labels.getFirstLabel(), labels.getSecondLabel()));
@@ -213,45 +180,19 @@ public class CorrelationManager {
 			@InOut("correlationLevels") ParamHolder<List<CorrelationLevel>> levels,
 			@InOut("distanceBounds") ParamHolder<Map<LabelPair, Double>> bounds,
 			@In("otherNodes") List<DEECoNode> deecoNodes) throws Exception {
+		
 		final boolean run = ComponentHelper.retrieveFromInternalData(RUN_FLAG, true);
 		System.out.println("Correlation ensembles management process started...");
 
-/*		for(CorrelationLevel level : levels.value){
-			String correlationFilter = level.getLabelPair().getFirstLabel();
-			String correlationSubject = level.getLabelPair().getSecondLabel();
-			CorrelationEnsembleFactory.setEnsembleMembershipBoundary(correlationFilter, correlationSubject, 20.0);
-			Class<?> ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
-			if(level.getCorrelationLevel() > KnowledgeMetadataHolder.getConfidenceLevel(correlationSubject)
-//					&& !isEnsembleActive(deecoNodes, ensemble.getName())
-//					&& run){
-					){
-				// Activate if confidence level is satisfied and the ensemble is not deployed or inactive
-				// AND the MetaAdaptationManager tells us to run
-				System.out.println(String.format("Deploying ensemble %s", ensemble.getName()));
-//				setEnsembleActive(deecoNodes, ensemble.getName(), true);
-				// Deploy/Re-deploy the ensemble
-				for(DEECoNode node : deecoNodes){
-					node.undeployEnsemble(ensemble.getName());
-					node.deployEnsemble(ensemble);
-				}
-			} else if(level.getCorrelationLevel() < KnowledgeMetadataHolder.getConfidenceLevel(level.getLabelPair().getSecondLabel())
-					&& isEnsembleActive(deecoNodes, ensemble.getName())) {
-				// deactivate if deployed and confidence level is not satisfied
-				System.out.println(String.format("Undeploying ensemble %s", ensemble.getName()));
-//				setEnsembleActive(deecoNodes, ensemble.getName(), false);
-				for(DEECoNode node : deecoNodes){
-					node.undeployEnsemble(ensemble.getName());
-				}
-			}
-		}*/
 		for(LabelPair labels : bounds.value.keySet()){
 			String correlationFilter = labels.getFirstLabel();
 			String correlationSubject = labels.getSecondLabel();
 			double distance = bounds.value.get(labels);
-			if (Double.isNaN(distance)) {
+			if (Double.isNaN(distance) || !run) {
 				String ensembleName = CorrelationEnsembleFactory
 						.composeClassName(correlationFilter, correlationSubject);
 				System.out.println(String.format("Undeploying ensemble %s",	ensembleName));
+				// Undeploy the ensemble if the meta-adaptation is stopped or the correlation between the data is not reliable
 				for (DEECoNode node : deecoNodes) {
 					node.undeployEnsemble(ensembleName);
 				}
@@ -259,6 +200,7 @@ public class CorrelationManager {
 				CorrelationEnsembleFactory.setEnsembleMembershipBoundary(correlationFilter, correlationSubject, distance);
 				Class<?> ensemble = CorrelationEnsembleFactory.getEnsembleDefinition(correlationFilter, correlationSubject);
 				System.out.println(String.format("Deploying ensemble %s", ensemble.getName()));
+				// Deploy the ensemble if the correlation is reliable enough and the meta-adaptation is running
 				for(DEECoNode node : deecoNodes){
 					node.undeployEnsemble(ensemble.getName());
 					node.deployEnsemble(ensemble);
@@ -266,73 +208,6 @@ public class CorrelationManager {
 			}
 		}
 			
-	}
-
-	/**
-	 * Find all the ensemble instances on the given {@link DEECoNode}s and set theirs active status.
-	 * @param deecoNodes The nodes on which the ensemble will be searched.
-	 * @param ensembleName The name of the ensemble to be found.
-	 * @param active The active status to be set.
-	 * @return True if any ensemble of the given name is found. False otherwise.
-	 */
-	private static boolean setEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName, boolean active){
-		boolean ensemblesFound = false;
-		for(DEECoNode node : deecoNodes){
-			for(ComponentInstance componentInstance : node.getRuntimeMetadata().getComponentInstances()){
-				for(EnsembleController ensemble : componentInstance.getEnsembleControllers()){
-					if(ensemble.getEnsembleDefinition().getName().equals(ensembleName)){
-						ensemble.setActive(active);
-						ensemblesFound = true;
-					}
-				}
-			}
-		}
-
-		return ensemblesFound;
-	}
-
-	/**
-	 * Finds the ensemble instances of the given name and checks whether it is active.
-	 * @param deecoNodes The nodes on which the ensemble will be searched.
-	 * @param ensembleName The name of the ensemble to be found.
-	 * @return True if at least one instance of the ensemble that is active is found.
-	 * 		False otherwise.
-	 */
-	private static boolean isEnsembleActive(List<DEECoNode> deecoNodes, String ensembleName){
-		// Assume the ensemble is not deployed or inactive
-		boolean active = false;
-
-		for(DEECoNode node : deecoNodes){
-			for(ComponentInstance componentInstance : node.getRuntimeMetadata().getComponentInstances()){
-				for(EnsembleController ensemble : componentInstance.getEnsembleControllers()){
-					if(ensemble.getEnsembleDefinition().getName().equals(ensembleName)
-							&& ensemble.isActive()){
-						// If the ensemble is deployed and active store this information
-						active = true;
-					}
-				}
-			}
-		}
-
-		return active;
-	}
-
-	/**
-	 * Returns the correlation for specified pair of knowledge fields.
-	 * @param labels the pair of labels that identifies the knowledge fields.
-	 * The correlation dependency is following: knowledge(firstLabel) -> knowledge(secondLabel)
-	 * @return The correlation for specified pair of knowledge fields.
-	 */
-	private static CorrelationLevel getCorrelationLevel(List<CorrelationLevel> levels, LabelPair labels){
-		for(CorrelationLevel correlationLevel : levels){
-			if(correlationLevel.getLabelPair().equals(labels)){
-				return correlationLevel;
-			}
-		}
-
-		CorrelationLevel correlationLevel = new CorrelationLevel(labels);
-		levels.add(correlationLevel);
-		return correlationLevel;
 	}
 
 	/**
@@ -477,21 +352,27 @@ public class CorrelationManager {
 		List<DistancePair> distancePairs = new ArrayList<>();
 		
 		for(KnowledgeQuadruple knowledge : knowledgeVectors){
-			double distance = KnowledgeMetadataHolder.distance(
-					labels.getFirstLabel(),
-					knowledge.c1Value1.getValue(),
-					knowledge.c2Value1.getValue());
-			DistanceClass distanceClass = KnowledgeMetadataHolder.classifyDistance(
-					labels.getSecondLabel(),
-					knowledge.c1Value2.getValue(),
-					knowledge.c2Value2.getValue());
-			distancePairs.add(new DistancePair(distance, distanceClass, knowledge.c1Value1.getTimestamp()));
+			// Consider only operational fields
+			if(knowledge.c1Value1.isOperational() && knowledge.c2Value1.isOperational()
+					&& knowledge.c1Value2.isOperational() && knowledge.c2Value2.isOperational()){
+				double distance = KnowledgeMetadataHolder.distance(
+						labels.getFirstLabel(),
+						knowledge.c1Value1.getValue(),
+						knowledge.c2Value1.getValue());
+				DistanceClass distanceClass = KnowledgeMetadataHolder.classifyDistance(
+						labels.getSecondLabel(),
+						knowledge.c1Value2.getValue(),
+						knowledge.c2Value2.getValue());
+				distancePairs.add(new DistancePair(distance, distanceClass, knowledge.c1Value1.getTimestamp()));
+			}
 		}
 
-		StringBuilder b = new StringBuilder();
-		b.append("Computed distances\n");
-		fillDistances(distancePairs, b);
-		System.out.print(b.toString());
+		if (dumpValues) {
+			StringBuilder b = new StringBuilder();
+			b.append("Computed distances\n");
+			fillDistances(distancePairs, b);
+			System.out.print(b.toString());
+		}
 		
 		return distancePairs;
 	}
@@ -499,10 +380,12 @@ public class CorrelationManager {
 	private static double getDistanceBoundary(List<DistancePair> distancePairs, LabelPair labels){
 		// Sort the data by the distance of first knowledge field
 		Collections.sort(distancePairs);
-		StringBuilder b = new StringBuilder();
-		b.append("Sorted distances\n");
-		fillDistances(distancePairs, b);
-		System.out.print(b.toString());
+		if(dumpValues) {
+			StringBuilder b = new StringBuilder();
+			b.append("Sorted distances\n");
+			fillDistances(distancePairs, b);
+			System.out.print(b.toString());
+		}
 		// Count the correlation for all the distances based on all smaller distances than the computed one
 		List<Double> correlations = new ArrayList<>(Collections.nCopies(distancePairs.size(), Double.NaN));
 		int closeCnt = 0;
@@ -546,84 +429,6 @@ public class CorrelationManager {
 		}
 		b.delete(b.length()-2, b.length());
 		b.append("\n");
-	}
-
-	/**
-	 * Computes data correlation for the given components between the specified
-	 * knowledge fields. The correlation is computed for the unprocessed interval
-	 * respecting the time slots.
-	 * @param history The knowledge history of all the components in the system.
-	 * @param processedTimeSlots The last time slots of the last processed data
-	 * 		  in the knowledge history.
-	 * @param levels The correlation computed so far.
-	 * @param components The pair of component for which the correlation will
-	 * 		  be computed.
-	 * @param labels The pair of labels for which the correlation will be computed.
-	 */
-	private static void correlationsForTimeSlots(
-			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
-			Map<ComponentPair, Map<LabelPair, Long>> processedTimeSlots,
-			List<CorrelationLevel> levels,
-			ComponentPair components,
-			LabelPair labels){
-		long lastTimeSlot = processedTimeSlots.get(components).get(labels);
-
-		CorrelationLevel correlationLevel = getCorrelationLevel(levels, labels);
-		List<MetadataWrapper<? extends Object>> c1Values1 = getUnprocessedTimeSlotsValues(
-				history.get(components.component1Id).get(labels.getFirstLabel()), lastTimeSlot);
-		List<MetadataWrapper<? extends Object>> c1Values2 = getUnprocessedTimeSlotsValues(
-				history.get(components.component1Id).get(labels.getSecondLabel()), lastTimeSlot);
-		List<MetadataWrapper<? extends Object>> c2Values1 = getUnprocessedTimeSlotsValues(
-				history.get(components.component2Id).get(labels.getFirstLabel()), lastTimeSlot);
-		List<MetadataWrapper<? extends Object>> c2Values2 = getUnprocessedTimeSlotsValues(
-				history.get(components.component2Id).get(labels.getSecondLabel()), lastTimeSlot);
-
-		KnowledgeQuadruple values = getMinCommonTimeSlotValues(
-				c1Values1, c1Values2, c2Values1, c2Values2);
-		if(values == null){
-			Log.d(String.format("Correlation for [%s:%s]{%s -> %s} Skipped",
-					components.component1Id, components.component2Id,
-					labels.getFirstLabel(), labels.getSecondLabel()));
-		}
-		long timeSlot = -1;
-		while(values != null){
-			timeSlot = values.timeSlot;
-			correlationLevel.addValues(values.c1Value1.getValue(), values.c2Value1.getValue(),
-									   values.c1Value2.getValue(), values.c2Value2.getValue());
-
-			Log.d(String.format("Correlation for [%s:%s]{%s -> %s}(%d)",
-					components.component1Id, components.component2Id,
-					labels.getFirstLabel(), labels.getSecondLabel(), timeSlot));
-
-			removeEarlierValuesForTimeSlot(c1Values1, timeSlot);
-			removeEarlierValuesForTimeSlot(c1Values2, timeSlot);
-			removeEarlierValuesForTimeSlot(c2Values1, timeSlot);
-			removeEarlierValuesForTimeSlot(c2Values2, timeSlot);
-			values = getMinCommonTimeSlotValues(c1Values1, c1Values2, c2Values1, c2Values2);
-		}
-		if(timeSlot > -1){
-			processedTimeSlots.get(components).put(labels, timeSlot);
-		}
-	}
-
-	/**
-	 * Extracts a list of values that are newer than the given time slot.
-	 * @param values The list of values on which the extraction will be performed.
-	 * @param lastTimeSlot The time slot delimiting the values being extracted.
-	 * 		  Only newer values are extracted.
-	 * @return A list of values that are newer than the given time slot.
-	 */
-	private static List<MetadataWrapper<? extends Object>> getUnprocessedTimeSlotsValues(
-			List<MetadataWrapper<? extends Object>> values, long lastTimeSlot){
-		List<MetadataWrapper<? extends Object>> unprocessed = new ArrayList<>();
-		for(MetadataWrapper<? extends Object> value : values){
-			long valueTimeSlot = value.getTimestamp() / TIME_SLOT_DURATION;
-			if(valueTimeSlot > lastTimeSlot){
-				unprocessed.add(value);
-			}
-		}
-
-		return unprocessed;
 	}
 
 	/**
