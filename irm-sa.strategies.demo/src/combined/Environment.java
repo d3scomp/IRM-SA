@@ -241,7 +241,7 @@ public class Environment {
 	}
 
 	@Process
-	@PeriodicScheduling(period=500, order = 1)
+	@PeriodicScheduling(period=50, order = 1)
 	static public void simulation(
 			@In("id") String id) {
 		final Map<String, FireFighterState> firefighters = getFirefighters();

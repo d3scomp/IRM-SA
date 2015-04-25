@@ -35,7 +35,7 @@ public class Monitor {
 	static final String DESIGN_MODEL = "design";
 
 	/** Period for monitoring. */
-	static final long MONITORING_PERIOD = 1000;
+	static final long MONITORING_PERIOD = 100;
 
 	/** Mandatory field. */
 	public String id;
@@ -51,7 +51,7 @@ public class Monitor {
 			w = new PrintWriter("fitnessData.txt", "UTF-8");
 
 			StringBuilder builder = new StringBuilder();
-			builder.append(String.format("%s %s %s %s %s %s\n", "time", "battery", "temperature", "inaccuracy", "temperatureQuality", "positionQuality"));
+			builder.append(String.format("%s %s %s %s %s\n", "time", "actual_temperature",  "belief_temperature", "actual_position", "belief_position"));
 			w.write(builder.toString());
 
 		} catch (IOException e) {
@@ -108,13 +108,7 @@ public class Monitor {
 				}
 			}
 		}
-		if (batteryInvariant != null) {
-			System.out.println("FF1 battery fitness: " + batteryInvariant.getFitness());
-			builder.append(String.format(Locale.ENGLISH, "%.3f ", batteryInvariant.getFitness()));
-		} else {
-			builder.append(" ");
-		}
-		if (temperatureInvariant != null) {
+		/*if (temperatureInvariant != null) {
 			System.out.println("FF1 temperature fitness: " + temperatureInvariant.getFitness());
 			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureInvariant.getFitness()));
 		} else {
@@ -134,7 +128,10 @@ public class Monitor {
 			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureQuality));
 		} else {
 			builder.append(" ");
-		}
+		}*/
+		
+		// actual temperature
+		builder.append(Environment.getTemperature(Environment.FF_LEADER_ID)).append(" ");
 
 		final double positionQuality = 1 - Environment.getInaccuracy(Environment.FF_LEADER_ID) / 30.0;
 		System.out.println("FF1 position quality: " + positionQuality);

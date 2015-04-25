@@ -14,7 +14,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
  * Auxiliary ensemble collecting data from FF1 to Monitor component.
  */
 @Ensemble
-@PeriodicScheduling(period = 1000, order = 19)
+@PeriodicScheduling(period = 100, order = 19)
 public class MonitorEnsemble {
 
 	@Membership
@@ -31,5 +31,6 @@ public class MonitorEnsemble {
 			@Out("coord.thoughtTemperature") ParamHolder<MetadataWrapper<Integer>> thoughtTemperature,
 			@In("member.temperature") MetadataWrapper<Integer> temperature) throws KnowledgeNotFoundException {
 		thoughtTemperature.value = temperature;
+		System.out.println(String.format("temperature exchange: %d : %d", temperature.getTimestamp(), temperature.getValue()));
 	}
 }
