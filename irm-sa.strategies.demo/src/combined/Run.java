@@ -134,7 +134,7 @@ public class Run {
 			deeco3 = simulation.createNode(3,
 					irmPlugin, metaAdaptationPlugin,
 					periodAdaptionPlugin,
-					assumptionParameterAdaptionPlugin,
+//					assumptionParameterAdaptionPlugin,
 					correlationPlugin,
 					monitorPlugin);
 			nodesInSimulation.add(deeco3);

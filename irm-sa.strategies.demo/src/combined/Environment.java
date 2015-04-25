@@ -64,7 +64,8 @@ public class Environment {
 	 * Maximal movement of a firefighter in a tick.
 	 * Also inaccuracy caused by regular firefighter movement.
 	 */
-	static private final double FF_MOVEMENT = 0.1;
+	static private final double FF_MOVEMENT = 0.033;
+	static private final double FF_BONUS = 0.1 * FF_MOVEMENT;
 
 	/** Inaccuracy in case of GPS malfunction. */
 	static private final double BROKEN_GSP_INACURRACY = 9 / 4.0 * 0.1;
@@ -252,7 +253,7 @@ public class Environment {
 		for (final String ffId : firefighters.keySet()) {
 			final FireFighterState ff = getFirefighter(ffId);
 
-			final double bonus = ffId.equals(FF_FOLLOWER_ID) ? 0.02 : 0;
+			final double bonus = ffId.equals(FF_FOLLOWER_ID) ? FF_BONUS : 0;
 			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus);
 			System.out.println("+++" + ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
