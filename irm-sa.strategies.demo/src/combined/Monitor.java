@@ -22,6 +22,7 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ProcessInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
 @SystemComponent
@@ -34,32 +35,36 @@ public class Monitor {
 	static final String DESIGN_MODEL = "design";
 
 	/** Period for monitoring. */
-	static final long MONITORING_PERIOD = 5000;
+	static final long MONITORING_PERIOD = 1000;
 
 	/** Mandatory field. */
 	public String id;
-	
+
+	/** FF1 Environment temperature. */
+	public MetadataWrapper<Integer> thoughtTemperature;
+
 	public static final PrintWriter writer;
-	
+
 	static {
 		PrintWriter w = null;
 		try {
 			w = new PrintWriter("fitnessData.txt", "UTF-8");
 
 			StringBuilder builder = new StringBuilder();
-			builder.append(String.format("%s %s %s %s\n", "time", "battery", "temperature", "inaccuracy"));
+			builder.append(String.format("%s %s %s %s %s %s\n", "time", "battery", "temperature", "inaccuracy", "temperatureQuality", "positionQuality"));
 			w.write(builder.toString());
-			
+
 		} catch (IOException e) {
 			Log.e("Can't open fitnessData.txt file", e);
 		}
-		writer = w; 
+		writer = w;
 	}
 
 	@Process
 	@PeriodicScheduling(period = MONITORING_PERIOD, order = 20)
 	static public void monitorSelectedInvariantFitness(
-			@In("id") String id) {
+			@In("id") String id,
+			@In("thoughtTemperature") MetadataWrapper<Integer> thoughtTemperature) {
 		final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 
 		// get architecture, design, trace models and plug-ins from the process context
@@ -74,7 +79,7 @@ public class Monitor {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(time).append(" ");
-		
+
 		System.out.println("=============");
 		System.out.println("=GRAPH DATA=");
 		System.out.println("=============");
@@ -106,16 +111,35 @@ public class Monitor {
 		if (batteryInvariant != null) {
 			System.out.println("FF1 battery fitness: " + batteryInvariant.getFitness());
 			builder.append(String.format(Locale.ENGLISH, "%.3f ", batteryInvariant.getFitness()));
+		} else {
+			builder.append(" ");
 		}
 		if (temperatureInvariant != null) {
 			System.out.println("FF1 temperature fitness: " + temperatureInvariant.getFitness());
 			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureInvariant.getFitness()));
+		} else {
+			builder.append(" ");
 		}
 		if (inaccuracyInvariant != null) {
 			System.out.println("FF1 inaccuracy fitness: " + inaccuracyInvariant.getFitness());
-			builder.append(String.format(Locale.ENGLISH, "%.3f\n", inaccuracyInvariant.getFitness()));
+			builder.append(String.format(Locale.ENGLISH, "%.3f ", inaccuracyInvariant.getFitness()));
+		} else {
+			builder.append(" ");
 		}
-		
+
+		if (thoughtTemperature != null && thoughtTemperature.getValue() != null) {
+			final int realTemperature = Environment.getTemperature(Environment.FF_LEADER_ID);
+			final double temperatureQuality = 1 - 1.0 * Math.abs(realTemperature - thoughtTemperature.getValue()) / realTemperature;
+			System.out.println("FF1 temperature quality: " + temperatureQuality);
+			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureQuality));
+		} else {
+			builder.append(" ");
+		}
+
+		final double positionQuality = 1 - Environment.getInaccuracy(Environment.FF_LEADER_ID) / 30.0;
+		System.out.println("FF1 position quality: " + positionQuality);
+		builder.append(String.format(Locale.ENGLISH, "%.3f\n", positionQuality));
+
 		writer.write(builder.toString());
 	}
 }

@@ -179,7 +179,7 @@ public class FireFighter {
 	/** Battery level. */
 	public MetadataWrapper<Integer> batteryLevel;
 
-	/** For now the position is 1D only. */
+	/** Position in sector positioning system. */
 	public MetadataWrapper<Position> position;
 
 	/** Environment temperature. */
@@ -363,7 +363,7 @@ public class FireFighter {
 
 	@Process
 	@Invariant("P03")
-	@PeriodicScheduling(period=1000)
+	@PeriodicScheduling(period=1000, order = 2)
 	public static void determineTemperature(
 		@In("id") String id,
 		@InOut("temperature") ParamHolder<MetadataWrapper<Integer>> temperature
@@ -389,8 +389,8 @@ public class FireFighter {
 		long currentTime = currentTime();
 		long delta = currentTime - heldTemperatureTime;
 		double oldnessTreshold = 15000.0;
-		
-		double fitness = 1 - Math.min(1, ((double) delta / oldnessTreshold));
+
+		double fitness = 1 - Math.min(1, (delta / oldnessTreshold));
 		return fitness;
 	}
 }

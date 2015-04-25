@@ -142,6 +142,16 @@ public class Environment {
 	}
 
 	/**
+	 * Just retrieves the temperature
+	 * @param ffId firefighter id
+	 * @return firefighter environment temperature
+	 */
+	static public int getTemperature(final String ffId) {
+		final FireFighterState ff =  getFirefighter(ffId);
+		return SEGMENTS[ff.position.segment].temps[ff.position.index];
+	}
+
+	/**
 	 * Returns temperature of given firefighter.
 	 * @param ffId firefighter id
 	 * @param temperature needed for making it non-operational
@@ -153,8 +163,7 @@ public class Environment {
 				&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= THERMO_DEAD_TIME) {
 			temperature.malfunction();
 		}
-		final FireFighterState ff =  getFirefighter(ffId);
-		return SEGMENTS[ff.position.segment].temps[ff.position.index];
+		return getTemperature(ffId);
 	}
 
 	/** Environment component id. Not used, but mandatory. */
@@ -232,7 +241,7 @@ public class Environment {
 	}
 
 	@Process
-	@PeriodicScheduling(period=500)
+	@PeriodicScheduling(period=500, order = 1)
 	static public void simulation(
 			@In("id") String id) {
 		final Map<String, FireFighterState> firefighters = getFirefighters();

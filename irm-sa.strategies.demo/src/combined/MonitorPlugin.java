@@ -12,6 +12,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
+import cz.cuni.mff.d3s.deeco.runtime.DuplicateEnsembleDefinitionException;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
@@ -33,7 +34,7 @@ public class MonitorPlugin implements DEECoPlugin {
 
 	/** Trace model. */
 	protected final TraceModel trace;
-	
+
 	Monitor monitor;
 
 	/**
@@ -58,6 +59,7 @@ public class MonitorPlugin implements DEECoPlugin {
 		try {
 			monitor = new Monitor();
 			container.deployComponent(monitor);
+			container.deployEnsemble(MonitorEnsemble.class);
 			// pass necessary data to the EvolutionaryAdaptationManager
 			for (ComponentInstance c : container.getRuntimeMetadata().getComponentInstances()) {
 				if (c.getName().equals(monitor.getClass().getName())) {
@@ -66,11 +68,11 @@ public class MonitorPlugin implements DEECoPlugin {
 					data.put(Monitor.TRACE_MODEL, trace);
 				}
 			}
-		} catch (AnnotationProcessorException e) {
+		} catch (AnnotationProcessorException | DuplicateEnsembleDefinitionException e) {
 			Log.e("Error while trying to deploy Monitor", e);
 		}
 	}
-	
+
 	public void finit(){
 		monitor.writer.close();
 	}
