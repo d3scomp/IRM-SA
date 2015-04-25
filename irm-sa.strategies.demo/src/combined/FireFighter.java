@@ -146,8 +146,8 @@ public class FireFighter {
 		storeInInternalData(LAST_BATTERY_CHECK, value);
 	}
 
-	static protected Deque<Integer> getInaccuracyHistory() {
-		Deque<Integer> val = retrieveFromInternalData(INACCURACY_HISTORY);
+	static protected Deque<Double> getInaccuracyHistory() {
+		Deque<Double> val = retrieveFromInternalData(INACCURACY_HISTORY);
 		if (val == null) {
 			val = new ArrayDeque<>(POSION_STATE_HISTORY);
 			storeInInternalData(INACCURACY_HISTORY, val);
@@ -291,8 +291,8 @@ public class FireFighter {
 		@In("id") String id,
 		@InOut("position") ParamHolder<MetadataWrapper<Position>> position
 	) {
-		final int inacc = Environment.getInaccuracy(id);
-		final Deque<Integer> history = getInaccuracyHistory();
+		final double inacc = Environment.getInaccuracy(id);
+		final Deque<Double> history = getInaccuracyHistory();
 		if (history.size() >= POSION_STATE_HISTORY) {
 			history.removeFirst();
 		}
@@ -323,7 +323,7 @@ public class FireFighter {
 			initialDirection = Direction.UP)
 			int bound) {
 		int bad = 0;
-		for (Integer i : getInaccuracyHistory()) {
+		for (Double i : getInaccuracyHistory()) {
 			if (i > bound) {
 				++bad;
 			}
@@ -340,7 +340,7 @@ public class FireFighter {
 		int posBad = 0;
 		int posOk = 0;
 		int inacc = 0;
-		for (Integer i : getInaccuracyHistory()) {
+		for (Double i : getInaccuracyHistory()) {
 			inacc += i;
 			if (i > bound) {
 				++posBad;

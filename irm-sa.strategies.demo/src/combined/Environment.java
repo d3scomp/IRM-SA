@@ -64,10 +64,10 @@ public class Environment {
 	 * Maximal movement of a firefighter in a tick.
 	 * Also inaccuracy caused by regular firefighter movement.
 	 */
-	static private final double FF_MOVEMENT = 4;
+	static private final double FF_MOVEMENT = 0.1;
 
 	/** Inaccuracy in case of GPS malfunction. */
-	static private final double BROKEN_GSP_INACURRACY = 9;
+	static private final double BROKEN_GSP_INACURRACY = 9 / 4.0 * 0.1;
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(24);
@@ -132,7 +132,7 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return inaccuracy of given firefighter
 	 */
-	static public int getInaccuracy(final String ffId) {
+	static public double getInaccuracy(final String ffId) {
 		return getFirefighter(ffId).inaccuracy;
 	}
 
@@ -252,7 +252,7 @@ public class Environment {
 		for (final String ffId : firefighters.keySet()) {
 			final FireFighterState ff = getFirefighter(ffId);
 
-			final int bonus = ffId.equals(FF_FOLLOWER_ID) ? 2 : 0;
+			final double bonus = ffId.equals(FF_FOLLOWER_ID) ? 0.02 : 0;
 			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus);
 			System.out.println("+++" + ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
@@ -406,7 +406,7 @@ public class Environment {
 		protected Position position = INITIAL_POSITION.clone();
 
 		/** Firefighter's position inaccuracy. */
-		protected int inaccuracy = INITIAL_INACCURACY;
+		protected double inaccuracy = INITIAL_INACCURACY;
 
 		/** Firefighter's battery level. */
 		protected int batteryLevel = INITIAL_BATTERY_LEVEL;
