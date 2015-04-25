@@ -104,6 +104,10 @@ public class Environment {
 		return ff;
 	}
 
+	static Position getPositionInternal(final String ffId) {
+		return getFirefighter(ffId).position;
+	}
+
 	/**
 	 * Returns position of given firefighter or NaN with insufficient energy.
 	 * Drains energy from the battery! If not enough energy left,

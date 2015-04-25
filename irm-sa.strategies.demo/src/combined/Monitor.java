@@ -40,8 +40,11 @@ public class Monitor {
 	/** Mandatory field. */
 	public String id;
 
-	/** FF1 Environment temperature. */
+	/** FF1 Environment temperature from the perspective of FF1. */
 	public MetadataWrapper<Integer> thoughtTemperature;
+
+	/** FF1 position from the perspective of FF1. */
+	public MetadataWrapper<Position> thoughtPosition;
 
 	public static final PrintWriter writer;
 
@@ -64,7 +67,8 @@ public class Monitor {
 	@PeriodicScheduling(period = MONITORING_PERIOD, order = 20)
 	static public void monitorSelectedInvariantFitness(
 			@In("id") String id,
-			@In("thoughtTemperature") MetadataWrapper<Integer> thoughtTemperature) {
+			@In("thoughtTemperature") MetadataWrapper<Integer> thoughtTemperature,
+			@In("thoughtPosition") MetadataWrapper<Position> thoughtPosition) {
 		final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 
 		// get architecture, design, trace models and plug-ins from the process context
@@ -121,11 +125,30 @@ public class Monitor {
 			builder.append(" ");
 		}
 
+		final int temperatureReal = Environment.getTemperature(Environment.FF_LEADER_ID);
+		System.out.println("FF1 real temperature: " + temperatureReal);
+		builder.append(String.format(Locale.ENGLISH, "%d ", temperatureReal));
+
 		if (thoughtTemperature != null && thoughtTemperature.getValue() != null) {
-			final int realTemperature = Environment.getTemperature(Environment.FF_LEADER_ID);
-			final double temperatureQuality = 1 - 1.0 * Math.abs(realTemperature - thoughtTemperature.getValue()) / realTemperature;
+			final int temperatureBelief = thoughtTemperature.getValue();
+			System.out.println("FF1 temperature belief: " + temperatureBelief);
+			builder.append(String.format(Locale.ENGLISH, "%d ", temperatureBelief));
+
+			final double temperatureQuality = 1 - 1.0 * Math.abs(temperatureReal - thoughtTemperature.getValue()) / temperatureReal;
 			System.out.println("FF1 temperature quality: " + temperatureQuality);
 			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureQuality));
+		} else {
+			builder.append("  ");
+		}
+
+		final Position positionReal = Environment.getPositionInternal(Environment.FF_LEADER_ID);
+		System.out.println("FF1 real position: " + positionReal);
+		builder.append(String.format(Locale.ENGLISH, "%s ", positionReal));
+
+		if (thoughtPosition != null && thoughtPosition.getValue() != null) {
+			final Position positionBelief = thoughtPosition.getValue();
+			System.out.println("FF1 position belief: " + positionBelief);
+			builder.append(String.format(Locale.ENGLISH, "%s ", positionBelief));
 		} else {
 			builder.append(" ");
 		}*/
