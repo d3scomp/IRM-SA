@@ -77,8 +77,6 @@ public class HeatMap {
 		/*32*/ new Segment(new int[] {31}, new int[0], 18, 9, 12, 9)
 	};
 
-	static final double TEMP = temperature(new Position(1, 1.75));
-
 	static final Map<Position, Vertex<Position, Integer>> GRAPH;
 
 	static {
