@@ -77,6 +77,8 @@ public class HeatMap {
 		/*32*/ new Segment(new int[] {31}, new int[0], 18, 9, 12, 9)
 	};
 
+	static final double TEMP = temperature(new Position(1, 1.75));
+
 	static final Map<Position, Vertex<Position, Integer>> GRAPH;
 
 	static {
@@ -207,6 +209,23 @@ public class HeatMap {
 //		}
 	}
 
+	public static double temperature(final Position position) {
+//		try {
+			final int index1 = (int) position.index;
+			double f = position.index - index1;
+			final int index2 = (int) Math.ceil(position.index);
+			final int temperature1 =  SEGMENTS[position.segment].temps[index1];
+			final int temperature2 =  SEGMENTS[position.segment].temps[index2];
+			if (temperature1 < temperature2) {
+				return temperature1 + f * (temperature2 - temperature1);
+			} else {
+				return temperature2 + (1 - f) * (temperature1 - temperature2);
+			}
+//		} catch (Exception e) {
+//			return 0.0;
+//		}
+	}
+
 	/**
 	 * Class representing corridor in which FF move.
 	 */
@@ -296,7 +315,7 @@ public class HeatMap {
 			}
 		}
 
-		public Point toPoint(final int index) {
+		public Point toPoint(final double index) {
 			switch (orientation) {
 				case N:
 					return new Point(x1, y1 - index);
@@ -313,10 +332,10 @@ public class HeatMap {
 	}
 
 	public static class Point {
-		public final int x;
-		public final int y;
+		public final double x;
+		public final double y;
 
-		public Point(final int x, final int y) {
+		public Point(final double x, final double y) {
 			this.x = x;
 			this.y = y;
 		}
