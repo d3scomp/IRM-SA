@@ -183,7 +183,7 @@ public class FireFighter {
 	public MetadataWrapper<Position> position;
 
 	/** Environment temperature. */
-	public MetadataWrapper<Integer> temperature;
+	public MetadataWrapper<Double> temperature;
 
 	/**
 	 * Only constructor.
@@ -193,7 +193,7 @@ public class FireFighter {
 		this.id = id;
 		batteryLevel = new MetadataWrapper<Integer>(Environment.INITIAL_BATTERY_LEVEL);
 		position = new MetadataWrapper<Position>(Environment.INITIAL_POSITION);
-		temperature = new MetadataWrapper<Integer>(Environment.INITIAL_TEMPERATURE);
+		temperature = new MetadataWrapper<Double>(Environment.INITIAL_TEMPERATURE);
 	}
 
 	/**
@@ -366,7 +366,7 @@ public class FireFighter {
 	@PeriodicScheduling(period=1000, order = 2)
 	public static void determineTemperature(
 		@In("id") String id,
-		@InOut("temperature") ParamHolder<MetadataWrapper<Integer>> temperature
+		@InOut("temperature") ParamHolder<MetadataWrapper<Double>> temperature
 	) {
 		if (temperature.value.isOperational()) {
 			temperature.value.setValue(Environment.getTemperature(id, temperature.value), currentTime());
@@ -377,14 +377,14 @@ public class FireFighter {
 
 	@InvariantMonitor("P03")
 	public static boolean determineTemperatureSatisfaction(
-			@In("temperature") MetadataWrapper<Integer> temperature) {
+			@In("temperature") MetadataWrapper<Double> temperature) {
 		return currentTime() - temperature.getTimestamp() < TOO_OLD;
 	}
 
 	@InvariantMonitor("P03")
 	public static double determineTemperatureFitness(
 			@In("id") String id,
-			@In("temperature") MetadataWrapper<Integer> temperature) {
+			@In("temperature") MetadataWrapper<Double> temperature) {
 		long heldTemperatureTime = temperature.getTimestamp();
 		long currentTime = currentTime();
 		long delta = currentTime - heldTemperatureTime;

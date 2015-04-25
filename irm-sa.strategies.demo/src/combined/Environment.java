@@ -34,7 +34,7 @@ public class Environment {
 	static public final Integer INITIAL_BATTERY_LEVEL = 1600;
 
 	/** Firefighters' initial temperature. */
-	static public final Integer INITIAL_TEMPERATURE = SEGMENTS[INITIAL_POSITION.segment].temps[INITIAL_POSITION.index];
+	static public final Double INITIAL_TEMPERATURE = HeatMap.temperature(INITIAL_POSITION);
 
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
@@ -64,10 +64,10 @@ public class Environment {
 	 * Maximal movement of a firefighter in a tick.
 	 * Also inaccuracy caused by regular firefighter movement.
 	 */
-	static private final int FF_MOVEMENT = 4;
+	static private final double FF_MOVEMENT = 4;
 
 	/** Inaccuracy in case of GPS malfunction. */
-	static private final int BROKEN_GSP_INACURRACY = 9;
+	static private final double BROKEN_GSP_INACURRACY = 9;
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(24);
@@ -150,9 +150,9 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return firefighter environment temperature
 	 */
-	static public int getTemperature(final String ffId) {
+	static public double getTemperature(final String ffId) {
 		final FireFighterState ff =  getFirefighter(ffId);
-		return SEGMENTS[ff.position.segment].temps[ff.position.index];
+		return HeatMap.temperature(ff.position);
 	}
 
 	/**
@@ -161,8 +161,8 @@ public class Environment {
 	 * @param temperature needed for making it non-operational
 	 * @return battery level of given firefighter
 	 */
-	static public int getTemperature(final String ffId,
-			final MetadataWrapper<Integer> temperature) {
+	static public double getTemperature(final String ffId,
+			final MetadataWrapper<Double> temperature) {
 		if (ffId.equals(FF_LEADER_ID)
 				&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= THERMO_DEAD_TIME) {
 			temperature.malfunction();
@@ -253,7 +253,7 @@ public class Environment {
 			final FireFighterState ff = getFirefighter(ffId);
 
 			final int bonus = ffId.equals(FF_FOLLOWER_ID) ? 2 : 0;
-			int steps = RANDOM.nextInt(FF_MOVEMENT + 1 + bonus);
+			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus);
 			System.out.println("+++" + ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
 			int prevSeg = -1; //previously occupied segment
@@ -291,7 +291,7 @@ public class Environment {
 					if (ff.direction > 0) { //going up
 						ff.position.index += steps;
 						steps = 0;
-						if (ff.position.index >= currSeg.temps.length) { //end hit?
+						if (ff.position.index > currSeg.temps.length - 1) { //end hit?
 							//correct our position and steps left
 							steps = ff.position.index - currSeg.temps.length + 1;
 							ff.position.index = currSeg.temps.length - 1;
@@ -374,7 +374,7 @@ public class Environment {
 			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
 			System.out.println(ffId + " position = " + ff.position);
-			System.out.println(ffId + " temperature = " + SEGMENTS[ff.position.segment].temps[ff.position.index]);
+			System.out.println(ffId + " temperature = " + HeatMap.temperature(ff.position));
 
 			if (ffId.equals(FF_LEADER_ID)) {
 				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();

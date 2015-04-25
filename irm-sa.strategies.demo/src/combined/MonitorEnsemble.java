@@ -20,18 +20,18 @@ public class MonitorEnsemble {
 	@Membership
 	public static boolean membership(
 		@In("member.id") String id,
-		@In("member.temperature") MetadataWrapper<Integer> memberTemperature, //only firefighters
+		@In("member.temperature") MetadataWrapper<Double> memberTemperature, //only firefighters
 		@In("member.position") MetadataWrapper<Position> memberPosition, //only firefighters
-		@In("coord.thoughtTemperature") MetadataWrapper<Integer> thoughtTemperature) { //only monitor
+		@In("coord.thoughtTemperature") MetadataWrapper<Double> thoughtTemperature) { //only monitor
 		return id.equals(Environment.FF_LEADER_ID);
 	}
 
 	@KnowledgeExchange
 	public static void map(
 			@In("member.id") String id,
-			@Out("coord.thoughtTemperature") ParamHolder<MetadataWrapper<Integer>> thoughtTemperature,
+			@Out("coord.thoughtTemperature") ParamHolder<MetadataWrapper<Double>> thoughtTemperature,
 			@Out("coord.thoughtPosition") ParamHolder<MetadataWrapper<Position>> thoughtPosition,
-			@In("member.temperature") MetadataWrapper<Integer> temperature,
+			@In("member.temperature") MetadataWrapper<Double> temperature,
 			@In("member.position") MetadataWrapper<Position> position) throws KnowledgeNotFoundException {
 		thoughtTemperature.value = temperature;
 		thoughtPosition.value = position;

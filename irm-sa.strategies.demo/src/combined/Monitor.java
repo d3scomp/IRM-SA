@@ -41,7 +41,7 @@ public class Monitor {
 	public String id;
 
 	/** FF1 Environment temperature from the perspective of FF1. */
-	public MetadataWrapper<Integer> thoughtTemperature;
+	public MetadataWrapper<Double> thoughtTemperature;
 
 	/** FF1 position from the perspective of FF1. */
 	public MetadataWrapper<Position> thoughtPosition;
@@ -67,7 +67,7 @@ public class Monitor {
 	@PeriodicScheduling(period = MONITORING_PERIOD, order = 20)
 	static public void monitorSelectedInvariantFitness(
 			@In("id") String id,
-			@In("thoughtTemperature") MetadataWrapper<Integer> thoughtTemperature,
+			@In("thoughtTemperature") MetadataWrapper<Double> thoughtTemperature,
 			@In("thoughtPosition") MetadataWrapper<Position> thoughtPosition) {
 		final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 
@@ -125,14 +125,14 @@ public class Monitor {
 			builder.append(" ");
 		}
 
-		final int temperatureReal = Environment.getTemperature(Environment.FF_LEADER_ID);
+		final double temperatureReal = Environment.getTemperature(Environment.FF_LEADER_ID);
 		System.out.println("FF1 real temperature: " + temperatureReal);
-		builder.append(String.format(Locale.ENGLISH, "%d ", temperatureReal));
+		builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureReal));
 
 		if (thoughtTemperature != null && thoughtTemperature.getValue() != null) {
-			final int temperatureBelief = thoughtTemperature.getValue();
+			final double temperatureBelief = thoughtTemperature.getValue();
 			System.out.println("FF1 temperature belief: " + temperatureBelief);
-			builder.append(String.format(Locale.ENGLISH, "%d ", temperatureBelief));
+			builder.append(String.format(Locale.ENGLISH, "%.3f ", temperatureBelief));
 
 			final double temperatureQuality = 1 - 1.0 * Math.abs(temperatureReal - thoughtTemperature.getValue()) / temperatureReal;
 			System.out.println("FF1 temperature quality: " + temperatureQuality);

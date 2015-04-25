@@ -13,12 +13,12 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 	public int segment;
 
 	/** Position inside segment. */
-	public int index;
+	public double index;
 
 	/**
 	 * Only constructor.
 	 */
-	public Position(final int segment, final int index) {
+	public Position(final int segment, final double index) {
 		this.name = "PositionKnowledge";
 		this.type = "PositionKnowledgeType";
 		this.segment = segment;
@@ -29,7 +29,7 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + index;
+		result = prime * result + Double.hashCode(index);
 		result = prime * result + segment;
 		return result;
 	}
