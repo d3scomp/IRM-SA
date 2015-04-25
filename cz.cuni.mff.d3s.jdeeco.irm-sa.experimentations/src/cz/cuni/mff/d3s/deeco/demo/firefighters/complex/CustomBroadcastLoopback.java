@@ -1,8 +1,8 @@
 package cz.cuni.mff.d3s.deeco.demo.firefighters.complex;
 
-import cz.cuni.mff.d3s.jdeeco.network.device.BroadcastLoopback;
+import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 
-public class CustomBroadcastLoopback extends BroadcastLoopback {
+public class CustomBroadcastLoopback extends SimpleBroadcastDevice {
 
 	public CustomBroadcastLoopback() {
 		super();

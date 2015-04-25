@@ -12,7 +12,6 @@ import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
-import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
 	public class MultiNodeSimulationOneTeam {
@@ -23,7 +22,6 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 			/* add network plugins */
 			simulation.addPlugin(new CustomBroadcastLoopback());
-			simulation.addPlugin(new PositionAware(0, 0));
 			simulation.addPlugin(Network.class);
 			simulation.addPlugin(DefaultKnowledgePublisher.class);
 			simulation.addPlugin(KnowledgeInsertingStrategy.class);
