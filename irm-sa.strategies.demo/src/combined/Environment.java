@@ -123,7 +123,7 @@ public class Environment {
 			return BAD_POSITION;
 		} else {
 			ff.inaccuracy = 0;
-			return ff.position;
+			return ff.position.clone();
 		}
 	}
 
