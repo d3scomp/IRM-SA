@@ -66,6 +66,7 @@ public class Environment {
 	 */
 	static private final double FF_MOVEMENT = 0.033;
 	static private final double FF_BONUS = 0.1 * FF_MOVEMENT;
+	static public final double FF_POS_INAC_BOUND = 5 * FF_MOVEMENT;
 
 	/** Inaccuracy in case of GPS malfunction. */
 	static private final double BROKEN_GSP_INACURRACY = 9 / 4.0 * 0.1;

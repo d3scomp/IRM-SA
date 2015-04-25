@@ -318,7 +318,8 @@ public class FireFighter {
 
 	@InvariantMonitor("A02")
 	public static boolean positionAccuracySatisfaction(
-			@AssumptionParameter(name = "bound", defaultValue = 20,
+			@AssumptionParameter(name = "bound",
+			defaultValue = Environment.FF_POS_INAC_BOUND,
 			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
 			int bound) {
@@ -333,7 +334,8 @@ public class FireFighter {
 
 	@InvariantMonitor("A02")
 	public static double positionAccuracyFitness(
-			@AssumptionParameter(name = "bound", defaultValue = 20,
+			@AssumptionParameter(name = "bound",
+			defaultValue = Environment.FF_POS_INAC_BOUND,
 			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
 			int bound) {
