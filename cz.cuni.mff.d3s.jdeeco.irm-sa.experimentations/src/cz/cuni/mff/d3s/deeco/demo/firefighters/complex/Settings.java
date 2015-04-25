@@ -14,18 +14,21 @@ public class Settings {
 //	public static final long BASE_INACCURACY = 1000;
 //	public static final long INACCURACY_INTERVAL = 1000;
 	
-	public static final int PROCESS_PERIOD = 1000; // in milliseconds
-	public static final int ENSEMBLE_PERIOD = 1000; 
-	public static final int ADAPTATION_PERIOD = 1000;
-	public static final int BROADCAST_PERIOD = 400;
+	public static final int PROCESS_PERIOD = 500; // in milliseconds
+	public static final int ENSEMBLE_PERIOD = 500; 
+	public static final int ADAPTATION_PERIOD = 500;
+	public static int BROADCAST_PERIOD = 400;
 	
 	public static int NETWORK_DELAY = 100; // in milliseconds
-	public static final long BASE_INACCURACY = 1000;
-	public static final long INACCURACY_INTERVAL = 1000;
+	public static long INACCURACY = 1000;
+	public static final long LEADER_AV_SWITCH_OFF_TIME = 3000;
 	
 	public static final String MODELS_BASE_PATH = "designModels" + File.separator;
 	public static final String XMIFILE_PREFIX = "firefighters_complex";
 	public static final String DESIGN_MODEL_PATH = MODELS_BASE_PATH + "firefighters_complex.irmdesign";
 
-	public static final int SIMULATION_DURATION = 60000; // in milliseconds
+	public static final int SIMULATION_DURATION = 40000; // in milliseconds
+	
+	public static final long inDangerTimes = 6000;
+	public static final int [] inDangerFFSuffix = {1,5,8};
 }

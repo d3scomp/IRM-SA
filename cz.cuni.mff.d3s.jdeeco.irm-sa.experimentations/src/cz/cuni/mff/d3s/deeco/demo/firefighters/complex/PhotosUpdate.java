@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("ex5")
-@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
+@PeriodicScheduling(period=10000, order=12)
 public class PhotosUpdate {
 
 	@Membership
@@ -28,6 +28,6 @@ public class PhotosUpdate {
 		@Out("coord.photos") ParamHolder<Map<String,Photo>> photos,  
 		@Out("coord.thermalPhotos") ParamHolder<Map<String,ThermalPhoto> > thermalPhotos 
 	) {
-		System.out.println("PhotosUpdate!");
+		//System.out.println("PhotosUpdate!");
 	}	
 }

@@ -25,16 +25,16 @@ import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 			/* create main application container */
 			DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
 			simulation.addPlugin(new IRMPlugin(design).withPeriod(Settings.ADAPTATION_PERIOD)
-					.withLog(true)
+					.withLog(false)
 					.withLogDir(Settings.MODELS_BASE_PATH)
 					.withLogPrefix(Settings.XMIFILE_PREFIX));
 			/* deploy components and ensembles */
 			DEECoNode deecoNode = simulation.createNode(1);
 			ClockProvider.init(simulationTimer);
-			deecoNode.deployComponent(new Officer("OF1"));
-			deecoNode.deployComponent(new Firefighter("FF1", "OF1"));
-			deecoNode.deployComponent(new Firefighter("FF2", "OF1"));
-			deecoNode.deployComponent(new Firefighter("FF3", "OF1"));
+			deecoNode.deployComponent(new Officer(1, "OF1"));
+			deecoNode.deployComponent(new Firefighter(1, "FF1", "OF1"));
+			deecoNode.deployComponent(new Firefighter(1, "FF2", "OF1"));
+			deecoNode.deployComponent(new Firefighter(1, "FF3", "OF1"));
 			deecoNode.deployComponent(new SiteLeader());
 			deecoNode.deployComponent(new UnmannedAerialVehicle("UAV1"));
 			deecoNode.deployEnsemble(GMsInDangerUpdate.class);

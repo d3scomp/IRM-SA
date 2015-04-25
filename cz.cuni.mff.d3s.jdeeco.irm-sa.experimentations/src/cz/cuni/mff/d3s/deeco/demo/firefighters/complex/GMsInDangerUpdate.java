@@ -5,7 +5,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("7")
-@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
+@PeriodicScheduling(period=3000, order=10)
 public class GMsInDangerUpdate {
 
 	@Membership
@@ -21,7 +21,7 @@ public class GMsInDangerUpdate {
 		@Out("member.nearbyGMInDanger") ParamHolder<Boolean> nearbyGMInDanger,  
 		@In("coord.noOfGMsInDanger") Integer noOfGMsInDanger 
 	) {
-		System.out.println("GMInDangerUpdate!");
+		//System.out.println("GMInDangerUpdate!");
 		nearbyGMInDanger.value = noOfGMsInDanger > 0;
 	}	
 }

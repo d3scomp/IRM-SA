@@ -7,7 +7,7 @@ import cz.cuni.mff.d3s.deeco.task.ParamHolder;
 
 @Ensemble
 @Invariant("ex6")
-@PeriodicScheduling(period=Settings.ENSEMBLE_PERIOD)
+@PeriodicScheduling(period=8000, order=9)
 public class FFsInDangerUpdate {
 
 	@Membership
@@ -26,6 +26,6 @@ public class FFsInDangerUpdate {
 		@In("member.GL_ID") String GL_ID,  
 		@Out("coord.noOfFFInDanger") ParamHolder<Map<Integer,Integer>> noOfFFInDanger 
 	) {
-		System.out.println("FFsInDangerUpdate!");
+		//System.out.println("FFsInDangerUpdate!");
 	}	
 }

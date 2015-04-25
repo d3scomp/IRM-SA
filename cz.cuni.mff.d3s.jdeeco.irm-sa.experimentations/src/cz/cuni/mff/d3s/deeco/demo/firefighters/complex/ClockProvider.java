@@ -6,9 +6,7 @@ public class ClockProvider {
 	private static ClockProvider instance;
 	
 	public static void init(CurrentTimeProvider timeProvider) {
-		if (instance == null) {
-			instance = new ClockProvider(timeProvider);
-		}
+		instance = new ClockProvider(timeProvider);
 	}
 	
 	public static CurrentTimeProvider getClock() {

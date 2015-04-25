@@ -15,7 +15,7 @@ import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.position.PositionAware;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 
-	public class MultiNodeSimulation {
+	public class MultiNodeSimulationOneTeam {
 
 		public static void main(String[] args) throws AnnotationProcessorException, InterruptedException, DEECoException, InstantiationException, IllegalAccessException {
 			SimulationTimer simulationTimer = new DiscreteEventTimer();
@@ -61,68 +61,12 @@ import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
 			deecoNode3.deployEnsemble(PhotosUpdate.class);
 			deecoNode3.deployEnsemble(SensorDataUpdate.class);
 			
-			DEECoNode deecoNode4 = simulation.createNode(4);
-			deecoNode4.deployComponent(new Firefighter(4, "FF4", "OF2"));
-			deecoNode4.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode4.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode4.deployEnsemble(PhotosUpdate.class);
-			deecoNode4.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode5 = simulation.createNode(5);
-			deecoNode5.deployComponent(new Firefighter(5, "FF5", "OF2"));
-			deecoNode5.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode5.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode5.deployEnsemble(PhotosUpdate.class);
-			deecoNode5.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode6 = simulation.createNode(6);
-			deecoNode6.deployComponent(new Firefighter(6, "FF6", "OF2"));
-			deecoNode6.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode6.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode6.deployEnsemble(PhotosUpdate.class);
-			deecoNode6.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode7 = simulation.createNode(7);
-			deecoNode7.deployComponent(new Firefighter(7, "FF7", "OF3"));
-			deecoNode7.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode7.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode7.deployEnsemble(PhotosUpdate.class);
-			deecoNode7.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode8 = simulation.createNode(8);
-			deecoNode8.deployComponent(new Firefighter(8, "FF8", "OF3"));
-			deecoNode8.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode8.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode8.deployEnsemble(PhotosUpdate.class);
-			deecoNode8.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode9 = simulation.createNode(9);
-			deecoNode9.deployComponent(new Firefighter(9, "FF9", "OF3"));
-			deecoNode9.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode9.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode9.deployEnsemble(PhotosUpdate.class);
-			deecoNode9.deployEnsemble(SensorDataUpdate.class);
-			
 			DEECoNode deecoNode10 = simulation.createNode(10);
 			deecoNode10.deployComponent(new Officer(10, "OF1"));
 			deecoNode10.deployEnsemble(GMsInDangerUpdate.class);
 			deecoNode10.deployEnsemble(FFsInDangerUpdate.class);
 			deecoNode10.deployEnsemble(PhotosUpdate.class);
 			deecoNode10.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode11 = simulation.createNode(11);
-			deecoNode11.deployComponent(new Officer(11, "OF2"));
-			deecoNode11.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode11.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode11.deployEnsemble(PhotosUpdate.class);
-			deecoNode11.deployEnsemble(SensorDataUpdate.class);
-			
-			DEECoNode deecoNode12 = simulation.createNode(12);
-			deecoNode12.deployComponent(new Officer(12, "OF3"));
-			deecoNode12.deployEnsemble(GMsInDangerUpdate.class);
-			deecoNode12.deployEnsemble(FFsInDangerUpdate.class);
-			deecoNode12.deployEnsemble(PhotosUpdate.class);
-			deecoNode12.deployEnsemble(SensorDataUpdate.class);
 			
 			DEECoNode deecoNode13 = simulation.createNode(13);
 			deecoNode13.deployComponent(new SiteLeader());
