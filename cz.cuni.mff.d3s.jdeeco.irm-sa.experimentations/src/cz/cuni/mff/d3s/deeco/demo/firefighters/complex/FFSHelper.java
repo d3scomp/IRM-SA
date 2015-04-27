@@ -126,7 +126,7 @@ public class FFSHelper {
 		String result = "";
 		long reaction;
 		for (Team team: teams.values()) {
-			reaction = team.rescueTime - team.officerTime;
+			reaction = team.rescueTime - team.situationTime;
 			result += team.team  +  " - danger at: " + team.situationTime + " officer time: " + team.officerTime + " rescue time at: " + team.rescueTime +  ", rescue after ("+ ((team.becauseOfInaccuracy)? "i":"ni") +"): " + reaction;
 			writeToFile(Long.toString(reaction));
 		}
