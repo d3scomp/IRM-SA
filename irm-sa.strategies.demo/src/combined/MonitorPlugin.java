@@ -74,6 +74,6 @@ public class MonitorPlugin implements DEECoPlugin {
 	}
 
 	public void finit(){
-		monitor.writer.close();
+		Monitor.writer.close();
 	}
 }

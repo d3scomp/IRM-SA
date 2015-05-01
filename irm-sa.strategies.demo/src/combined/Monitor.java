@@ -152,25 +152,25 @@ public class Monitor {
 		} else {
 			builder.append(" ");
 		}
-		
+
 
 		final double positionQuality = 1 - Environment.getInaccuracy(Environment.FF_LEADER_ID) / 30.0;
 		System.out.println("FF1 position quality: " + positionQuality);
 		builder.append(String.format(Locale.ENGLISH, "%.3f\n", positionQuality));*/
 
 		// actual temperature
-		builder.append(Environment.getTemperature(Environment.FF_LEADER_ID)).append(" ");
-		
+		builder.append(Environment.getRealTemperature(Environment.FF_LEADER_ID)).append(" ");
+
 		// belief temperature
 		builder.append(thoughtTemperature.getValue()).append(" ");
-		
+
 		// actual position
-		builder.append(Environment.getFirefighter(Environment.FF_LEADER_ID).position).append(" ");
-		
+		builder.append(Environment.getRealPosition(Environment.FF_LEADER_ID)).append(" ");
+
 		// belief position
 		builder.append(thoughtPosition.getValue()).append("\n");
-		
-		
+
+
 		writer.write(builder.toString());
 	}
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import combined.HeatMap.Segment;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
@@ -61,18 +63,50 @@ public class Environment {
 	static final String LONELY_FF_ID = "FF3";
 
 	/**
-	 * Maximal movement of a firefighter in a tick.
+	 * Average movement of a firefighter in a ms.
 	 * Also inaccuracy caused by regular firefighter movement.
 	 */
-	static private final double FF_MOVEMENT = 0.033;
-	static private final double FF_BONUS = 0.1 * FF_MOVEMENT;
-	static public final double FF_POS_INAC_BOUND = 5 * FF_MOVEMENT;
+	static public final double FF_MOVEMENT = 0.004;
+
+	/** Bonus speed for follower firefighter to keep the group together. */
+	static private final double FF_BONUS = 0.25 * FF_MOVEMENT;
 
 	/** Inaccuracy in case of GPS malfunction. */
-	static private final double BROKEN_GSP_INACURRACY = 9 / 4.0 * 0.1;
+	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25;
+
+	/** Simulation tick in ms. */
+	static public final long SIMULATION_PERIOD = 50;
+
+	/** HeatMap square size in meters. */
+	static public final double CORRIDOR_SIZE = 2.0;
+
+	/** Initial period for determine position. */
+	static public final long INITIAL_POSITION_PERIOD = 1250;
+
+	/** Initial value of inaccuracy assumption parameter. */
+	static public final double FF_POS_INAC_BOUND =
+			INITIAL_POSITION_PERIOD / SIMULATION_PERIOD * BROKEN_GSP_INACURRACY * SIMULATION_PERIOD * 0.95;
+
+	/** Maximal value of inaccuracy assumption parameter. */
+	static public final double FF_POS_INAC_BOUND_MAX = FF_POS_INAC_BOUND * 1.25;
+
+	/** Minimal value of inaccuracy assumption parameter. */
+	static public final double FF_POS_INAC_BOUND_MIN = FF_POS_INAC_BOUND * 0.75;
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(24);
+
+	/** Filter for position. */
+	static private UnaryOperator<Position> positionFilter = UnaryOperator.identity(); //TODO noise filter
+
+	/** Filter for battery level. */
+	static private UnaryOperator<Integer> batteryFilter = UnaryOperator.identity(); //TODO noise filter
+
+	/** Filter for temperature. */
+	static private UnaryOperator<Double> temperatureFilter = UnaryOperator.identity(); //TODO noise filter
+
+	/** Filter for position if gps is broken. */
+	static private Function<Position, Position> brokenGPSFilter = UnaryOperator.<Position>identity().compose(positionFilter); //TODO inaccuracy filter
 
 	/////////////////////
 	//ENVIRONMENT STATE//
@@ -106,7 +140,7 @@ public class Environment {
 		return ff;
 	}
 
-	static Position getPositionInternal(final String ffId) {
+	static Position getRealPosition(final String ffId) {
 		return getFirefighter(ffId).position;
 	}
 
@@ -125,7 +159,12 @@ public class Environment {
 			return BAD_POSITION;
 		} else {
 			ff.inaccuracy = 0;
-			return ff.position.clone();
+			if (ffId.equals(FF_LEADER_ID)
+					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
+				return brokenGPSFilter.apply(ff.position.clone());
+			} else {
+				return positionFilter.apply(ff.position.clone());
+			}
 		}
 	}
 
@@ -143,8 +182,17 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return battery level of given firefighter
 	 */
-	static public int getBatteryLevel(final String ffId) {
+	static public int getRealBatteryLevel(final String ffId) {
 		return getFirefighter(ffId).batteryLevel;
+	}
+
+	/**
+	 * Returns battery level of given firefighter.
+	 * @param ffId firefighter id
+	 * @return battery level of given firefighter
+	 */
+	static public int getBatteryLevel(final String ffId) {
+		return batteryFilter.apply(getFirefighter(ffId).batteryLevel);
 	}
 
 	/**
@@ -152,7 +200,7 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return firefighter environment temperature
 	 */
-	static public double getTemperature(final String ffId) {
+	static public double getRealTemperature(final String ffId) {
 		final FireFighterState ff =  getFirefighter(ffId);
 		return HeatMap.temperature(ff.position);
 	}
@@ -169,15 +217,11 @@ public class Environment {
 				&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= THERMO_DEAD_TIME) {
 			temperature.malfunction();
 		}
-		return getTemperature(ffId);
+		return temperatureFilter.apply(getRealTemperature(ffId));
 	}
 
 	/** Environment component id. Not used, but mandatory. */
 	public String id;
-
-	static class PathSoFar {
-
-	}
 
 	/**
 	 * Returns index of segment to go on shortest path.
@@ -247,7 +291,7 @@ public class Environment {
 	}
 
 	@Process
-	@PeriodicScheduling(period=50, order = 1)
+	@PeriodicScheduling(period=SIMULATION_PERIOD, order = 1)
 	static public void simulation(
 			@In("id") String id) {
 		final Map<String, FireFighterState> firefighters = getFirefighters();
@@ -255,7 +299,7 @@ public class Environment {
 			final FireFighterState ff = getFirefighter(ffId);
 
 			final double bonus = ffId.equals(FF_FOLLOWER_ID) ? FF_BONUS : 0;
-			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus);
+			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus) * SIMULATION_PERIOD;
 			System.out.println("+++" + ffId + " STEPS: " + steps);
 			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
 			int prevSeg = -1; //previously occupied segment
@@ -381,9 +425,9 @@ public class Environment {
 			if (ffId.equals(FF_LEADER_ID)) {
 				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
 				if (time >= GPS_BREAK_TIME) {
-					ff.inaccuracy += BROKEN_GSP_INACURRACY;
+					ff.inaccuracy += BROKEN_GSP_INACURRACY * SIMULATION_PERIOD;
 				} else {
-					ff.inaccuracy += FF_MOVEMENT;
+					ff.inaccuracy += FF_MOVEMENT * SIMULATION_PERIOD;
 				}
 			} else {
 				ff.inaccuracy += FF_MOVEMENT;

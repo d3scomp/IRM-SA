@@ -58,7 +58,7 @@ public class Run {
 
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 300_000;
-	
+
 	static final boolean enableMetaAdaptation = true;
 
 	/**
@@ -110,7 +110,7 @@ public class Run {
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl())
 						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(250))
 						.withConsiderAssumptions(true)
-						.withAdaptationBound(0.9)
+						.withAdaptationBound(0.8)
 						.withMaximumTries(5);
 
 		// create AssumptionParameterAdaptationPlugin
@@ -120,6 +120,7 @@ public class Run {
 						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.AdapteeSelectorFitness())
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DirectionSelectorImpl())
 						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed(5))
+						.withAdaptationBound(0.4)
 						.withMaximumTries(5);
 
 		// create correlation plugin
@@ -134,7 +135,7 @@ public class Run {
 			deeco3 = simulation.createNode(3,
 					irmPlugin, metaAdaptationPlugin,
 					periodAdaptionPlugin,
-//					assumptionParameterAdaptionPlugin,
+					assumptionParameterAdaptionPlugin,
 					correlationPlugin,
 					monitorPlugin);
 			nodesInSimulation.add(deeco3);

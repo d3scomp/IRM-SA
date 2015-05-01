@@ -164,13 +164,13 @@ public class FireFighter {
 		return val == null ? -1L : val;
 	}
 
-	static protected void setLastInaccuracyBound(final int value) {
+	static protected void setLastInaccuracyBound(final double value) {
 		storeInInternalData(LAST_INACCURACY_BOUND, value);
 	}
 
-	static protected int getLastInaccuracyBound() {
-		final Integer val = retrieveFromInternalData(LAST_INACCURACY_BOUND);
-		return val == null ? 0 : val;
+	static protected double getLastInaccuracyBound() {
+		final Double val = retrieveFromInternalData(LAST_INACCURACY_BOUND);
+		return val == null ? 0.0 : val;
 	}
 
 	/** Mandatory id field. */
@@ -284,9 +284,21 @@ public class FireFighter {
 		return fitness;
 	}
 
+	private static void resetPositionStateIfNeeded(final double inaccBound) {
+		final long currentPeriod = getCurrentProcessPeriod("determinePosition");
+		final long previousPeriod = getLastPositionPeriod();
+		final double previousBound = getLastInaccuracyBound();
+		if (currentPeriod != previousPeriod || inaccBound != previousBound) {
+			//reset state if adaptation happened
+			getInaccuracyHistory().clear();
+			setLastPositionPeriod(currentPeriod);
+			setLastInaccuracyBound(inaccBound);
+		}
+	}
+
 	@Process
 	@Invariant("P02")
-	@PeriodicScheduling(period=1250)
+	@PeriodicScheduling(period = Environment.INITIAL_POSITION_PERIOD)
 	public static void determinePosition(
 		@In("id") String id,
 		@InOut("position") ParamHolder<MetadataWrapper<Position>> position
@@ -318,11 +330,11 @@ public class FireFighter {
 
 	@InvariantMonitor("A02")
 	public static boolean positionAccuracySatisfaction(
-			@AssumptionParameter(name = "bound",
-			defaultValue = Environment.FF_POS_INAC_BOUND,
-			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
+			@AssumptionParameter(name = "bound", defaultValue = Environment.FF_POS_INAC_BOUND,
+			maxValue = Environment.FF_POS_INAC_BOUND_MAX, minValue = Environment.FF_POS_INAC_BOUND_MIN, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
-			int bound) {
+			double bound) {
+		resetPositionStateIfNeeded(bound);
 		int bad = 0;
 		for (Double i : getInaccuracyHistory()) {
 			if (i > bound) {
@@ -334,11 +346,10 @@ public class FireFighter {
 
 	@InvariantMonitor("A02")
 	public static double positionAccuracyFitness(
-			@AssumptionParameter(name = "bound",
-			defaultValue = Environment.FF_POS_INAC_BOUND,
-			maxValue = 30, minValue = 15, scope = Scope.COMPONENT,
+			@AssumptionParameter(name = "bound", defaultValue = Environment.FF_POS_INAC_BOUND,
+			maxValue = Environment.FF_POS_INAC_BOUND_MAX, minValue = Environment.FF_POS_INAC_BOUND_MIN, scope = Scope.COMPONENT,
 			initialDirection = Direction.UP)
-			int bound) {
+			double bound) {
 		int posBad = 0;
 		int posOk = 0;
 		int inacc = 0;
