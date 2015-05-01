@@ -20,7 +20,7 @@
 	<dependency>
 		<groupId>cz.cuni.mff.d3s.jdeeco</groupId>
 		<artifactId>cz.cuni.mff.d3s.jdeeco.core</artifactId>
-		<version>3.0.0</version>
+		<version>3.0.1</version>
 	</dependency>
 	<dependency>
 		<groupId>cz.cuni.mff.d3s.jdeeco</groupId>

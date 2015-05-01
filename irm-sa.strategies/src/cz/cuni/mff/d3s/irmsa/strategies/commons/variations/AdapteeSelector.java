@@ -18,7 +18,6 @@ package cz.cuni.mff.d3s.irmsa.strategies.commons.variations;
 import java.util.Collection;
 import java.util.Set;
 
-import cz.cuni.mff.d3s.deeco.model.architecture.api.LocalComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.RemoteComponentInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
