@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
+import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.custom.RuntimeMetadataFactoryExt;
 import cz.cuni.mff.d3s.deeco.runners.DEECoSimulation;
@@ -126,7 +128,7 @@ public class Run {
 		// create correlation plugin
 		registerMetadataForFields();
 
-		MonitorPlugin monitorPlugin = new MonitorPlugin(model, design, irmPlugin.getTrace());
+//		MonitorPlugin monitorPlugin = new MonitorPlugin(model, design, irmPlugin.getTrace());
 		final DEECoNode deeco3;
 		if(enableMetaAdaptation){
 			final CorrelationPlugin correlationPlugin =
@@ -136,25 +138,34 @@ public class Run {
 					irmPlugin, metaAdaptationPlugin,
 					periodAdaptionPlugin,
 					assumptionParameterAdaptionPlugin,
-					correlationPlugin,
-					monitorPlugin);
+					correlationPlugin/*,
+					monitorPlugin*/);
 			nodesInSimulation.add(deeco3);
 		} else {
 			// Meta-adaptation disabled
 				deeco3 = simulation.createNode(3,
 						irmPlugin,
-						metaAdaptationPlugin,
-						monitorPlugin);
+						metaAdaptationPlugin/*,
+						monitorPlugin*/);
 				nodesInSimulation.add(deeco3);
 		}
 		//deploy components
-		deeco3.deployComponent(new FireFighter(Environment.FF_LEADER_ID));
+		ComponentInstance ff1ComponentInstance = deeco3.deployComponent(new FireFighter(Environment.FF_LEADER_ID));
 		deeco3.deployComponent(new Environment());
 		deeco3.deployEnsemble(FireFighterDataAggregation.class);
+		deeco3.deployComponent(new EvaluationComponent("eval"));
+		
+		// Assign the FF1 to the evaluation component
+		EvaluationComponent.init(ff1ComponentInstance);
 
+		// deeco3.getRuntimeMetadata().getComponentInstances().add(ci);
+		KnowledgeManager km = ff1ComponentInstance.getKnowledgeManager();
+		// km.get(arg0) // TODO: examples in unit tests of knowledge manager
+		
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
-		monitorPlugin.finit();
+		// Close the file writer
+		EvaluationComponent.finit();
 		Log.i("Simulation Finished");
 	}
 
