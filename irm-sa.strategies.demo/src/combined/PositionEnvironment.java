@@ -1,13 +1,8 @@
 package combined;
 
-import java.io.Serializable;
-
 import combined.HeatMap.Point;
-import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 
-public class Position extends KnowledgeImpl implements Serializable, Cloneable {
-
-	private static final long serialVersionUID = 3725325029322368894L;
+public class PositionEnvironment implements Cloneable {
 
 	/** Segment id. */
 	public int segment;
@@ -18,11 +13,14 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 	/**
 	 * Only constructor.
 	 */
-	public Position(final int segment, final double index) {
-		this.name = "PositionKnowledge";
-		this.type = "PositionKnowledgeType";
+	public PositionEnvironment(final int segment, final double index) {
 		this.segment = segment;
 		this.index = index;
+	}
+	
+	public PositionComponent toPositionComponent() {
+		final Point p = HeatMap.SEGMENTS[segment].toPoint(index);
+		return new PositionComponent(p.x,  p.y);
 	}
 
 	@Override
@@ -42,10 +40,10 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Position)) {
+		if (!(obj instanceof PositionEnvironment)) {
 			return false;
 		}
-		Position other = (Position) obj;
+		PositionEnvironment other = (PositionEnvironment) obj;
 		if (index != other.index) {
 			return false;
 		}
@@ -57,18 +55,13 @@ public class Position extends KnowledgeImpl implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		try {
-			final Point p = HeatMap.SEGMENTS[segment].toPoint(index);
-			return "[" + p.x + "," + p.y + "]";
-		} catch (IndexOutOfBoundsException e) {
-			return "{ segment = " + segment + ", index = " + index + "}";
-		}
+		return String.format("{ segment = %d, index = %.4f }", segment, index);
 	}
 
 	@Override
-	public Position clone() {
+	public PositionEnvironment clone() {
 		try {
-			return (Position) super.clone();
+			return (PositionEnvironment) super.clone();
 		} catch (CloneNotSupportedException e) {
 			return null; //should never happen
 		}

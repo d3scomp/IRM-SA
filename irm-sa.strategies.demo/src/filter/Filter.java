@@ -51,9 +51,9 @@ public abstract class Filter<T> {
 	 * @param data The data to be filtered.
 	 * @return Data with all the filters in the chain applied.
 	 */
-	public T filter(T data) {
+	public T apply(final T data) {
 		T filteredData = innerFilter != null
-				? innerFilter.filter(data)
+				? innerFilter.apply(data)
 				: data;
 		return applyNoise(filteredData);
 	}
@@ -64,6 +64,6 @@ public abstract class Filter<T> {
 	 * @param data The data to be filtered.
 	 * @return Data with applied noise.
 	 */
-	abstract protected T applyNoise(T data);
+	abstract protected T applyNoise(final T data);
 	
 }
