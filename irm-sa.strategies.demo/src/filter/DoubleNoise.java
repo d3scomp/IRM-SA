@@ -13,7 +13,7 @@ public class DoubleNoise extends Filter<Double> {
 	/**
 	 * Generator of random numbers with the normal distribution.
 	 */
-	private RandomNoise noise;
+	private NormalDistribution noise;
 	
 	/**
 	 * Create new instance of {@link DoubleNoise} with the normal
@@ -23,7 +23,7 @@ public class DoubleNoise extends Filter<Double> {
 	 * @param deviation The standard deviation of the normal distribution.
 	 */
 	public DoubleNoise(double mean, double deviation) {
-		noise = new RandomNoise(mean, deviation);
+		noise = new NormalDistribution(mean, deviation);
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class DoubleNoise extends Filter<Double> {
 	 */
 	public DoubleNoise(double mean, double deviation, Filter<Double> innerFilter) {
 		super(innerFilter);
-		noise = new RandomNoise(mean, deviation);
+		noise = new NormalDistribution(mean, deviation);
 	}
 
 	/**
@@ -48,6 +48,6 @@ public class DoubleNoise extends Filter<Double> {
 	 */
 	@Override
 	protected Double applyNoise(final Double data) {
-		return (data + noise.getNoise());
+		return (data + noise.getNext());
 	}
 }

@@ -77,7 +77,7 @@ public class HeatMap {
 		/*32*/ new Segment(new int[] {31}, new int[0], 18, 9, 12, 9)
 	};
 
-	static final Map<Position, Vertex<Position, Integer>> GRAPH;
+	static final Map<Location, Vertex<Location, Integer>> GRAPH;
 
 	static {
 		//TODO convert segments to graph
@@ -88,7 +88,7 @@ public class HeatMap {
 			//create start crossing if needed
 			if (s.startCrossing == null) {
 				if (s.starts.length == 0) {
-					s.startCrossing = new Position(i, 0);
+					s.startCrossing = new Location(i, 0);
 				} else if (s.starts.length == 1) {
 					final Segment other = SEGMENTS[s.starts[0]];
 					//decide who contains the crossing
@@ -97,9 +97,9 @@ public class HeatMap {
 							s.startCrossing = other.startCrossing;
 						} else {
 							if (s.x1 == other.x2 || s.y1 == other.y2) { //our start
-								s.startCrossing = new Position(i, 0);
+								s.startCrossing = new Location(i, 0);
 							} else if (other.x1 == s.x2 || other.y1 == s.y2) { //their start
-								s.startCrossing = new Position(s.starts[0], 0);
+								s.startCrossing = new Location(s.starts[0], 0);
 							} else {
 								throw new RuntimeException("This should never happen! Probably badly defined segments!");
 							}
@@ -111,9 +111,9 @@ public class HeatMap {
 						} else {
 							//decide who contains the crossing
 							if (s.x1 == other.x1 || s.y1 == other.y1) { //our start
-								s.startCrossing = new Position(i, 0);
+								s.startCrossing = new Location(i, 0);
 							} else if (other.x2 == s.x2 || other.y2 == s.y2) { //their end
-								s.startCrossing = new Position(s.starts[0], other.temps.length - 1);
+								s.startCrossing = new Location(s.starts[0], other.temps.length - 1);
 							} else {
 								throw new RuntimeException("This should never happen! Probably badly defined segments!");
 							}
@@ -130,7 +130,7 @@ public class HeatMap {
 			//create end crossing if needed
 			if (s.endCrossing == null) {
 				if (s.ends.length == 0) {
-					s.endCrossing = new Position(i, s.temps.length - 1);
+					s.endCrossing = new Location(i, s.temps.length - 1);
 				} else if (s.ends.length == 1) {
 					final Segment other = SEGMENTS[s.ends[0]];
 					//decide who contains the crossing
@@ -139,9 +139,9 @@ public class HeatMap {
 							s.endCrossing = other.startCrossing;
 						} else {
 							if (s.x2 == other.x2 || s.y2 == other.y2) { //our end
-								s.endCrossing = new Position(i, s.temps.length - 1);
+								s.endCrossing = new Location(i, s.temps.length - 1);
 							} else if (other.x1 == s.x1 || other.y1 == s.y1) { //their start
-								s.endCrossing = new Position(s.ends[0], 0);
+								s.endCrossing = new Location(s.ends[0], 0);
 							} else {
 								throw new RuntimeException("This should never happen! Probably badly defined segments!");
 							}
@@ -153,9 +153,9 @@ public class HeatMap {
 						} else {
 							//decide who contains the crossing
 							if (s.x2 == other.x1 || s.y2 == other.y1) { //our end
-								s.endCrossing = new Position(i, s.temps.length - 1);
+								s.endCrossing = new Location(i, s.temps.length - 1);
 							} else if (other.x2 == s.x1 || other.y2 == s.y1) { //their end
-								s.endCrossing = new Position(s.ends[0], other.temps.length - 1);
+								s.endCrossing = new Location(s.ends[0], other.temps.length - 1);
 							} else {
 								throw new RuntimeException("This should never happen! Probably badly defined segments!");
 							}
@@ -179,19 +179,19 @@ public class HeatMap {
 				throw new RuntimeException("This should never happen! Check segment definitions.");
 			}
 			final double w = PositionMetric.distance(s.startCrossing, s.endCrossing);
-			Vertex<Position, Integer> start = GRAPH.get(s.startCrossing);
+			Vertex<Location, Integer> start = GRAPH.get(s.startCrossing);
 			if (start == null) {
 				start = new Vertex<>(s.startCrossing);
 				GRAPH.put(start.value, start);
 			}
-			Vertex<Position, Integer> end = GRAPH.get(s.endCrossing);
+			Vertex<Location, Integer> end = GRAPH.get(s.endCrossing);
 			if (end == null) {
 				end = new Vertex<>(s.endCrossing);
 				GRAPH.put(end.value, end);
 			}
-			final Edge<Position, Integer> edge1 = new Edge<>(end, w, i);
+			final Edge<Location, Integer> edge1 = new Edge<>(end, w, i);
 			start.adjacencies.add(edge1);
-			final Edge<Position, Integer> edge2 = new Edge<>(start, w, i);
+			final Edge<Location, Integer> edge2 = new Edge<>(start, w, i);
 			end.adjacencies.add(edge2);
 		}
 
@@ -207,7 +207,7 @@ public class HeatMap {
 //		}
 	}
 
-	public static double temperature(final Position position) {
+	public static double temperature(final Location position) {
 //		try {
 			final int index1 = (int) position.index;
 			double f = position.index - index1;
@@ -254,10 +254,10 @@ public class HeatMap {
 		public final Orientation orientation;
 
 		/** Crossing at the start. */
-		public Position startCrossing;
+		public Location startCrossing;
 
 		/** Crossing at the start. */
-		public Position endCrossing;
+		public Location endCrossing;
 
 		/** Weight for dijkstra. */
 		public double weigth;
@@ -313,16 +313,16 @@ public class HeatMap {
 			}
 		}
 
-		public Location toPosition(final double index) {
+		public Position toPosition(final double index) {
 			switch (orientation) {
 				case N:
-					return new Location(x1, y1 - index);
+					return new Position(x1, y1 - index);
 				case E:
-					return new Location(x1 + index, y1);
+					return new Position(x1 + index, y1);
 				case S:
-					return new Location(x1, y1 + index);
+					return new Position(x1, y1 + index);
 				case W:
-					return new Location(x1 - index, y1);
+					return new Position(x1 - index, y1);
 				default:
 					return null;
 			}

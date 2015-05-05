@@ -1,58 +1,31 @@
 package combined;
 
-public class Position implements Cloneable {
+import java.io.Serializable;
 
-	/** Segment id. */
-	public int segment;
+import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 
-	/** Position inside segment. */
-	public double index;
+public class Position extends KnowledgeImpl  implements Serializable, Cloneable {
 
 	/**
-	 * Only constructor.
+	 * Generated serial version UID.
 	 */
-	public Position(final int segment, final double index) {
-		this.segment = segment;
-		this.index = index;
+	private static final long serialVersionUID = -5980471557237426848L;
+	
+	public final double x;
+	public final double y;
+	
+	public Position(double x, double y) {
+		this.name = "PositionKnowledge";
+		this.type = "PositionKnowledgeType";
+		
+		this.x = x;
+		this.y = y;
 	}
 	
-	public Location toPositionComponent() {
-		return HeatMap.SEGMENTS[segment].toPosition(index);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Double.hashCode(index);
-		result = prime * result + segment;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Position)) {
-			return false;
-		}
-		Position other = (Position) obj;
-		if (index != other.index) {
-			return false;
-		}
-		if (segment != other.segment) {
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public String toString() {
-		return String.format("{ segment = %d, index = %.4f }", segment, index);
+		return String.format("[%.4f,%.4f]", x, y);
 	}
 
 	@Override
