@@ -1,7 +1,10 @@
 package combined;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import dijkstra.Edge;
+import dijkstra.Vertex;
 
 /**
  * Environment heat map holder.
@@ -32,254 +35,181 @@ public class HeatMap {
 		{    7,  10,  14,  15,  17,  18,  19,  19,  19,  19,  19,  19,  19,  19,  18,  17,  15,  14,  10,   7 }
 	};
 
-	/**
-	 * Segments/corridors. Minimal length at least 2!
-	 * Do not use adjacent crossings! Ie. do not create the following:
-	 *   #
-	 *   #
-	 * ######
-	 *    #
-	 *    #
-	 */
-	static final Segment[] SEGMENTS = new Segment[] {
-		/* 0*/ null, //zero segment => indexing starts from 1 :-( //TODO reindex
-		/* 1*/ new Segment(new int[0], new int[] {2}, 0, 0, 3, 0),
-		/* 2*/ new Segment(new int[] {1}, new int[] {3}, 4, 0, 4, 4),
-		/* 3*/ new Segment(new int[] {2, 6}, new int[] {4}, 4, 5, 1, 5),
-		/* 4*/ new Segment(new int[] {3}, new int[] {5}, 1, 6, 1, 10),
-		/* 5*/ new Segment(new int[] {4, 8}, new int[] {7}, 1, 11, 7, 11),
-		/* 6*/ new Segment(new int[] {3}, new int[] {7, 19, 20}, 5, 5, 8, 5),
-		/* 7*/ new Segment(new int[] {6}, new int[] {5}, 8, 6, 8, 11),
-		/* 8*/ new Segment(new int[] {5}, new int[] {9}, 1, 12, 1, 17),
-		/* 9*/ new Segment(new int[] {8}, new int[] {10}, 2, 17, 4, 17),
-		/*10*/ new Segment(new int[] {9}, new int[] {11}, 5, 17, 5, 14),
-		/*11*/ new Segment(new int[] {10}, new int[] {12}, 6, 14, 7, 14),
-		/*12*/ new Segment(new int[] {11}, new int[] {13}, 8, 14, 8, 17),
-		/*13*/ new Segment(new int[] {12}, new int[] {14}, 9, 17, 12, 17),
-		/*14*/ new Segment(new int[] {13, 15}, new int[0], 13, 17, 13, 19),
-		/*15*/ new Segment(new int[] {14}, new int[] {16}, 14, 17, 16, 17),
-		/*16*/ new Segment(new int[] {15}, new int[] {17}, 17, 17, 17, 12),
-		/*17*/ new Segment(new int[] {16}, new int[] {18}, 16, 12, 10, 12),
-		/*18*/ new Segment(new int[] {17}, new int[] {19}, 10, 11, 10, 6),
-		/*19*/ new Segment(new int[] {6}, new int[] {18, 21}, 9, 5, 10, 5),
-		/*20*/ new Segment(new int[] {6}, new int[0], 8, 4, 8, 1),
-		/*21*/ new Segment(new int[] {19}, new int[] {22, 23, 24}, 11, 5, 12, 5),
-		/*22*/ new Segment(new int[] {21}, new int[0], 12, 4, 12, 3),
-		/*23*/ new Segment(new int[] {21}, new int[0], 12, 6, 12, 7),
-		/*24*/ new Segment(new int[] {21}, new int[] {25, 26, 27}, 13, 5, 14, 5),
-		/*25*/ new Segment(new int[] {24}, new int[0], 14, 4, 14, 3),
-		/*26*/ new Segment(new int[] {24}, new int[0], 14, 6, 14, 7),
-		/*27*/ new Segment(new int[] {24}, new int[] {28, 29, 30}, 15, 5, 16, 5),
-		/*28*/ new Segment(new int[] {27}, new int[0], 16, 4, 16, 3),
-		/*29*/ new Segment(new int[] {27}, new int[0], 16, 6, 16, 7),
-		/*30*/ new Segment(new int[] {27}, new int[] {31}, 17, 5, 18, 5),
-		/*31*/ new Segment(new int[] {30}, new int[] {32}, 18, 6, 18, 8),
-		/*32*/ new Segment(new int[] {31}, new int[0], 18, 9, 12, 9)
+	/** Junctions in the map. */
+	static final Junction[] JUNCTIONS = new Junction[] {
+		/*  0 */ new Junction(0, 0),
+		/*  1 */ new Junction(4, 0),
+		/*  2 */ new Junction(4, 5),
+		/*  3 */ new Junction(1, 5),
+		/*  4 */ new Junction(1, 11),
+		/*  5 */ new Junction(8, 11),
+		/*  6 */ new Junction(8, 5),
+		/*  7 */ new Junction(1, 17),
+		/*  8 */ new Junction(5, 17),
+		/*  9 */ new Junction(5, 14),
+		/* 10 */ new Junction(8, 14),
+		/* 11 */ new Junction(8, 17),
+		/* 12 */ new Junction(13, 17),
+		/* 13 */ new Junction(13, 19),
+		/* 14 */ new Junction(17, 17),
+		/* 15 */ new Junction(17, 12),
+		/* 16 */ new Junction(10, 12),
+		/* 17 */ new Junction(10, 5),
+		/* 18 */ new Junction(12, 5),
+		/* 19 */ new Junction(12, 3),
+		/* 20 */ new Junction(12, 7),
+		/* 21 */ new Junction(14, 5),
+		/* 22 */ new Junction(14, 3),
+		/* 23 */ new Junction(14, 7),
+		/* 24 */ new Junction(16, 5),
+		/* 25 */ new Junction(16, 3),
+		/* 26 */ new Junction(16, 7),
+		/* 27 */ new Junction(18, 5),
+		/* 28 */ new Junction(18, 9),
+		/* 29 */ new Junction(12, 9),
+		/* 30 */ new Junction(8, 1)
 	};
 
-	static final Map<Location, Vertex<Location, Integer>> GRAPH;
+	/** List of corridors in the map. */
+	static final List<Corridor> CORRIDORS = new ArrayList<>();
+
+	/**
+	 * Auxiliary field for determining original segment index.
+	 * For debug purposes only.
+	 */
+	static private int corrIndex = 1;
 
 	static {
-		//TODO convert segments to graph
-		GRAPH = new HashMap<>();
-		for (int i = 1; i < SEGMENTS.length; ++i) { //TODO fix when segments are reindexed
-			final Segment s = SEGMENTS[i];
-
-			//create start crossing if needed
-			if (s.startCrossing == null) {
-				if (s.starts.length == 0) {
-					s.startCrossing = new Location(i, 0);
-				} else if (s.starts.length == 1) {
-					final Segment other = SEGMENTS[s.starts[0]];
-					//decide who contains the crossing
-					if (Utils.contains(other.starts, i)) {
-						if (other.startCrossing != null) {
-							s.startCrossing = other.startCrossing;
-						} else {
-							if (s.x1 == other.x2 || s.y1 == other.y2) { //our start
-								s.startCrossing = new Location(i, 0);
-							} else if (other.x1 == s.x2 || other.y1 == s.y2) { //their start
-								s.startCrossing = new Location(s.starts[0], 0);
-							} else {
-								throw new RuntimeException("This should never happen! Probably badly defined segments!");
-							}
-							other.startCrossing = s.startCrossing;
-						}
-					} else if (Utils.contains(other.ends, i)) {
-						if (other.endCrossing != null) {
-							s.startCrossing = other.endCrossing;
-						} else {
-							//decide who contains the crossing
-							if (s.x1 == other.x1 || s.y1 == other.y1) { //our start
-								s.startCrossing = new Location(i, 0);
-							} else if (other.x2 == s.x2 || other.y2 == s.y2) { //their end
-								s.startCrossing = new Location(s.starts[0], other.temps.length - 1);
-							} else {
-								throw new RuntimeException("This should never happen! Probably badly defined segments!");
-							}
-							other.endCrossing = s.startCrossing;
-						}
-					} else { // not bidirectional?
-						throw new RuntimeException("This should never happen! Probably badly defined segments!");
-					}
-				} else /*if (s.starts.length > 1)*/ {
-					//do nothing, one of the other ends will take care of it
-				}
-			}
-
-			//create end crossing if needed
-			if (s.endCrossing == null) {
-				if (s.ends.length == 0) {
-					s.endCrossing = new Location(i, s.temps.length - 1);
-				} else if (s.ends.length == 1) {
-					final Segment other = SEGMENTS[s.ends[0]];
-					//decide who contains the crossing
-					if (Utils.contains(other.starts, i)) {
-						if (other.startCrossing != null) {
-							s.endCrossing = other.startCrossing;
-						} else {
-							if (s.x2 == other.x2 || s.y2 == other.y2) { //our end
-								s.endCrossing = new Location(i, s.temps.length - 1);
-							} else if (other.x1 == s.x1 || other.y1 == s.y1) { //their start
-								s.endCrossing = new Location(s.ends[0], 0);
-							} else {
-								throw new RuntimeException("This should never happen! Probably badly defined segments!");
-							}
-							other.startCrossing = s.endCrossing;
-						}
-					} else if (Utils.contains(other.ends, i)) {
-						if (other.endCrossing != null) {
-							s.endCrossing = other.endCrossing;
-						} else {
-							//decide who contains the crossing
-							if (s.x2 == other.x1 || s.y2 == other.y1) { //our end
-								s.endCrossing = new Location(i, s.temps.length - 1);
-							} else if (other.x2 == s.x1 || other.y2 == s.y1) { //their end
-								s.endCrossing = new Location(s.ends[0], other.temps.length - 1);
-							} else {
-								throw new RuntimeException("This should never happen! Probably badly defined segments!");
-							}
-							other.endCrossing = s.endCrossing;
-						}
-					} else { // not bidirectional?
-						throw new RuntimeException("This should never happen! Probably badly defined segments!");
-					}
-				} else /*if (s.endss.length > 1)*/ {
-					//do nothing, one of the other ends will take care of it
-				}
-			}
-		}
-
-		for (int i = 1; i < SEGMENTS.length; ++i) { //TODO fix when segments are reindexed
-			final Segment s = SEGMENTS[i];
-			if (s.startCrossing == null) {
-				throw new RuntimeException("This should never happen! Check segment definitions.");
-			}
-			if (s.endCrossing == null) {
-				throw new RuntimeException("This should never happen! Check segment definitions.");
-			}
-			final double w = LocationMetric.distance(s.startCrossing, s.endCrossing);
-			Vertex<Location, Integer> start = GRAPH.get(s.startCrossing);
-			if (start == null) {
-				start = new Vertex<>(s.startCrossing);
-				GRAPH.put(start.value, start);
-			}
-			Vertex<Location, Integer> end = GRAPH.get(s.endCrossing);
-			if (end == null) {
-				end = new Vertex<>(s.endCrossing);
-				GRAPH.put(end.value, end);
-			}
-			final Edge<Location, Integer> edge1 = new Edge<>(end, w, i);
-			start.adjacencies.add(edge1);
-			final Edge<Location, Integer> edge2 = new Edge<>(start, w, i);
-			end.adjacencies.add(edge2);
-		}
-
-		//debug
-//		List<Vertex<Position, Integer>>  list = new ArrayList<>(GRAPH.values());
-//		Dijkstra.computePaths(GRAPH.get(new Position(1, 0)));
-//		Collections.sort(list);
-//		for (Vertex<Position, Integer> v : list) {
-//			System.out.println("Crossing " + v.value);
-//			for (Edge<Position, Integer> e : v.adjacencies) {
-//				System.out.println("Corridor " + e.value + " to " + e.target.value + " of length " + e.weight);
-//			}
-//		}
-	}
-
-	public static double temperature(final Location position) {
-//		try {
-			final int index1 = (int) position.index;
-			double f = position.index - index1;
-			final int index2 = (int) Math.ceil(position.index);
-			final int temperature1 =  SEGMENTS[position.segment].temps[index1];
-			final int temperature2 =  SEGMENTS[position.segment].temps[index2];
-			if (temperature1 < temperature2) {
-				return temperature1 + f * (temperature2 - temperature1);
-			} else {
-				return temperature2 + (1 - f) * (temperature1 - temperature2);
-			}
-//		} catch (Exception e) {
-//			return 0.0;
-//		}
+		/*  1 */ joinJunctions(0, 1);
+		/*  2 */ joinJunctions(1, 2);
+		/*  3 */ joinJunctions(2, 3);
+		/*  4 */ joinJunctions(3, 4);
+		/*  5 */ joinJunctions(4, 5);
+		/*  6 */ joinJunctions(2, 6);
+		/*  7 */ joinJunctions(5, 6);
+		/*  8 */ joinJunctions(4, 7);
+		/*  9 */ joinJunctions(7, 8);
+		/* 10 */ joinJunctions(8, 9);
+		/* 11 */ joinJunctions(9, 10);
+		/* 12 */ joinJunctions(10, 11);
+		/* 13 */ joinJunctions(11, 12);
+		/* 14 */ joinJunctions(12, 13);
+		/* 15 */ joinJunctions(12, 14);
+		/* 16 */ joinJunctions(14, 15);
+		/* 17 */ joinJunctions(15, 16);
+		/* 18 */ joinJunctions(16, 17);
+		/* 19 */ joinJunctions(6, 17);
+		/* 20 */ joinJunctions(6, 30);
+		/* 21 */ joinJunctions(17, 18);
+		/* 22 */ joinJunctions(18, 19);
+		/* 23 */ joinJunctions(18, 20);
+		/* 24 */ joinJunctions(18, 21);
+		/* 25 */ joinJunctions(21, 22);
+		/* 26 */ joinJunctions(21, 23);
+		/* 27 */ joinJunctions(21, 24);
+		/* 28 */ joinJunctions(24, 25);
+		/* 29 */ joinJunctions(24, 26);
+		/* 30 */ joinJunctions(24, 27);
+		/* 31 */ joinJunctions(27, 28);
+		/* 32 */ joinJunctions(28, 29);
 	}
 
 	/**
-	 * Class representing corridor in which FF move.
+	 * Joins junctions with given indices with new Corridors.
+	 * Also adds new Corridors to CORRIDORS.
+	 * @param index1 junction 1 index
+	 * @param index2 junction 2 index
 	 */
-	public static class Segment {
+	static private void joinJunctions(final int index1, final int index2) {
+		final Junction junction1 = JUNCTIONS[index1];
+		final Junction junction2 = JUNCTIONS[index2];
+		final double weight = PositionMetric.distance(junction1.value, junction2.value);
+		final int size = CORRIDORS.size();
+		final Corridor corridor1 = new Corridor(junction1, junction2, weight, size, size + 1);
+		corridor1.origIndex = corrIndex;
+		CORRIDORS.add(corridor1);
+		final Corridor corridor2 = new Corridor(junction2, junction1, weight, size + 1, size);
+		CORRIDORS.add(corridor2);
+		corridor2.origIndex = corrIndex;
+		++corrIndex;
+	}
 
-		/** Corridors at start. */
-		public final int[] starts;
+	/**
+	 * Returns temperature on given location.
+	 * @param location location to compute temperature on
+	 * @return temperature on given location
+	 */
+	public static double temperature(final Location location) {
+		final int index1 = (int) location.index;
+		double f = location.index - index1;
+		final int index2 = (int) Math.ceil(location.index);
+		final int temperature1 = CORRIDORS.get(location.corridor).temps[index1];
+		final int temperature2 =  CORRIDORS.get(location.corridor).temps[index2];
+		if (temperature1 < temperature2) {
+			return temperature1 + f * (temperature2 - temperature1);
+		} else {
+			return temperature2 + (1 - f) * (temperature1 - temperature2);
+		}
+	}
 
-		/** Corridors at end. */
-		public final int[] ends;
+	/**
+	 * Class representing junction of corridors or end of corridor.
+	 */
+	static class Junction extends Vertex<Position> {
+
+		/**
+		 * Only constructor.
+		 * @param x x-coordinate
+		 * @param y y-coordinate
+		 */
+		public Junction(final double x, final double y) {
+			super(new Position(x, y));
+		}
+	}
+
+	/**
+	 * Class representing oriented corridor between junctions.
+	 */
+	static class Corridor extends Edge<Position> {
+
+		/** Origin. */
+		final Vertex<Position> source;
+
+		/** Corridor index in CORRIDORS. */
+		final int index;
+
+		/** Opposite corridor. */
+		final int opposite;
 
 		/** Temperatures on corridors squares. */
 		public final int[] temps;
 
-		/** Start X-coord. */
-		public final int x1;
-
-		/** Start Y-coord. */
-		public final int y1;
-
-		/** End X-coord. */
-		public final int x2;
-
-		/** End Y-coord. */
-		public final int y2;
-
-		/** Segment orientation. */
+		/** Corridor orientation. */
 		public final Orientation orientation;
 
-		/** Crossing at the start. */
-		public Location startCrossing;
-
-		/** Crossing at the start. */
-		public Location endCrossing;
-
-		/** Weight for dijkstra. */
-		public double weigth;
+		/** Original segment index. For debug purposes only. */
+		public int origIndex;
 
 		/**
-		 * Only constructor
-		 * @param starts segments at start
-		 * @param ends segments at end
-		 * @param x1 Start X-coord
-		 * @param y1 Start Y-coord
-		 * @param x2 End X-coord
-		 * @param y2 End Y-coord
+		 * Only constructor.
+		 * @param source corridor origin
+		 * @param target corridor target
+		 * @param weight corridor length
+		 * @param index corridor index in CORRIDORS
+		 * @param opposite opposite corridor index
 		 */
-		public Segment(final int[] starts, final int[] ends,
-				final int x1, final int y1, final int x2, final int y2) {
+		public Corridor(final Vertex<Position> source, final Vertex<Position> target,
+				final double weight, final int index, final int opposite) {
+			super(target, weight);
+			this.source = source;
+			this.index = index;
+			this.opposite = opposite;
+			//
+			final int x1 = (int) Math.round(source.value.x);
+			final int y1 = (int) Math.round(source.value.y);
+			final int x2 = (int) Math.round(target.value.x);
+			final int y2 = (int) Math.round(target.value.y);
 			assert x1 == x2 || y1 == y2;
-			this.starts = starts;
-			this.ends = ends;
-			this.x1 = x1;
-			this.y1 = y1;
-			this.x2 = x2;
-			this.y2 = y2;
 			if (x1 == x2) {
 				if (y1 < y2) {
 					temps = new int[y2 - y1 + 1];
@@ -311,24 +241,38 @@ public class HeatMap {
 			} else {
 				throw new IllegalArgumentException("Bad start/end pos!");
 			}
+			//
+			source.adjacencies.add(this);
 		}
 
+		/**
+		 * Converts index in corridor to Position.
+		 * @param index index in corridor
+		 * @return new Position
+		 */
 		public Position toPosition(final double index) {
 			switch (orientation) {
 				case N:
-					return new Position(x1, y1 - index);
+					return new Position(source.value.x, source.value.y - index);
 				case E:
-					return new Position(x1 + index, y1);
+					return new Position(source.value.x + index, source.value.y);
 				case S:
-					return new Position(x1, y1 + index);
+					return new Position(source.value.x, source.value.y + index);
 				case W:
-					return new Position(x1 - index, y1);
+					return new Position(source.value.x - index, source.value.y);
 				default:
 					return null;
 			}
 		}
+
+		public void remove() {
+			source.adjacencies.remove(this);
+		}
 	}
 
+	/**
+	 * Corridors can have these orientations.
+	 */
 	public enum Orientation {
 		N, E, S, W
 	}

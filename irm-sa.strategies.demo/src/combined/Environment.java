@@ -1,13 +1,16 @@
 package combined;
 
-import static combined.HeatMap.SEGMENTS;
+import static combined.HeatMap.CORRIDORS;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
-import combined.HeatMap.Segment;
+import combined.HeatMap.Corridor;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
@@ -15,6 +18,9 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
+import dijkstra.Dijkstra;
+import dijkstra.Edge;
+import dijkstra.Vertex;
 import filter.DoubleNoise;
 import filter.PositionNoise;
 
@@ -28,8 +34,8 @@ public class Environment {
 
 	/** Firefighters' initial position. */
 	static private final Location INITIAL_POSITION = new Location(19, 0);
-	
-	static public final Position INITIAL_FF_POSITION = INITIAL_POSITION.toPositionComponent();
+
+	static public final Position INITIAL_FF_POSITION = INITIAL_POSITION.toPosition();
 
 	/** Firefighters' initial inaccuracy. */
 	static public final Integer INITIAL_INACCURACY = 0;
@@ -103,13 +109,12 @@ public class Environment {
 
 	/** Filter for position if GPS is broken. */
 	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 1.5, positionNoise);
-	
+
 	/** Filter for battery level. */
 	static private DoubleNoise batteryNoise = new DoubleNoise(0.0, 1.0);
 
 	/** Filter for temperature. */
 	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 2.0);
-
 
 	/////////////////////
 	//ENVIRONMENT STATE//
@@ -143,7 +148,12 @@ public class Environment {
 		return ff;
 	}
 
-	static Location getRealPosition(final String ffId) {
+	/**
+	 * Returns location of the firefighter with the given id.
+	 * @param ffId firefighter id
+	 * @return firefighter's location
+	 */
+	static Location getLocation(final String ffId) {
 		return getFirefighter(ffId).position;
 	}
 
@@ -164,9 +174,9 @@ public class Environment {
 			ff.inaccuracy = 0;
 			if (ffId.equals(FF_LEADER_ID)
 					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
-				return brokenGPSInaccuracy.apply(ff.position.toPositionComponent());
+				return brokenGPSInaccuracy.apply(ff.position.toPosition());
 			} else {
-				return positionNoise.apply(ff.position.toPositionComponent());
+				return positionNoise.apply(ff.position.toPosition());
 			}
 		}
 	}
@@ -227,68 +237,177 @@ public class Environment {
 	public String id;
 
 	/**
-	 * Returns index of segment to go on shortest path.
-	 * @param from start position, must be start/end of corridor
-	 * @param to target position
-	 * @return index of segment to go on shortest path
+	 * Prepares firefighter's plan how to get to its target.
+	 * @param ff firefighter which needs new plan
 	 */
-	static private int findShortestPath(final Location from, final Location to) {
-		//TODO do not compute this on every crossing, but store the result?
-		final Segment s = HeatMap.SEGMENTS[from.segment];
-		final Segment e = HeatMap.SEGMENTS[to.segment];
+	static private void preparePlan(final FireFighterState ff) {
+		ff.plan.clear(); //discard previous plan
+		final Corridor startCorr = CORRIDORS.get(ff.position.corridor);
+		final Corridor targetCorr = CORRIDORS.get(ff.target.corridor);
+		if (ff.position.corridor == ff.target.corridor) { //correct corridor?
+			if (ff.position.index > ff.target.index) { //facing wrong way?
+				//turn back
+				ff.position.corridor = startCorr.opposite;
+				ff.position.index = startCorr.weight - ff.position.index;
+				//move target to correct corridor
+				ff.target.corridor = startCorr.opposite;
+				ff.target.index = startCorr.weight - ff.target.index;
+			}
+			return; //no other plan needed
+		}
+		if (startCorr.opposite == ff.target.corridor) {
+			final double targetIndexInStartCorr = startCorr.weight - ff.target.index;
+			if (ff.position.index > targetIndexInStartCorr) { //facing wrong way?
+				//turn back
+				ff.position.corridor = startCorr.opposite;
+				ff.position.index = startCorr.weight - ff.position.index;
+			} else { //facing right way
+				//move target to correct corridor
+				ff.target.corridor = startCorr.index;
+				ff.target.index = targetIndexInStartCorr;
+			}
+			return; //no other plan needed
+		}
 
-		final Vertex<Location, Integer> start = new Vertex<>(from);
+		//find corridors to go through to get to target
+		final Vertex<Position> start = new Vertex<>(ff.position.toPosition());
+		final Vertex<Position> target = new Vertex<>(ff.target.toPosition());
 
-		final double w1 = LocationMetric.distance(from, s.startCrossing);
-		final Vertex<Location, Integer> n1 = HeatMap.GRAPH.get(s.startCrossing);
-		final Edge<Location, Integer> e1 = new Edge<>(n1, w1, -1);
+		//add new vertices and edges for start and target locations
+		//from start to current corridor end
+		final double w1 = startCorr.weight - ff.position.index;
+		final Vertex<Position> v1 = startCorr.target;
+		final AuxiliaryEdge e1 = new AuxiliaryEdge(v1, w1, startCorr.index);
 		start.adjacencies.add(e1);
 
-		final double w2 = LocationMetric.distance(from, s.endCrossing);
-		final Vertex<Location, Integer> n2 = HeatMap.GRAPH.get(s.endCrossing);
-		final Edge<Location, Integer> e2 = new Edge<>(n2, w2, -1);
+		//from start to current corridor start
+		final double w2 = ff.position.index;
+		final Vertex<Position> v2 = startCorr.source;
+		final AuxiliaryEdge e2 = new AuxiliaryEdge(v2, w2, startCorr.opposite);
 		start.adjacencies.add(e2);
 
-		final Vertex<Location, Integer> end = new Vertex<>(to);
+		//from target corridor start to target location
+		final double w3 = ff.target.index;
+		final Vertex<Position> v3 = target;
+		final AuxiliaryEdge e3 = new AuxiliaryEdge(v3, w3, targetCorr.index);
+		targetCorr.source.adjacencies.add(e3);
 
-		final double w3 = LocationMetric.distance(to, e.startCrossing);
-		final Vertex<Location, Integer> n3 = HeatMap.GRAPH.get(e.startCrossing);
-		final Edge<Location, Integer> e3 = new Edge<>(end, w3, to.segment);
-		n3.adjacencies.add(e3);
-
-		final double w4 = LocationMetric.distance(to, e.endCrossing);
-		final Vertex<Location, Integer> n4 = HeatMap.GRAPH.get(e.endCrossing);
-		final Edge<Location, Integer> e4 = new Edge<>(end, w4, to.segment);
-		n4.adjacencies.add(e4);
+		//from target corridor end to target location
+		final double w4 = ff.target.index;
+		final Vertex<Position> v4 = target;
+		final AuxiliaryEdge e4 = new AuxiliaryEdge(v4, w4, targetCorr.opposite);
+		targetCorr.target.adjacencies.add(e4);
 
 		try {
 			Dijkstra.computePaths(start);
-			final List<Vertex<Location, Integer>> path = Dijkstra.getShortestPathTo(end);
-			if (path.size() < 3) {
-				//ups
-				System.err.println("NO PATH FOUND?! " + from + "->" + to);
-				return -1;
+			final List<Edge<Position>> path = Dijkstra.getEdgesOnShortestPathTo(target);
+			if (path.size() < 2) {
+				throw new RuntimeException("NO PATH FOUND?! " + ff.position + "->" + ff.target); //something wrong!
 			}
-			int result = -1;
-			final Vertex<Location, Integer> first = path.get(1); //zero is start
-			if (from.segment != first.value.segment) {
-				result = first.value.segment;
-			} else {
-				final Vertex<Location, Integer> second = path.get(2);
-				for (Edge<Location, Integer> edge : first.adjacencies) {
-					if (edge.target.equals(second)) {
-						result = edge.value;
-						break;
-					}
+			//process first edge
+			final Edge<Position> first = path.get(0);
+			if (!(first instanceof AuxiliaryEdge)) {
+				throw new RuntimeException("Unexpected path!"); //something wrong!
+			}
+			if (startCorr.opposite == ((AuxiliaryEdge) first).index) { //facing wrong way?
+				//turn back
+				ff.position.corridor = startCorr.opposite;
+				ff.position.index = startCorr.weight - ff.position.index;
+			}
+			//process edges from second to the one before last
+			for (int i = 1; i < path.size() - 1; ++i) {
+				final Edge<Position> edge = path.get(i);
+				if (edge instanceof Corridor) {
+					final int corridor = ((Corridor) edge).index;
+					ff.plan.add(corridor); //filling the plan
+				} else {
+					throw new RuntimeException("Unexpected edges on path!"); //something wrong!
 				}
 			}
-			System.out.println("+++Dijkstra says: " + result);
-			return result;
+			//process last edge
+			final Edge<Position> last = path.get(path.size() - 1);
+			if (!(last instanceof AuxiliaryEdge)) {
+				throw new RuntimeException("Unexpected path!"); //something wrong!
+			}
+			if (targetCorr.opposite == ((AuxiliaryEdge) last).index) { //is the target on opposite corridor?
+				//move target to correct corridor
+				ff.target.corridor = targetCorr.opposite;
+				ff.target.index = targetCorr.weight - ff.target.index;
+			}
+			ff.plan.add(ff.target.corridor); //last corridor to plan
 		} finally {
-			n3.adjacencies.remove(e3);
-			n4.adjacencies.remove(e4);
-			for (Vertex<Location, Integer> v : HeatMap.GRAPH.values()) {
+			//clean up, restore initial state
+			v3.adjacencies.remove(e3);
+			v4.adjacencies.remove(e4);
+			for (Vertex<Position> v : HeatMap.JUNCTIONS) {
 				v.reset();
+			}
+		}
+	}
+
+	/**
+	 * Computes movement for given firefighter in one simulation tick.
+	 * @param ffId firefighter id
+	 * @param ff firefighter state
+	 * @return movement for given firefighter
+	 */
+	static private double computeMovement(final String ffId, final FireFighterState ff) {
+		//TODO fixed speed with variation
+		final double bonus = ffId.equals(FF_FOLLOWER_ID) ? FF_BONUS : 0;
+		return RANDOM.nextDouble() * (FF_MOVEMENT + bonus) * SIMULATION_PERIOD;
+	}
+
+	/**
+	 * Generates random location as firefighter target.
+	 * @return random location
+	 */
+	static Location randomTarget() {
+		final int corridor = RANDOM.nextInt(CORRIDORS.size());
+		final int index = RANDOM.nextInt(CORRIDORS.get(corridor).temps.length);
+		return new Location(corridor, index);
+	}
+
+	/**
+	 * Moves given firefighter.
+	 * @param ff firefighter to move
+	 */
+	static private void moveFireFighter(final String ffId, final FireFighterState ff) {
+		if (ffId.equals(FF_FOLLOWER_ID)) {
+			//follower's  target moves, the plan must be recalculated
+			final FireFighterState leader = getFirefighter(FF_LEADER_ID);
+			ff.target = leader.position.clone();
+			preparePlan(ff);
+		}
+		double movement = computeMovement(ffId, ff);
+		System.out.println("+++ " + ffId + " MOVEMENT: " + movement);
+		while (movement > 0) { //move while we can
+			final Corridor currCorr = CORRIDORS.get(ff.position.corridor);
+			if (ff.target.corridor == currCorr.index) { //are we in target corridor?
+				if (ff.position.index + movement >= ff.target.index) {
+					//we are here, do not move more than needed
+					movement -= ff.target.index - ff.position.index;
+					ff.target = randomTarget(); //new target
+					preparePlan(ff); //prepare plan
+				} else {
+					//we cannot reach the target in this simulation tick
+					ff.position.index += movement;
+					break; //no movement left
+				}
+			} else { //we are not in target corridor, lets move on
+				if (ff.position.index + movement >= currCorr.weight) {
+					//we hit the end of corridor
+					movement -= currCorr.weight - ff.position.index;
+					try {
+					ff.position.corridor = ff.plan.remove(); //follow the plan
+					} catch (NoSuchElementException e) {
+						e.printStackTrace();
+					}
+					ff.position.index = 0.0; //new position in corridor
+				} else {
+					//we cannot reach the corridor end in this simulation tick
+					ff.position.index += movement;
+					break; //no movement left
+				}
 			}
 		}
 	}
@@ -301,124 +420,7 @@ public class Environment {
 		for (final String ffId : firefighters.keySet()) {
 			final FireFighterState ff = getFirefighter(ffId);
 
-			final double bonus = ffId.equals(FF_FOLLOWER_ID) ? FF_BONUS : 0;
-			double steps = RANDOM.nextDouble() * (FF_MOVEMENT + bonus) * SIMULATION_PERIOD;
-			System.out.println("+++" + ffId + " STEPS: " + steps);
-			boolean decide = false; //in previous iteration we entered new segment, but we may leave it immediately into another segment
-			int prevSeg = -1; //previously occupied segment
-			while (steps > 0) {
-				final Segment currSeg = SEGMENTS[ff.position.segment];
-				int nextSegIndex = -1;
-				if (decide) { //we need to decide whether stay in this segment, or go immediately to other
-					int[] candidates;
-					if (ff.position.index == 0) {
-						candidates = currSeg.starts; //we are at the start
-					} else /*if (ff.position.index == currSeg.temps.length - 1)*/ {
-						candidates = currSeg.ends; //we are at the end
-					}
-					if (ffId.equals(FF_FOLLOWER_ID)) {
-						final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-						if (leader.position.segment == ff.position.segment) {
-							//we stay
-						} else {
-							nextSegIndex = findShortestPath(ff.position, leader.position);
-							if (!Utils.contains(candidates, nextSegIndex)) { //should we turn around?
-								nextSegIndex = -1;
-								ff.direction = (byte) -ff.direction;
-							}
-						}
-					} else {
-						final int r = RANDOM.nextInt(candidates.length);
-						if (candidates[r] == prevSeg) {
-							//we stay
-						} else {
-							nextSegIndex = candidates[r];
-						}
-					}
-					decide = false; // we have decided
-				} else {
-					if (ff.direction > 0) { //going up
-						ff.position.index += steps;
-						steps = 0;
-						if (ff.position.index > currSeg.temps.length - 1) { //end hit?
-							//correct our position and steps left
-							steps = ff.position.index - currSeg.temps.length + 1;
-							ff.position.index = currSeg.temps.length - 1;
-
-							//decide where to go next
-							if (currSeg.ends.length == 0) {
-								ff.direction = -1; //dead end, return
-							} else {
-								if (ffId.equals(FF_FOLLOWER_ID)) {
-									final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-									if (leader.position.segment == ff.position.segment) {
-										//we stay
-										steps = 0;
-									} else {
-										nextSegIndex = findShortestPath(ff.position, leader.position);
-										if (!Utils.contains(currSeg.ends, nextSegIndex)) { //should we turn around?
-											nextSegIndex = -1;
-											ff.direction = (byte) -ff.direction;
-										}
-									}
-								} else {
-									final int r = RANDOM.nextInt(currSeg.ends.length);
-									nextSegIndex = currSeg.ends[r];
-								}
-							}
-						}
-					} else /*if (ff.direction < 0)*/ { //going down
-						ff.position.index -= steps;
-						steps = 0;
-						if (ff.position.index < 0) { //start hit?
-							//correct our position and steps left
-							steps = -ff.position.index;
-							ff.position.index = 0;
-
-							//decide where to go next
-							if (currSeg.starts.length == 0) {
-								ff.direction = 1; //dead end, return
-							} else {
-								if (ffId.equals(FF_FOLLOWER_ID)) {
-									final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-									if (leader.position.segment == ff.position.segment) {
-										//we stay
-										steps = 0;
-									} else {
-										nextSegIndex = findShortestPath(ff.position, leader.position);
-										if (!Utils.contains(currSeg.starts, nextSegIndex)) { //should we turn around?
-											nextSegIndex = -1;
-											ff.direction = (byte) -ff.direction;
-										}
-									}
-								} else {
-									final int r = RANDOM.nextInt(currSeg.starts.length);
-									nextSegIndex = currSeg.starts[r];
-								}
-							}
-						}
-					}
-				}
-				if (nextSegIndex > 0) { //TODO fix when segments are reindexed
-					final Segment nextSeg = SEGMENTS[nextSegIndex];
-					if (Utils.contains(nextSeg.ends, ff.position.segment)) {
-						prevSeg = ff.position.segment;
-						decide = nextSeg.ends.length > 1;
-						ff.position.segment = nextSegIndex;
-						ff.position.index = nextSeg.temps.length - 1;
-						ff.direction = -1;
-					} else if (Utils.contains(nextSeg.starts, ff.position.segment)) {
-						prevSeg = ff.position.segment;
-						decide = nextSeg.starts.length > 1;
-						ff.position.segment = nextSegIndex;
-						ff.position.index = 0;
-						ff.direction = 1;
-					} else {
-						throw new IllegalArgumentException("Segments must be bidirectionally connected! (" + ff.position.segment + ", " + nextSegIndex + ")");
-					}
-					--steps; //we made a step
-				}
-			}
+			moveFireFighter(ffId, ff);
 
 			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
@@ -440,8 +442,8 @@ public class Environment {
 		final FireFighterState follower = getFirefighter(FF_FOLLOWER_ID);
 		if (leader != null && follower != null) {
 			System.out.println("#########################################");
-			System.out.println("LEADER POS: " + leader.position + "(" + leader.position.segment + ", " + leader.position.index + ")");
-			System.out.println("FOLLOW POS: " + follower.position  + "(" + follower.position.segment + ", " + follower.position.index + ")");
+			System.out.println("LEADER POS: " + leader.position + "(" + leader.position.corridor + ", " + leader.position.index + ")");
+			System.out.println("FOLLOW POS: " + follower.position  + "(" + follower.position.corridor + ", " + follower.position.index + ")");
 			System.out.println("DISTANCE  : " + LocationMetric.distance(leader.position, follower.position));
 		}
 	}
@@ -463,12 +465,39 @@ public class Environment {
 		/** Movement direction. */
 		protected byte direction;
 
+		/** Target where the firefighter moves. */
+		protected Location target = randomTarget();
+
+		/** Plan how to reach the target. It contains list of corridor indices. */
+		protected Deque<Integer> plan = new ArrayDeque<>();
+
 		/**
 		 * Only constructor.
 		 * @param ffId firefighter id
 		 */
 		public FireFighterState(final String ffId) {
 			direction = (byte) (LONELY_FF_ID.equals(ffId) ? -1 : 1);
+			preparePlan(this);
+		}
+	}
+
+	/**
+	 * Auxiliary class for computing plans.
+	 */
+	static class AuxiliaryEdge extends Edge<Position> {
+
+		/** Corridor index. */
+		public final int index;
+
+		/**
+		 * Only constructor.
+		 * @param target target vertex
+		 * @param weight corridor length
+		 * @param index corridor index
+		 */
+		public AuxiliaryEdge(final Vertex<Position> target, final double weight, final int index) {
+			super(target, weight);
+			this.index = index;
 		}
 	}
 }

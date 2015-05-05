@@ -2,22 +2,22 @@ package combined;
 
 public class Location implements Cloneable {
 
-	/** Segment id. */
-	public int segment;
+	/** Corridor id. */
+	public int corridor;
 
-	/** Position inside segment. */
+	/** Position inside corridor. */
 	public double index;
 
 	/**
 	 * Only constructor.
 	 */
-	public Location(final int segment, final double index) {
-		this.segment = segment;
+	public Location(final int corridor, final double index) {
+		this.corridor = corridor;
 		this.index = index;
 	}
-	
-	public Position toPositionComponent() {
-		return HeatMap.SEGMENTS[segment].toPosition(index);
+
+	public Position toPosition() {
+		return HeatMap.CORRIDORS.get(corridor).toPosition(index);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class Location implements Cloneable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Double.hashCode(index);
-		result = prime * result + segment;
+		result = prime * result + corridor;
 		return result;
 	}
 
@@ -44,7 +44,7 @@ public class Location implements Cloneable {
 		if (index != other.index) {
 			return false;
 		}
-		if (segment != other.segment) {
+		if (corridor != other.corridor) {
 			return false;
 		}
 		return true;
@@ -52,7 +52,7 @@ public class Location implements Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("{ segment = %d, index = %.4f }", segment, index);
+		return String.format("{ corridor = %d, index = %.4f }", corridor, index);
 	}
 
 	@Override

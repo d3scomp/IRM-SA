@@ -5,7 +5,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 public class LocationMetric implements Metric {
 
 	static public double distance(final Location pos1, final Location pos2) {
-		return PositionMetric.distance(pos1.toPositionComponent(), pos2.toPositionComponent());
+		return PositionMetric.distance(pos1.toPosition(), pos2.toPosition());
 	}
 
 	@Override

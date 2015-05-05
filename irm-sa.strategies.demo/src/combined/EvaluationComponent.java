@@ -110,7 +110,7 @@ public class EvaluationComponent {
 				// belief temperature
 				final double beliefTemperature = componentTemperature.getValue();
 				// actual position
-				final Position actualPosition = Environment.getRealPosition(componentId).toPositionComponent();
+				final Position actualPosition = Environment.getLocation(componentId).toPosition();
 				// belief position
 				final Position beliefPosition = componentPosition.getValue();
 				
