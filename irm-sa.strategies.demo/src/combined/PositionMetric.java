@@ -4,17 +4,17 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 
 public class PositionMetric implements Metric {
 
-	static public double distance(final PositionEnvironment pos1, final PositionEnvironment pos2) {
+	static public double distance(final Position pos1, final Position pos2) {
 		return CoordinateMetric.distance(pos1.toPositionComponent(), pos2.toPositionComponent());
 	}
 
 	@Override
 	public double distance(Object value1, Object value2) {
-		if(!(value1 instanceof PositionEnvironment) || !(value2 instanceof PositionEnvironment))
+		if(!(value1 instanceof Position) || !(value2 instanceof Position))
 			throw new IllegalArgumentException("Can't compute a distance of anything else than Positions.");
 
-		final PositionEnvironment pos1 = (PositionEnvironment) value1;
-		final PositionEnvironment pos2 = (PositionEnvironment) value2;
+		final Position pos1 = (Position) value1;
+		final Position pos2 = (Position) value2;
 		return distance(pos1, pos2);
 	}
 }

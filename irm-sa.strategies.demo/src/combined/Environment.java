@@ -29,9 +29,9 @@ import filter.PositionNoise;
 public class Environment {
 
 	/** Firefighters' initial position. */
-	static private final PositionEnvironment INITIAL_POSITION = new PositionEnvironment(19, 0);
+	static private final Position INITIAL_POSITION = new Position(19, 0);
 	
-	static public final PositionComponent INITIAL_FF_POSITION = INITIAL_POSITION.toPositionComponent();
+	static public final Location INITIAL_FF_POSITION = INITIAL_POSITION.toPositionComponent();
 
 	/** Firefighters' initial inaccuracy. */
 	static public final Integer INITIAL_INACCURACY = 0;
@@ -55,7 +55,7 @@ public class Environment {
 	static final int MAX_GROUP_DISTANCE = 8;
 
 	/** Returned when battery is too low to provide GPS readings. */
-	static final PositionComponent BAD_POSITION = new PositionComponent(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	static final Location BAD_POSITION = new Location(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
 	/** Firefighter leading the group. */
 	static final String FF_LEADER_ID = "FF1";
@@ -145,7 +145,7 @@ public class Environment {
 		return ff;
 	}
 
-	static PositionEnvironment getRealPosition(final String ffId) {
+	static Position getRealPosition(final String ffId) {
 		return getFirefighter(ffId).position;
 	}
 
@@ -156,7 +156,7 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return position of given firefighter or NaN with insufficient energy
 	 */
-	static public PositionComponent getPosition(final String ffId) {
+	static public Location getPosition(final String ffId) {
 		final FireFighterState ff = getFirefighter(ffId);
 		ff.batteryLevel -= GPS_ENERGY_COST;
 		if (ff.batteryLevel <= 0.0) {
@@ -234,50 +234,50 @@ public class Environment {
 	 * @param to target position
 	 * @return index of segment to go on shortest path
 	 */
-	static private int findShortestPath(final PositionEnvironment from, final PositionEnvironment to) {
+	static private int findShortestPath(final Position from, final Position to) {
 		//TODO do not compute this on every crossing, but store the result?
 		final Segment s = HeatMap.SEGMENTS[from.segment];
 		final Segment e = HeatMap.SEGMENTS[to.segment];
 
-		final Vertex<PositionEnvironment, Integer> start = new Vertex<>(from);
+		final Vertex<Position, Integer> start = new Vertex<>(from);
 
 		final double w1 = PositionMetric.distance(from, s.startCrossing);
-		final Vertex<PositionEnvironment, Integer> n1 = HeatMap.GRAPH.get(s.startCrossing);
-		final Edge<PositionEnvironment, Integer> e1 = new Edge<>(n1, w1, -1);
+		final Vertex<Position, Integer> n1 = HeatMap.GRAPH.get(s.startCrossing);
+		final Edge<Position, Integer> e1 = new Edge<>(n1, w1, -1);
 		start.adjacencies.add(e1);
 
 		final double w2 = PositionMetric.distance(from, s.endCrossing);
-		final Vertex<PositionEnvironment, Integer> n2 = HeatMap.GRAPH.get(s.endCrossing);
-		final Edge<PositionEnvironment, Integer> e2 = new Edge<>(n2, w2, -1);
+		final Vertex<Position, Integer> n2 = HeatMap.GRAPH.get(s.endCrossing);
+		final Edge<Position, Integer> e2 = new Edge<>(n2, w2, -1);
 		start.adjacencies.add(e2);
 
-		final Vertex<PositionEnvironment, Integer> end = new Vertex<>(to);
+		final Vertex<Position, Integer> end = new Vertex<>(to);
 
 		final double w3 = PositionMetric.distance(to, e.startCrossing);
-		final Vertex<PositionEnvironment, Integer> n3 = HeatMap.GRAPH.get(e.startCrossing);
-		final Edge<PositionEnvironment, Integer> e3 = new Edge<>(end, w3, to.segment);
+		final Vertex<Position, Integer> n3 = HeatMap.GRAPH.get(e.startCrossing);
+		final Edge<Position, Integer> e3 = new Edge<>(end, w3, to.segment);
 		n3.adjacencies.add(e3);
 
 		final double w4 = PositionMetric.distance(to, e.endCrossing);
-		final Vertex<PositionEnvironment, Integer> n4 = HeatMap.GRAPH.get(e.endCrossing);
-		final Edge<PositionEnvironment, Integer> e4 = new Edge<>(end, w4, to.segment);
+		final Vertex<Position, Integer> n4 = HeatMap.GRAPH.get(e.endCrossing);
+		final Edge<Position, Integer> e4 = new Edge<>(end, w4, to.segment);
 		n4.adjacencies.add(e4);
 
 		try {
 			Dijkstra.computePaths(start);
-			final List<Vertex<PositionEnvironment, Integer>> path = Dijkstra.getShortestPathTo(end);
+			final List<Vertex<Position, Integer>> path = Dijkstra.getShortestPathTo(end);
 			if (path.size() < 3) {
 				//ups
 				System.err.println("NO PATH FOUND?! " + from + "->" + to);
 				return -1;
 			}
 			int result = -1;
-			final Vertex<PositionEnvironment, Integer> first = path.get(1); //zero is start
+			final Vertex<Position, Integer> first = path.get(1); //zero is start
 			if (from.segment != first.value.segment) {
 				result = first.value.segment;
 			} else {
-				final Vertex<PositionEnvironment, Integer> second = path.get(2);
-				for (Edge<PositionEnvironment, Integer> edge : first.adjacencies) {
+				final Vertex<Position, Integer> second = path.get(2);
+				for (Edge<Position, Integer> edge : first.adjacencies) {
 					if (edge.target.equals(second)) {
 						result = edge.value;
 						break;
@@ -289,7 +289,7 @@ public class Environment {
 		} finally {
 			n3.adjacencies.remove(e3);
 			n4.adjacencies.remove(e4);
-			for (Vertex<PositionEnvironment, Integer> v : HeatMap.GRAPH.values()) {
+			for (Vertex<Position, Integer> v : HeatMap.GRAPH.values()) {
 				v.reset();
 			}
 		}
@@ -454,7 +454,7 @@ public class Environment {
 	protected static class FireFighterState {
 
 		/** Firefighter's position. */
-		protected PositionEnvironment position = INITIAL_POSITION.clone();
+		protected Position position = INITIAL_POSITION.clone();
 
 		/** Firefighter's position inaccuracy. */
 		protected double inaccuracy = INITIAL_INACCURACY;

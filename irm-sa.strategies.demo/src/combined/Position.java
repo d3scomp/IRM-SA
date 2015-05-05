@@ -1,8 +1,6 @@
 package combined;
 
-import combined.HeatMap.Point;
-
-public class PositionEnvironment implements Cloneable {
+public class Position implements Cloneable {
 
 	/** Segment id. */
 	public int segment;
@@ -13,14 +11,13 @@ public class PositionEnvironment implements Cloneable {
 	/**
 	 * Only constructor.
 	 */
-	public PositionEnvironment(final int segment, final double index) {
+	public Position(final int segment, final double index) {
 		this.segment = segment;
 		this.index = index;
 	}
 	
-	public PositionComponent toPositionComponent() {
-		final Point p = HeatMap.SEGMENTS[segment].toPoint(index);
-		return new PositionComponent(p.x,  p.y);
+	public Location toPositionComponent() {
+		return HeatMap.SEGMENTS[segment].toPosition(index);
 	}
 
 	@Override
@@ -40,10 +37,10 @@ public class PositionEnvironment implements Cloneable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof PositionEnvironment)) {
+		if (!(obj instanceof Position)) {
 			return false;
 		}
-		PositionEnvironment other = (PositionEnvironment) obj;
+		Position other = (Position) obj;
 		if (index != other.index) {
 			return false;
 		}
@@ -59,9 +56,9 @@ public class PositionEnvironment implements Cloneable {
 	}
 
 	@Override
-	public PositionEnvironment clone() {
+	public Position clone() {
 		try {
-			return (PositionEnvironment) super.clone();
+			return (Position) super.clone();
 		} catch (CloneNotSupportedException e) {
 			return null; //should never happen
 		}

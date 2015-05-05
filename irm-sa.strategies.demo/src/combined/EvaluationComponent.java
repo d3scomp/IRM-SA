@@ -100,8 +100,8 @@ public class EvaluationComponent {
 				final String componentId = (String) knowledgeValues.getValue(componentIdPath);
 				final MetadataWrapper<Double> componentTemperature = 
 						(MetadataWrapper<Double>) knowledgeValues.getValue(componentTempPath);
-				final MetadataWrapper<PositionComponent> componentPosition = 
-						(MetadataWrapper<PositionComponent>) knowledgeValues.getValue(componentPosPath);
+				final MetadataWrapper<Location> componentPosition = 
+						(MetadataWrapper<Location>) knowledgeValues.getValue(componentPosPath);
 	
 				// time
 				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
@@ -110,9 +110,9 @@ public class EvaluationComponent {
 				// belief temperature
 				final double beliefTemperature = componentTemperature.getValue();
 				// actual position
-				final PositionComponent actualPosition = Environment.getRealPosition(componentId).toPositionComponent();
+				final Location actualPosition = Environment.getRealPosition(componentId).toPositionComponent();
 				// belief position
-				final PositionComponent beliefPosition = componentPosition.getValue();
+				final Location beliefPosition = componentPosition.getValue();
 				
 				// temperature distance
 				final double temperatureDistance = KnowledgeMetadataHolder.distance(

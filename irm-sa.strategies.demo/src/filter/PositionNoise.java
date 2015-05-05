@@ -1,8 +1,8 @@
 package filter;
 
-import combined.PositionComponent;
+import combined.Location;
 
-public class PositionNoise extends Filter<PositionComponent> {
+public class PositionNoise extends Filter<Location> {
 
 	/**
 	 * Generator of random numbers with the normal distribution.
@@ -29,7 +29,7 @@ public class PositionNoise extends Filter<PositionComponent> {
 	 * @param deviation The standard deviation of the normal distribution.
 	 * @param innerFilter The chain of filters inside this instance.
 	 */
-	public PositionNoise(double mean, double deviation, Filter<PositionComponent> innerFilter) {
+	public PositionNoise(double mean, double deviation, Filter<Location> innerFilter) {
 		super(innerFilter);
 		noise = new RandomNoise(mean, deviation);
 	}
@@ -41,12 +41,12 @@ public class PositionNoise extends Filter<PositionComponent> {
 	 * @return The given data with applied noise.
 	 */
 	@Override
-	protected PositionComponent applyNoise(final PositionComponent data) {
+	protected Location applyNoise(final Location data) {
 		// horizontal noise
 		double h = noise.getNoise();
 		// vertical noise
 		double v = noise.getNoise();
 		
-		return new PositionComponent(data.x + h, data.y + v);
+		return new Location(data.x + h, data.y + v);
 	}
 }

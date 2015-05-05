@@ -180,7 +180,7 @@ public class FireFighter {
 	public MetadataWrapper<Double> batteryLevel;
 
 	/** Position in sector positioning system. */
-	public MetadataWrapper<PositionComponent> position;
+	public MetadataWrapper<Location> position;
 
 	/** Environment temperature. */
 	public MetadataWrapper<Double> temperature;
@@ -192,7 +192,7 @@ public class FireFighter {
 	public FireFighter(final String id) {
 		this.id = id;
 		batteryLevel = new MetadataWrapper<Double>(Environment.INITIAL_BATTERY_LEVEL);
-		position = new MetadataWrapper<PositionComponent>(Environment.INITIAL_FF_POSITION);
+		position = new MetadataWrapper<Location>(Environment.INITIAL_FF_POSITION);
 		temperature = new MetadataWrapper<Double>(Environment.INITIAL_TEMPERATURE);
 	}
 
@@ -301,7 +301,7 @@ public class FireFighter {
 	@PeriodicScheduling(period = Environment.INITIAL_POSITION_PERIOD)
 	public static void determinePosition(
 		@In("id") String id,
-		@InOut("position") ParamHolder<MetadataWrapper<PositionComponent>> position
+		@InOut("position") ParamHolder<MetadataWrapper<Location>> position
 	) {
 		final double inacc = Environment.getInaccuracy(id);
 		final Deque<Double> history = getInaccuracyHistory();
@@ -316,13 +316,13 @@ public class FireFighter {
 
 	@InvariantMonitor("P02")
 	public static boolean determinePositionSatisfaction(
-			@In("position") MetadataWrapper<PositionComponent> position) {
+			@In("position") MetadataWrapper<Location> position) {
 		return currentTime() - position.getTimestamp() < TOO_OLD;
 	}
 
 	@InvariantMonitor("P02")
 	public static double determinePositionFitness(
-			@In("position") MetadataWrapper<PositionComponent> position) {
+			@In("position") MetadataWrapper<Location> position) {
 		final long time = currentTime();
 		final boolean recent = time - position.getTimestamp() < TOO_OLD;
 		return recent ? 1.0 : 0.0;

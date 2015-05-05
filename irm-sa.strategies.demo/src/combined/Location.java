@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import cz.cuni.mff.d3s.irm.model.design.impl.KnowledgeImpl;
 
-public class PositionComponent extends KnowledgeImpl  implements Serializable, Cloneable {
+public class Location extends KnowledgeImpl  implements Serializable, Cloneable {
 
 	/**
 	 * Generated serial version UID.
@@ -14,7 +14,7 @@ public class PositionComponent extends KnowledgeImpl  implements Serializable, C
 	public final double x;
 	public final double y;
 	
-	public PositionComponent(double x, double y) {
+	public Location(double x, double y) {
 		this.name = "PositionKnowledge";
 		this.type = "PositionKnowledgeType";
 		
@@ -29,9 +29,9 @@ public class PositionComponent extends KnowledgeImpl  implements Serializable, C
 	}
 
 	@Override
-	public PositionComponent clone() {
+	public Location clone() {
 		try {
-			return (PositionComponent) super.clone();
+			return (Location) super.clone();
 		} catch (CloneNotSupportedException e) {
 			return null; //should never happen
 		}
