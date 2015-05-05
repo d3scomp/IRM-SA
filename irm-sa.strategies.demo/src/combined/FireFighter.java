@@ -21,11 +21,11 @@ import static combined.FireFighterHelper.*;
 @Component
 @IRMComponent("FireFighter")
 public class FireFighter {
-	
+
 	///////////////////////////////////////////////////////////////////////////
 	//     KNOWLEDGE                                                         //
 	///////////////////////////////////////////////////////////////////////////
-	
+
 	/** Mandatory id field. */
 	public String id;
 
@@ -40,7 +40,7 @@ public class FireFighter {
 
 	///////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Only constructor.
 	 * @param id component id
@@ -48,10 +48,10 @@ public class FireFighter {
 	public FireFighter(final String id) {
 		this.id = id;
 		batteryLevel = new MetadataWrapper<Double>(Environment.INITIAL_BATTERY_LEVEL);
-		position = new MetadataWrapper<Position>(Environment.INITIAL_FF_POSITION);
+		position = new MetadataWrapper<Position>(Environment.INITIAL_POSITION);
 		temperature = new MetadataWrapper<Double>(Environment.INITIAL_TEMPERATURE);
 	}
-	
+
 	@Process
 	@Invariant("P01")
 	@PeriodicScheduling(period=1000)
@@ -59,7 +59,7 @@ public class FireFighter {
 			@In("id") String id,
 			@InOut("batteryLevel") ParamHolder<MetadataWrapper<Double>> batteryLevel
 	) {
-		
+
 		if (batteryLevel.value.isOperational()) {
 			batteryLevel.value.setValue(Environment.getBatteryLevel(id), currentTime());
 		}

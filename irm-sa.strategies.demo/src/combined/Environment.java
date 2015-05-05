@@ -32,10 +32,11 @@ import filter.PositionNoise;
 @SystemComponent
 public class Environment {
 
-	/** Firefighters' initial position. */
-	static private final Location INITIAL_POSITION = new Location(19, 0);
+	/** Firefighters' initial location. */
+	static private final Location INITIAL_LOCATION = new Location(19, 0);
 
-	static public final Position INITIAL_FF_POSITION = INITIAL_POSITION.toPosition();
+	/** Firefighters' initial position. */
+	static public final Position INITIAL_POSITION = INITIAL_LOCATION.toPosition();
 
 	/** Firefighters' initial inaccuracy. */
 	static public final Integer INITIAL_INACCURACY = 0;
@@ -44,7 +45,7 @@ public class Environment {
 	static public final Double INITIAL_BATTERY_LEVEL = 1600.0;
 
 	/** Firefighters' initial temperature. */
-	static public final Double INITIAL_TEMPERATURE = HeatMap.temperature(INITIAL_POSITION);
+	static public final Double INITIAL_TEMPERATURE = HeatMap.temperature(INITIAL_LOCATION);
 
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
@@ -154,7 +155,7 @@ public class Environment {
 	 * @return firefighter's location
 	 */
 	static Location getLocation(final String ffId) {
-		return getFirefighter(ffId).position;
+		return getFirefighter(ffId).location;
 	}
 
 	/**
@@ -174,9 +175,9 @@ public class Environment {
 			ff.inaccuracy = 0;
 			if (ffId.equals(FF_LEADER_ID)
 					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
-				return brokenGPSInaccuracy.apply(ff.position.toPosition());
+				return brokenGPSInaccuracy.apply(ff.location.toPosition());
 			} else {
-				return positionNoise.apply(ff.position.toPosition());
+				return positionNoise.apply(ff.location.toPosition());
 			}
 		}
 	}
@@ -215,7 +216,7 @@ public class Environment {
 	 */
 	static public double getRealTemperature(final String ffId) {
 		final FireFighterState ff =  getFirefighter(ffId);
-		return HeatMap.temperature(ff.position);
+		return HeatMap.temperature(ff.location);
 	}
 
 	/**
@@ -242,13 +243,13 @@ public class Environment {
 	 */
 	static private void preparePlan(final FireFighterState ff) {
 		ff.plan.clear(); //discard previous plan
-		final Corridor startCorr = CORRIDORS.get(ff.position.corridor);
+		final Corridor startCorr = CORRIDORS.get(ff.location.corridor);
 		final Corridor targetCorr = CORRIDORS.get(ff.target.corridor);
-		if (ff.position.corridor == ff.target.corridor) { //correct corridor?
-			if (ff.position.index > ff.target.index) { //facing wrong way?
+		if (ff.location.corridor == ff.target.corridor) { //correct corridor?
+			if (ff.location.index > ff.target.index) { //facing wrong way?
 				//turn back
-				ff.position.corridor = startCorr.opposite;
-				ff.position.index = startCorr.weight - ff.position.index;
+				ff.location.corridor = startCorr.opposite;
+				ff.location.index = startCorr.weight - ff.location.index;
 				//move target to correct corridor
 				ff.target.corridor = startCorr.opposite;
 				ff.target.index = startCorr.weight - ff.target.index;
@@ -257,10 +258,10 @@ public class Environment {
 		}
 		if (startCorr.opposite == ff.target.corridor) {
 			final double targetIndexInStartCorr = startCorr.weight - ff.target.index;
-			if (ff.position.index > targetIndexInStartCorr) { //facing wrong way?
+			if (ff.location.index > targetIndexInStartCorr) { //facing wrong way?
 				//turn back
-				ff.position.corridor = startCorr.opposite;
-				ff.position.index = startCorr.weight - ff.position.index;
+				ff.location.corridor = startCorr.opposite;
+				ff.location.index = startCorr.weight - ff.location.index;
 			} else { //facing right way
 				//move target to correct corridor
 				ff.target.corridor = startCorr.index;
@@ -270,18 +271,18 @@ public class Environment {
 		}
 
 		//find corridors to go through to get to target
-		final Vertex<Position> start = new Vertex<>(ff.position.toPosition());
+		final Vertex<Position> start = new Vertex<>(ff.location.toPosition());
 		final Vertex<Position> target = new Vertex<>(ff.target.toPosition());
 
 		//add new vertices and edges for start and target locations
 		//from start to current corridor end
-		final double w1 = startCorr.weight - ff.position.index;
+		final double w1 = startCorr.weight - ff.location.index;
 		final Vertex<Position> v1 = startCorr.target;
 		final AuxiliaryEdge e1 = new AuxiliaryEdge(v1, w1, startCorr.index);
 		start.adjacencies.add(e1);
 
 		//from start to current corridor start
-		final double w2 = ff.position.index;
+		final double w2 = ff.location.index;
 		final Vertex<Position> v2 = startCorr.source;
 		final AuxiliaryEdge e2 = new AuxiliaryEdge(v2, w2, startCorr.opposite);
 		start.adjacencies.add(e2);
@@ -302,7 +303,7 @@ public class Environment {
 			Dijkstra.computePaths(start);
 			final List<Edge<Position>> path = Dijkstra.getEdgesOnShortestPathTo(target);
 			if (path.size() < 2) {
-				throw new RuntimeException("NO PATH FOUND?! " + ff.position + "->" + ff.target); //something wrong!
+				throw new RuntimeException("NO PATH FOUND?! " + ff.location + "->" + ff.target); //something wrong!
 			}
 			//process first edge
 			final Edge<Position> first = path.get(0);
@@ -311,8 +312,8 @@ public class Environment {
 			}
 			if (startCorr.opposite == ((AuxiliaryEdge) first).index) { //facing wrong way?
 				//turn back
-				ff.position.corridor = startCorr.opposite;
-				ff.position.index = startCorr.weight - ff.position.index;
+				ff.location.corridor = startCorr.opposite;
+				ff.location.index = startCorr.weight - ff.location.index;
 			}
 			//process edges from second to the one before last
 			for (int i = 1; i < path.size() - 1; ++i) {
@@ -375,37 +376,37 @@ public class Environment {
 		if (ffId.equals(FF_FOLLOWER_ID)) {
 			//follower's  target moves, the plan must be recalculated
 			final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-			ff.target = leader.position.clone();
+			ff.target = leader.location.clone();
 			preparePlan(ff);
 		}
 		double movement = computeMovement(ffId, ff);
 		System.out.println("+++ " + ffId + " MOVEMENT: " + movement);
 		while (movement > 0) { //move while we can
-			final Corridor currCorr = CORRIDORS.get(ff.position.corridor);
+			final Corridor currCorr = CORRIDORS.get(ff.location.corridor);
 			if (ff.target.corridor == currCorr.index) { //are we in target corridor?
-				if (ff.position.index + movement >= ff.target.index) {
+				if (ff.location.index + movement >= ff.target.index) {
 					//we are here, do not move more than needed
-					movement -= ff.target.index - ff.position.index;
+					movement -= ff.target.index - ff.location.index;
 					ff.target = randomTarget(); //new target
 					preparePlan(ff); //prepare plan
 				} else {
 					//we cannot reach the target in this simulation tick
-					ff.position.index += movement;
+					ff.location.index += movement;
 					break; //no movement left
 				}
 			} else { //we are not in target corridor, lets move on
-				if (ff.position.index + movement >= currCorr.weight) {
+				if (ff.location.index + movement >= currCorr.weight) {
 					//we hit the end of corridor
-					movement -= currCorr.weight - ff.position.index;
+					movement -= currCorr.weight - ff.location.index;
 					try {
-					ff.position.corridor = ff.plan.remove(); //follow the plan
+					ff.location.corridor = ff.plan.remove(); //follow the plan
 					} catch (NoSuchElementException e) {
 						e.printStackTrace();
 					}
-					ff.position.index = 0.0; //new position in corridor
+					ff.location.index = 0.0; //new position in corridor
 				} else {
 					//we cannot reach the corridor end in this simulation tick
-					ff.position.index += movement;
+					ff.location.index += movement;
 					break; //no movement left
 				}
 			}
@@ -424,8 +425,8 @@ public class Environment {
 
 			System.out.println("TIME: " + ProcessContext.getTimeProvider().getCurrentMilliseconds());
 			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
-			System.out.println(ffId + " position = " + ff.position);
-			System.out.println(ffId + " temperature = " + HeatMap.temperature(ff.position));
+			System.out.println(ffId + " position = " + ff.location);
+			System.out.println(ffId + " temperature = " + HeatMap.temperature(ff.location));
 
 			if (ffId.equals(FF_LEADER_ID)) {
 				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
@@ -442,9 +443,9 @@ public class Environment {
 		final FireFighterState follower = getFirefighter(FF_FOLLOWER_ID);
 		if (leader != null && follower != null) {
 			System.out.println("#########################################");
-			System.out.println("LEADER POS: " + leader.position + "(" + leader.position.corridor + ", " + leader.position.index + ")");
-			System.out.println("FOLLOW POS: " + follower.position  + "(" + follower.position.corridor + ", " + follower.position.index + ")");
-			System.out.println("DISTANCE  : " + LocationMetric.distance(leader.position, follower.position));
+			System.out.println("LEADER POS: " + leader.location + "(" + leader.location.corridor + ", " + leader.location.index + ")");
+			System.out.println("FOLLOW POS: " + follower.location  + "(" + follower.location.corridor + ", " + follower.location.index + ")");
+			System.out.println("DISTANCE  : " + LocationMetric.distance(leader.location, follower.location));
 		}
 	}
 
@@ -453,17 +454,14 @@ public class Environment {
 	 */
 	protected static class FireFighterState {
 
-		/** Firefighter's position. */
-		protected Location position = INITIAL_POSITION.clone();
+		/** Firefighter's location. */
+		protected Location location = INITIAL_LOCATION.clone();
 
 		/** Firefighter's position inaccuracy. */
 		protected double inaccuracy = INITIAL_INACCURACY;
 
 		/** Firefighter's battery level. */
 		protected double batteryLevel = INITIAL_BATTERY_LEVEL;
-
-		/** Movement direction. */
-		protected byte direction;
 
 		/** Target where the firefighter moves. */
 		protected Location target = randomTarget();
@@ -476,7 +474,6 @@ public class Environment {
 		 * @param ffId firefighter id
 		 */
 		public FireFighterState(final String ffId) {
-			direction = (byte) (LONELY_FF_ID.equals(ffId) ? -1 : 1);
 			preparePlan(this);
 		}
 	}
