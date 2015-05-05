@@ -178,7 +178,7 @@ public class HeatMap {
 			if (s.endCrossing == null) {
 				throw new RuntimeException("This should never happen! Check segment definitions.");
 			}
-			final double w = PositionMetric.distance(s.startCrossing, s.endCrossing);
+			final double w = LocationMetric.distance(s.startCrossing, s.endCrossing);
 			Vertex<Location, Integer> start = GRAPH.get(s.startCrossing);
 			if (start == null) {
 				start = new Vertex<>(s.startCrossing);

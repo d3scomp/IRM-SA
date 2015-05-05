@@ -45,7 +45,6 @@ import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
 import cz.cuni.mff.d3s.jdeeco.network.l2.strategy.KnowledgeInsertingStrategy;
 import cz.cuni.mff.d3s.jdeeco.position.PositionPlugin;
 import cz.cuni.mff.d3s.jdeeco.publishing.DefaultKnowledgePublisher;
-import filter.DoubleNoise;
 
 /**
  * This class contains main for centralized run.
@@ -183,7 +182,7 @@ public class Run {
 		final int batteryBoundary = 20;
 
 		final Metric simpleMetric = new DifferenceMetric();
-		final Metric positionMetric = new CoordinateMetric();
+		final Metric positionMetric = new PositionMetric();
 
 		final double positionConfidence = 0.9;
 		final double temperatureConfidence = 0.8;

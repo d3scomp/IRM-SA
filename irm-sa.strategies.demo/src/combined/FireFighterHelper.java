@@ -121,7 +121,7 @@ public class FireFighterHelper {
 	}
 
 	private static double getLastBatteryLevel() {
-		final Integer val = retrieveFromInternalData(LAST_BATTERY_LEVEL);
+		final Double val = retrieveFromInternalData(LAST_BATTERY_LEVEL);
 		return val == null ? Environment.INITIAL_BATTERY_LEVEL : val;
 	}
 

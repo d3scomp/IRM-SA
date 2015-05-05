@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import combined.HeatMap.Segment;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
@@ -241,24 +239,24 @@ public class Environment {
 
 		final Vertex<Location, Integer> start = new Vertex<>(from);
 
-		final double w1 = PositionMetric.distance(from, s.startCrossing);
+		final double w1 = LocationMetric.distance(from, s.startCrossing);
 		final Vertex<Location, Integer> n1 = HeatMap.GRAPH.get(s.startCrossing);
 		final Edge<Location, Integer> e1 = new Edge<>(n1, w1, -1);
 		start.adjacencies.add(e1);
 
-		final double w2 = PositionMetric.distance(from, s.endCrossing);
+		final double w2 = LocationMetric.distance(from, s.endCrossing);
 		final Vertex<Location, Integer> n2 = HeatMap.GRAPH.get(s.endCrossing);
 		final Edge<Location, Integer> e2 = new Edge<>(n2, w2, -1);
 		start.adjacencies.add(e2);
 
 		final Vertex<Location, Integer> end = new Vertex<>(to);
 
-		final double w3 = PositionMetric.distance(to, e.startCrossing);
+		final double w3 = LocationMetric.distance(to, e.startCrossing);
 		final Vertex<Location, Integer> n3 = HeatMap.GRAPH.get(e.startCrossing);
 		final Edge<Location, Integer> e3 = new Edge<>(end, w3, to.segment);
 		n3.adjacencies.add(e3);
 
-		final double w4 = PositionMetric.distance(to, e.endCrossing);
+		final double w4 = LocationMetric.distance(to, e.endCrossing);
 		final Vertex<Location, Integer> n4 = HeatMap.GRAPH.get(e.endCrossing);
 		final Edge<Location, Integer> e4 = new Edge<>(end, w4, to.segment);
 		n4.adjacencies.add(e4);
@@ -444,7 +442,7 @@ public class Environment {
 			System.out.println("#########################################");
 			System.out.println("LEADER POS: " + leader.position + "(" + leader.position.segment + ", " + leader.position.index + ")");
 			System.out.println("FOLLOW POS: " + follower.position  + "(" + follower.position.segment + ", " + follower.position.index + ")");
-			System.out.println("DISTANCE  : " + PositionMetric.distance(leader.position, follower.position));
+			System.out.println("DISTANCE  : " + LocationMetric.distance(leader.position, follower.position));
 		}
 	}
 
