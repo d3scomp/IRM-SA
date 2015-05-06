@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.CorrelationLevel.DistanceClass;
-import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
 
 /**
