@@ -32,8 +32,8 @@ public class FireFighter {
 	/** Battery level. */
 	public MetadataWrapper<Double> batteryLevel;
 
-	/** Position in sector positioning system. */
-	public MetadataWrapper<Position> position;
+	/** Position in corridor coordinate system. */
+	public MetadataWrapper<PositionKnowledge> position;
 
 	/** Environment temperature. */
 	public MetadataWrapper<Double> temperature;
@@ -47,9 +47,9 @@ public class FireFighter {
 	 */
 	public FireFighter(final String id) {
 		this.id = id;
-		batteryLevel = new MetadataWrapper<Double>(Environment.INITIAL_BATTERY_LEVEL);
-		position = new MetadataWrapper<Position>(Environment.INITIAL_POSITION);
-		temperature = new MetadataWrapper<Double>(Environment.INITIAL_TEMPERATURE);
+		batteryLevel = new MetadataWrapper<>(Environment.INITIAL_BATTERY_LEVEL);
+		position = new MetadataWrapper<>(Environment.INITIAL_POSITION);
+		temperature = new MetadataWrapper<>(Environment.INITIAL_TEMPERATURE);
 	}
 
 	@Process
@@ -92,7 +92,6 @@ public class FireFighter {
 			@In("batteryLevel") MetadataWrapper<Double> batteryLevel) {
 		final double bl = batteryLevel.getValue();
 		final double fitness = batteryDrainageSatisfactionInternal(bl);
-		System.err.println("BATTERY FITNESS = " + fitness);
 		return fitness;
 	}
 
@@ -101,9 +100,9 @@ public class FireFighter {
 	@PeriodicScheduling(period = Environment.INITIAL_POSITION_PERIOD)
 	public static void determinePosition(
 		@In("id") String id,
-		@InOut("position") ParamHolder<MetadataWrapper<Position>> position
+		@InOut("position") ParamHolder<MetadataWrapper<PositionKnowledge>> position
 	) {
-		final double inacc = Environment.getInaccuracy(id);
+		final double inacc = computeCurrentInaccuracy(position.value);
 		final Deque<Double> history = getInaccuracyHistory();
 		if (history.size() >= POSION_STATE_HISTORY) {
 			history.removeFirst();
@@ -116,13 +115,13 @@ public class FireFighter {
 
 	@InvariantMonitor("P02")
 	public static boolean determinePositionSatisfaction(
-			@In("position") MetadataWrapper<Position> position) {
+			@In("position") MetadataWrapper<PositionKnowledge> position) {
 		return currentTime() - position.getTimestamp() < TOO_OLD;
 	}
 
 	@InvariantMonitor("P02")
 	public static double determinePositionFitness(
-			@In("position") MetadataWrapper<Position> position) {
+			@In("position") MetadataWrapper<PositionKnowledge> position) {
 		final long time = currentTime();
 		final boolean recent = time - position.getTimestamp() < TOO_OLD;
 		return recent ? 1.0 : 0.0;

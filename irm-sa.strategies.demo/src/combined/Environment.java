@@ -35,8 +35,11 @@ public class Environment {
 	/** Firefighters' initial location. */
 	static private final Location INITIAL_LOCATION = new Location(19, 0);
 
+	/** Inaccuracy of fully operational gps sensor. */
+	static private final double GPS_INACCURACY = 0.0;
+
 	/** Firefighters' initial position. */
-	static public final Position INITIAL_POSITION = INITIAL_LOCATION.toPosition();
+	static public final PositionKnowledge INITIAL_POSITION = new PositionKnowledge(INITIAL_LOCATION.toPosition(), GPS_INACCURACY);
 
 	/** Firefighters' initial inaccuracy. */
 	static public final Integer INITIAL_INACCURACY = 0;
@@ -60,7 +63,7 @@ public class Environment {
 	static final int MAX_GROUP_DISTANCE = 8;
 
 	/** Returned when battery is too low to provide GPS readings. */
-	static final Position BAD_POSITION = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
+	static final PositionKnowledge BAD_POSITION = new PositionKnowledge(Double.NaN, Double.NaN, Double.POSITIVE_INFINITY);
 
 	/** Firefighter leading the group. */
 	static final String FF_LEADER_ID = "FF1";
@@ -71,17 +74,17 @@ public class Environment {
 	/** Firefighter with this id goes left at start. */
 	static final String LONELY_FF_ID = "FF3";
 
+	/** Firefighter speed in m/s. */
+	static public final double FF_SPEED = 4.0;
+
 	/**
-	 * Average movement of a firefighter in a ms.
+	 * Movement of a firefighter in a ms.
 	 * Also inaccuracy caused by regular firefighter movement.
 	 */
-	static public final double FF_MOVEMENT = 0.004;
+	static public final double FF_MOVEMENT = FF_SPEED / 1000;
 
 	/** Bonus speed for follower firefighter to keep the group together. */
 	static private final double FF_BONUS = 0.25 * FF_MOVEMENT;
-
-	/** Inaccuracy in case of GPS malfunction. */
-	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25;
 
 	/** Simulation tick in ms. */
 	static public final long SIMULATION_PERIOD = 50;
@@ -92,9 +95,11 @@ public class Environment {
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
 
+	/** Inaccuracy in case of GPS malfunction. */
+	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25 * INITIAL_POSITION_PERIOD;
+
 	/** Initial value of inaccuracy assumption parameter. */
-	static public final double FF_POS_INAC_BOUND =
-			INITIAL_POSITION_PERIOD / SIMULATION_PERIOD * BROKEN_GSP_INACURRACY * SIMULATION_PERIOD * 0.95;
+	static public final double FF_POS_INAC_BOUND = (BROKEN_GSP_INACURRACY +  INITIAL_POSITION_PERIOD * FF_MOVEMENT) * 0.95;
 
 	/** Maximal value of inaccuracy assumption parameter. */
 	static public final double FF_POS_INAC_BOUND_MAX = FF_POS_INAC_BOUND * 1.25;
@@ -165,30 +170,22 @@ public class Environment {
 	 * @param ffId firefighter id
 	 * @return position of given firefighter or NaN with insufficient energy
 	 */
-	static public Position getPosition(final String ffId) {
+	static public PositionKnowledge getPosition(final String ffId) {
 		final FireFighterState ff = getFirefighter(ffId);
 		ff.batteryLevel -= GPS_ENERGY_COST;
 		if (ff.batteryLevel <= 0.0) {
 			ff.batteryLevel = 0;
 			return BAD_POSITION;
 		} else {
-			ff.inaccuracy = 0;
 			if (ffId.equals(FF_LEADER_ID)
 					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
-				return brokenGPSInaccuracy.apply(ff.location.toPosition());
+				final Position position = brokenGPSInaccuracy.apply(ff.location.toPosition());
+				return new PositionKnowledge(position, BROKEN_GSP_INACURRACY);
 			} else {
-				return positionNoise.apply(ff.location.toPosition());
+				final Position position = positionNoise.apply(ff.location.toPosition());
+				return new PositionKnowledge(position, GPS_INACCURACY);
 			}
 		}
-	}
-
-	/**
-	 * Returns inaccuracy of given firefighter.
-	 * @param ffId firefighter id
-	 * @return inaccuracy of given firefighter
-	 */
-	static public double getInaccuracy(final String ffId) {
-		return getFirefighter(ffId).inaccuracy;
 	}
 
 	/**
@@ -427,17 +424,6 @@ public class Environment {
 			System.out.println(ffId + " batteryLevel = " + ff.batteryLevel);
 			System.out.println(ffId + " position = " + ff.location);
 			System.out.println(ffId + " temperature = " + HeatMap.temperature(ff.location));
-
-			if (ffId.equals(FF_LEADER_ID)) {
-				final long time = ProcessContext.getTimeProvider().getCurrentMilliseconds();
-				if (time >= GPS_BREAK_TIME) {
-					ff.inaccuracy += BROKEN_GSP_INACURRACY * SIMULATION_PERIOD;
-				} else {
-					ff.inaccuracy += FF_MOVEMENT * SIMULATION_PERIOD;
-				}
-			} else {
-				ff.inaccuracy += FF_MOVEMENT;
-			}
 		}
 		final FireFighterState leader = getFirefighter(FF_LEADER_ID);
 		final FireFighterState follower = getFirefighter(FF_FOLLOWER_ID);
@@ -456,9 +442,6 @@ public class Environment {
 
 		/** Firefighter's location. */
 		protected Location location = INITIAL_LOCATION.clone();
-
-		/** Firefighter's position inaccuracy. */
-		protected double inaccuracy = INITIAL_INACCURACY;
 
 		/** Firefighter's battery level. */
 		protected double batteryLevel = INITIAL_BATTERY_LEVEL;
