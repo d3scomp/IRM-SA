@@ -47,9 +47,9 @@ public class FireFighter {
 	 */
 	public FireFighter(final String id) {
 		this.id = id;
-		batteryLevel = new MetadataWrapper<>(Environment.INITIAL_BATTERY_LEVEL);
-		position = new MetadataWrapper<>(Environment.INITIAL_POSITION);
-		temperature = new MetadataWrapper<>(Environment.INITIAL_TEMPERATURE);
+		batteryLevel = new MetadataWrapper<>(Environment.getInitialBattery(id));
+		position = new MetadataWrapper<>(Environment.getInitialPosition(id));
+		temperature = new MetadataWrapper<>(Environment.getInitialTemperature(id));
 	}
 
 	@Process

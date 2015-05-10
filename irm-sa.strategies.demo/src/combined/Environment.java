@@ -3,12 +3,17 @@ package combined;
 import static combined.HeatMap.CORRIDORS;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import combined.HeatMap.Corridor;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
@@ -32,23 +37,51 @@ import filter.PositionNoise;
 @SystemComponent
 public class Environment {
 
+	/** Firefighter leading the group. */
+	static public final String FF_LEADER_ID = "FF1";
+
+	/** Firefighter following in the group. */
+	static public final String FF_FOLLOWER_ID = "FF2";
+
+	/** Firefighter with this id goes left at start. */
+	static public final String LONELY_FF_ID = "FF3";
+
+	/** Default Location for firefighters not contained in INITIAL_LOCATIONS. */
+	static private final Location DEFAULT_LOCATION = new Location(0, 0);
+
 	/** Firefighters' initial location. */
-	static private final Location INITIAL_LOCATION = new Location(19, 0);
+	static private final Map<String, Location> INITIAL_LOCATIONS = ((Supplier<Map<String, Location>>) () -> {
+		final Map<String, Location> result = new HashMap<>();
+		result.put(FF_LEADER_ID, new Location(11, 0));
+		result.put(FF_FOLLOWER_ID, new Location(38, 2));
+		result.put(LONELY_FF_ID, new Location(11, 0));
+		return Collections.unmodifiableMap(result);
+	}).get();
 
 	/** Inaccuracy of fully operational gps sensor. */
 	static private final double GPS_INACCURACY = 0.0;
 
-	/** Firefighters' initial position. */
-	static public final PositionKnowledge INITIAL_POSITION = new PositionKnowledge(INITIAL_LOCATION.toPosition(), GPS_INACCURACY);
+	/** Default Position for firefighters not contained in INITIAL_LOCATIONS. */
+	static private final PositionKnowledge DEFAULT_POSITION =
+			new PositionKnowledge(DEFAULT_LOCATION.toPosition(), GPS_INACCURACY);
 
-	/** Firefighters' initial inaccuracy. */
-	static public final Integer INITIAL_INACCURACY = 0;
+	/** Firefighters' initial position. */
+	static private final Map<String, PositionKnowledge> INITIAL_POSITIONS =
+			INITIAL_LOCATIONS.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
+				return new PositionKnowledge(e.getValue().toPosition(), GPS_INACCURACY);
+			}));
 
 	/** Firefighters' initial battery level. */
 	static public final Double INITIAL_BATTERY_LEVEL = 1600.0;
 
+	/** Default temperature for firefighters not contained in INITIAL_LOCATIONS. */
+	static private final Double DEFAULT_TEMPERATURE = HeatMap.temperature(DEFAULT_LOCATION);
+
 	/** Firefighters' initial temperature. */
-	static public final Double INITIAL_TEMPERATURE = HeatMap.temperature(INITIAL_LOCATION);
+	static private final Map<String, Double> INITIAL_TEMPERATURES =
+			INITIAL_LOCATIONS.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
+				return HeatMap.temperature(e.getValue());
+			}));
 
 	/** Checking position drains this much energy from battery. */
 	static private final int GPS_ENERGY_COST = 4;
@@ -63,34 +96,22 @@ public class Environment {
 	static final int MAX_GROUP_DISTANCE = 8;
 
 	/** Returned when battery is too low to provide GPS readings. */
-	static final PositionKnowledge BAD_POSITION = new PositionKnowledge(Double.NaN, Double.NaN, Double.POSITIVE_INFINITY);
-
-	/** Firefighter leading the group. */
-	static final String FF_LEADER_ID = "FF1";
-
-	/** Firefighter following in the group. */
-	static final String FF_FOLLOWER_ID = "FF2";
-
-	/** Firefighter with this id goes left at start. */
-	static final String LONELY_FF_ID = "FF3";
+	static public final PositionKnowledge BAD_POSITION = new PositionKnowledge(Double.NaN, Double.NaN, Double.POSITIVE_INFINITY);
 
 	/** Firefighter speed in m/s. */
-	static public final double FF_SPEED = 4.0;
-
-	/**
-	 * Movement of a firefighter in a ms.
-	 * Also inaccuracy caused by regular firefighter movement.
-	 */
-	static public final double FF_MOVEMENT = FF_SPEED / 1000;
-
-	/** Bonus speed for follower firefighter to keep the group together. */
-	static private final double FF_BONUS = 0.25 * FF_MOVEMENT;
-
-	/** Simulation tick in ms. */
-	static public final long SIMULATION_PERIOD = 50;
+	static public final double FF_SPEED = 1.0;
 
 	/** HeatMap square size in meters. */
 	static public final double CORRIDOR_SIZE = 2.0;
+
+	/**
+	 * Movement of a firefighter in squares per ms.
+	 * Also inaccuracy caused by regular firefighter movement.
+	 */
+	static public final double FF_MOVEMENT = FF_SPEED / 1000 / CORRIDOR_SIZE;
+
+	/** Simulation tick in ms. */
+	static public final long SIMULATION_PERIOD = 50;
 
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
@@ -127,7 +148,10 @@ public class Environment {
 	/////////////////////
 
 	/** Firefighters state. */
-	static private Map<String, FireFighterState> firefighters = new HashMap<>();
+	static private Map<String, FireFighterState> firefighters =
+			INITIAL_LOCATIONS.keySet().stream().collect(Collectors.toMap(Function.identity(), id -> {
+				return new FireFighterState(id);
+			}));
 
 	/**
 	 * Returns Firefighter's states.
@@ -147,11 +171,26 @@ public class Environment {
 	static protected FireFighterState getFirefighter(final String ffId) {
 		final Map<String, FireFighterState> firefighters = getFirefighters();
 		FireFighterState ff = firefighters.get(ffId);
-		if (ff == null) {
+		if (ff == null) { //should not happen, but just to be sure
 			ff = new FireFighterState(ffId);
 			firefighters.put(ffId, ff);
 		}
 		return ff;
+	}
+
+	static public Double getInitialBattery(final String id) {
+		return batteryNoise.apply(INITIAL_BATTERY_LEVEL);
+	}
+
+	static public PositionKnowledge getInitialPosition(final String id) {
+		final PositionKnowledge pos = INITIAL_POSITIONS.get(id);
+		final Position noised = positionNoise.apply(pos != null ? pos : DEFAULT_POSITION);
+		return new PositionKnowledge(noised, GPS_INACCURACY);
+	}
+
+	static public Double getInitialTemperature(final String id) {
+		final Double temp = INITIAL_TEMPERATURES.get(id);
+		return temperatureNoise.apply(temp != null ? temp : DEFAULT_TEMPERATURE);
 	}
 
 	/**
@@ -350,9 +389,7 @@ public class Environment {
 	 * @return movement for given firefighter
 	 */
 	static private double computeMovement(final String ffId, final FireFighterState ff) {
-		//TODO fixed speed with variation
-		final double bonus = ffId.equals(FF_FOLLOWER_ID) ? FF_BONUS : 0;
-		return RANDOM.nextDouble() * (FF_MOVEMENT + bonus) * SIMULATION_PERIOD;
+		return FF_MOVEMENT * SIMULATION_PERIOD;
 	}
 
 	/**
@@ -373,8 +410,10 @@ public class Environment {
 		if (ffId.equals(FF_FOLLOWER_ID)) {
 			//follower's  target moves, the plan must be recalculated
 			final FireFighterState leader = getFirefighter(FF_LEADER_ID);
-			ff.target = leader.location.clone();
-			preparePlan(ff);
+			if (LocationMetric.distance(ff.location, leader.location) > MAX_GROUP_DISTANCE / 2) {
+				ff.target = leader.location.clone();
+				preparePlan(ff);
+			}
 		}
 		double movement = computeMovement(ffId, ff);
 		System.out.println("+++ " + ffId + " MOVEMENT: " + movement);
@@ -441,7 +480,7 @@ public class Environment {
 	protected static class FireFighterState {
 
 		/** Firefighter's location. */
-		protected Location location = INITIAL_LOCATION.clone();
+		protected Location location;
 
 		/** Firefighter's battery level. */
 		protected double batteryLevel = INITIAL_BATTERY_LEVEL;
@@ -457,6 +496,7 @@ public class Environment {
 		 * @param ffId firefighter id
 		 */
 		public FireFighterState(final String ffId) {
+			location = INITIAL_LOCATIONS.get(ffId).clone();
 			preparePlan(this);
 		}
 	}
