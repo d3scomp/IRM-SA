@@ -264,10 +264,6 @@ public class HeatMap {
 					return null;
 			}
 		}
-
-		public void remove() {
-			source.adjacencies.remove(this);
-		}
 	}
 
 	/**

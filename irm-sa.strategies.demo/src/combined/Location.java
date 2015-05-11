@@ -1,5 +1,8 @@
 package combined;
 
+/**
+ * Class representing coordinates in Corridor coordinate system.
+ */
 public class Location implements Cloneable {
 
 	/** Corridor id. */
@@ -10,12 +13,18 @@ public class Location implements Cloneable {
 
 	/**
 	 * Only constructor.
+	 * @param corridor corridor id
+	 * @param index position inside corridor
 	 */
 	public Location(final int corridor, final double index) {
 		this.corridor = corridor;
 		this.index = index;
 	}
 
+	/**
+	 * Converts Location into Position.
+	 * @return position corresponding to this Location
+	 */
 	public Position toPosition() {
 		return HeatMap.CORRIDORS.get(corridor).toPosition(index);
 	}

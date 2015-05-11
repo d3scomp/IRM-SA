@@ -10,11 +10,12 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
 import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irmsa.MonitorContext;
+import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 /**
  * Holds constants and methods used by {@link FireFighter} that are not
  * considered to be a part of the {@link FireFighter} as a DEECo component.
- * 
+ *
  * @author Dominik Skoda <skoda@d3s.mff.cuni.cz>
  *
  */
@@ -96,7 +97,6 @@ public class FireFighterHelper {
 	}
 
 	private static void storeInInternalData(final String key, final Object value) {
-		System.out.println("SET INTERNAL DATA: " + key + " " + value);
 		final ComponentInstance instance = getComponentInstance();
 		instance.getInternalData().put(key, value);
 	}
@@ -199,11 +199,6 @@ public class FireFighterHelper {
 		final double energyLeft = 1.0 * batteryLevel / diff * period;
 		if (energyLeft < timeLeft) {
 			final double ratio = energyLeft / timeLeft;
-			System.err.println("LAST BATTERY = " + getLastBatteryLevel());
-			System.err.println("CURR BATTERY = " + batteryLevel);
-			System.err.println("PERIOD = " + period);
-			System.err.println("DIFF = " + diff);
-			System.err.println("RATIO = " + ratio);
 			return SATISFACTION_BOUND * ratio;
 		} else {
 			return 1.0;
@@ -222,4 +217,10 @@ public class FireFighterHelper {
 		}
 	}
 
+	public static double computeCurrentInaccuracy(final MetadataWrapper<PositionKnowledge> position) {
+		final long time = currentTime();
+		final long diff = time - position.getTimestamp();
+		final double inaccuracy = position.getValue().inaccuracy;
+		return inaccuracy + diff * Environment.FF_MOVEMENT;
+	}
 }
