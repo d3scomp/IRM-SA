@@ -84,7 +84,7 @@ public class Environment {
 	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25;
 
 	/** Simulation tick in ms. */
-	static public final long SIMULATION_PERIOD = 50;
+	static public final long SIMULATION_PERIOD = 500;
 
 	/** HeatMap square size in meters. */
 	static public final double CORRIDOR_SIZE = 2.0;
@@ -115,7 +115,7 @@ public class Environment {
 	static private DoubleNoise batteryNoise = new DoubleNoise(0.0, 1.0);
 
 	/** Filter for temperature. */
-	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 2.0);
+	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 0.5);
 
 	/////////////////////
 	//ENVIRONMENT STATE//

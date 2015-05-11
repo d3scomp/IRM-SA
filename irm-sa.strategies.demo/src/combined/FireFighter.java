@@ -176,7 +176,7 @@ public class FireFighter {
 
 	@Process
 	@Invariant("P03")
-	@PeriodicScheduling(period=200, order = 2)
+	@PeriodicScheduling(period=1250, order = 2)
 	public static void determineTemperature(
 		@In("id") String id,
 		@InOut("temperature") ParamHolder<MetadataWrapper<Double>> temperature
