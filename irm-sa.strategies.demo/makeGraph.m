@@ -77,7 +77,6 @@ function makeGraph(varargin)
             fprintf('Plotting "%s".\n', key);
             figure('name', key);
             plot(data(time), data(key));
-            disp(data(key));
         else
             fprintf('"%s" data not found. Can''t plot them.\n', key);
         end
@@ -104,6 +103,7 @@ function data = extractData(fileName, rows)
     end
 
     % Load all the values
+    fprintf('Processing the data ...\n');
     line = fgetl(f);
     lineNum = lineNum + 1;
     while ischar(line)
