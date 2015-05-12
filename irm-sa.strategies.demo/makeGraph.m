@@ -1,4 +1,4 @@
-function makeGraph(varargin)
+function data = makeGraph(varargin)
 %% MAKEGRAPH reads specified file containing time series to be plotted.
 % It accepts the following parameters:
 % * Mandatory
@@ -71,12 +71,13 @@ function makeGraph(varargin)
         return;
     end
 %%
+    timeInSec = data(time)/1000;
     for j = 1:size(dataToPlot, 2)
         key = char(dataToPlot(j));
         if isKey(data, key)
             fprintf('Plotting "%s".\n', key);
             figure('name', key);
-            plot(data(time), data(key));
+            plot(timeInSec, data(key));
         else
             fprintf('"%s" data not found. Can''t plot them.\n', key);
         end
@@ -85,8 +86,14 @@ function makeGraph(varargin)
 end
 
 function data = extractData(fileName, rows)
+    % Delimiter of individual data entries
     separator = ';';
-    data = containers.Map;
+    % Explicit dimensionality of data (implicit dimensionality is 1, but
+    % e.g. position has 2 dimensions (x and y).
+    explicitDimensionalities = containers.Map( ...
+        {'actual_position', 'belief_position'}, ...
+        [2, 2]);
+    data = containers.Map();
 
     f = fopen(fileName);
     fprintf('Opening file "%s".\n', fileName);
@@ -99,7 +106,14 @@ function data = extractData(fileName, rows)
     for k = 1:size(keys, 2)
         key = char(keys(k));
         fprintf('The following key found: "%s".\n', key);
-        data(key) = zeros(1, lineCnt-1); % -1 to exclude the header
+        if isKey(explicitDimensionalities, key)
+            % If the dimension of the data is specified, use it
+            dimension = explicitDimensionalities(key);
+            data(key) = zeros(dimension, lineCnt-1); % -1 to exclude the header
+        else
+            % Otherwise scalar values are expected
+            data(key) = zeros(1, lineCnt-1); % -1 to exclude the header
+        end
     end
 
     % Load all the values
@@ -116,8 +130,8 @@ function data = extractData(fileName, rows)
                 % Process each column
                 key = char(keys(i));
                 v = data(key);
-                value = str2double(values(i));
-                v(lineNum-1) = value; % -1 to skip the header
+                value = str2num(values{i}); %#ok<ST2NM>
+                v(:, lineNum-1) = value; % -1 to skip the header
                 data(key) = v;
             end
         end

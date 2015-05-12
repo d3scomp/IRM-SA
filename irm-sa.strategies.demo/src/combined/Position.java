@@ -1,6 +1,7 @@
 package combined;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Class representing coordinates in cartesian coordinate system.
@@ -31,7 +32,7 @@ public class Position implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("[%.4f,%.4f]", x, y);
+		return String.format(Locale.ENGLISH, "[%.4f,%.4f]", x, y);
 	}
 
 	@Override
