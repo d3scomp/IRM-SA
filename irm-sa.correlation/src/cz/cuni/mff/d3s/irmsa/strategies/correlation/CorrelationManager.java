@@ -38,7 +38,7 @@ public class CorrelationManager {
 	 */
 	@Local
 	private static final boolean dumpValues = false;
-	
+
 	/** Run flag stored in internal data under this key. */
 	@Local
 	static final String RUN_FLAG = "runFlag";
@@ -46,7 +46,7 @@ public class CorrelationManager {
 	/** Done flag stored in internal data under this key. */
 	@Local
 	static final String DONE_FLAG = "doneFlag";
-	
+
 	/**
 	 * Time slot duration in milliseconds. Correlation of values is computed
 	 * within these time slots.
@@ -61,7 +61,7 @@ public class CorrelationManager {
 	@Local
 	public final List<DEECoNode> otherNodes;
 
-	
+
 	public String id = "CorrelationManager";
 
 	/**
@@ -142,6 +142,25 @@ public class CorrelationManager {
 		System.out.println(b.toString());
 	}
 
+	@Process
+	@PeriodicScheduling(period=1000)
+	public static void calculateCorrelation(
+			@In("knowledgeHistoryOfAllComponents") Map<String, Map<String, List<MetadataWrapper<?>>>> history) {
+		boolean done = true;
+		for (String s1 : history.keySet()) {
+			final Map<String, List<MetadataWrapper<?>>> map = history.get(s1);
+			for (String s2 : map.keySet()) {
+				final List<MetadataWrapper<?>> list = map.get(s2);
+				if (!list.isEmpty()) {
+					done &= list.get(list.size() - 1).isOperational();
+				}
+			}
+		}
+		if (done) {
+			ComponentHelper.storeInInternalData(DONE_FLAG, true);
+		}
+	}
+
 	/**
 	 * Method that measures the correlation between the data in the system
 	 *
@@ -155,7 +174,7 @@ public class CorrelationManager {
 			@InOut("distanceBounds") ParamHolder<Map<LabelPair, BoundaryValueHolder>> bounds){
 
 		System.out.println("Correlation process started...");
-		
+
 		for(LabelPair labels : getAllLabelPairs(history)){
 			System.out.println(String.format("%s -> %s", labels.getFirstLabel(), labels.getSecondLabel()));
 			List<DistancePair> distances = computeDistances(history, labels);
@@ -183,7 +202,7 @@ public class CorrelationManager {
 	public static void manageCorrelationEnsembles(
 			@InOut("distanceBounds") ParamHolder<Map<LabelPair, BoundaryValueHolder>> bounds,
 			@In("otherNodes") List<DEECoNode> deecoNodes) throws Exception {
-		
+
 		final boolean run = ComponentHelper.retrieveFromInternalData(RUN_FLAG, true);
 		System.out.println("Correlation ensembles management process started...");
 
@@ -218,7 +237,7 @@ public class CorrelationManager {
 						ensembleName));
 			}
 		}
-			
+
 	}
 
 	/**
@@ -254,7 +273,7 @@ public class CorrelationManager {
 
 		return labelPairs;
 	}
-	
+
 	/**
 	 * Returns a set of all label pairs available among all the components in the system.
 	 * @param history The history of knowledge of all the components in the system.
@@ -263,12 +282,12 @@ public class CorrelationManager {
 	private static Set<LabelPair> getAllLabelPairs(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history){
 		Set<LabelPair> labelPairs = new HashSet<LabelPair>();
-		
+
 		for(ComponentPair components : getComponentPairs(history.keySet()))
 		{
 			labelPairs.addAll(getLabelPairs(history, components));
 		}
-		
+
 		return labelPairs;
 	}
 
@@ -292,18 +311,18 @@ public class CorrelationManager {
 
 		return componentPairs;
 	}
-	
+
 	/** Get all the components containing the given pair of knowledge fields.
 	 * @param history The history of knowledge of all the components in the system.
-	 * @param labels The pair knowledge fields required the components to have. 
+	 * @param labels The pair knowledge fields required the components to have.
 	 * @return All the components containing the given pair of knowledge fields.
 	 */
 	private static Set<String> getComponents(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			LabelPair labels){
-		
+
 		Set<String> components = new HashSet<>(history.keySet());
-		
+
 		for(String component : history.keySet()){
 			if(!history.get(component).keySet().contains(labels.getFirstLabel())
 					|| !history.get(component).keySet().contains(labels.getSecondLabel())){
@@ -311,10 +330,10 @@ public class CorrelationManager {
 				components.remove(component);
 			}
 		}
-		
+
 		return components;
 	}
-	
+
 	/**
 	 * Returns a list of knowledge values identified by given labels from given components.
 	 * @param history The history of knowledge of all the components in the system.
@@ -326,7 +345,7 @@ public class CorrelationManager {
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			ComponentPair components,
 			LabelPair labels){
-		
+
 		List<KnowledgeQuadruple> knowledgeVectors = new ArrayList<>();
 		List<MetadataWrapper<? extends Object>> c1Values1 = new ArrayList<>(
 				history.get(components.component1Id).get(labels.getFirstLabel()));
@@ -359,10 +378,10 @@ public class CorrelationManager {
 			removeEarlierValuesForTimeSlot(c2Values2, timeSlot);
 			values = getMinCommonTimeSlotValues(c1Values1, c1Values2, c2Values1, c2Values2);
 		}
-		
+
 		return knowledgeVectors;
 	}
-	
+
 	/** Returns a matrix of distances and distance classes for given knowledge fields among all the components.
 	 * @param history The history of knowledge of all the components in the system.
 	 * @param labels The pair knowledge fields the values will be extracted from.
@@ -371,9 +390,9 @@ public class CorrelationManager {
 	private static List<DistancePair> computeDistances(
 			Map<String, Map<String, List<MetadataWrapper<? extends Object>>>> history,
 			LabelPair labels){
-		
+
 		List<KnowledgeQuadruple> knowledgeVectors = new ArrayList<>();
-		
+
 		Set<String> componentIds = getComponents(history, labels);
 		List<ComponentPair> componentPairs = getComponentPairs(componentIds);
 		for(ComponentPair components : componentPairs){
@@ -381,7 +400,7 @@ public class CorrelationManager {
 		}
 
 		List<DistancePair> distancePairs = new ArrayList<>();
-		
+
 		for(KnowledgeQuadruple knowledge : knowledgeVectors){
 			// Consider only operational fields
 			if(knowledge.c1Value1.isOperational() && knowledge.c2Value1.isOperational()
@@ -404,10 +423,10 @@ public class CorrelationManager {
 			fillDistances(distancePairs, b);
 			System.out.print(b.toString());
 		}
-		
+
 		return distancePairs;
 	}
-	
+
 	/**
 	 * Returns the distance boundary of the knowledge identified by the first label in the given labels,
 	 * that ensures the satisfaction of confidence level by the correlation of the knowledge identified by the labels.
@@ -445,10 +464,10 @@ public class CorrelationManager {
 				return distancePairs.get(i).distance;
 			}
 		}
-		
+
 		return Double.NaN;
 	}
-	
+
 	/**
 	 * Fill the given StringBuilder with the given values.
 	 * For debug print purposes.
