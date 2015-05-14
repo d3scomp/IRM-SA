@@ -196,6 +196,9 @@ public class FireFighterHelper {
 		final long timeLeft = TARGET_DURABILITY - time;
 		final double diff = getLastBatteryLevel() - batteryLevel;
 		final long period = time - getLastBatteryCheck();
+		if (diff == 0 || period == 0) {
+			return 1.0;
+		}
 		final double energyLeft = 1.0 * batteryLevel / diff * period;
 		if (energyLeft < timeLeft) {
 			final double ratio = energyLeft / timeLeft;
