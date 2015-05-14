@@ -72,7 +72,7 @@ public class Environment {
 			}));
 
 	/** Firefighters' initial battery level. */
-	static public final Double INITIAL_BATTERY_LEVEL = 1600.0;
+	static public final Double INITIAL_BATTERY_LEVEL = 2000.0;
 
 	/** Default temperature for firefighters not contained in INITIAL_LOCATIONS. */
 	static private final Double DEFAULT_TEMPERATURE = HeatMap.temperature(DEFAULT_LOCATION);
@@ -111,7 +111,7 @@ public class Environment {
 	static public final double FF_MOVEMENT = FF_SPEED / 1000 / CORRIDOR_SIZE;
 
 	/** Simulation tick in ms. */
-	static public final long SIMULATION_PERIOD = 500;
+	static public final long SIMULATION_PERIOD = 50;
 
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
@@ -132,10 +132,10 @@ public class Environment {
 	static private final Random RANDOM = new Random(24);
 
 	/** Filter for position. */
-	static private PositionNoise positionNoise = new PositionNoise(0.0, 0.3);
+	static private PositionNoise positionNoise = new PositionNoise(0.0, 0.5);
 
 	/** Filter for position if GPS is broken. */
-	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 1.5, positionNoise);
+	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 1.0, positionNoise);
 
 	/** Filter for battery level. */
 	static private DoubleNoise batteryNoise = new DoubleNoise(0.0, 1.0);

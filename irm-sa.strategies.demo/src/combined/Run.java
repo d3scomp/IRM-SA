@@ -74,7 +74,7 @@ public class Run {
 	public static void main(final String args[])
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
 		Log.i("Preparing simulation");
-		
+
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 
@@ -113,7 +113,7 @@ public class Run {
 						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(250))
 						.withConsiderAssumptions(true)
 						.withAdaptationBound(0.8)
-						.withMaximumTries(5);
+						.withMaximumTries(3);
 
 		// create AssumptionParameterAdaptationPlugin
 		final AssumptionParameterAdaptationPlugin assumptionParameterAdaptionPlugin =
@@ -123,7 +123,7 @@ public class Run {
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DirectionSelectorImpl())
 						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.assumption.DeltaComputorFixed(5))
 						.withAdaptationBound(0.4)
-						.withMaximumTries(5);
+						.withMaximumTries(3);
 
 		// create correlation plugin
 		registerMetadataForFields();
@@ -154,14 +154,14 @@ public class Run {
 		deeco3.deployComponent(new Environment());
 		deeco3.deployEnsemble(FireFighterDataAggregation.class);
 		deeco3.deployComponent(new EvaluationComponent("eval"));
-		
+
 		// Assign the FF1 to the evaluation component
 		EvaluationComponent.init(ff1ComponentInstance);
 
 		// deeco3.getRuntimeMetadata().getComponentInstances().add(ci);
 		KnowledgeManager km = ff1ComponentInstance.getKnowledgeManager();
 		// km.get(arg0) // TODO: examples in unit tests of knowledge manager
-		
+
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		// Close the file writer
