@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.eclipse.emf.common.util.EMap;
+
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
@@ -16,6 +18,7 @@ import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.architecture.api.Architecture;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentProcess;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
@@ -27,6 +30,7 @@ import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.InvariantInstance;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
 import cz.cuni.mff.d3s.irmsa.IRMInstanceGenerator;
+import cz.cuni.mff.d3s.irmsa.strategies.AdaptationManager;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DirectionSelector;
@@ -38,7 +42,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.InvariantFitnessCombi
  */
 @Component
 @SystemComponent
-public abstract class EvolutionaryAdaptationManager {
+public abstract class EvolutionaryAdaptationManager implements AdaptationManager {
 
 	/** Default period of monitoring. */
 	static public final int MONITORING_PERIOD = 5000;
@@ -94,6 +98,9 @@ public abstract class EvolutionaryAdaptationManager {
 	/** Overall system fitness. */
 	public Double fitness = 0.0;
 
+	/** Deeco component instance representing this manager. */
+	private ComponentInstance deecoComponent;
+
 	/**
 	 * Only constructor.
 	 * @param initState initial state
@@ -105,6 +112,34 @@ public abstract class EvolutionaryAdaptationManager {
 		state = initState;
 		this.maximumTries = maximumTries;
 		triesLeft = maximumTries;
+	}
+
+	/**
+	 * Deeco component instance representing this manager.
+	 * @param deecoComponent component instance of this manager
+	 */
+	public void setDeecoComponent(final ComponentInstance deecoComponent) {
+		this.deecoComponent = deecoComponent;
+	}
+
+	@Override
+	public void stop() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		data.put(EvolutionaryAdaptationManager.RUN_FLAG, false);
+	}
+
+	@Override
+	public void run() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		data.put(EvolutionaryAdaptationManager.RUN_FLAG, true);
+		data.put(EvolutionaryAdaptationManager.DONE_FLAG, false);
+	}
+
+	@Override
+	public boolean isDone() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		final Boolean result = (Boolean) data.get(EvolutionaryAdaptationManager.DONE_FLAG);
+		return result == null || result;
 	}
 
 	/**

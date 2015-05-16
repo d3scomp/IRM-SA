@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EMap;
+
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.InOut;
@@ -17,8 +19,10 @@ import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
 import cz.cuni.mff.d3s.deeco.logging.Log;
+import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoNode;
 import cz.cuni.mff.d3s.deeco.task.ParamHolder;
+import cz.cuni.mff.d3s.irmsa.strategies.AdaptationManager;
 import cz.cuni.mff.d3s.irmsa.strategies.ComponentHelper;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.BoundaryValueHolder;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.ComponentPair;
@@ -31,7 +35,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.MetadataWrapper;
 
 @Component
 @SystemComponent
-public class CorrelationManager {
+public class CorrelationManager implements AdaptationManager {
 
 	/**
 	 * Specify whether to print the values being processed by the correlation computation.
@@ -80,6 +84,8 @@ public class CorrelationManager {
 	 */
 	public Map<LabelPair, BoundaryValueHolder> distanceBounds;
 
+	@Local
+	private ComponentInstance deecoComponent;
 
 	/**
 	 * Create an instance of the {@link CorrelationManager} that will hold
@@ -91,6 +97,34 @@ public class CorrelationManager {
 		distanceBounds = new HashMap<>();
 
 		this.otherNodes = otherNodes;
+	}
+
+	/**
+	 * Deeco component instance representing this manager.
+	 * @param deecoComponent component instance of this manager
+	 */
+	public void setDeecoComponent(final ComponentInstance deecoComponent) {
+		this.deecoComponent = deecoComponent;
+	}
+
+	@Override
+	public void stop() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		data.put(CorrelationManager.RUN_FLAG, false);
+	}
+
+	@Override
+	public void run() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		data.put(CorrelationManager.RUN_FLAG, true);
+		data.put(CorrelationManager.DONE_FLAG, false);
+	}
+
+	@Override
+	public boolean isDone() {
+		final EMap<String, Object> data = deecoComponent.getInternalData();
+		final Boolean result = (Boolean) data.get(CorrelationManager.DONE_FLAG);
+		return result == null || result;
 	}
 
 	/**

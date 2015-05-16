@@ -14,7 +14,6 @@ import cz.cuni.mff.d3s.deeco.runtime.DEECoContainer;
 import cz.cuni.mff.d3s.deeco.runtime.DEECoPlugin;
 import cz.cuni.mff.d3s.irm.model.design.IRM;
 import cz.cuni.mff.d3s.irm.model.trace.api.TraceModel;
-import cz.cuni.mff.d3s.irmsa.strategies.AdaptationManager;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.AdapteeSelector;
 import cz.cuni.mff.d3s.irmsa.strategies.commons.variations.DeltaComputor;
@@ -211,25 +210,8 @@ public abstract class EvolutionaryAdaptationPlugin <T extends EvolutionaryAdapta
 					data.put(EvolutionaryAdaptationManager.ADAPTATION_BOUND, adaptationBound);
 					provideDataToManager(data);
 					//
-					metaAdaptationPlugin.registerManager(new AdaptationManager() {
-
-						@Override
-						public void stop() {
-							data.put(EvolutionaryAdaptationManager.RUN_FLAG, false);
-						}
-
-						@Override
-						public void run() {
-							data.put(EvolutionaryAdaptationManager.RUN_FLAG, true);
-							data.put(EvolutionaryAdaptationManager.DONE_FLAG, false);
-						}
-
-						@Override
-						public boolean isDone() {
-							final Boolean result = (Boolean) data.get(EvolutionaryAdaptationManager.DONE_FLAG);
-							return result == null || result;
-						}
-					});
+					manager.setDeecoComponent(c);
+					metaAdaptationPlugin.registerManager(manager);
 				}
 			}
 		} catch (AnnotationProcessorException e) {
