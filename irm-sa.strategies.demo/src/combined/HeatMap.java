@@ -251,15 +251,18 @@ public class HeatMap {
 		 * @return new Position
 		 */
 		public Position toPosition(final double index) {
+			double x = Environment.CORRIDOR_SIZE * source.value.x;
+			double y = Environment.CORRIDOR_SIZE * source.value.y;
+			double shift = Environment.CORRIDOR_SIZE * index;
 			switch (orientation) {
 				case N:
-					return new Position(source.value.x, source.value.y - index);
+					return new Position(x, y - shift);
 				case E:
-					return new Position(source.value.x + index, source.value.y);
+					return new Position(x + shift, y);
 				case S:
-					return new Position(source.value.x, source.value.y + index);
+					return new Position(x, y + shift);
 				case W:
-					return new Position(source.value.x - index, source.value.y);
+					return new Position(x - shift, y);
 				default:
 					return null;
 			}
