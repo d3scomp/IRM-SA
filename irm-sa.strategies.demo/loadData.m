@@ -1,23 +1,23 @@
-function data = makeGraph(varargin)
-%% MAKEGRAPH reads specified file containing time series to be plotted.
+function data = loadData(varargin)
+%% LOADDATA reads specified file containing comma separated values.
+% The first line is expected to contain a header, labeling each column of
+% data.
 % It accepts the following parameters:
 % * Mandatory
 %  * |fileName| - Name of the file to be processed
 % * Optional - Key-Value pairs
-%  * |rows| - Rows of data to be processed
-%  * |labels| - List of labels of data to be plotted
+%  * |range| - Rows of data to be processed
+%  * |plot| - List of labels of data to be plotted
 %%
 %% Examples
-% *makeGraph('evaluationData.csv')*
-% Reads the whole file specified and plots the default predefined data
-% |temperature_distance|, |position_distance|.
+% *data = makeGraph('evaluationData.csv')*
+% Reads the whole file specified.
 %
-% *makeGraph('evaluationData.csv', 'rows', 1:50)*
+% *data = makeGraph('evaluationData.csv', 'range', 1:50)*
 % Processes only first 50 rows of data (data header is not counted line,
-% data lines start from 1)in the file specified and plots
-% the default predefined data |temperature_distance|, |position_distance|.
+% data lines start from 1 in the file specified.
 %
-% *makeGraph('evaluationData.csv', 'labels', {'actual_temperature',
+% *data = makeGraph('evaluationData.csv', 'plot', {'actual_temperature',
 % 'belief_temperature'})*
 % Reads the whole file specified and plots the values of given data series
 % |actual_temperature|, |belief_temperature|.
@@ -34,13 +34,13 @@ function data = makeGraph(varargin)
                 error('No value specified for the argument "%s"', key);
             end
             switch key
-                case 'rows'
+                case 'range'
                     if isnumeric(varargin{i+1})
                         rows = varargin{i+1};
                     else
                         error('Invalid value of "%s" argument', 'rows');
                     end
-                case 'labels'
+                case 'plot'
                     if iscellstr(varargin{i+1})
                         labels = varargin{i+1};
                     else
@@ -56,7 +56,7 @@ function data = makeGraph(varargin)
     if exist('labels', 'var')
         dataToPlot = labels;
     else
-        dataToPlot = {'temperature_distance', 'position_distance'};
+        dataToPlot = {};
     end
     if exist('rows', 'var')
         dataToProcess = rows;
@@ -72,7 +72,7 @@ function data = makeGraph(varargin)
     end
 %%
     timeInSec = data(time)/1000;
-    for j = 1:size(dataToPlot, 2)
+    for j = 1:size(dataToPlot, 2) % TODO: dedicate a separate function for ploting
         key = char(dataToPlot(j));
         if isKey(data, key)
             fprintf('Plotting "%s".\n', key);
