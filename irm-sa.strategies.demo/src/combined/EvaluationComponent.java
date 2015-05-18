@@ -59,8 +59,10 @@ public class EvaluationComponent {
 			builder.append("actual_temperature").append(DELIMITER);
 			builder.append("belief_temperature").append(DELIMITER);
 			builder.append("temperature_distance").append(DELIMITER);
-			builder.append("actual_position").append(DELIMITER);
-			builder.append("belief_position").append(DELIMITER);
+			builder.append("actual_position_x").append(DELIMITER);
+			builder.append("actual_position_y").append(DELIMITER);
+			builder.append("belief_position_x").append(DELIMITER);
+			builder.append("belief_position_y").append(DELIMITER);
 			builder.append("position_distance").append("\n");
 			writer.write(builder.toString());
 
@@ -131,9 +133,11 @@ public class EvaluationComponent {
 				// temperature distance
 				builder.append(temperatureDistance).append(DELIMITER);
 				// actual position
-				builder.append(actualPosition).append(DELIMITER);
+				builder.append(actualPosition.x).append(DELIMITER);
+				builder.append(actualPosition.y).append(DELIMITER);
 				// belief position
-				builder.append(beliefPosition).append(DELIMITER);
+				builder.append(beliefPosition.x).append(DELIMITER);
+				builder.append(beliefPosition.y).append(DELIMITER);
 				// position distance
 				builder.append(positionDistance).append("\n");
 	

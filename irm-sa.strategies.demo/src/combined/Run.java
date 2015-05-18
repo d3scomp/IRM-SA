@@ -15,11 +15,12 @@
  ******************************************************************************/
 package combined;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.cuni.mff.d3s.deeco.annotations.processor.AnnotationProcessorException;
-import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.logging.Log;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.RuntimeMetadata;
@@ -59,9 +60,9 @@ public class Run {
 			MODELS_BASE_PATH + "firefighters.combined.irmdesign";
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 300_000;
+	static private final long SIMULATION_END = 290_000;
 
-	static final boolean enableMetaAdaptation = true;
+	static final boolean enableMetaAdaptation = false;
 
 	/**
 	 * Runs centralized simulation.
@@ -72,7 +73,7 @@ public class Run {
 	 * @throws InstantiationException
 	 */
 	public static void main(final String args[])
-			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException {
+			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException, IOException {
 		Log.i("Preparing simulation");
 
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
@@ -80,7 +81,7 @@ public class Run {
 
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new SimpleBroadcastDevice());
+		simulation.addPlugin(new SimpleBroadcastDevice(100, 50, SimpleBroadcastDevice.DEFAULT_RANGE));
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
@@ -110,7 +111,7 @@ public class Run {
 						.withInvariantFitnessCombiner(new cz.cuni.mff.d3s.irmsa.strategies.period.InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.AdapteeSelectorFitness())
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl())
-						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(250))
+						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(1500))
 						.withConsiderAssumptions(true)
 						.withAdaptationBound(0.8)
 						.withMaximumTries(3);
@@ -158,14 +159,17 @@ public class Run {
 		// Assign the FF1 to the evaluation component
 		EvaluationComponent.init(ff1ComponentInstance);
 
+		Environment.positionWriter = new PrintWriter("PositionSampledNoAdapt.csv", "UTF-8");
+
 		// deeco3.getRuntimeMetadata().getComponentInstances().add(ci);
-		KnowledgeManager km = ff1ComponentInstance.getKnowledgeManager();
+		//KnowledgeManager km = ff1ComponentInstance.getKnowledgeManager();
 		// km.get(arg0) // TODO: examples in unit tests of knowledge manager
 
 		Log.i("Simulation Starts");
 		simulation.start(SIMULATION_END);
 		// Close the file writer
 		EvaluationComponent.finit();
+		Environment.positionWriter.close();
 		Log.i("Simulation Finished");
 	}
 

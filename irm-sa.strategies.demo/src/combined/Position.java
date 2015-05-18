@@ -14,10 +14,10 @@ public class Position implements Serializable, Cloneable {
 	private static final long serialVersionUID = -5980471557237426848L;
 
 	/** X-coordinate. */
-	public final double x;
+	public final Double x;
 
 	/** Y-coordinate. */
-	public final double y;
+	public final Double y;
 
 	/**
 	 * Only constructor.

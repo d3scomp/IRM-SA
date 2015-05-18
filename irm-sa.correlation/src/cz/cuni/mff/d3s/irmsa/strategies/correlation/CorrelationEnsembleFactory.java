@@ -39,7 +39,7 @@ public class CorrelationEnsembleFactory {
 	/**
 	 * The period at which the ensemble is planned.
 	 */
-	private static final long schedulingPeriod = 1000;
+	private static final long schedulingPeriod = 250;
 
 	/**
 	 * Provides the ensemble definition for the knowledge fields of given name.

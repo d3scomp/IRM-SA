@@ -9,7 +9,7 @@ public class PositionKnowledge extends Position {
 	private static final long serialVersionUID = -8628242433411285211L;
 
 	/** Sensor inaccuracy. */
-	final public double inaccuracy;
+	public final Double inaccuracy;
 
 	/**
 	 * Create from coordinates.

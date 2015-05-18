@@ -2,6 +2,7 @@ package combined;
 
 import static combined.HeatMap.CORRIDORS;
 
+import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import combined.HeatMap.Corridor;
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
+import cz.cuni.mff.d3s.deeco.annotations.Local;
 import cz.cuni.mff.d3s.deeco.annotations.PeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.Process;
 import cz.cuni.mff.d3s.deeco.annotations.SystemComponent;
@@ -37,6 +39,10 @@ import filter.PositionNoise;
 @SystemComponent
 public class Environment {
 
+
+	@Local
+	public static PrintWriter positionWriter;
+	
 	/** Firefighter leading the group. */
 	static public final String FF_LEADER_ID = "FF1";
 
@@ -93,13 +99,13 @@ public class Environment {
 	static private final int THERMO_DEAD_TIME = 150_000;
 
 	/** Maximal distance between group members. */
-	static final int MAX_GROUP_DISTANCE = 8;
+	static final int MAX_GROUP_DISTANCE = 4;
 
 	/** Returned when battery is too low to provide GPS readings. */
 	static public final PositionKnowledge BAD_POSITION = new PositionKnowledge(Double.NaN, Double.NaN, Double.POSITIVE_INFINITY);
 
 	/** Firefighter speed in m/s. */
-	static public final double FF_SPEED = 1.0;
+	static public final double FF_SPEED = 1;
 
 	/** HeatMap square size in meters. */
 	static public final double CORRIDOR_SIZE = 2.0;
@@ -114,7 +120,7 @@ public class Environment {
 	static public final long SIMULATION_PERIOD = 50;
 
 	/** Initial period for determine position. */
-	static public final long INITIAL_POSITION_PERIOD = 1250;
+	static public final long INITIAL_POSITION_PERIOD = 2000;
 
 	/** Inaccuracy in case of GPS malfunction. */
 	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25 * INITIAL_POSITION_PERIOD;
@@ -129,19 +135,19 @@ public class Environment {
 	static public final double FF_POS_INAC_BOUND_MIN = FF_POS_INAC_BOUND * 0.75;
 
 	/** RNG. */
-	static private final Random RANDOM = new Random(24);
+	static private final Random RANDOM = new Random(246811);
 
 	/** Filter for position. */
-	static private PositionNoise positionNoise = new PositionNoise(0.0, 0.5);
+	static private PositionNoise positionNoise = new PositionNoise(0.0, 0.1);
 
 	/** Filter for position if GPS is broken. */
-	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 1.0, positionNoise);
+	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 0.5, positionNoise);
 
 	/** Filter for battery level. */
 	static private DoubleNoise batteryNoise = new DoubleNoise(0.0, 1.0);
 
 	/** Filter for temperature. */
-	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 0.5);
+	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 2);
 
 	/////////////////////
 	//ENVIRONMENT STATE//
