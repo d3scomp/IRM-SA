@@ -1,93 +1,41 @@
 function data = loadData(varargin)
-%% LOADDATA reads specified file containing comma separated values.
+%% LOADDATA reads specified file containing comma separated values (csv).
 % The first line is expected to contain a header, labeling each column of
-% data.
-% It accepts the following parameters:
-% * Mandatory
-%  * |fileName| - Name of the file to be processed
-% * Optional - Key-Value pairs
-%  * |range| - Rows of data to be processed
-%  * |plot| - List of labels of data to be plotted
-%%
-%% Examples
-% *data = makeGraph('evaluationData.csv')*
-% Reads the whole file specified.
+% the data. A map indexed by header labels is returned.
 %
-% *data = makeGraph('evaluationData.csv', 'range', 1:50)*
-% Processes only first 50 rows of data (data header is not counted line,
-% data lines start from 1 in the file specified.
+% data = LOADDATA('fileName.csv')
 %
-% *data = makeGraph('evaluationData.csv', 'plot', {'actual_temperature',
-% 'belief_temperature'})*
-% Reads the whole file specified and plots the values of given data series
-% |actual_temperature|, |belief_temperature|.
-%%
-    if(nargin < 1)
-        error('No file name specified');
-    else
-        fileName = char(varargin(1));
-    end
-    if(nargin > 1)
-        for i = 2:2:nargin
-            key = char(varargin(i));
-            if nargin < i+1
-                error('No value specified for the argument "%s"', key);
-            end
-            switch key
-                case 'range'
-                    if isnumeric(varargin{i+1})
-                        rows = varargin{i+1};
-                    else
-                        error('Invalid value of "%s" argument', 'rows');
-                    end
-                case 'plot'
-                    if iscellstr(varargin{i+1})
-                        labels = varargin{i+1};
-                    else
-                        error('Invalid value of "%s" argument', 'labels');
-                    end
-                otherwise
-                    error('Unknown argument "%s"', key);
-            end
-        end
-    end
-%%
-    time = 'time';
-    if exist('labels', 'var')
-        dataToPlot = labels;
-    else
-        dataToPlot = {};
-    end
-    if exist('rows', 'var')
-        dataToProcess = rows;
-    else
-        dataToProcess = [];
-    end
-%%
-    data = extractData(fileName, dataToProcess);
+% An augmented version of this command can be used to filter a specifit
+% range of the data:
+%
+% data = LOADDATA('fileName.csv', 'range', 1:1000);
+%
+% or to quick plot some of the data:
+% 
+% data = LOADDATA('fileName.csv', 'plot', {'actual_temperature',
+% 'belief_temperature'})
 
-    if ~isKey(data, time)
-        fprintf('Data for "%s" not found.\n', time);
-        return;
+    [fileName, arguments] = processArguments(varargin{:});
+    
+    data = extractData(fileName);
+
+    if isKey(arguments, rangeArg)
+        data = filterData(data, arguments(rangeArg));
     end
-%%
-    timeInSec = data(time)/1000;
-    for j = 1:size(dataToPlot, 2) % TODO: dedicate a separate function for ploting
-        key = char(dataToPlot(j));
-        if isKey(data, key)
-            fprintf('Plotting "%s".\n', key);
-            figure('name', key);
-            plot(timeInSec, data(key));
-        else
-            fprintf('"%s" data not found. Can''t plot them.\n', key);
-        end
+    
+    if isKey(arguments, plotArg)
+        quickPlot(data, arguments(plotArg));
     end
 
 end
 
-function data = extractData(fileName, rows)
+function data = extractData(fileName)
+%% EXTRACTDATA reads the specified file and returnes the data in a map
+% indexed by the labels from the first line in the file.
+
     % Delimiter of individual data entries
     separator = ';';
+    
     % Explicit dimensionality of data (implicit dimensionality is 1, but
     % e.g. position has 2 dimensions (x and y).
     explicitDimensionalities = containers.Map( ...
@@ -141,19 +89,48 @@ function data = extractData(fileName, rows)
     
     fclose(f);
     fprintf('Reading the file completed.\n');
+end
+
+function filtered = filterData(data, range)
+%% FILTERDATA filters the wanted data.
+
+    keySet = keys(data);
+    filtered = containers.Map();
+    for i = 1:size(keySet, 2)
+        % Process each column
+        key = char(keySet(i));
+        v = data(key);
+        filtered(key) = v(range);
+    end
+end
+
+function quickPlot(data, selected)
+%% QUICKPLOT simply visualizes the specified data in a line plot.
+
+    time = 'time';
+    if ~isKey(data, time)
+        fprintf('Data for "%s" not found.\n', time);
+        return;
+    end
     
-    % Filter the wanted data
-    if ~isempty(rows)
-        for i = 1:size(keys, 2)
-            % Process each column
-            key = char(keys(i));
-            v = data(key);
-            data(key) = v(rows);
+    timeInSec = data(time)/1000;
+    for j = 1:size(selected, 2)
+        key = char(selected(j));
+        if isKey(data, key)
+            fprintf('Plotting "%s".\n', key);
+            figure('name', key);
+            plot(timeInSec, data(key));
+        else
+            fprintf('"%s" data not found. Can''t plot them.\n', key);
         end
     end
 end
 
 function cnt = lineCount(fid)
+%% LINECOUNT provides the number of lines in the specified file passed
+% as handle to an open file. After the lilne count is determined the handle
+% is rewinded to the beginning of the file.
+
     n = 0;
     line = fgetl(fid);
     while ischar(line)
@@ -165,11 +142,52 @@ function cnt = lineCount(fid)
     cnt = n;
 end
 
-% function distances = euclid(aP, bP)
-% 
-%     distances = ones(1, size(aP, 1));
-% 
-%     for i = 1:size(aP, 1)
-%         distances(i) = sqrt((aP(i, 1) - bP(i, 1))^2 + (aP(i, 2) - bP(i, 2))^2);
-%     end
-% end
+function [fileName, arguments] = processArguments(varargin)
+%% PROCESSARGUMENTS checks correctness of provided arguments and parses them
+% into a map of correctly typed values.
+
+    if(nargin < 1)
+        error('No file name specified');
+    else
+        fileName = char(varargin{1});
+    end
+    arguments = containers.Map();
+    if(nargin > 1)
+        for i = 2:2:nargin
+            key = char(varargin{i});
+            if nargin < i+1
+                error('No value specified for the argument "%s"', key);
+            end
+            
+            switch key
+                case rangeArg
+                    if isnumeric(varargin{i+1})
+                        arguments(rangeArg) = varargin{i+1};
+                    else
+                        error('Invalid value of "%s" argument', rangeArg);
+                    end
+                case plotArg
+                    if iscellstr(varargin{i+1})
+                        arguments(plotArg) = varargin{i+1};
+                    else
+                        error('Invalid value of "%s" argument', plotArg);
+                    end
+                otherwise
+                    error('Unknown argument "%s"', key);
+            end
+        end
+    end
+end
+
+%% Names of supported options
+function a = plotArg()
+% PLOTARG represents the name of the 'plot' option.
+
+    a = 'plot';
+end
+
+function a = rangeArg()
+% RANGEARG represents the name of the 'range' option.
+
+    a = 'range';
+end
