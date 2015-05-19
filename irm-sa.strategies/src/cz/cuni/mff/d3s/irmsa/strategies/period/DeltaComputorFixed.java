@@ -51,8 +51,8 @@ public class DeltaComputorFixed implements DeltaComputor {
 	@Override
 	public void computeDelta(final InvariantInfo<?> info) {
 		long per = 0;
-		long min = 250;
-		long max = 2000;
+		long min = 1;
+		long max = -1L;
 		if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 			final ProcessInvariantInstance pii = info.getInvariant();
 			final ProcessInvariant pi = (ProcessInvariant) pii.getInvariant();
@@ -68,6 +68,9 @@ public class DeltaComputorFixed implements DeltaComputor {
 		}
 		if (max == -1L) {
 			max = Long.MAX_VALUE;
+		}
+		if (min < 1) {
+			min = 1;
 		}
 		switch (info.direction) {
 		case UP:
