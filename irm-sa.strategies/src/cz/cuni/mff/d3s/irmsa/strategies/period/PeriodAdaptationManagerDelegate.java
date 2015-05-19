@@ -22,7 +22,7 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<PeriodBackup> {
 
 	public static PrintWriter periodWriter;
-	
+
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
 			final List<IRMInstance> irmInstances) {
@@ -87,13 +87,14 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 	}
 
 	/**
-	 * Returns id of ExchangeInvariantInstance as knowledge manager id
+	 * Returns id of ProcessInvariantInstance as knowledge manager id, colon,
+	 * invariant refId, intended for organizing backups.
 	 * @param xii ExchangeInvariantInstance
-	 * @return knowledge manager id
+	 * @return id for ProcessInvariantInstance usable for backup
 	 */
 	static String getProcessInvariantInstanceId(final ProcessInvariantInstance pii) {
 		final ComponentInstance com = pii.getComponentProcess().getComponentInstance();
-		return com.getKnowledgeManager().getId();
+		return com.getKnowledgeManager().getId() + ":" + pii.getInvariant().getRefID();
 	}
 
 	/**
@@ -112,22 +113,14 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 	@Override
 	public PeriodBackup applyChanges(
 			final Set<InvariantInfo<?>> adaptees, final PeriodBackup backup) {
+		backup.exchanges.clear();
+		backup.processes.clear();
 		for (InvariantInfo<?> info : adaptees) {
 			final PeriodBackup.Change change = new PeriodBackup.Change(info.delta.longValue(), info.direction.opposite());
 			final long currentPeriod = getCurrentPeriod(info);
 			final long newPeriod = currentPeriod + info.direction.getCoef() * info.delta.longValue();
 			final TimeTrigger trigger = getTimeTrigger(info);
-			if (trigger == null || newPeriod <= 0) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(ProcessContext.getTimeProvider().getCurrentMilliseconds()).append(';');
-				builder.append(currentPeriod).append(';');
-				builder.append(newPeriod).append(";skipped");;
 
-				periodWriter.println(builder.toString());
-				periodWriter.flush();
-				continue;
-			}
-			
 			StringBuilder builder = new StringBuilder();
 			builder.append(ProcessContext.getTimeProvider().getCurrentMilliseconds()).append(';');
 			builder.append(currentPeriod).append(';');
@@ -136,7 +129,7 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 
 			periodWriter.println(builder.toString());
 			periodWriter.flush();
-			
+
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
 				final String id = getProcessInvariantInstanceId(pii);

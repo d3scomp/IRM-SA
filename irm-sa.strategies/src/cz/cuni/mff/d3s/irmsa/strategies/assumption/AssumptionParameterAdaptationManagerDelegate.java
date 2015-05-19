@@ -21,9 +21,9 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
 public class AssumptionParameterAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<AssumptionParameterBackup> {
 
-	
+
 	public static PrintWriter assumptionWriter;
-	
+
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
 			final List<IRMInstance> irmInstances) {
@@ -51,6 +51,7 @@ public class AssumptionParameterAdaptationManagerDelegate implements Evolutionar
 	@Override
 	public AssumptionParameterBackup applyChanges(
 			final Set<InvariantInfo<?>> adaptees, final AssumptionParameterBackup backup) {
+		backup.parameters.clear();
 		for (InvariantInfo<?> invariantInfo : adaptees) {
 			final AssumptionInfo info = (AssumptionInfo) invariantInfo;
 			final AssumptionInstance assumption = info.getInvariant();
