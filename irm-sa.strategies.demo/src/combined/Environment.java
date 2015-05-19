@@ -41,8 +41,8 @@ public class Environment {
 
 	@Local
 	public static PrintWriter positionWriter;
-	
-	
+
+
 	/** Firefighter leading the group. */
 	static public final String FF_LEADER_ID = "FF1";
 
@@ -76,9 +76,6 @@ public class Environment {
 			INITIAL_LOCATIONS.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> {
 				return new PositionKnowledge(e.getValue().toPosition(), GPS_INACCURACY);
 			}));
-
-	/** Firefighters' initial battery level. */
-	static public final Double INITIAL_BATTERY_LEVEL = 2000.0;
 
 	/** Default temperature for firefighters not contained in INITIAL_LOCATIONS. */
 	static private final Double DEFAULT_TEMPERATURE = HeatMap.temperature(DEFAULT_LOCATION);
@@ -121,9 +118,9 @@ public class Environment {
 
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
-	
+
 	static public final long ADAPTED_POSITION_PERIOD = 400;
-	
+
 	static public final long POSITION_ADAPTATION_STEP = INITIAL_POSITION_PERIOD - ADAPTED_POSITION_PERIOD;
 
 	/** Inaccuracy in case of GPS malfunction. */
@@ -137,6 +134,9 @@ public class Environment {
 
 	/** Minimal value of inaccuracy assumption parameter. */
 	static public final double FF_POS_INAC_BOUND_MIN = FF_POS_INAC_BOUND * 0.75;
+
+	/** Firefighters' initial battery level. */
+	static public final Double INITIAL_BATTERY_LEVEL = 1.0 * FireFighterHelper.TARGET_DURABILITY / ADAPTED_POSITION_PERIOD * GPS_ENERGY_COST;
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(246811);
