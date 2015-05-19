@@ -39,9 +39,9 @@ import filter.PositionNoise;
 @SystemComponent
 public class Environment {
 
-
 	@Local
 	public static PrintWriter positionWriter;
+	
 	
 	/** Firefighter leading the group. */
 	static public final String FF_LEADER_ID = "FF1";
@@ -120,7 +120,11 @@ public class Environment {
 	static public final long SIMULATION_PERIOD = 50;
 
 	/** Initial period for determine position. */
-	static public final long INITIAL_POSITION_PERIOD = 2000;
+	static public final long INITIAL_POSITION_PERIOD = 1250;
+	
+	static public final long ADAPTED_POSITION_PERIOD = 400;
+	
+	static public final long POSITION_ADAPTATION_STEP = INITIAL_POSITION_PERIOD - ADAPTED_POSITION_PERIOD;
 
 	/** Inaccuracy in case of GPS malfunction. */
 	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25 * INITIAL_POSITION_PERIOD;

@@ -35,11 +35,13 @@ import cz.cuni.mff.d3s.irm.model.design.IRMDesignPackage;
 import cz.cuni.mff.d3s.irmsa.EMFHelper;
 import cz.cuni.mff.d3s.irmsa.IRMPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.MetaAdaptationPlugin;
+import cz.cuni.mff.d3s.irmsa.strategies.assumption.AssumptionParameterAdaptationManagerDelegate;
 import cz.cuni.mff.d3s.irmsa.strategies.assumption.AssumptionParameterAdaptationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.CorrelationPlugin;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metadata.KnowledgeMetadataHolder;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.DifferenceMetric;
 import cz.cuni.mff.d3s.irmsa.strategies.correlation.metric.Metric;
+import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationManagerDelegate;
 import cz.cuni.mff.d3s.irmsa.strategies.period.PeriodAdaptationPlugin;
 import cz.cuni.mff.d3s.jdeeco.network.Network;
 import cz.cuni.mff.d3s.jdeeco.network.device.SimpleBroadcastDevice;
@@ -62,7 +64,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 290_000;
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMetaAdaptation = true;
 
 	/**
 	 * Runs centralized simulation.
@@ -111,7 +113,7 @@ public class Run {
 						.withInvariantFitnessCombiner(new cz.cuni.mff.d3s.irmsa.strategies.period.InvariantFitnessCombinerAverage())
 						.withAdapteeSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.AdapteeSelectorFitness())
 						.withDirectionSelector(new cz.cuni.mff.d3s.irmsa.strategies.period.DirectionSelectorImpl())
-						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(1500))
+						.withDeltaComputor(new cz.cuni.mff.d3s.irmsa.strategies.period.DeltaComputorFixed(Environment.POSITION_ADAPTATION_STEP))
 						.withConsiderAssumptions(true)
 						.withAdaptationBound(0.8)
 						.withMaximumTries(3);
@@ -159,7 +161,11 @@ public class Run {
 		// Assign the FF1 to the evaluation component
 		EvaluationComponent.init(ff1ComponentInstance);
 
-		Environment.positionWriter = new PrintWriter("PositionSampledNoAdapt.csv", "UTF-8");
+		Environment.positionWriter = new PrintWriter("PositionSampledAdapt.csv", "UTF-8");
+		AssumptionParameterAdaptationManagerDelegate.assumptionWriter = new PrintWriter("AssumptionAdapt.csv", "UTF-8");
+		AssumptionParameterAdaptationManagerDelegate.assumptionWriter.println("time;old;new");
+		PeriodAdaptationManagerDelegate.periodWriter = new PrintWriter("PeriodAdapt.csv", "UTF-8");
+		PeriodAdaptationManagerDelegate.periodWriter.println("time;old;new");
 
 		// deeco3.getRuntimeMetadata().getComponentInstances().add(ci);
 		//KnowledgeManager km = ff1ComponentInstance.getKnowledgeManager();
@@ -170,6 +176,8 @@ public class Run {
 		// Close the file writer
 		EvaluationComponent.finit();
 		Environment.positionWriter.close();
+		AssumptionParameterAdaptationManagerDelegate.assumptionWriter.close();
+		PeriodAdaptationManagerDelegate.periodWriter.close();
 		Log.i("Simulation Finished");
 	}
 

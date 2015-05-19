@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa.strategies.assumption;
 
+import java.io.PrintWriter;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,9 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
 public class AssumptionParameterAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<AssumptionParameterBackup> {
 
+	
+	public static PrintWriter assumptionWriter;
+	
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
 			final List<IRMInstance> irmInstances) {
@@ -58,10 +62,17 @@ public class AssumptionParameterAdaptationManagerDelegate implements Evolutionar
 			if (value == null) {
 				value = assumptionParameter.defaultValue();
 			}
+			StringBuilder builder = new StringBuilder();
+			builder.append(ProcessContext.getTimeProvider().getCurrentMilliseconds()).append(';');
+			builder.append(value).append(';');
 			value = computeNewValue(value, info.parameter.getType(), info.direction, info.delta);
+			builder.append(value);
 			data.put(paramId, value);
 			final AssumptionParameterBackup.Change change = new AssumptionParameterBackup.Change(paramId, info.delta, info.direction.opposite());
 			backup.parameters.put(knowledgeManager.getId(), change);
+
+			assumptionWriter.println(builder.toString());
+			assumptionWriter.flush();
 		}
 		return backup;
 	}

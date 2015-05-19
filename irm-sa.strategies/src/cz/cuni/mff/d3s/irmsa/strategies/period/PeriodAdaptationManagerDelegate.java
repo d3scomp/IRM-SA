@@ -1,5 +1,6 @@
 package cz.cuni.mff.d3s.irmsa.strategies.period;
 
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +9,7 @@ import cz.cuni.mff.d3s.deeco.model.runtime.api.ComponentInstance;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.EnsembleDefinition;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.TimeTrigger;
 import cz.cuni.mff.d3s.deeco.model.runtime.api.Trigger;
+import cz.cuni.mff.d3s.deeco.task.ProcessContext;
 import cz.cuni.mff.d3s.irm.model.runtime.api.AssumptionInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.ExchangeInvariantInstance;
 import cz.cuni.mff.d3s.irm.model.runtime.api.IRMInstance;
@@ -19,6 +21,8 @@ import cz.cuni.mff.d3s.irmsa.strategies.commons.InvariantInfo;
 
 public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationManagerDelegate<PeriodBackup> {
 
+	public static PrintWriter periodWriter;
+	
 	@Override
 	public Set<InvariantInfo<?>> extractInvariants(
 			final List<IRMInstance> irmInstances) {
@@ -113,10 +117,26 @@ public class PeriodAdaptationManagerDelegate implements EvolutionaryAdaptationMa
 			final long currentPeriod = getCurrentPeriod(info);
 			final long newPeriod = currentPeriod + info.direction.getCoef() * info.delta.longValue();
 			final TimeTrigger trigger = getTimeTrigger(info);
-			if (trigger == null) {
+			if (trigger == null || newPeriod <= 0) {
+				StringBuilder builder = new StringBuilder();
+				builder.append(ProcessContext.getTimeProvider().getCurrentMilliseconds()).append(';');
+				builder.append(currentPeriod).append(';');
+				builder.append(newPeriod).append(";skipped");;
+
+				periodWriter.println(builder.toString());
+				periodWriter.flush();
 				continue;
 			}
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append(ProcessContext.getTimeProvider().getCurrentMilliseconds()).append(';');
+			builder.append(currentPeriod).append(';');
 			trigger.setPeriod(newPeriod);
+			builder.append(newPeriod);
+
+			periodWriter.println(builder.toString());
+			periodWriter.flush();
+			
 			if (ProcessInvariantInstance.class.isAssignableFrom(info.clazz)) {
 				final ProcessInvariantInstance pii = info.getInvariant();
 				final String id = getProcessInvariantInstanceId(pii);
