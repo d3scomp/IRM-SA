@@ -16,7 +16,8 @@ public class PositionNoise extends Filter<Position> {
 	 * @param mean The mean of the normal distribution.
 	 * @param deviation The standard deviation of the normal distribution.
 	 */
-	public PositionNoise(double mean, double deviation) {
+	public PositionNoise(String name, double mean, double deviation) {
+		super(name);
 		noise = new NormalDistribution(mean, deviation);
 	}
 	
@@ -29,8 +30,8 @@ public class PositionNoise extends Filter<Position> {
 	 * @param deviation The standard deviation of the normal distribution.
 	 * @param innerFilter The chain of filters inside this instance.
 	 */
-	public PositionNoise(double mean, double deviation, Filter<Position> innerFilter) {
-		super(innerFilter);
+	public PositionNoise(String name, double mean, double deviation, Filter<Position> innerFilter) {
+		super(name, innerFilter);
 		noise = new NormalDistribution(mean, deviation);
 	}
 
@@ -46,6 +47,8 @@ public class PositionNoise extends Filter<Position> {
 		double h = noise.getNext();
 		// vertical noise
 		double v = noise.getNext();
+
+		filterWriter.println(String.format("%s\t%.3f\t%.3f", name, h, v));
 		
 		return new Position(data.x + h, data.y + v);
 	}

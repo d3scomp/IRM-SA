@@ -1,5 +1,7 @@
 package filter;
 
+import java.io.PrintWriter;
+
 /**
  * A filter for applying noise and inaccuracy to a data.
  * Filter is bound to a certain data type is it meant to
@@ -12,24 +14,30 @@ package filter;
  */
 public abstract class Filter<T> {
 
+	public static PrintWriter filterWriter;
+	
 	/**
 	 * Inner filter is dedicated for filter chaining.
 	 */
 	protected Filter<T> innerFilter;
 	
+	final String name;
+	
 	/**
 	 * Construct new filter without a chain inside it.
 	 */
-	public Filter() {
+	public Filter(String name) {
 		innerFilter = null;
+		this.name = name;
 	}
 	
 	/**
 	 * Construct new filter with a chain of filters inside it. 
 	 * @param innerFilter The chain of inner filters.
 	 */
-	public Filter(Filter<T> innerFilter) {
+	public Filter(String name, Filter<T> innerFilter) {
 		this.innerFilter = innerFilter;
+		this.name = name;
 	}
 	
 	/**

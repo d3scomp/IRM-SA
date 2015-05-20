@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import combined.HeatMap.Corridor;
+
 import cz.cuni.mff.d3s.deeco.annotations.Component;
 import cz.cuni.mff.d3s.deeco.annotations.In;
 import cz.cuni.mff.d3s.deeco.annotations.Local;
@@ -140,19 +141,46 @@ public class Environment {
 
 	/** RNG. */
 	static private final Random RANDOM = new Random(246811);
-
+	
 	/** Filter for position. */
-	static private PositionNoise positionNoise = new PositionNoise(0.0, 0.1);
+	static private Map<String, PositionNoise> positionNoise;
 
 	/** Filter for position if GPS is broken. */
-	static private PositionNoise brokenGPSInaccuracy = new PositionNoise(0.0, 0.5, positionNoise);
+	static private Map<String, PositionNoise> brokenGPSInaccuracy;
 
 	/** Filter for battery level. */
-	static private DoubleNoise batteryNoise = new DoubleNoise(0.0, 1.0);
+	static private Map<String, DoubleNoise> batteryNoise;
 
 	/** Filter for temperature. */
-	static private DoubleNoise temperatureNoise = new DoubleNoise(0.0, 2);
+	static private Map<String, DoubleNoise> temperatureNoise;
 
+	static {
+		PositionNoise pn1 = new PositionNoise("leader pos", 0.0, 0.1);
+		PositionNoise pn2 = new PositionNoise("follow pos", 0.0, 0.1);
+		PositionNoise pn3 = new PositionNoise("lonely pos", 0.0, 0.1);
+		
+		
+		positionNoise = new HashMap<>();
+		positionNoise.put(FF_LEADER_ID, pn1);
+		positionNoise.put(FF_FOLLOWER_ID, pn2);
+		positionNoise.put(LONELY_FF_ID, pn3);
+		
+		brokenGPSInaccuracy = new HashMap<>();
+		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 0.0, 0.5, pn1));
+		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 0.0, 0.5, pn2));
+		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 0.0, 0.5, pn3));
+		
+		batteryNoise = new HashMap<>();
+		batteryNoise.put(FF_LEADER_ID, new DoubleNoise("leader bat", 0.0, 1.0));
+		batteryNoise.put(FF_FOLLOWER_ID, new DoubleNoise("follow bat", 0.0, 1.0));
+		batteryNoise.put(LONELY_FF_ID, new DoubleNoise("lonely bat", 0.0, 1.0));
+		
+		temperatureNoise = new HashMap<>();
+		temperatureNoise.put(FF_LEADER_ID, new DoubleNoise("leader tmp", 0.0, 2));
+		temperatureNoise.put(FF_FOLLOWER_ID, new DoubleNoise("follow tmp", 0.0, 2));
+		temperatureNoise.put(LONELY_FF_ID, new DoubleNoise("lonely tmp", 0.0, 2));
+	}
+	
 	/////////////////////
 	//ENVIRONMENT STATE//
 	/////////////////////
@@ -189,18 +217,18 @@ public class Environment {
 	}
 
 	static public Double getInitialBattery(final String id) {
-		return batteryNoise.apply(INITIAL_BATTERY_LEVEL);
+		return batteryNoise.get(id).apply(INITIAL_BATTERY_LEVEL);
 	}
 
 	static public PositionKnowledge getInitialPosition(final String id) {
 		final PositionKnowledge pos = INITIAL_POSITIONS.get(id);
-		final Position noised = positionNoise.apply(pos != null ? pos : DEFAULT_POSITION);
+		final Position noised = positionNoise.get(id).apply(pos != null ? pos : DEFAULT_POSITION);
 		return new PositionKnowledge(noised, GPS_INACCURACY);
 	}
 
 	static public Double getInitialTemperature(final String id) {
 		final Double temp = INITIAL_TEMPERATURES.get(id);
-		return temperatureNoise.apply(temp != null ? temp : DEFAULT_TEMPERATURE);
+		return temperatureNoise.get(id).apply(temp != null ? temp : DEFAULT_TEMPERATURE);
 	}
 
 	/**
@@ -228,10 +256,10 @@ public class Environment {
 		} else {
 			if (ffId.equals(FF_LEADER_ID)
 					&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= GPS_BREAK_TIME) {
-				final Position position = brokenGPSInaccuracy.apply(ff.location.toPosition());
+				final Position position = brokenGPSInaccuracy.get(ffId).apply(ff.location.toPosition());
 				return new PositionKnowledge(position, BROKEN_GSP_INACURRACY);
 			} else {
-				final Position position = positionNoise.apply(ff.location.toPosition());
+				final Position position = positionNoise.get(ffId).apply(ff.location.toPosition());
 				return new PositionKnowledge(position, GPS_INACCURACY);
 			}
 		}
@@ -252,7 +280,7 @@ public class Environment {
 	 * @return battery level of given firefighter
 	 */
 	static public double getBatteryLevel(final String ffId) {
-		return batteryNoise.apply(getFirefighter(ffId).batteryLevel);
+		return batteryNoise.get(ffId).apply(getFirefighter(ffId).batteryLevel);
 	}
 
 	/**
@@ -277,7 +305,7 @@ public class Environment {
 				&& ProcessContext.getTimeProvider().getCurrentMilliseconds() >= THERMO_DEAD_TIME) {
 			temperature.malfunction();
 		}
-		return temperatureNoise.apply(getRealTemperature(ffId));
+		return temperatureNoise.get(ffId).apply(getRealTemperature(ffId));
 	}
 
 	/** Environment component id. Not used, but mandatory. */

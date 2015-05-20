@@ -62,9 +62,9 @@ public class Run {
 			MODELS_BASE_PATH + "firefighters.combined.irmdesign";
 
 	/** End of the simulation in milliseconds. */
-	static private final long SIMULATION_END = 290_000;
+	static private final long SIMULATION_END = 300_000;
 
-	static final boolean enableMetaAdaptation = true;
+	static final boolean enableMetaAdaptation = false;
 
 	/**
 	 * Runs centralized simulation.
@@ -78,6 +78,8 @@ public class Run {
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException, IOException {
 		Log.i("Preparing simulation");
 
+		filter.Filter.filterWriter = new PrintWriter("filtersAdapt.txt");
+		
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
 
@@ -178,6 +180,7 @@ public class Run {
 		Environment.positionWriter.close();
 		AssumptionParameterAdaptationManagerDelegate.assumptionWriter.close();
 		PeriodAdaptationManagerDelegate.periodWriter.close();
+		filter.Filter.filterWriter.close();
 		Log.i("Simulation Finished");
 	}
 

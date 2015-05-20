@@ -22,7 +22,8 @@ public class DoubleNoise extends Filter<Double> {
 	 * @param mean The mean of the normal distribution.
 	 * @param deviation The standard deviation of the normal distribution.
 	 */
-	public DoubleNoise(double mean, double deviation) {
+	public DoubleNoise(String name, double mean, double deviation) {
+		super(name);
 		noise = new NormalDistribution(mean, deviation);
 	}
 	
@@ -35,8 +36,8 @@ public class DoubleNoise extends Filter<Double> {
 	 * @param deviation The standard deviation of the normal distribution.
 	 * @param innerFilter The chain of filters inside this instance.
 	 */
-	public DoubleNoise(double mean, double deviation, Filter<Double> innerFilter) {
-		super(innerFilter);
+	public DoubleNoise(String name, double mean, double deviation, Filter<Double> innerFilter) {
+		super(name, innerFilter);
 		noise = new NormalDistribution(mean, deviation);
 	}
 
@@ -48,6 +49,8 @@ public class DoubleNoise extends Filter<Double> {
 	 */
 	@Override
 	protected Double applyNoise(final Double data) {
-		return (data + noise.getNext());
+		double r = noise.getNext();
+		filterWriter.println(String.format("%s\t%.3f", name, r));
+		return (data + r);
 	}
 }
