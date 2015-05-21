@@ -3,7 +3,7 @@
   <invariants description="FF equipment has energy for operation time" refID="I01"/>
   <invariants description="FF::position is determined" refID="I02"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="BatteryLevel is determined" refID="P01" processName="determineBatteryLevel" processPeriod="1000"/>
-  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Inaccuracy(FF::position) &lt; 1.93m" refID="A02" weight="2.0"/>
+  <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Inaccuracy(FF::position) &lt; 1.5m" refID="A02" weight="2.0"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:ProcessInvariant" description="FF::position is determined by GPS" refID="P02" processName="determinePosition" processPeriod="1250" processMinPeriod="250" processMaxPeriod="2000"/>
   <invariants xsi:type="cz.cuni.mff.d3s.irm.model.design:Assumption" description="Battery drainage is optimal" refID="A01"/>
   <invariants description="Data about FF's environment are collected" refID="I03"/>
