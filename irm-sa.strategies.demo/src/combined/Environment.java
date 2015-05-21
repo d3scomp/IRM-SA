@@ -120,7 +120,7 @@ public class Environment {
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
 
-	static public final long ADAPTED_POSITION_PERIOD = 300;
+	static public final long ADAPTED_POSITION_PERIOD = 250;
 
 	static public final long POSITION_ADAPTATION_STEP = INITIAL_POSITION_PERIOD - ADAPTED_POSITION_PERIOD;
 
@@ -128,13 +128,13 @@ public class Environment {
 	static public final double BROKEN_GSP_INACURRACY = FF_MOVEMENT * 2.25 * INITIAL_POSITION_PERIOD;
 
 	/** Initial value of inaccuracy assumption parameter. */
-	static public final double FF_POS_INAC_BOUND = (BROKEN_GSP_INACURRACY +  INITIAL_POSITION_PERIOD * FF_MOVEMENT) * 0.95;
+	static public final double FF_POS_INAC_BOUND = 1.5; //(BROKEN_GSP_INACURRACY +  INITIAL_POSITION_PERIOD * FF_MOVEMENT) * 0.95;
 
 	/** Maximal value of inaccuracy assumption parameter. */
-	static public final double FF_POS_INAC_BOUND_MAX = FF_POS_INAC_BOUND * 1.25;
+	static public final double FF_POS_INAC_BOUND_MAX = 1.9; //FF_POS_INAC_BOUND * 1.25;
 
 	/** Minimal value of inaccuracy assumption parameter. */
-	static public final double FF_POS_INAC_BOUND_MIN = FF_POS_INAC_BOUND * 0.75;
+	static public final double FF_POS_INAC_BOUND_MIN = 1.1; //FF_POS_INAC_BOUND * 0.75;
 
 	/** Firefighters' initial battery level. */
 	static public final Double INITIAL_BATTERY_LEVEL = 1.0 * FireFighterHelper.TARGET_DURABILITY / ADAPTED_POSITION_PERIOD * GPS_ENERGY_COST;
@@ -166,9 +166,9 @@ public class Environment {
 		positionNoise.put(LONELY_FF_ID, pn3);
 		
 		brokenGPSInaccuracy = new HashMap<>();
-		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 0, 0.7, pn1));
-		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 0, 0.7, pn2));
-		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 0, 0.7, pn3));
+		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 0, 0.5, pn1));
+		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 0, 0.5, pn2));
+		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 0, 0.5, pn3));
 		
 		batteryNoise = new HashMap<>();
 		batteryNoise.put(FF_LEADER_ID, new DoubleNoise("leader bat", 0.0, 1.0));
