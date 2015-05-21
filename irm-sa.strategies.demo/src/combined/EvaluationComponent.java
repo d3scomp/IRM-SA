@@ -52,7 +52,10 @@ public class EvaluationComponent {
 		EvaluationComponent.componentsKnowledge = component.getKnowledgeManager();
 		
 		try {
-			writer = new PrintWriter("EvaluationData.csv", "UTF-8");
+			final String suffix = Run.enableMetaAdaptation
+					? "Adapt"
+					: "NoAdapt";
+			writer = new PrintWriter(String.format("EvaluationData%s.csv", suffix), "UTF-8");
 
 			StringBuilder builder = new StringBuilder();
 			builder.append("time").append(DELIMITER);

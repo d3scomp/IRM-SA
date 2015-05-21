@@ -120,7 +120,7 @@ public class Environment {
 	/** Initial period for determine position. */
 	static public final long INITIAL_POSITION_PERIOD = 1250;
 
-	static public final long ADAPTED_POSITION_PERIOD = 400;
+	static public final long ADAPTED_POSITION_PERIOD = 300;
 
 	static public final long POSITION_ADAPTATION_STEP = INITIAL_POSITION_PERIOD - ADAPTED_POSITION_PERIOD;
 
@@ -166,9 +166,9 @@ public class Environment {
 		positionNoise.put(LONELY_FF_ID, pn3);
 		
 		brokenGPSInaccuracy = new HashMap<>();
-		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 0.0, 0.5, pn1));
-		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 0.0, 0.5, pn2));
-		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 0.0, 0.5, pn3));
+		brokenGPSInaccuracy.put(FF_LEADER_ID, new PositionNoise("leader iac", 1.6, 0.1, pn1));
+		brokenGPSInaccuracy.put(FF_FOLLOWER_ID, new PositionNoise("follow iac", 1.6, 0.1, pn2));
+		brokenGPSInaccuracy.put(LONELY_FF_ID, new PositionNoise("lonely iac", 1.6, 0.1, pn3));
 		
 		batteryNoise = new HashMap<>();
 		batteryNoise.put(FF_LEADER_ID, new DoubleNoise("leader bat", 0.0, 1.0));

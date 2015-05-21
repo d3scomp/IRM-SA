@@ -64,7 +64,7 @@ public class Run {
 	/** End of the simulation in milliseconds. */
 	static private final long SIMULATION_END = 300_000;
 
-	static final boolean enableMetaAdaptation = false;
+	static final boolean enableMetaAdaptation = true;
 
 	/**
 	 * Runs centralized simulation.
@@ -78,7 +78,11 @@ public class Run {
 			throws DEECoException, AnnotationProcessorException, InstantiationException, IllegalAccessException, IOException {
 		Log.i("Preparing simulation");
 
-		filter.Filter.filterWriter = new PrintWriter("filtersAdapt.txt");
+		final String suffix = enableMetaAdaptation
+				? "Adapt"
+				: "NoAdapt";
+		
+		filter.Filter.filterWriter = new PrintWriter(String.format("filters%s.txt", suffix));
 		
 		final List<DEECoNode> nodesInSimulation = new ArrayList<DEECoNode>();
 		final SimulationTimer simulationTimer = new DiscreteEventTimer();
@@ -163,10 +167,10 @@ public class Run {
 		// Assign the FF1 to the evaluation component
 		EvaluationComponent.init(ff1ComponentInstance);
 
-		Environment.positionWriter = new PrintWriter("PositionSampledAdapt.csv", "UTF-8");
-		AssumptionParameterAdaptationManagerDelegate.assumptionWriter = new PrintWriter("AssumptionAdapt.csv", "UTF-8");
+		Environment.positionWriter = new PrintWriter(String.format("PositionSampled%s.csv", suffix), "UTF-8");
+		AssumptionParameterAdaptationManagerDelegate.assumptionWriter = new PrintWriter(String.format("Assumption%s.csv", suffix), "UTF-8");
 		AssumptionParameterAdaptationManagerDelegate.assumptionWriter.println("time;old;new");
-		PeriodAdaptationManagerDelegate.periodWriter = new PrintWriter("PeriodAdapt.csv", "UTF-8");
+		PeriodAdaptationManagerDelegate.periodWriter = new PrintWriter(String.format("Period%s.csv", suffix), "UTF-8");
 		PeriodAdaptationManagerDelegate.periodWriter.println("time;old;new");
 
 		// deeco3.getRuntimeMetadata().getComponentInstances().add(ci);
