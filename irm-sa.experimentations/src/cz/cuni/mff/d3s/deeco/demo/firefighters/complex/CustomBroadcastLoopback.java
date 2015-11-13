@@ -8,14 +8,16 @@ public class CustomBroadcastLoopback extends SimpleBroadcastDevice {
 		super();
 	}
 	
-	public CustomBroadcastLoopback(long delayMean, int delayDeviation, int range) {
-		super(delayMean, delayDeviation, range);
+	public CustomBroadcastLoopback(long delayMean, int delayDeviation, int range, int mtu) {
+		super(delayMean, delayDeviation, range, mtu);
 	}
 
 	@Override
 	public void sendToAll(PacketWrapper packet) {
-		if (!FFSHelper.getInstance().dropPacket(Integer.parseInt(packet.source.getId()), scheduler.getTimer().getCurrentMilliseconds())) {
-			super.sendToAll(packet);
+		for (LoopDevice loop : loops) {
+			if (!FFSHelper.getInstance().dropPacket(Integer.parseInt(packet.source.getId()), loop.getScheduler().getTimer().getCurrentMilliseconds())) {
+				super.sendToAll(packet);
+			}
 		}
 	}
 }
