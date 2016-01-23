@@ -89,7 +89,7 @@ public class Run {
 
 		/* create main application container */
 		final DEECoSimulation simulation = new DEECoSimulation(simulationTimer);
-		simulation.addPlugin(new SimpleBroadcastDevice(100, 50, SimpleBroadcastDevice.DEFAULT_RANGE));
+		simulation.addPlugin(new SimpleBroadcastDevice(100, 50, SimpleBroadcastDevice.DEFAULT_RANGE, 128));
 		simulation.addPlugin(Network.class);
 		simulation.addPlugin(DefaultKnowledgePublisher.class);
 		simulation.addPlugin(KnowledgeInsertingStrategy.class);
